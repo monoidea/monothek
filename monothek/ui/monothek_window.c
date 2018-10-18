@@ -154,15 +154,23 @@ monothek_window_init(MonothekWindow *window)
   gtk_window_set_title((GtkWindow *) window,
 		       "monoidea's monothek");
 
+#if 0
   /* scrolled window */
   scrolled_window = (GtkWidget *) gtk_scrolled_window_new(NULL, NULL);
   gtk_container_add(window,
 		    scrolled_window);
-
+#endif
+  
   /* view - vbox */
-  window->view = (GtkVBox *) gtk_vbox_new(FALSE, 0);
+  window->view = (GtkVBox *) gtk_vbox_new(FALSE,
+					  0);
+#if 0
   gtk_scrolled_window_add_with_viewport((GtkContainer *) scrolled_window, (GtkWidget*) window->view);
-
+#else
+  gtk_container_add(window,
+		    window->view);
+#endif
+  
   /* start view */
   view = monothek_start_view_new();
   gtk_box_pack_start(window->view,

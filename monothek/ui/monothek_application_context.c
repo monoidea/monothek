@@ -905,7 +905,8 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
 	       "window", window,
 	       NULL);
 
-  gtk_window_set_default_size((GtkWindow *) window, 1920, 1080);
+  //  gtk_window_set_default_size((GtkWindow *) window, 1920, 1080);
+  gtk_window_fullscreen((GtkWindow *) window);
 
   ags_connectable_connect(AGS_CONNECTABLE(window));
   gtk_widget_show_all(window);

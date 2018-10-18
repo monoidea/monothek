@@ -418,6 +418,123 @@ monothek_start_view_draw(MonothekView *view)
 		  (double) start_view->diskjokey_width, (double) start_view->diskjokey_height);
   cairo_stroke(cr);
 
+  {
+    PangoLayout *layout;
+    PangoFontDescription *desc;
+
+    PangoRectangle ink_rect;
+    PangoRectangle logical_rect;
+    
+    gchar *diskjokey_font;
+    
+    static const guint font_size = 100;
+
+    diskjokey_font = g_strdup_printf("%s Bold", view->font);
+
+    /* diskjokey - head */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "DISKJOKEY", -1);
+    desc = pango_font_description_from_string(diskjokey_font);
+    pango_font_description_set_size(desc,
+				    96 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 228.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* diskjokey - pricing */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "5 CHF", -1);
+    desc = pango_font_description_from_string(diskjokey_font);
+    pango_font_description_set_size(desc,
+				    60 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 438.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+    
+    /* diskjokey - start */
+    cairo_set_line_width(cr,
+			 start_view->diskjokey_start_box_line_width);
+    cairo_rectangle(cr,
+		    (double) start_view->diskjokey_start_box_x0, (double) start_view->diskjokey_start_box_y0,
+		    (double) start_view->diskjokey_start_box_width, (double) start_view->diskjokey_start_box_height);
+    cairo_fill(cr);
+
+    /* set black color */
+    cairo_set_source_rgb(cr,
+			 0.0,
+			 0.0,
+			 0.0);
+
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "START", -1);
+    desc = pango_font_description_from_string(diskjokey_font);
+    pango_font_description_set_size(desc,
+				    38 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 639.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* restore color */
+    cairo_set_source_rgb(cr,
+			 1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			 1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			 1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    
+    /* diskjokey - description */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "BE THE DJ AND PLAY 10\nMINUTES FREESTYLE", -1);
+    desc = pango_font_description_from_string(diskjokey_font);
+    pango_font_description_set_size(desc,
+				    38 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_alignment(layout,
+			       PANGO_ALIGN_CENTER);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 820.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+  }
+
   /* paint */
   cairo_pop_group_to_source(cr);
   cairo_paint(cr);

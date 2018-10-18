@@ -43,6 +43,7 @@ struct _MonothekStartView
 
   gdouble outer_box_line_width;
 
+  //jukebox
   gdouble jukebox_x0;
   gdouble jukebox_y0;
 
@@ -56,7 +57,8 @@ struct _MonothekStartView
 
   gdouble jukebox_start_box_width;
   gdouble jukebox_start_box_height;
-  
+
+  //diskjokey
   gdouble diskjokey_x0;
   gdouble diskjokey_y0;
 
