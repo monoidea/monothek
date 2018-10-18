@@ -25,6 +25,8 @@
 #include <monothek/ui/monothek_application_context.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
+#include <monothek/ui/view/monothek_closed_view.h>
+#include <monothek/ui/view/monothek_outage_view.h>
 
 #include <stdlib.h>
 
@@ -151,6 +153,9 @@ monothek_window_init(MonothekWindow *window)
 
   window->flags = 0;
 
+  gtk_widget_set_size_request(window,
+			      1920, 1080);
+  
   gtk_window_set_title((GtkWindow *) window,
 		       "monoidea's monothek");
 
@@ -173,6 +178,24 @@ monothek_window_init(MonothekWindow *window)
   
   /* start view */
   view = monothek_start_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  /* closed view */
+  view = monothek_closed_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  /* outage view */
+  view = monothek_outage_view_new();
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
