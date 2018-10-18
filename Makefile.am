@@ -96,6 +96,8 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_start_view.h \
 	monothek/ui/view/monothek_closed_view.h \
 	monothek/ui/view/monothek_outage_view.h \
+	monothek/ui/view/monothek_jukebox_payment_view.h \
+	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_view.h
 
 deprecated_libmonothek_view_c_sources =
@@ -105,6 +107,8 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_start_view.c \
 	monothek/ui/view/monothek_closed_view.c \
 	monothek/ui/view/monothek_outage_view.c \
+	monothek/ui/view/monothek_jukebox_payment_view.c \
+	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_view.c
 
 # monothek_ui all files

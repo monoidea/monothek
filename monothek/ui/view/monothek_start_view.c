@@ -474,19 +474,6 @@ monothek_start_view_draw(MonothekView *view)
     g_object_unref(layout);
     
     /* diskjokey - start */
-    cairo_set_line_width(cr,
-			 start_view->diskjokey_start_box_line_width);
-    cairo_rectangle(cr,
-		    (double) start_view->diskjokey_start_box_x0, (double) start_view->diskjokey_start_box_y0,
-		    (double) start_view->diskjokey_start_box_width, (double) start_view->diskjokey_start_box_height);
-    cairo_fill(cr);
-
-    /* set black color */
-    cairo_set_source_rgb(cr,
-			 0.0,
-			 0.0,
-			 0.0);
-
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "START", -1);
     desc = pango_font_description_from_string(diskjokey_font);
@@ -507,11 +494,12 @@ monothek_start_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    /* restore color */
-    cairo_set_source_rgb(cr,
-			 1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
-			 1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
-			 1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    cairo_set_line_width(cr,
+			 start_view->diskjokey_start_box_line_width);
+    cairo_rectangle(cr,
+		    (double) start_view->diskjokey_start_box_x0, (double) start_view->diskjokey_start_box_y0,
+		    (double) start_view->diskjokey_start_box_width, (double) start_view->diskjokey_start_box_height);
+    cairo_stroke(cr);
     
     /* diskjokey - description */
     layout = pango_cairo_create_layout(cr);
