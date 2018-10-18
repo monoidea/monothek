@@ -1,4 +1,12 @@
-2018-10-18  gettextize  <bug-gnu-gettext@gnu.org>
+ags (1.0.0)
 
-	* configure.ac (AM_GNU_GETTEXT_VERSION): Bump to 0.19.8.
-
+	[ Joël Krähemann (Maintainer of Monothek) ]
+	* implemented MonothekApplicationContext
+	* implemented MonothekWindow
+	* implemented MonothekView
+	* TODO:JK: implemented MonothekStartView, MonothekStartModel and MonthekStartController
+	* TODO:JK: implemented MonothekClosedView, MonothekClosedModel and MonthekClosedController
+	* TODO:JK: implemented MonothekOutageView, MonothekOutageModel and MonthekOutageController
+	* TODO:JK: implemented MonothekJukeboxPaymentView, MonothekJukeboxPaymentModel and MonthekJukeboxPaymentController
+	* TODO:JK: implemented MonothekDiskjokeyPaymentView, MonothekDiskjokeyPaymentModel and MonthekDiskjokeyPaymentController
+	* TODO:JK: implemented MonothekJukeboxModeView, MonothekJukeboxModeModel and MonthekJukeboxModeController
