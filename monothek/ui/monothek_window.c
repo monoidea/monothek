@@ -22,7 +22,7 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
- #include <monothek/ui/monothek_application_context.h>
+#include <monothek/ui/monothek_application_context.h>
 
 #include <stdlib.h>
 
@@ -32,13 +32,13 @@ void monothek_window_class_init(MonothekWindowClass *window);
 void monothek_window_connectable_interface_init(AgsConnectableInterface *connectable);
 void monothek_window_init(MonothekWindow *window);
 void monothek_window_set_property(GObject *gobject,
-			     guint prop_id,
-			     const GValue *value,
-			     GParamSpec *param_spec);
+				  guint prop_id,
+				  const GValue *value,
+				  GParamSpec *param_spec);
 void monothek_window_get_property(GObject *gobject,
-			     guint prop_id,
-			     GValue *value,
-			     GParamSpec *param_spec);
+				  guint prop_id,
+				  GValue *value,
+				  GParamSpec *param_spec);
 void monothek_window_finalize(GObject *gobject);
 
 void monothek_window_connect(AgsConnectable *connectable);
@@ -205,9 +205,9 @@ monothek_window_init(MonothekWindow *window)
 
 void
 monothek_window_set_property(GObject *gobject,
-			guint prop_id,
-			const GValue *value,
-			GParamSpec *param_spec)
+			     guint prop_id,
+			     const GValue *value,
+			     GParamSpec *param_spec)
 {
   MonothekWindow *window;
 
@@ -263,9 +263,9 @@ monothek_window_set_property(GObject *gobject,
 
 void
 monothek_window_get_property(GObject *gobject,
-			guint prop_id,
-			GValue *value,
-			GParamSpec *param_spec)
+			     guint prop_id,
+			     GValue *value,
+			     GParamSpec *param_spec)
 {
   MonothekWindow *window;
 

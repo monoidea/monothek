@@ -159,6 +159,8 @@ am__objects_3 = $(am__objects_2)
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_4 = $(am__objects_1) \
 	monothek/ui/libmonothek_la-monothek_application_context.lo \
+	monothek/ui/libmonothek_la-monothek_start_view.lo \
+	monothek/ui/libmonothek_la-monothek_view.lo \
 	monothek/ui/libmonothek_la-monothek_window.lo
 am_libmonothek_la_OBJECTS = $(am__objects_3) $(am__objects_4)
 libmonothek_la_OBJECTS = $(am_libmonothek_la_OBJECTS)
@@ -198,6 +200,8 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo \
+	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo \
+	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Plo \
 	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -502,12 +506,16 @@ deprecated_libmonothek_h_sources =
 libmonothek_h_sources = \
 	$(deprecated_libmonothek_h_sources) \
 	monothek/ui/monothek_application_context.h \
+	monothek/ui/monothek_start_view.h \
+	monothek/ui/monothek_view.h \
 	monothek/ui/monothek_window.h
 
 deprecated_libmonothek_c_sources = 
 libmonothek_c_sources = \
 	$(deprecated_libmonothek_c_sources) \
 	monothek/ui/monothek_application_context.c \
+	monothek/ui/monothek_start_view.c \
+	monothek/ui/monothek_view.c \
 	monothek/ui/monothek_window.c
 
 
@@ -663,6 +671,12 @@ monothek/ui/$(DEPDIR)/$(am__dirstamp):
 monothek/ui/libmonothek_la-monothek_application_context.lo:  \
 	monothek/ui/$(am__dirstamp) \
 	monothek/ui/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/libmonothek_la-monothek_start_view.lo:  \
+	monothek/ui/$(am__dirstamp) \
+	monothek/ui/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/libmonothek_la-monothek_view.lo:  \
+	monothek/ui/$(am__dirstamp) \
+	monothek/ui/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/libmonothek_la-monothek_window.lo:  \
 	monothek/ui/$(am__dirstamp) \
 	monothek/ui/$(DEPDIR)/$(am__dirstamp)
@@ -693,6 +707,8 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/$(DEPDIR)/ui-monothek_main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -731,6 +747,20 @@ monothek/ui/libmonothek_la-monothek_application_context.lo: monothek/ui/monothek
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/monothek_application_context.c' object='monothek/ui/libmonothek_la-monothek_application_context.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/libmonothek_la-monothek_application_context.lo `test -f 'monothek/ui/monothek_application_context.c' || echo '$(srcdir)/'`monothek/ui/monothek_application_context.c
+
+monothek/ui/libmonothek_la-monothek_start_view.lo: monothek/ui/monothek_start_view.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/libmonothek_la-monothek_start_view.lo -MD -MP -MF monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Tpo -c -o monothek/ui/libmonothek_la-monothek_start_view.lo `test -f 'monothek/ui/monothek_start_view.c' || echo '$(srcdir)/'`monothek/ui/monothek_start_view.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Tpo monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/monothek_start_view.c' object='monothek/ui/libmonothek_la-monothek_start_view.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/libmonothek_la-monothek_start_view.lo `test -f 'monothek/ui/monothek_start_view.c' || echo '$(srcdir)/'`monothek/ui/monothek_start_view.c
+
+monothek/ui/libmonothek_la-monothek_view.lo: monothek/ui/monothek_view.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/libmonothek_la-monothek_view.lo -MD -MP -MF monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Tpo -c -o monothek/ui/libmonothek_la-monothek_view.lo `test -f 'monothek/ui/monothek_view.c' || echo '$(srcdir)/'`monothek/ui/monothek_view.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Tpo monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/monothek_view.c' object='monothek/ui/libmonothek_la-monothek_view.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/libmonothek_la-monothek_view.lo `test -f 'monothek/ui/monothek_view.c' || echo '$(srcdir)/'`monothek/ui/monothek_view.c
 
 monothek/ui/libmonothek_la-monothek_window.lo: monothek/ui/monothek_window.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/libmonothek_la-monothek_window.lo -MD -MP -MF monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Tpo -c -o monothek/ui/libmonothek_la-monothek_window.lo `test -f 'monothek/ui/monothek_window.c' || echo '$(srcdir)/'`monothek/ui/monothek_window.c
@@ -1117,6 +1147,8 @@ distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f monothek/$(DEPDIR)/ui-monothek_main.Po
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Plo
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -1167,6 +1199,8 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f monothek/$(DEPDIR)/ui-monothek_main.Po
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_view.Plo
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

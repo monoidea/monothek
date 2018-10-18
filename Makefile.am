@@ -65,6 +65,44 @@ libmonothek_c_sources = \
 	monothek/ui/monothek_application_context.c \
 	monothek/ui/monothek_window.c
 
+deprecated_libmonothek_view_h_sources =
+
+libmonothek_model_h_sources = \
+	$(deprecated_libmonothek_model_h_sources) \
+	monothek/ui/model/monothek_start_model.h
+
+deprecated_libmonothek_model_c_sources =
+
+libmonothek_model_c_sources = \
+	$(deprecated_libmonothek_model_c_sources) \
+	monothek/ui/model/monothek_start_model.c
+
+deprecated_libmonothek_controller_h_sources =
+
+libmonothek_controller_h_sources = \
+	$(deprecated_libmonothek_controller_h_sources) \
+	monothek/ui/controller/monothek_start_controller.h
+
+deprecated_libmonothek_controller_c_sources =
+
+libmonothek_controller_c_sources = \
+	$(deprecated_libmonothek_controller_c_sources) \
+	monothek/ui/controller/monothek_start_controller.c
+
+deprecated_libmonothek_view_h_sources =
+
+libmonothek_view_h_sources = \
+	$(deprecated_libmonothek_view_h_sources) \
+	monothek/ui/view/monothek_start_view.h \
+	monothek/ui/view/monothek_view.h
+
+deprecated_libmonothek_view_c_sources =
+
+libmonothek_view_c_sources = \
+	$(deprecated_libmonothek_view_c_sources) \
+	monothek/ui/view/monothek_start_view.c \
+	monothek/ui/view/monothek_view.c
+
 # monothek_ui all files
 monothek_uiheaders = \
 	monothek/monothek_main.h
