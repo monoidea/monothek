@@ -363,6 +363,9 @@ monothek_jukebox_payment_view_draw(MonothekView *view)
 		  jukebox_payment_view->arrow_top_x0 + (jukebox_payment_view->arrow_top_width / 2.0), jukebox_payment_view->arrow_top_y0 + jukebox_payment_view->arrow_top_height);
     cairo_close_path(cr);
     cairo_fill(cr);
+
+    /* free font string */
+    g_free(jukebox_font);
   }
   
   /* paint */

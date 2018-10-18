@@ -365,6 +365,8 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
     pango_cairo_show_layout(cr, layout);
 
     g_object_unref(layout);
+
+    g_free(attempts);
     
     /* test */
     layout = pango_cairo_create_layout(cr);
@@ -395,6 +397,9 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 		    (double) jukebox_mode_view->test_box_x0, (double) jukebox_mode_view->test_box_y0,
 		    (double) jukebox_mode_view->test_box_width, (double) jukebox_mode_view->test_box_height);
     cairo_stroke(cr);
+
+    /* free font string */
+    g_free(jukebox_font);
   }
 
   {
@@ -439,6 +444,9 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 		    (double) jukebox_mode_view->play_box_x0, (double) jukebox_mode_view->play_box_y0,
 		    (double) jukebox_mode_view->play_box_width, (double) jukebox_mode_view->play_box_height);
     cairo_stroke(cr);
+
+    /* free font string */
+    g_free(jukebox_font);
   }
 
   {
@@ -483,6 +491,9 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 		    (double) jukebox_mode_view->cancel_box_x0, (double) jukebox_mode_view->cancel_box_y0,
 		    (double) jukebox_mode_view->cancel_box_width, (double) jukebox_mode_view->cancel_box_height);
     cairo_stroke(cr);
+
+    /* free font string */
+    g_free(jukebox_font);
   }
   
   /* paint */

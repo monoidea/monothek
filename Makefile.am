@@ -19,13 +19,27 @@ LIBTOOL_DEPS = @LIBTOOL_DEPS@
 monothek_ui_CFLAGS = @MONOTHEK_CFLAGS@
 monothek_ui_LDFLAGS = @MONOTHEK_LDFLAGS@
 
-libmonothekdir = $(libdir)/monothek
-libmonothek_LTLIBRARIES = libmonothek.la
-
 localedir = $(datadir)/locale
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 
 bin_PROGRAMS=monothek-ui
+
+libmonothekdir = $(libdir)/monothek
+libmonothek_LTLIBRARIES = libmonothek.la
+
+EXTRA_DIST = config.rpath \
+	monothek/config.h.in \
+	gtk-doc.make \
+	acsite.m4 \
+	aclocal.m4 \
+	README \
+	mkinstalldirs \
+	m4/Makefile.am \
+	m4/Makefile.in \
+	monothek/i18n.h \
+	monothek/gettext.h \
+	m4/README \
+	po/README
 
 CLEANFILES = \
 	m4/Makefile
@@ -99,6 +113,7 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.h \
 	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_jukebox_mode_view.h \
+	monothek/ui/view/monothek_jukebox_no_test_view.h \
 	monothek/ui/view/monothek_view.h
 
 deprecated_libmonothek_view_c_sources =
@@ -111,6 +126,7 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.c \
 	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_jukebox_mode_view.c \
+	monothek/ui/view/monothek_jukebox_no_test_view.c \
 	monothek/ui/view/monothek_view.c
 
 # monothek_ui all files

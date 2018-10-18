@@ -172,6 +172,7 @@ am__objects_7 = $(am__objects_1) \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_diskjokey_payment_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo \
+	monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_view.lo
 am_libmonothek_la_OBJECTS = $(am__objects_3) $(am__objects_4) \
 	$(am__objects_5) $(am__objects_6) $(am__objects_7)
@@ -218,6 +219,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo \
+	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo \
@@ -288,7 +290,7 @@ CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/monothek/config.h.in ABOUT-NLS AUTHORS ChangeLog \
-	compile config.guess config.rpath config.sub depcomp \
+	README compile config.guess config.rpath config.sub depcomp \
 	install-sh ltmain.sh missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
@@ -500,6 +502,20 @@ monothek_ui_CFLAGS = @MONOTHEK_CFLAGS@ $(LIBAGS_CFLAGS) \
 monothek_ui_LDFLAGS = @MONOTHEK_LDFLAGS@ -pthread
 libmonothekdir = $(libdir)/monothek
 libmonothek_LTLIBRARIES = libmonothek.la
+EXTRA_DIST = config.rpath \
+	monothek/config.h.in \
+	gtk-doc.make \
+	acsite.m4 \
+	aclocal.m4 \
+	README \
+	mkinstalldirs \
+	m4/Makefile.am \
+	m4/Makefile.in \
+	monothek/i18n.h \
+	monothek/gettext.h \
+	m4/README \
+	po/README
+
 CLEANFILES = \
 	m4/Makefile
 
@@ -562,6 +578,7 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.h \
 	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_jukebox_mode_view.h \
+	monothek/ui/view/monothek_jukebox_no_test_view.h \
 	monothek/ui/view/monothek_view.h
 
 deprecated_libmonothek_view_c_sources = 
@@ -573,6 +590,7 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.c \
 	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_jukebox_mode_view.c \
+	monothek/ui/view/monothek_jukebox_no_test_view.c \
 	monothek/ui/view/monothek_view.c
 
 
@@ -773,6 +791,9 @@ monothek/ui/view/libmonothek_la-monothek_diskjokey_payment_view.lo:  \
 monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo:  \
+	monothek/ui/view/$(am__dirstamp) \
+	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/view/libmonothek_la-monothek_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
@@ -815,6 +836,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo@am__quote@ # am--include-marker
@@ -919,6 +941,13 @@ monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo: monothek/ui/view/
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_jukebox_mode_view.c' object='monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo `test -f 'monothek/ui/view/monothek_jukebox_mode_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_mode_view.c
+
+monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo: monothek/ui/view/monothek_jukebox_no_test_view.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo `test -f 'monothek/ui/view/monothek_jukebox_no_test_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_no_test_view.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Tpo monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_jukebox_no_test_view.c' object='monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo `test -f 'monothek/ui/view/monothek_jukebox_no_test_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_no_test_view.c
 
 monothek/ui/view/libmonothek_la-monothek_view.lo: monothek/ui/view/monothek_view.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_view.lo `test -f 'monothek/ui/view/monothek_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_view.c
@@ -1320,6 +1349,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo
+	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
@@ -1379,6 +1409,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo
+	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo

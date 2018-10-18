@@ -404,6 +404,9 @@ monothek_start_view_draw(MonothekView *view)
 
     pango_cairo_update_layout(cr, layout);
     pango_cairo_show_layout(cr, layout);
+
+    /* free font string */
+    g_free(jukebox_font);
   }
   
   /* diskjokey - draw box */
@@ -521,6 +524,9 @@ monothek_start_view_draw(MonothekView *view)
 
     pango_cairo_update_layout(cr, layout);
     pango_cairo_show_layout(cr, layout);
+
+    /* free font string */
+    g_free(diskjokey_font);
   }
 
   /* paint */

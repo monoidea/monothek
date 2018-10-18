@@ -1,0 +1,24 @@
+Monothek
+====
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
+
+jkraehemann@gmail.com
+
+To invoke the program run like followin:
+
+$ monothek-ui
+
+Purpose
+====
+
+Monothek is a program to run either a jukebox or diskjokey interface.
+It offers you a service to do a musical performance.
+
+Monothek was designed by monoidea. See http://monoidea.ch for further
+information.
+
+The web-service is available from http://monothek.ch

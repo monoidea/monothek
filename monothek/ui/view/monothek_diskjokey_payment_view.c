@@ -363,6 +363,9 @@ monothek_diskjokey_payment_view_draw(MonothekView *view)
 		  diskjokey_payment_view->arrow_top_x0 + (diskjokey_payment_view->arrow_top_width / 2.0), diskjokey_payment_view->arrow_top_y0 + diskjokey_payment_view->arrow_top_height);
     cairo_close_path(cr);
     cairo_fill(cr);
+
+    /* free font string */
+    g_free(diskjokey_font);
   }
   
   /* paint */

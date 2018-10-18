@@ -30,6 +30,7 @@
 #include <monothek/ui/view/monothek_jukebox_payment_view.h>
 #include <monothek/ui/view/monothek_diskjokey_payment_view.h>
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
+#include <monothek/ui/view/monothek_jukebox_no_test_view.h>
 
 #include <stdlib.h>
 
@@ -226,6 +227,15 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox mode view */
   view = monothek_jukebox_mode_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  /* jukebox no test view */
+  view = monothek_jukebox_no_test_view_new();
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,

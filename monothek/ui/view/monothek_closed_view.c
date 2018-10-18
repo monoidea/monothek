@@ -298,6 +298,9 @@ monothek_closed_view_draw(MonothekView *view)
     pango_cairo_show_layout(cr, layout);
 
     g_object_unref(layout);
+
+    /* free font string */
+    g_free(jukebox_font);
   }
   
   cairo_set_source_rgb(cr,
@@ -338,6 +341,9 @@ monothek_closed_view_draw(MonothekView *view)
     pango_cairo_show_layout(cr, layout);
 
     g_object_unref(layout);
+
+    /* free font string */
+    g_free(diskjokey_font);
   }
 
   /* paint */
