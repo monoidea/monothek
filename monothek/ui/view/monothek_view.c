@@ -61,6 +61,16 @@ gboolean monothek_view_motion_notify(GtkWidget *widget,
 
 void monothek_view_real_draw(MonothekView *view);
 
+/**
+ * SECTION:monothek_view
+ * @short_description: The view object.
+ * @title: MonothekView
+ * @section_id:
+ * @include: monothek/ui/view/monothek_view.h
+ *
+ * #MonothekView is a base class of a MVC widget's view.
+ */
+
 enum{
   DRAW,
   LAST_SIGNAL,
@@ -541,6 +551,9 @@ monothek_view_real_draw(MonothekView *view)
     return;
   }
 
+  cairo_surface_flush(cairo_get_target(cr));
+  cairo_push_group(cr);
+
   x_start = 0;
   y_start = 0;
 
@@ -554,6 +567,7 @@ monothek_view_real_draw(MonothekView *view)
 		  (double) width, (double) height);
   cairo_fill(cr);
 
+  cairo_pop_group_to_source(cr);
   cairo_paint(cr);
 
   cairo_surface_mark_dirty(cairo_get_target(cr));

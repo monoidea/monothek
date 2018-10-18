@@ -43,9 +43,15 @@ struct _MonothekStartController
 struct _MonothekStartControllerClass
 {
   GObjectClass gobject;
+
+  void (*launch_jukebox)(MonothekStartController *start_controller);
+  void (*launch_diskjokey)(MonothekStartController *start_controller);
 };
 
 GType monothek_start_controller_get_type(void);
+
+void monothek_start_controller_launch_jukebox(MonothekStartController *start_controller);
+void monothek_start_controller_launch_diskjokey(MonothekStartController *start_controller);
 
 MonothekStartController* monothek_start_controller_new();
 

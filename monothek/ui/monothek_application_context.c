@@ -756,10 +756,6 @@ monothek_application_context_dispose(GObject *gobject)
 
   /* window */
   if(monothek_application_context->window != NULL){
-    g_object_set(monothek_application_context->window,
-		 "application-context", NULL,
-		 NULL);
-    
     gtk_widget_destroy(monothek_application_context->window);
 
     monothek_application_context->window = NULL;
@@ -821,6 +817,7 @@ void
 monothek_application_context_prepare(AgsApplicationContext *application_context)
 {
   MonothekApplicationContext *monothek_application_context;
+  MonothekWindow *window;
 
   AgsThread *audio_loop, *polling_thread, *task_thread;
   AgsThreadPool *thread_pool;
@@ -901,6 +898,18 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
     
   pthread_mutex_unlock(audio_loop->start_mutex);
 
+  /* MonothekWindow */
+  window = g_object_new(MONOTHEK_TYPE_WINDOW,
+			NULL);
+  g_object_set(monothek_application_context,
+	       "window", window,
+	       NULL);
+
+  gtk_window_set_default_size((GtkWindow *) window, 1920, 1080);
+
+  ags_connectable_connect(AGS_CONNECTABLE(window));
+  gtk_widget_show_all(window);
+  
   /* start gui thread */
   gtk_main();
 }
@@ -909,7 +918,6 @@ void
 monothek_application_context_setup(AgsApplicationContext *application_context)
 {
   MonothekApplicationContext *monothek_application_context;
-  MonothekWindow *window;
 
   AgsAudioLoop *audio_loop;
   GObject *soundcard;
@@ -1063,7 +1071,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
     }
     
     monothek_application_context->soundcard = g_list_append(monothek_application_context->soundcard,
-							soundcard);
+							    soundcard);
     g_object_ref(soundcard);
 
     /* device */
@@ -1144,20 +1152,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   }  
 
   g_free(soundcard_group);
-  
-  /* MonothekWindow */
-  window = g_object_new(MONOTHEK_TYPE_WINDOW,
-			"soundcard", soundcard,
-			"application-context", monothek_application_context,
-			NULL);
-  g_object_set(monothek_application_context,
-	       "window", window,
-	       NULL);
-
-  gtk_window_set_default_size((GtkWindow *) window, 1920, 1080);
-
-  ags_connectable_connect(AGS_CONNECTABLE(window));
-  
+    
   /* AgsSoundcardThread and AgsExportThread */
   monothek_application_context->soundcard_thread = NULL;
   list = monothek_application_context->soundcard;
@@ -1179,41 +1174,24 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
     export_thread = NULL;
     
     //    if(soundcard_capability == AGS_SOUNDCARD_CAPABILITY_PLAYBACK){
-      notify_soundcard = ags_notify_soundcard_new(soundcard_thread);
-      AGS_TASK(notify_soundcard)->task_thread = application_context->task_thread;
+    notify_soundcard = ags_notify_soundcard_new(soundcard_thread);
+    AGS_TASK(notify_soundcard)->task_thread = application_context->task_thread;
     
-      if(AGS_IS_DEVOUT(list->data)){
-	AGS_DEVOUT(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_JACK_DEVOUT(list->data)){
-	AGS_JACK_DEVOUT(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_PULSE_DEVOUT(list->data)){
-	AGS_PULSE_DEVOUT(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_CORE_AUDIO_DEVOUT(list->data)){
-	AGS_CORE_AUDIO_DEVOUT(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_DEVIN(list->data)){
-	AGS_DEVIN(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_JACK_DEVIN(list->data)){
-	AGS_JACK_DEVIN(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_PULSE_DEVIN(list->data)){
-	AGS_PULSE_DEVIN(list->data)->notify_soundcard = notify_soundcard;
-      }else if(AGS_IS_CORE_AUDIO_DEVIN(list->data)){
-	AGS_CORE_AUDIO_DEVIN(list->data)->notify_soundcard = notify_soundcard;
-      }
+    if(AGS_IS_DEVOUT(list->data)){
+      AGS_DEVOUT(list->data)->notify_soundcard = notify_soundcard;
+    }
 
-      ags_task_thread_append_cyclic_task(application_context->task_thread,
-					 notify_soundcard);
+    ags_task_thread_append_cyclic_task(application_context->task_thread,
+				       notify_soundcard);
 
-      /* export thread */
-      if(AGS_IS_DEVOUT(list->data) ||
-	 AGS_IS_JACK_DEVOUT(list->data) ||
-	 AGS_IS_PULSE_DEVOUT(list->data) ||
-	 AGS_IS_CORE_AUDIO_DEVOUT(list->data)){
-	export_thread = (AgsThread *) ags_export_thread_new(list->data,
-							    NULL);
-	ags_thread_add_child_extended(AGS_THREAD(audio_loop),
-				      (AgsThread *) export_thread,
-				      TRUE, TRUE);
-      }    
+    /* export thread */
+    if(AGS_IS_DEVOUT(list->data)){
+      export_thread = (AgsThread *) ags_export_thread_new(list->data,
+							  NULL);
+      ags_thread_add_child_extended(AGS_THREAD(audio_loop),
+				    (AgsThread *) export_thread,
+				    TRUE, TRUE);
+    }    
 
     /* default soundcard thread */
     if(monothek_application_context->soundcard_thread == NULL){
@@ -1242,7 +1220,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 				destroy_worker,
 				TRUE, TRUE);
   monothek_application_context->worker = g_list_prepend(monothek_application_context->worker,
-						    destroy_worker);
+							destroy_worker);
   ags_thread_start(destroy_worker);
   
   /* AgsThreadPool */

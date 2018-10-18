@@ -17,7 +17,7 @@
  * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <monothek/ui/monothek_start_model.h>
+#include <monothek/ui/model/monothek_start_model.h>
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
@@ -40,13 +40,12 @@ void monothek_start_model_finalize(GObject *gobject);
 
 /**
  * SECTION:monothek_start_model
- * @short_description: The start_model object.
+ * @short_description: The start model object.
  * @title: MonothekStartModel
  * @section_id:
- * @include: monothek/ui/monothek_start_model.h
+ * @include: monothek/ui/model/monothek_start_model.h
  *
- * #MonothekStartModel is a composite toplevel widget. It contains the
- * menubar, the machine rack and the notation editor.
+ * #MonothekStartModel is the MVC's start model.
  */
 
 enum{

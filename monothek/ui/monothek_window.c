@@ -24,6 +24,8 @@
 
 #include <monothek/ui/monothek_application_context.h>
 
+#include <monothek/ui/view/monothek_start_view.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -60,8 +62,6 @@ gboolean monothek_window_delete_event(GtkWidget *widget, GdkEventAny *event);
 
 enum{
   PROP_0,
-  PROP_SOUNDCARD,
-  PROP_APPLICATION_CONTEXT,
 };
 
 static gpointer monothek_window_parent_class = NULL;
@@ -124,38 +124,6 @@ monothek_window_class_init(MonothekWindowClass *window)
   gobject->finalize = monothek_window_finalize;
 
   /* properties */
-  /**
-   * MonothekWindow:soundcard:
-   *
-   * The assigned main MonothekSoundcard.
-   * 
-   * Since: 1.0.0
-   */
-  param_spec = g_param_spec_object("soundcard",
-				   i18n_pspec("assigned soundcard"),
-				   i18n_pspec("The soundcard it is assigned with"),
-				   G_TYPE_OBJECT,
-				   G_PARAM_READABLE | G_PARAM_WRITABLE);
-  g_object_class_install_property(gobject,
-				  PROP_SOUNDCARD,
-				  param_spec);
-
-  /**
-   * MonothekWindow:application-context:
-   *
-   * The assigned application context.
-   * 
-   * Since: 1.0.0
-   */
-  param_spec = g_param_spec_object("application-context",
-				   i18n_pspec("assigned application context"),
-				   i18n_pspec("The MonothekApplicationContext it is assigned with"),
-				   G_TYPE_OBJECT,
-				   G_PARAM_READABLE | G_PARAM_WRITABLE);
-  g_object_class_install_property(gobject,
-				  PROP_APPLICATION_CONTEXT,
-				  param_spec);
-
 
   /* GtkWidgetClass */
   widget = (GtkWidgetClass *) window;
@@ -177,17 +145,11 @@ void
 monothek_window_init(MonothekWindow *window)
 {
   GtkWidget *scrolled_window;
-  GtkWidget *viewport;
-  GtkVBox *vbox;
-
+  MonothekView *view;
+  
   GError *error;
 
   window->flags = 0;
-
-  window->application_context = NULL;
-  window->application_mutex = NULL;
-  
-  window->soundcard = NULL;
 
   gtk_window_set_title((GtkWindow *) window,
 		       "monoidea's monothek");
@@ -197,10 +159,16 @@ monothek_window_init(MonothekWindow *window)
   gtk_container_add(window,
 		    scrolled_window);
 
-
-  /* vbox */
+  /* view - vbox */
   window->view = (GtkVBox *) gtk_vbox_new(FALSE, 0);
-  gtk_container_add((GtkContainer *) scrolled_window, (GtkWidget*) window->view);
+  gtk_scrolled_window_add_with_viewport((GtkContainer *) scrolled_window, (GtkWidget*) window->view);
+
+  /* start view */
+  view = monothek_start_view_new();
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
 }
 
 void
@@ -214,47 +182,6 @@ monothek_window_set_property(GObject *gobject,
   window = MONOTHEK_WINDOW(gobject);
 
   switch(prop_id){
-  case PROP_SOUNDCARD:
-    {
-      GObject *soundcard;
-
-      soundcard = g_value_get_object(value);
-
-      if(window->soundcard == soundcard){
-	return;
-      }
-      
-      if(soundcard != NULL){
-	g_object_ref(soundcard);
-      }
-      
-      window->soundcard = soundcard;
-    }
-    break;
-  case PROP_APPLICATION_CONTEXT:
-    {
-      MonothekApplicationContext *application_context;
-
-      application_context = (MonothekApplicationContext *) g_value_get_object(value);
-
-      if((MonothekApplicationContext *) window->application_context == application_context){
-	return;
-      }
-
-      if(window->application_context != NULL){
-	window->application_mutex = NULL;
-	g_object_unref(window->application_context);
-      }
-
-      if(application_context != NULL){
-	window->application_mutex = AGS_APPLICATION_CONTEXT(application_context)->obj_mutex;
-	
-	g_object_ref(application_context);
-      }
-
-      window->application_context = (GObject *) application_context;
-    }
-    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -272,12 +199,6 @@ monothek_window_get_property(GObject *gobject,
   window = MONOTHEK_WINDOW(gobject);
 
   switch(prop_id){
-  case PROP_SOUNDCARD:
-    g_value_set_object(value, window->soundcard);
-    break;
-  case PROP_APPLICATION_CONTEXT:
-    g_value_set_object(value, window->application_context);
-    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -291,8 +212,6 @@ monothek_window_finalize(GObject *gobject)
 
   window = (MonothekWindow *) gobject;
 
-  g_object_unref(G_OBJECT(window->soundcard));
-  
   /* call parent */
   G_OBJECT_CLASS(monothek_window_parent_class)->finalize(gobject);
 }
@@ -342,11 +261,7 @@ monothek_window_show(GtkWidget *widget)
 gboolean
 monothek_window_delete_event(GtkWidget *widget, GdkEventAny *event)
 {
-  gtk_widget_destroy(widget);
-
-  GTK_WIDGET_CLASS(monothek_window_parent_class)->delete_event(widget, event);
-
-  return(FALSE);
+  return(TRUE);
 }
 
 /**

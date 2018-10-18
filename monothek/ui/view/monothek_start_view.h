@@ -25,7 +25,7 @@
 
 #include <gtk/gtk.h>
 
-#include <monothek/ui/monothek_view.h>
+#include <monothek/ui/view/monothek_view.h>
 
 #define MONOTHEK_TYPE_START_VIEW                (monothek_start_view_get_type())
 #define MONOTHEK_START_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_START_VIEW, MonothekStartView))
@@ -40,6 +40,36 @@ typedef struct _MonothekStartViewClass MonothekStartViewClass;
 struct _MonothekStartView
 {
   MonothekView monothek_view;
+
+  gdouble outer_box_line_width;
+
+  gdouble jukebox_x0;
+  gdouble jukebox_y0;
+
+  gdouble jukebox_width;
+  gdouble jukebox_height;
+
+  gdouble jukebox_start_box_line_width;
+
+  gdouble jukebox_start_box_x0;
+  gdouble jukebox_start_box_y0;
+
+  gdouble jukebox_start_box_width;
+  gdouble jukebox_start_box_height;
+  
+  gdouble diskjokey_x0;
+  gdouble diskjokey_y0;
+
+  gdouble diskjokey_width;
+  gdouble diskjokey_height;
+
+  gdouble diskjokey_start_box_line_width;
+
+  gdouble diskjokey_start_box_x0;
+  gdouble diskjokey_start_box_y0;
+
+  gdouble diskjokey_start_box_width;
+  gdouble diskjokey_start_box_height;
 };
 
 struct _MonothekStartViewClass

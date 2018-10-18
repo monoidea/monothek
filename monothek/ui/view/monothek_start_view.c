@@ -17,7 +17,7 @@
  * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <monothek/ui/monothek_start_view.h>
+#include <monothek/ui/view/monothek_start_view.h>
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
@@ -46,13 +46,12 @@ void monothek_start_view_draw(MonothekView *view);
 
 /**
  * SECTION:monothek_start_view
- * @short_description: The start_view object.
+ * @short_description: The start view object.
  * @title: MonothekStartView
  * @section_id:
- * @include: monothek/ui/monothek_start_view.h
+ * @include: monothek/ui/view/monothek_start_view.h
  *
- * #MonothekStartView is a composite toplevel widget. It contains the
- * menubar, the machine rack and the notation editor.
+ * #MonothekStartView is the MVC's start view widget.
  */
 
 enum{
@@ -107,7 +106,8 @@ monothek_start_view_class_init(MonothekStartViewClass *start_view)
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
-
+  MonothekViewClass *view;
+  
   GParamSpec *param_spec;
 
   monothek_start_view_parent_class = g_type_class_peek_parent(start_view);
@@ -123,6 +123,9 @@ monothek_start_view_class_init(MonothekStartViewClass *start_view)
   /* properties */
 
   /* MonothekView */
+  view = (MonothekViewClass *) start_view;
+
+  view->draw = monothek_start_view_draw;
 }
 
 void
@@ -139,7 +142,37 @@ monothek_start_view_connectable_interface_init(AgsConnectableInterface *connecta
 void
 monothek_start_view_init(MonothekStartView *start_view)
 {
-  //TODO:JK: implement me
+  start_view->outer_box_line_width = 5.0;
+
+  /* jukebox */
+  start_view->jukebox_x0 = 80.0;
+  start_view->jukebox_y0 = 80.0;
+
+  start_view->jukebox_width = 840.0;
+  start_view->jukebox_height = 920.0;
+
+  start_view->jukebox_start_box_line_width = 5.0;
+
+  start_view->jukebox_start_box_x0 = 320.0;
+  start_view->jukebox_start_box_y0 = 600.0;
+
+  start_view->jukebox_start_box_width = 360.0;
+  start_view->jukebox_start_box_height = 120.0;
+  
+  /* diskjokey */
+  start_view->diskjokey_x0 = 1000.0;
+  start_view->diskjokey_y0 = 80.0;
+
+  start_view->diskjokey_width = 840.0;
+  start_view->diskjokey_height = 920.0;
+
+  start_view->diskjokey_start_box_line_width = 5.0;
+
+  start_view->diskjokey_start_box_x0 = 1240.0;
+  start_view->diskjokey_start_box_y0 = 600.0;
+
+  start_view->diskjokey_start_box_width = 360.0;
+  start_view->diskjokey_start_box_height = 120.0;
 }
 
 void
@@ -226,7 +259,175 @@ monothek_start_view_disconnect(AgsConnectable *connectable)
 void
 monothek_start_view_draw(MonothekView *view)
 {
+  MonothekStartView *start_view;
+  
+  cairo_t *cr;
+
+  guint width, height;
+  guint x_start, y_start;
+
+  static const gdouble white_gc = 65535.0;
+
+  start_view = MONOTHEK_START_VIEW(view);
+  
+  /* call parent */
   MONOTHEK_VIEW_CLASS(monothek_start_view_parent_class)->draw(view);
+
+  /* create cr */
+  cr = gdk_cairo_create(GTK_WIDGET(view)->window);
+  
+  if(cr == NULL){
+    return;
+  }
+
+  cairo_surface_flush(cairo_get_target(cr));
+  cairo_push_group(cr);
+
+  x_start = 0;
+  y_start = 0;
+
+  width = GTK_WIDGET(view)->allocation.width;
+  height = GTK_WIDGET(view)->allocation.height;
+
+  /* jukebox - draw box */
+  cairo_set_source_rgb(cr,
+		       1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+		       1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+		       1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+  cairo_set_line_width(cr,
+		       start_view->outer_box_line_width);
+  cairo_rectangle(cr,
+		  (double) start_view->jukebox_x0, (double) start_view->jukebox_y0,
+		  (double) start_view->jukebox_width, (double) start_view->jukebox_height);
+  cairo_stroke(cr);
+
+  {
+    PangoLayout *layout;
+    PangoFontDescription *desc;
+
+    PangoRectangle ink_rect;
+    PangoRectangle logical_rect;
+    
+    gchar *jukebox_font;
+    
+    static const guint font_size = 100;
+
+    jukebox_font = g_strdup_printf("%s Bold", view->font);
+
+    /* jukebox - head */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "JUKEBOX", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    96 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 228.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* jukebox - pricing */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "5 CHF", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    60 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 438.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+    
+    /* jukebox - start */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "START", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    38 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 639.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    cairo_set_line_width(cr,
+			 start_view->jukebox_start_box_line_width);
+    cairo_rectangle(cr,
+		    (double) start_view->jukebox_start_box_x0, (double) start_view->jukebox_start_box_y0,
+		    (double) start_view->jukebox_start_box_width, (double) start_view->jukebox_start_box_height);
+    cairo_stroke(cr);
+
+    /* jukebox - description */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "CHOOSE A TITLE AND\nDANCE TO IT TILL IT ENDS", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    38 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_alignment(layout,
+			       PANGO_ALIGN_CENTER);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 820.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+  }
+  
+  /* diskjokey - draw box */
+  cairo_set_source_rgb(cr,
+		       1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+		       1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+		       1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+  cairo_set_line_width(cr,
+		       start_view->outer_box_line_width);
+  cairo_rectangle(cr,
+		  (double) start_view->diskjokey_x0, (double) start_view->diskjokey_y0,
+		  (double) start_view->diskjokey_width, (double) start_view->diskjokey_height);
+  cairo_stroke(cr);
+
+  /* paint */
+  cairo_pop_group_to_source(cr);
+  cairo_paint(cr);
+
+  cairo_surface_mark_dirty(cairo_get_target(cr));
+  cairo_destroy(cr);
+
+#ifndef __APPLE__
+  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
+#endif
 }
 
 /**

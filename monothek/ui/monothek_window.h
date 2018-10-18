@@ -46,11 +46,6 @@ struct _MonothekWindow
 
   guint flags;
 
-  GObject *application_context;
-  pthread_mutex_t *application_mutex;
-  
-  GObject *soundcard;
-
   GtkBox *view;
 };
 
