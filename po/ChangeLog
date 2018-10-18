@@ -1,0 +1,5 @@
+2018-10-18  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.19.8.1.
+	* POTFILES.in: New file.
+
