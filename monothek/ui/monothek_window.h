@@ -3,18 +3,18 @@
  *
  * This file is part of Monothek.
  *
- * GSequencer is free software: you can redistribute it and/or modify
+ * Monothek is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * GSequencer is distributed in the hope that it will be useful,
+ * Monothek is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with GSequencer.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __MONOTHEK_WINDOW_H__
@@ -35,16 +35,23 @@
 typedef struct _MonothekWindow MonothekWindow;
 typedef struct _MonothekWindowClass MonothekWindowClass;
 
+typedef enum{
+  MONOTHEK_WINDOW_ADDED_TO_REGISTRY           = 1,
+  MONOTHEK_WINDOW_CONNECTED                   = 1 <<  1,
+}MonothekWindowFlags;
+
 struct _MonothekWindow
 {
   GtkWindow window;
 
-  guint flmonothek;
+  guint flags;
 
   GObject *application_context;
   pthread_mutex_t *application_mutex;
   
   GObject *soundcard;
+
+  GtkBox *view;
 };
 
 struct _MonothekWindowClass

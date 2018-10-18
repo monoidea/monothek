@@ -1,21 +1,23 @@
-/* GSequencer - Advanced GTK Sequencer
+/* Monothek - monoidea's monothek
  * Copyright (C) 2018 Joël Krähemann
  *
- * This file is part of GSequencer.
+ * This file is part of Monothek.
  *
- * GSequencer is free software: you can redistribute it and/or modify
+ * Monothek is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * GSequencer is distributed in the hope that it will be useful,
+ * Monothek is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with GSequencer.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <monothek/ui/monothek_application_context.h>
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
@@ -42,16 +44,16 @@
 
 #include <stdbool.h>
 
-#include <ags/i18n.h>
+#include <monothek/i18n.h>
 
 void monothek_application_context_signal_handler(int signr);
 static void monothek_application_context_signal_cleanup();
 
-void monothek_application_context_class_init(MonothekApplicationContextClass *xorg_application_context);
+void monothek_application_context_class_init(MonothekApplicationContextClass *monothek_application_context);
 void monothek_application_context_connectable_interface_init(AgsConnectableInterface *connectable);
 void monothek_application_context_concurrency_provider_interface_init(AgsConcurrencyProviderInterface *concurrency_provider);
 void monothek_application_context_sound_provider_interface_init(AgsSoundProviderInterface *sound_provider);
-void monothek_application_context_init(MonothekApplicationContext *xorg_application_context);
+void monothek_application_context_init(MonothekApplicationContext *monothek_application_context);
 void monothek_application_context_set_property(GObject *gobject,
 					       guint prop_id,
 					       const GValue *value,
@@ -98,7 +100,7 @@ void monothek_application_context_launch(AgsFileLaunch *launch, MonothekApplicat
 
 /**
  * SECTION:monothek_application_context
- * @short_description: The xorg application context
+ * @short_description: The monothek application context
  * @title: MonothekApplicationContext
  * @section_id:
  * @include: ags/X/monothek_application_context.h
@@ -116,7 +118,6 @@ static gpointer monothek_application_context_parent_class = NULL;
 static AgsConnectableInterface* monothek_application_context_parent_connectable_interface;
 
 MonothekApplicationContext *monothek_application_context;
-volatile gboolean ags_show_start_animation;
 
 extern AgsApplicationContext *ags_application_context;
 
@@ -139,7 +140,7 @@ monothek_application_context_get_type()
   static volatile gsize g_define_type_id__volatile = 0;
 
   if(g_once_init_enter (&g_define_type_id__volatile)){
-    GType ags_type_xorg_application_context = 0;
+    GType ags_type_monothek_application_context = 0;
 
     static const GTypeInfo monothek_application_context_info = {
       sizeof (MonothekApplicationContextClass),
@@ -171,24 +172,24 @@ monothek_application_context_get_type()
       NULL, /* interface_data */
     };
 
-    ags_type_xorg_application_context = g_type_register_static(AGS_TYPE_APPLICATION_CONTEXT,
-							       "MonothekApplicationContext",
-							       &monothek_application_context_info,
-							       0);
+    ags_type_monothek_application_context = g_type_register_static(AGS_TYPE_APPLICATION_CONTEXT,
+								   "MonothekApplicationContext",
+								   &monothek_application_context_info,
+								   0);
 
-    g_type_add_interface_static(ags_type_xorg_application_context,
+    g_type_add_interface_static(ags_type_monothek_application_context,
 				AGS_TYPE_CONNECTABLE,
 				&ags_connectable_interface_info);
 
-    g_type_add_interface_static(ags_type_xorg_application_context,
+    g_type_add_interface_static(ags_type_monothek_application_context,
 				AGS_TYPE_CONCURRENCY_PROVIDER,
 				&ags_concurrency_provider_interface_info);
 
-    g_type_add_interface_static(ags_type_xorg_application_context,
+    g_type_add_interface_static(ags_type_monothek_application_context,
 				AGS_TYPE_SOUND_PROVIDER,
 				&ags_sound_provider_interface_info);
 
-    g_once_init_leave(&g_define_type_id__volatile, ags_type_xorg_application_context);
+    g_once_init_leave(&g_define_type_id__volatile, ags_type_monothek_application_context);
   }
 
   return g_define_type_id__volatile;
@@ -237,16 +238,16 @@ monothek_application_context_signal_handler_timer(int sig, siginfo_t *si, void *
 #endif
 
 void
-monothek_application_context_class_init(MonothekApplicationContextClass *xorg_application_context)
+monothek_application_context_class_init(MonothekApplicationContextClass *monothek_application_context)
 {
   GObjectClass *gobject;
   AgsApplicationContextClass *application_context;
   GParamSpec *param_spec;
 
-  monothek_application_context_parent_class = g_type_class_peek_parent(xorg_application_context);
+  monothek_application_context_parent_class = g_type_class_peek_parent(monothek_application_context);
 
   /* GObjectClass */
-  gobject = (GObjectClass *) xorg_application_context;
+  gobject = (GObjectClass *) monothek_application_context;
 
   gobject->set_property = monothek_application_context_set_property;
   gobject->get_property = monothek_application_context_get_property;
@@ -260,19 +261,19 @@ monothek_application_context_class_init(MonothekApplicationContextClass *xorg_ap
    *
    * The assigned window.
    * 
-   * Since: 2.0.0
+   * Since: 1.0.0
    */
   param_spec = g_param_spec_object("window",
 				   i18n_pspec("window of xorg application context"),
 				   i18n_pspec("The window which this xorg application context assigned to"),
-				   AGS_TYPE_WINDOW,
+				   MONOTHEK_TYPE_WINDOW,
 				   G_PARAM_READABLE | G_PARAM_WRITABLE);
   g_object_class_install_property(gobject,
 				  PROP_WINDOW,
 				  param_spec);
 
   /* MonothekApplicationContextClass */
-  application_context = (AgsApplicationContextClass *) xorg_application_context;
+  application_context = (AgsApplicationContextClass *) monothek_application_context;
   
   application_context->load_config = monothek_application_context_load_config;
 
@@ -283,8 +284,8 @@ monothek_application_context_class_init(MonothekApplicationContextClass *xorg_ap
   
   application_context->quit = monothek_application_context_quit;
 
-  application_context->write = monothek_application_context_write;
-  application_context->read = monothek_application_context_read;
+  application_context->write = NULL;
+  application_context->read = NULL;
 }
 
 void
@@ -325,45 +326,46 @@ monothek_application_context_sound_provider_interface_init(AgsSoundProviderInter
 }
 
 void
-monothek_application_context_init(MonothekApplicationContext *xorg_application_context)
+monothek_application_context_init(MonothekApplicationContext *monothek_application_context)
 {
   AgsConfig *config;
 
   if(ags_application_context == NULL){
-    ags_application_context = xorg_application_context;
+    ags_application_context = monothek_application_context;
   }
+
+  g_atomic_int_set(&(monothek_application_context->gui_ready),
+		   FALSE);
   
   /* fundamental instances */
   config = ags_config_get_instance();
-  AGS_APPLICATION_CONTEXT(xorg_application_context)->config = config;
+  AGS_APPLICATION_CONTEXT(monothek_application_context)->config = config;
   g_object_ref(config);
   g_object_set(config,
-	       "application-context", xorg_application_context,
+	       "application-context", monothek_application_context,
 	       NULL);
 
-  AGS_APPLICATION_CONTEXT(xorg_application_context)->log = ags_log_get_instance();
-  g_object_ref(AGS_APPLICATION_CONTEXT(xorg_application_context)->log);
+  AGS_APPLICATION_CONTEXT(monothek_application_context)->log = ags_log_get_instance();
+  g_object_ref(AGS_APPLICATION_CONTEXT(monothek_application_context)->log);
   
   /* Xorg application context */
-  xorg_application_context->thread_pool = NULL;
+  monothek_application_context->thread_pool = NULL;
 
-  xorg_application_context->polling_thread = NULL;
+  monothek_application_context->polling_thread = NULL;
 
-  xorg_application_context->worker = NULL;
+  monothek_application_context->worker = NULL;
   
-  xorg_application_context->soundcard_thread = NULL;
-  xorg_application_context->export_thread = NULL;
+  monothek_application_context->soundcard_thread = NULL;
+  monothek_application_context->export_thread = NULL;
 
-  xorg_application_context->gui_thread = NULL;
+  monothek_application_context->soundcard = NULL;
+  monothek_application_context->sequencer = NULL;
 
-  xorg_application_context->soundcard = NULL;
-  xorg_application_context->sequencer = NULL;
-
-  xorg_application_context->sound_server = NULL;
+  monothek_application_context->sound_server = NULL;
   
-  xorg_application_context->audio = NULL;
+  monothek_application_context->audio = NULL;
 
-  xorg_application_context->window = NULL;
+  monothek_application_context->window = NULL;
 }
 
 void
@@ -372,30 +374,30 @@ monothek_application_context_set_property(GObject *gobject,
 					  const GValue *value,
 					  GParamSpec *param_spec)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
-  xorg_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
+  monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
 
   switch(prop_id){
   case PROP_WINDOW:
     {
-      AgsWindow *window;
+      MonothekWindow *window;
       
-      window = (AgsWindow *) g_value_get_object(value);
+      window = (MonothekWindow *) g_value_get_object(value);
 
-      if(window == xorg_application_context->window){
+      if(window == monothek_application_context->window){
 	return;
       }
 
-      if(xorg_application_context->window != NULL){
-	g_object_unref(xorg_application_context->window);
+      if(monothek_application_context->window != NULL){
+	g_object_unref(monothek_application_context->window);
       }
       
       if(window != NULL){
 	g_object_ref(G_OBJECT(window));
       }
       
-      xorg_application_context->window = window;
+      monothek_application_context->window = window;
     }
     break;
   default:
@@ -410,14 +412,14 @@ monothek_application_context_get_property(GObject *gobject,
 					  GValue *value,
 					  GParamSpec *param_spec)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
-  xorg_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
+  monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
 
   switch(prop_id){
   case PROP_WINDOW:
     {
-      g_value_set_object(value, xorg_application_context->window);
+      g_value_set_object(value, monothek_application_context->window);
     }
     break;
   default:
@@ -429,20 +431,20 @@ monothek_application_context_get_property(GObject *gobject,
 void
 monothek_application_context_connect(AgsConnectable *connectable)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
   GList *soundcard, *sequencer;
   
-  xorg_application_context = MONOTHEK_APPLICATION_CONTEXT(connectable);
+  monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(connectable);
 
-  if((AGS_APPLICATION_CONTEXT_CONNECTED & (AGS_APPLICATION_CONTEXT(xorg_application_context)->flags)) != 0){
+  if((AGS_APPLICATION_CONTEXT_CONNECTED & (AGS_APPLICATION_CONTEXT(monothek_application_context)->flags)) != 0){
     return;
   }
 
   monothek_application_context_parent_connectable_interface->connect(connectable);
 
   /* soundcard */
-  soundcard = xorg_application_context->soundcard;
+  soundcard = monothek_application_context->soundcard;
 
   while(soundcard != NULL){
     ags_connectable_connect(AGS_CONNECTABLE(soundcard->data));
@@ -450,17 +452,17 @@ monothek_application_context_connect(AgsConnectable *connectable)
     soundcard = soundcard->next;
   }
   
-  ags_connectable_connect(AGS_CONNECTABLE(xorg_application_context->window));
+  ags_connectable_connect(AGS_CONNECTABLE(monothek_application_context->window));
 }
 
 void
 monothek_application_context_disconnect(AgsConnectable *connectable)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
-  xorg_application_context = MONOTHEK_APPLICATION_CONTEXT(connectable);
+  monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(connectable);
 
-  if((AGS_APPLICATION_CONTEXT_CONNECTED & (AGS_APPLICATION_CONTEXT(xorg_application_context)->flags)) == 0){
+  if((AGS_APPLICATION_CONTEXT_CONNECTED & (AGS_APPLICATION_CONTEXT(monothek_application_context)->flags)) == 0){
     return;
   }
 
@@ -685,29 +687,29 @@ monothek_application_context_set_audio(AgsSoundProvider *sound_provider,
 void
 monothek_application_context_dispose(GObject *gobject)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
   GList *list;
 
-  xorg_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
+  monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
 
   /* thread pool */
-  if(xorg_application_context->thread_pool != NULL){
-    g_object_unref(xorg_application_context->thread_pool);
+  if(monothek_application_context->thread_pool != NULL){
+    g_object_unref(monothek_application_context->thread_pool);
     
-    xorg_application_context->thread_pool = NULL;
+    monothek_application_context->thread_pool = NULL;
   }
 
   /* polling thread */
-  if(xorg_application_context->polling_thread != NULL){
-    g_object_unref(xorg_application_context->polling_thread);
+  if(monothek_application_context->polling_thread != NULL){
+    g_object_unref(monothek_application_context->polling_thread);
 
-    xorg_application_context->polling_thread = NULL;
+    monothek_application_context->polling_thread = NULL;
   }
 
   /* worker thread */
-  if(xorg_application_context->worker != NULL){
-    list = xorg_application_context->worker;
+  if(monothek_application_context->worker != NULL){
+    list = monothek_application_context->worker;
 
     while(list != NULL){
       g_object_run_dispose(list->data);
@@ -715,28 +717,28 @@ monothek_application_context_dispose(GObject *gobject)
       list = list->next;
     }
     
-    g_list_free_full(xorg_application_context->worker,
+    g_list_free_full(monothek_application_context->worker,
 		     g_object_unref);
 
-    xorg_application_context->worker = NULL;
+    monothek_application_context->worker = NULL;
   }
   
   /* soundcard and export thread */
-  if(xorg_application_context->soundcard_thread != NULL){
-    g_object_unref(xorg_application_context->soundcard_thread);
+  if(monothek_application_context->soundcard_thread != NULL){
+    g_object_unref(monothek_application_context->soundcard_thread);
 
-    xorg_application_context->soundcard_thread = NULL;
+    monothek_application_context->soundcard_thread = NULL;
   }
 
-  if(xorg_application_context->export_thread != NULL){
-    g_object_unref(xorg_application_context->export_thread);
+  if(monothek_application_context->export_thread != NULL){
+    g_object_unref(monothek_application_context->export_thread);
 
-    xorg_application_context->export_thread = NULL;
+    monothek_application_context->export_thread = NULL;
   }
 
   /* soundcard */
-  if(xorg_application_context->soundcard != NULL){
-    list = xorg_application_context->soundcard;
+  if(monothek_application_context->soundcard != NULL){
+    list = monothek_application_context->soundcard;
 
     while(list != NULL){
       g_object_set(list->data,
@@ -746,21 +748,21 @@ monothek_application_context_dispose(GObject *gobject)
       list = list->next;
     }
     
-    g_list_free_full(xorg_application_context->soundcard,
+    g_list_free_full(monothek_application_context->soundcard,
 		     g_object_unref);
 
-    xorg_application_context->soundcard = NULL;
+    monothek_application_context->soundcard = NULL;
   }
 
   /* window */
-  if(xorg_application_context->window != NULL){
-    g_object_set(xorg_application_context->window,
+  if(monothek_application_context->window != NULL){
+    g_object_set(monothek_application_context->window,
 		 "application-context", NULL,
 		 NULL);
     
-    gtk_widget_destroy(xorg_application_context->window);
+    gtk_widget_destroy(monothek_application_context->window);
 
-    xorg_application_context->window = NULL;
+    monothek_application_context->window = NULL;
   }  
   
   /* call parent */
@@ -770,40 +772,40 @@ monothek_application_context_dispose(GObject *gobject)
 void
 monothek_application_context_finalize(GObject *gobject)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
-  xorg_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
+  monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
 
-  if(xorg_application_context->thread_pool != NULL){
-    g_object_unref(xorg_application_context->thread_pool);
+  if(monothek_application_context->thread_pool != NULL){
+    g_object_unref(monothek_application_context->thread_pool);
   }
 
-  if(xorg_application_context->polling_thread != NULL){
-    g_object_unref(xorg_application_context->polling_thread);
+  if(monothek_application_context->polling_thread != NULL){
+    g_object_unref(monothek_application_context->polling_thread);
   }
 
-  if(xorg_application_context->worker != NULL){
-    g_list_free_full(xorg_application_context->worker,
+  if(monothek_application_context->worker != NULL){
+    g_list_free_full(monothek_application_context->worker,
 		     g_object_unref);
 
-    xorg_application_context->worker = NULL;
+    monothek_application_context->worker = NULL;
   }
   
-  if(xorg_application_context->soundcard_thread != NULL){
-    g_object_unref(xorg_application_context->soundcard_thread);
+  if(monothek_application_context->soundcard_thread != NULL){
+    g_object_unref(monothek_application_context->soundcard_thread);
   }
 
-  if(xorg_application_context->export_thread != NULL){
-    g_object_unref(xorg_application_context->export_thread);
+  if(monothek_application_context->export_thread != NULL){
+    g_object_unref(monothek_application_context->export_thread);
   }
 
-  if(xorg_application_context->soundcard != NULL){
-    g_list_free_full(xorg_application_context->soundcard,
+  if(monothek_application_context->soundcard != NULL){
+    g_list_free_full(monothek_application_context->soundcard,
 		     g_object_unref);
   }
   
-  if(xorg_application_context->window != NULL){
-    gtk_widget_destroy(xorg_application_context->window);
+  if(monothek_application_context->window != NULL){
+    gtk_widget_destroy(monothek_application_context->window);
   }
   
   /* call parent */
@@ -818,20 +820,20 @@ monothek_application_context_load_config(AgsApplicationContext *application_cont
 void
 monothek_application_context_prepare(AgsApplicationContext *application_context)
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
   AgsThread *audio_loop, *polling_thread, *task_thread;
   AgsThreadPool *thread_pool;
 
   GList *start_queue;
   
-  xorg_application_context = (MonothekApplicationContext *) application_context;
+  monothek_application_context = (MonothekApplicationContext *) application_context;
 
   /* call parent */
   //  AGS_APPLICATION_CONTEXT_CLASS(monothek_application_context_parent_class)->prepare(application_context);
   
   /* register types */
-  ags_application_context_register_types(xorg_application_context);
+  ags_application_context_register_types(monothek_application_context);
 
   /*
    * fundamental thread setup
@@ -839,8 +841,8 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
   /* AgsAudioLoop */
   audio_loop =
     application_context->main_loop = ags_audio_loop_new((GObject *) NULL,
-							(GObject *) xorg_application_context);
-  g_object_set(xorg_application_context,
+							(GObject *) monothek_application_context);
+  g_object_set(monothek_application_context,
 	       "main-loop", audio_loop,
 	       NULL);
 
@@ -849,7 +851,7 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
 
   /* AgsPollingThread */
   polling_thread = 
-    xorg_application_context->polling_thread = ags_polling_thread_new();
+    monothek_application_context->polling_thread = ags_polling_thread_new();
   ags_thread_add_child_extended(AGS_THREAD(audio_loop),
 				(AgsThread *) polling_thread,
 				TRUE, TRUE);
@@ -863,8 +865,6 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
   ags_thread_add_child_extended(AGS_THREAD(audio_loop),
 				(AgsThread *) task_thread,
 				TRUE, TRUE);
-  g_signal_connect(application_context->task_thread, "clear-cache",
-		   G_CALLBACK(monothek_application_context_clear_cache), NULL);
 
   /* start engine */
   pthread_mutex_lock(audio_loop->start_mutex);
@@ -908,8 +908,8 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
 void
 monothek_application_context_setup(AgsApplicationContext *application_context)
 {
-  MonothekApplicationContext *xorg_application_context;
-  AgsWindow *window;
+  MonothekApplicationContext *monothek_application_context;
+  MonothekWindow *window;
 
   AgsAudioLoop *audio_loop;
   GObject *soundcard;
@@ -937,13 +937,12 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   gchar *str;
   gchar *capability;
   
-  uid_t uid;
-  
+  gboolean is_output;
   guint i;
   
-  xorg_application_context = (MonothekApplicationContext *) application_context;
+  monothek_application_context = (MonothekApplicationContext *) application_context;
 
-  audio_loop = AGS_APPLICATION_CONTEXT(xorg_application_context)->main_loop;
+  audio_loop = AGS_APPLICATION_CONTEXT(monothek_application_context)->main_loop;
 
   config = ags_config_get_instance();
 
@@ -986,7 +985,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 				 audio_message_queue);
 
   /* AgsSoundcard */
-  xorg_application_context->soundcard = NULL;
+  monothek_application_context->soundcard = NULL;
   soundcard = NULL;
 
   soundcard_group = g_strdup("soundcard");
@@ -1031,7 +1030,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 			      "alsa",
 			      5)){
 	if(is_output){
-	  soundcard = (GObject *) ags_devout_new((GObject *) xorg_application_context);
+	  soundcard = (GObject *) ags_devout_new((GObject *) monothek_application_context);
 	  
 	  AGS_DEVOUT(soundcard)->flags &= (~AGS_DEVOUT_OSS);
 	  AGS_DEVOUT(soundcard)->flags |= AGS_DEVOUT_ALSA;
@@ -1057,13 +1056,13 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
       continue;
     }
     
-    if(xorg_application_context->soundcard == NULL){
+    if(monothek_application_context->soundcard == NULL){
       g_object_set(audio_loop,
 		   "default-output-soundcard", G_OBJECT(soundcard),
 		   NULL);
     }
     
-    xorg_application_context->soundcard = g_list_append(xorg_application_context->soundcard,
+    monothek_application_context->soundcard = g_list_append(monothek_application_context->soundcard,
 							soundcard);
     g_object_ref(soundcard);
 
@@ -1140,32 +1139,28 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 				      i);
   }
 
-  if(xorg_application_context->soundcard != NULL){
-    soundcard = xorg_application_context->soundcard->data;
+  if(monothek_application_context->soundcard != NULL){
+    soundcard = monothek_application_context->soundcard->data;
   }  
 
   g_free(soundcard_group);
   
-  /* AgsWindow */
-#ifdef AGS_WITH_QUARTZ
-  g_object_new(GTKOSX_TYPE_APPLICATION,
-	       NULL);
-#endif
-  window = g_object_new(AGS_TYPE_WINDOW,
+  /* MonothekWindow */
+  window = g_object_new(MONOTHEK_TYPE_WINDOW,
 			"soundcard", soundcard,
-			"application-context", xorg_application_context,
+			"application-context", monothek_application_context,
 			NULL);
-  g_object_set(xorg_application_context,
+  g_object_set(monothek_application_context,
 	       "window", window,
 	       NULL);
 
-  gtk_window_set_default_size((GtkWindow *) window, 1920, 1080;
+  gtk_window_set_default_size((GtkWindow *) window, 1920, 1080);
 
   ags_connectable_connect(AGS_CONNECTABLE(window));
   
   /* AgsSoundcardThread and AgsExportThread */
-  xorg_application_context->soundcard_thread = NULL;
-  list = xorg_application_context->soundcard;
+  monothek_application_context->soundcard_thread = NULL;
+  list = monothek_application_context->soundcard;
     
   while(list != NULL){
     AgsNotifySoundcard *notify_soundcard;
@@ -1221,15 +1216,15 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
       }    
 
     /* default soundcard thread */
-    if(xorg_application_context->soundcard_thread == NULL){
-      xorg_application_context->soundcard_thread = soundcard_thread;
+    if(monothek_application_context->soundcard_thread == NULL){
+      monothek_application_context->soundcard_thread = soundcard_thread;
       g_object_ref(soundcard_thread);
     }
 
     /* default export thread */
     if(export_thread != NULL &&
-       xorg_application_context->export_thread == NULL){
-      xorg_application_context->export_thread = export_thread;
+       monothek_application_context->export_thread == NULL){
+      monothek_application_context->export_thread = export_thread;
       g_object_ref(export_thread);
     }
 
@@ -1238,7 +1233,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   }
 
   /* AgsWorkerThread */
-  xorg_application_context->worker = NULL;
+  monothek_application_context->worker = NULL;
 
   /* AgsDestroyWorker */
   destroy_worker = ags_destroy_worker_new();
@@ -1246,12 +1241,12 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   ags_thread_add_child_extended(AGS_THREAD(audio_loop),
 				destroy_worker,
 				TRUE, TRUE);
-  xorg_application_context->worker = g_list_prepend(xorg_application_context->worker,
+  monothek_application_context->worker = g_list_prepend(monothek_application_context->worker,
 						    destroy_worker);
   ags_thread_start(destroy_worker);
   
   /* AgsThreadPool */
-  xorg_application_context->thread_pool = AGS_TASK_THREAD(application_context->task_thread)->thread_pool;
+  monothek_application_context->thread_pool = AGS_TASK_THREAD(application_context->task_thread)->thread_pool;
 }
 
 void
@@ -1352,10 +1347,10 @@ monothek_application_context_quit(AgsApplicationContext *application_context)
 MonothekApplicationContext*
 monothek_application_context_new()
 {
-  MonothekApplicationContext *xorg_application_context;
+  MonothekApplicationContext *monothek_application_context;
 
-  xorg_application_context = (MonothekApplicationContext *) g_object_new(AGS_TYPE_XORG_APPLICATION_CONTEXT,
-									NULL);
+  monothek_application_context = (MonothekApplicationContext *) g_object_new(MONOTHEK_TYPE_APPLICATION_CONTEXT,
+									     NULL);
 
-  return(xorg_application_context);
+  return(monothek_application_context);
 }

@@ -21,6 +21,7 @@
 # notice and this notice are preserved.  This file is offered as-is,
 # without any warranty.
 
+
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -116,22 +117,67 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/monothek/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libmonothekdir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_1 = monothek/ui-monothek_main.$(OBJEXT)
-am__objects_2 =
-am_monothek_ui_OBJECTS = $(am__objects_1) $(am__objects_2)
-monothek_ui_OBJECTS = $(am_monothek_ui_OBJECTS)
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
+LTLIBRARIES = $(libmonothek_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-monothek_ui_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+libmonothek_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
+am__objects_1 =
+am__objects_2 = $(am__objects_1)
+am__objects_3 = $(am__objects_2)
+am__dirstamp = $(am__leading_dot)dirstamp
+am__objects_4 = $(am__objects_1) \
+	monothek/ui/libmonothek_la-monothek_application_context.lo \
+	monothek/ui/libmonothek_la-monothek_window.lo
+am_libmonothek_la_OBJECTS = $(am__objects_3) $(am__objects_4)
+libmonothek_la_OBJECTS = $(am_libmonothek_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libmonothek_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(libmonothek_la_CFLAGS) $(CFLAGS) $(libmonothek_la_LDFLAGS) \
+	$(LDFLAGS) -o $@
+am__objects_5 = monothek/ui-monothek_main.$(OBJEXT)
+am_monothek_ui_OBJECTS = $(am__objects_5) $(am__objects_1)
+monothek_ui_OBJECTS = $(am_monothek_ui_OBJECTS)
+monothek_ui_DEPENDENCIES = libmonothek.la $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 monothek_ui_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(monothek_ui_CFLAGS) \
 	$(CFLAGS) $(monothek_ui_LDFLAGS) $(LDFLAGS) -o $@
@@ -150,7 +196,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/monothek
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po
+am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
+	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo \
+	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -170,8 +218,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(monothek_ui_SOURCES)
-DIST_SOURCES = $(monothek_ui_SOURCES)
+SOURCES = $(libmonothek_la_SOURCES) $(monothek_ui_SOURCES)
+DIST_SOURCES = $(libmonothek_la_SOURCES) $(monothek_ui_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -279,7 +327,7 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
-DEFS = @DEFS@
+DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 DSYMUTIL = @DSYMUTIL@
@@ -400,7 +448,7 @@ infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
-localedir = @localedir@
+localedir = $(datadir)/locale
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
@@ -427,24 +475,40 @@ monothek_ui_CFLAGS = @MONOTHEK_CFLAGS@ $(LIBAGS_CFLAGS) \
 	$(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) \
 	$(GTK_CFLAGS)
 monothek_ui_LDFLAGS = @MONOTHEK_LDFLAGS@ -pthread
+libmonothekdir = $(libdir)/monothek
+libmonothek_LTLIBRARIES = libmonothek.la
 CLEANFILES = \
 	m4/Makefile
 
 
+# pkgconfig_DATA += libmonothek.pc
+
+# include
+# nobase_include_HEADERS += $(libmonothek_la_HEADERS_0)
+libmonothek_la_HEADERS_0 = $(libmonothek_h_sources)
+libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources)
+
+# library libmonothek
+libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
+libmonothek_la_LDFLAGS = $(LDFLAGS) -version-info 1:0:0 -shared -fPIC -Wl,-soname,libmonothek.so -pthread
+libmonothek_la_LIBADD = -ldl -lm $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
+
 # monothek
 monothek_ui_SOURCES = $(monothek_ui_c_sources) $(monothek_uiheaders)
-monothek_ui_LDADD = -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
+monothek_ui_LDADD = libmonothek.la -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
 
 # libmonothek all files
 deprecated_libmonothek_h_sources = 
 libmonothek_h_sources = \
 	$(deprecated_libmonothek_h_sources) \
-	monothek/monothek_application_context.h
+	monothek/ui/monothek_application_context.h \
+	monothek/ui/monothek_window.h
 
 deprecated_libmonothek_c_sources = 
 libmonothek_c_sources = \
 	$(deprecated_libmonothek_c_sources) \
-	monothek/monothek_application_context.c
+	monothek/ui/monothek_application_context.c \
+	monothek/ui/monothek_window.c
 
 
 # monothek_ui all files
@@ -555,6 +619,56 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
+
+install-libmonothekLTLIBRARIES: $(libmonothek_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	@list='$(libmonothek_LTLIBRARIES)'; test -n "$(libmonothekdir)" || list=; \
+	list2=; for p in $$list; do \
+	  if test -f $$p; then \
+	    list2="$$list2 $$p"; \
+	  else :; fi; \
+	done; \
+	test -z "$$list2" || { \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(libmonothekdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(libmonothekdir)" || exit 1; \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libmonothekdir)'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libmonothekdir)"; \
+	}
+
+uninstall-libmonothekLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(libmonothek_LTLIBRARIES)'; test -n "$(libmonothekdir)" || list=; \
+	for p in $$list; do \
+	  $(am__strip_dir) \
+	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libmonothekdir)/$$f'"; \
+	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libmonothekdir)/$$f"; \
+	done
+
+clean-libmonothekLTLIBRARIES:
+	-test -z "$(libmonothek_LTLIBRARIES)" || rm -f $(libmonothek_LTLIBRARIES)
+	@list='$(libmonothek_LTLIBRARIES)'; \
+	locs=`for p in $$list; do echo $$p; done | \
+	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
+	      sort -u`; \
+	test -z "$$locs" || { \
+	  echo rm -f $${locs}; \
+	  rm -f $${locs}; \
+	}
+monothek/ui/$(am__dirstamp):
+	@$(MKDIR_P) monothek/ui
+	@: > monothek/ui/$(am__dirstamp)
+monothek/ui/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) monothek/ui/$(DEPDIR)
+	@: > monothek/ui/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/libmonothek_la-monothek_application_context.lo:  \
+	monothek/ui/$(am__dirstamp) \
+	monothek/ui/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/libmonothek_la-monothek_window.lo:  \
+	monothek/ui/$(am__dirstamp) \
+	monothek/ui/$(DEPDIR)/$(am__dirstamp)
+
+libmonothek.la: $(libmonothek_la_OBJECTS) $(libmonothek_la_DEPENDENCIES) $(EXTRA_libmonothek_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libmonothek_la_LINK) -rpath $(libmonothekdir) $(libmonothek_la_OBJECTS) $(libmonothek_la_LIBADD) $(LIBS)
 monothek/$(am__dirstamp):
 	@$(MKDIR_P) monothek
 	@: > monothek/$(am__dirstamp)
@@ -571,11 +685,15 @@ monothek-ui$(EXEEXT): $(monothek_ui_OBJECTS) $(monothek_ui_DEPENDENCIES) $(EXTRA
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f monothek/*.$(OBJEXT)
+	-rm -f monothek/ui/*.$(OBJEXT)
+	-rm -f monothek/ui/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/$(DEPDIR)/ui-monothek_main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -607,6 +725,20 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
+monothek/ui/libmonothek_la-monothek_application_context.lo: monothek/ui/monothek_application_context.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/libmonothek_la-monothek_application_context.lo -MD -MP -MF monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Tpo -c -o monothek/ui/libmonothek_la-monothek_application_context.lo `test -f 'monothek/ui/monothek_application_context.c' || echo '$(srcdir)/'`monothek/ui/monothek_application_context.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Tpo monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/monothek_application_context.c' object='monothek/ui/libmonothek_la-monothek_application_context.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/libmonothek_la-monothek_application_context.lo `test -f 'monothek/ui/monothek_application_context.c' || echo '$(srcdir)/'`monothek/ui/monothek_application_context.c
+
+monothek/ui/libmonothek_la-monothek_window.lo: monothek/ui/monothek_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/libmonothek_la-monothek_window.lo -MD -MP -MF monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Tpo -c -o monothek/ui/libmonothek_la-monothek_window.lo `test -f 'monothek/ui/monothek_window.c' || echo '$(srcdir)/'`monothek/ui/monothek_window.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Tpo monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/monothek_window.c' object='monothek/ui/libmonothek_la-monothek_window.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/libmonothek_la-monothek_window.lo `test -f 'monothek/ui/monothek_window.c' || echo '$(srcdir)/'`monothek/ui/monothek_window.c
+
 monothek/ui-monothek_main.o: monothek/monothek_main.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(monothek_ui_CFLAGS) $(CFLAGS) -MT monothek/ui-monothek_main.o -MD -MP -MF monothek/$(DEPDIR)/ui-monothek_main.Tpo -c -o monothek/ui-monothek_main.o `test -f 'monothek/monothek_main.c' || echo '$(srcdir)/'`monothek/monothek_main.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/$(DEPDIR)/ui-monothek_main.Tpo monothek/$(DEPDIR)/ui-monothek_main.Po
@@ -626,6 +758,7 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf monothek/ui/.libs monothek/ui/_libs
 
 distclean-libtool:
 	-rm -f libtool config.lt
@@ -930,10 +1063,10 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(LTLIBRARIES)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libmonothekdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -965,6 +1098,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f monothek/$(DEPDIR)/$(am__dirstamp)
 	-rm -f monothek/$(am__dirstamp)
+	-rm -f monothek/ui/$(DEPDIR)/$(am__dirstamp)
+	-rm -f monothek/ui/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -975,11 +1110,14 @@ ags-docs-am: ags-docs-local
 
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libmonothekLTLIBRARIES \
+	clean-libtool mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f monothek/$(DEPDIR)/ui-monothek_main.Po
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -996,7 +1134,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-libmonothekLTLIBRARIES
 
 install-dvi: install-dvi-recursive
 
@@ -1028,6 +1166,8 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f monothek/$(DEPDIR)/ui-monothek_main.Po
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
+	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -1044,28 +1184,30 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-libmonothekLTLIBRARIES
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS ags-docs-am \
 	ags-docs-local all all-am am--depfiles am--refresh check \
 	check-am clean clean-binPROGRAMS clean-cscope clean-generic \
-	clean-libtool cscope cscopelist-am ctags ctags-am dist \
-	dist-all dist-bzip2 dist-gzip dist-lzip dist-shar dist-tarZ \
-	dist-xz dist-zip distcheck distclean distclean-compile \
-	distclean-generic distclean-hdr distclean-libtool \
-	distclean-tags distcleancheck distdir distuninstallcheck dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
+	clean-libmonothekLTLIBRARIES clean-libtool cscope \
+	cscopelist-am ctags ctags-am dist dist-all dist-bzip2 \
+	dist-gzip dist-lzip dist-shar dist-tarZ dist-xz dist-zip \
+	distcheck distclean distclean-compile distclean-generic \
+	distclean-hdr distclean-libtool distclean-tags distcleancheck \
+	distdir distuninstallcheck dvi dvi-am html html-am info \
+	info-am install install-am install-binPROGRAMS install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-libmonothekLTLIBRARIES install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
 	installdirs-am maintainer-clean maintainer-clean-generic \
 	mostlyclean mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-binPROGRAMS
+	uninstall-am uninstall-binPROGRAMS \
+	uninstall-libmonothekLTLIBRARIES
 
 .PRECIOUS: Makefile
 

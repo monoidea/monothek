@@ -3,18 +3,18 @@
  *
  * This file is part of Monothek.
  *
- * GSequencer is free software: you can redistribute it and/or modify
+ * Monothek is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * GSequencer is distributed in the hope that it will be useful,
+ * Monothek is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with GSequencer.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef __MONOTHEK_APPLICATION_CONTEXT_H__
@@ -29,12 +29,14 @@
 #include <ags/libags-audio.h>
 #include <ags/libags-gui.h>
 
-#define AGS_TYPE_XORG_APPLICATION_CONTEXT                (monothek_application_context_get_type())
-#define MONOTHEK_APPLICATION_CONTEXT(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), AGS_TYPE_XORG_APPLICATION_CONTEXT, MonothekApplicationContext))
-#define MONOTHEK_APPLICATION_CONTEXT_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, AGS_TYPE_XORG_APPLICATION_CONTEXT, MonothekApplicationContextClass))
-#define AGS_IS_XORG_APPLICATION_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), AGS_TYPE_XORG_APPLICATION_CONTEXT))
-#define AGS_IS_XORG_APPLICATION_CONTEXT_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), AGS_TYPE_XORG_APPLICATION_CONTEXT))
-#define MONOTHEK_APPLICATION_CONTEXT_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, AGS_TYPE_XORG_APPLICATION_CONTEXT, MonothekApplicationContextClass))
+#include <monothek/ui/monothek_window.h>
+
+#define MONOTHEK_TYPE_APPLICATION_CONTEXT                (monothek_application_context_get_type())
+#define MONOTHEK_APPLICATION_CONTEXT(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_APPLICATION_CONTEXT, MonothekApplicationContext))
+#define MONOTHEK_APPLICATION_CONTEXT_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_APPLICATION_CONTEXT, MonothekApplicationContextClass))
+#define AGS_IS_XORG_APPLICATION_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_APPLICATION_CONTEXT))
+#define AGS_IS_XORG_APPLICATION_CONTEXT_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_APPLICATION_CONTEXT))
+#define MONOTHEK_APPLICATION_CONTEXT_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_APPLICATION_CONTEXT, MonothekApplicationContextClass))
 
 #define MONOTHEK_VERSION "1.0.0"
 #define MONOTHEK_BUILD_ID "Wed Oct 17 18:17:09 UTC 2018"
@@ -49,6 +51,8 @@ typedef enum{
 struct _MonothekApplicationContext
 {
   AgsApplicationContext application_context;
+
+  volatile gboolean gui_ready;
   
   AgsThreadPool *thread_pool;
 

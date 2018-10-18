@@ -19,30 +19,51 @@ LIBTOOL_DEPS = @LIBTOOL_DEPS@
 monothek_ui_CFLAGS = @MONOTHEK_CFLAGS@
 monothek_ui_LDFLAGS = @MONOTHEK_LDFLAGS@
 
+libmonothekdir = $(libdir)/monothek
+libmonothek_LTLIBRARIES = libmonothek.la
+
+localedir = $(datadir)/locale
+DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+
 bin_PROGRAMS=monothek-ui
 
 CLEANFILES = \
 	m4/Makefile
+
+# pkgconfig_DATA += libmonothek.pc
+
+# include
+# nobase_include_HEADERS += $(libmonothek_la_HEADERS_0)
+
+libmonothek_la_HEADERS_0 = $(libmonothek_h_sources)
+libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources)
+
+# library libmonothek
+libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
+libmonothek_la_LDFLAGS = $(LDFLAGS) -version-info 1:0:0 -shared -fPIC -Wl,-soname,libmonothek.so -pthread
+libmonothek_la_LIBADD = -ldl -lm $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
 
 # monothek
 monothek_ui_SOURCES = $(monothek_ui_c_sources) $(monothek_uiheaders)
 
 monothek_ui_CFLAGS += $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
 monothek_ui_LDFLAGS += -pthread
-monothek_ui_LDADD = -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
+monothek_ui_LDADD = libmonothek.la -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
 
 # libmonothek all files
 deprecated_libmonothek_h_sources =
 
 libmonothek_h_sources = \
 	$(deprecated_libmonothek_h_sources) \
-	monothek/monothek_application_context.h
+	monothek/ui/monothek_application_context.h \
+	monothek/ui/monothek_window.h
 
 deprecated_libmonothek_c_sources =
 
 libmonothek_c_sources = \
 	$(deprecated_libmonothek_c_sources) \
-	monothek/monothek_application_context.c
+	monothek/ui/monothek_application_context.c \
+	monothek/ui/monothek_window.c
 
 # monothek_ui all files
 monothek_uiheaders = \
