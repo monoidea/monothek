@@ -73,7 +73,14 @@ AC_SUBST(GTK_LIBS)
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 
-AM_EXTRA_RECURSIVE_TARGETS([ags-docs])
+# check for gtk-doc
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
+],[
+AM_CONDITIONAL([ENABLE_GTK_DOC], false)
+])
+
+AM_EXTRA_RECURSIVE_TARGETS([monothek-docs])
 AC_CONFIG_FILES([
 Makefile
 m4/Makefile

@@ -30,10 +30,8 @@ libmonothek_LTLIBRARIES = libmonothek.la
 EXTRA_DIST = config.rpath \
 	monothek/config.h.in \
 	gtk-doc.make \
-	acsite.m4 \
 	aclocal.m4 \
 	README \
-	mkinstalldirs \
 	m4/Makefile.am \
 	m4/Makefile.in \
 	monothek/i18n.h \
