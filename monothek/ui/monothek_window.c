@@ -31,6 +31,7 @@
 #include <monothek/ui/view/monothek_diskjokey_payment_view.h>
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
 #include <monothek/ui/view/monothek_jukebox_no_test_view.h>
+#include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
 #include <monothek/ui/view/monothek_jukebox_qrcode_view.h>
@@ -246,6 +247,13 @@ monothek_window_init(MonothekWindow *window)
 		     FALSE, FALSE,
 		     0);
 
+  /* jukebox playlist view */
+  view = monothek_jukebox_playlist_view_new();
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
   /* jukebox track view */
   view = monothek_jukebox_track_view_new();
   gtk_widget_set_no_show_all(view,
@@ -266,6 +274,8 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox qrcode view */
   view = monothek_jukebox_qrcode_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
