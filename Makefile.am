@@ -81,13 +81,27 @@ deprecated_libmonothek_model_h_sources =
 
 libmonothek_model_h_sources = \
 	$(deprecated_libmonothek_model_h_sources) \
-	monothek/ui/model/monothek_start_model.h
+	monothek/ui/model/monothek_start_model.h \
+	monothek/ui/model/monothek_closed_model.h \
+	monothek/ui/model/monothek_outage_model.h \
+	monothek/ui/model/monothek_jukebox_payment_model.h \
+	monothek/ui/model/monothek_diskjokey_payment_model.h \
+	monothek/ui/model/monothek_jukebox_mode_model.h \
+	monothek/ui/model/monothek_jukebox_no_test_model.h \
+	monothek/ui/model/monothek_jukebox_track_model.h
 
 deprecated_libmonothek_model_c_sources =
 
 libmonothek_model_c_sources = \
 	$(deprecated_libmonothek_model_c_sources) \
-	monothek/ui/model/monothek_start_model.c
+	monothek/ui/model/monothek_start_model.c \
+	monothek/ui/model/monothek_closed_model.c \
+	monothek/ui/model/monothek_outage_model.c \
+	monothek/ui/model/monothek_jukebox_payment_model.c \
+	monothek/ui/model/monothek_diskjokey_payment_model.c \
+	monothek/ui/model/monothek_jukebox_mode_model.c \
+	monothek/ui/model/monothek_jukebox_no_test_model.c \
+	monothek/ui/model/monothek_jukebox_track_model.c
 
 deprecated_libmonothek_controller_h_sources =
 
@@ -112,6 +126,7 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_jukebox_mode_view.h \
 	monothek/ui/view/monothek_jukebox_no_test_view.h \
+	monothek/ui/view/monothek_jukebox_track_view.h \
 	monothek/ui/view/monothek_view.h
 
 deprecated_libmonothek_view_c_sources =
@@ -125,6 +140,7 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_jukebox_mode_view.c \
 	monothek/ui/view/monothek_jukebox_no_test_view.c \
+	monothek/ui/view/monothek_jukebox_track_view.c \
 	monothek/ui/view/monothek_view.c
 
 # monothek_ui all files

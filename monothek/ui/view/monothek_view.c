@@ -81,6 +81,7 @@ enum{
   PROP_JUKEBOX_GC,
   PROP_DISKJOKEY_GC,
   PROP_FONT,
+  PROP_MODEL,
 };
 
 static gpointer monothek_view_parent_class = NULL;
@@ -187,6 +188,22 @@ monothek_view_class_init(MonothekViewClass *view)
   g_object_class_install_property(gobject,
 				  PROP_FONT,
 				  param_spec);
+
+  /**
+   * MonothekView:model:
+   *
+   * The model assigned to the view.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_object("model",
+				   i18n("model"),
+				   i18n("The model of view"),
+				   G_TYPE_OBJECT,
+				   G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_MODEL,
+				  param_spec);
   
   /* GtkWidgetClass */
   widget = (GtkWidgetClass *) view;
@@ -242,6 +259,8 @@ monothek_view_init(MonothekView *view)
   view->diskjokey_gc = MONOTHEK_VIEW_DEFAULT_DISKJOKEY_GC;
   
   view->font = MONOTHEK_VIEW_DEFAULT_FONT;
+
+  view->model = NULL;
 }
 
 void
@@ -272,6 +291,27 @@ monothek_view_set_property(GObject *gobject,
       font = g_value_get_string(value);
       
       view->font = g_strdup(font);
+    }
+    break;
+  case PROP_MODEL:
+    {
+      GObject *model;
+
+      model = g_value_get_object(value);
+
+      if(view->model == model){
+	return;
+      }
+
+      if(view->model != NULL){
+	g_object_unref(view->model);
+      }
+
+      if(model != NULL){
+	g_object_ref(model);
+      }
+
+      view->model = model;
     }
     break;
   default:
@@ -309,6 +349,12 @@ monothek_view_get_property(GObject *gobject,
 			 view->font);
     }
     break;
+  case PROP_MODEL:
+    {
+      g_value_set_object(value,
+			 view->model);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -321,6 +367,12 @@ monothek_view_finalize(GObject *gobject)
   MonothekView *view;
 
   view = MONOTHEK_VIEW(gobject);
+
+  g_free(view->font);
+  
+  if(view->model != NULL){
+    g_object_unref(view->model);
+  }
   
   /* call parent */
   G_OBJECT_CLASS(monothek_view_parent_class)->finalize(gobject);

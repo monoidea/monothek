@@ -61,6 +61,8 @@ struct _MonothekView
   guint32 diskjokey_gc;
 
   gchar *font;
+
+  GObject *model;
 };
 
 struct _MonothekViewClass
