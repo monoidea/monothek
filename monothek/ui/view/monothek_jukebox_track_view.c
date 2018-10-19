@@ -154,7 +154,7 @@ monothek_jukebox_track_view_init(MonothekJukeboxTrackView *jukebox_track_view)
   jukebox_track_view->cover_box_height = 440.0;
 
   /* progress */
-  jukebox_track_view->progress_adjustment = gtk_adjustment_new(0.0, 0.0, 1.0, 1.0, 1.0, 1.0;
+  jukebox_track_view->progress = gtk_adjustment_new(0.0, 0.0, 1.0, 0.001, 0.01, 0.01);
   
   jukebox_track_view->progress_box_line_width = 5.0;
 
@@ -279,7 +279,140 @@ monothek_jukebox_track_view_draw(MonothekView *view)
   width = GTK_WIDGET(view)->allocation.width;
   height = GTK_WIDGET(view)->allocation.height;
 
-  //TODO:JK: implement me
+  cairo_set_source_rgb(cr,
+		       1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+		       1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+		       1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+
+  /* jukebox - cover box */
+  cairo_set_line_width(cr,
+		       jukebox_track_view->cover_box_line_width);
+  cairo_rectangle(cr,
+		  (double) jukebox_track_view->cover_box_x0, (double) jukebox_track_view->cover_box_y0,
+		  (double) jukebox_track_view->cover_box_width, (double) jukebox_track_view->cover_box_height);
+  cairo_stroke(cr);
+  
+  /* jukebox - progress box */
+  cairo_set_line_width(cr,
+		       jukebox_track_view->progress_box_line_width);
+  cairo_rectangle(cr,
+		  (double) jukebox_track_view->progress_box_x0, (double) jukebox_track_view->progress_box_y0,
+		  (double) jukebox_track_view->progress_box_width, (double) jukebox_track_view->progress_box_height);
+  cairo_stroke(cr);
+
+  /* jukebox - time */
+  {
+    PangoLayout *layout;
+    PangoFontDescription *desc;
+
+    PangoRectangle ink_rect;
+    PangoRectangle logical_rect;
+    
+    gchar *jukebox_font;
+    
+    static const guint font_size = 100;
+
+    jukebox_font = g_strdup_printf("%s Bold", view->font);
+
+    /* jukebox - total */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "0:00", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    19 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 340.0,
+		  (double) 680.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* jukebox - remaining */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "-0:00", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    19 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 1500.0,
+		  (double) 680.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+  }
+
+  /* jukebox - info */
+  {
+    PangoLayout *layout;
+    PangoFontDescription *desc;
+
+    PangoRectangle ink_rect;
+    PangoRectangle logical_rect;
+    
+    gchar *jukebox_font;
+    
+    static const guint font_size = 100;
+
+    jukebox_font = g_strdup_printf("%s Bold", view->font);
+
+    /* jukebox - titel */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "(null)", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    30 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 780.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* jukebox - artist */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "(null)", -1);
+    desc = pango_font_description_from_string(jukebox_font);
+    pango_font_description_set_size(desc,
+				    19 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 880.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+  }
   
   /* paint */
   cairo_pop_group_to_source(cr);
