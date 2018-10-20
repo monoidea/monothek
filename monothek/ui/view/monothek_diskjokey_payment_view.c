@@ -46,12 +46,12 @@ void monothek_diskjokey_payment_view_draw(MonothekView *view);
 
 /**
  * SECTION:monothek_diskjokey_payment_view
- * @short_description: The diskjokey_payment view object.
+ * @short_description: The diskjokey payment view object.
  * @title: MonothekDiskjokeyPaymentView
  * @section_id:
  * @include: monothek/ui/view/monothek_diskjokey_payment_view.h
  *
- * #MonothekDiskjokeyPaymentView is the MVC's diskjokey_payment view widget.
+ * #MonothekDiskjokeyPaymentView is the MVC's diskjokey payment view widget.
  */
 
 enum{

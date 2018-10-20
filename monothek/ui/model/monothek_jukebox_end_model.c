@@ -45,7 +45,7 @@ void monothek_jukebox_end_model_finalize(GObject *gobject);
  * @section_id:
  * @include: monothek/ui/model/monothek_jukebox_end_model.h
  *
- * #MonothekJukeboxEndModel is the MVC's start model.
+ * #MonothekJukeboxEndModel is the MVC's end model.
  */
 
 enum{

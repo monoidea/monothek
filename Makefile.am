@@ -91,7 +91,10 @@ libmonothek_model_h_sources = \
 	monothek/ui/model/monothek_jukebox_playlist_model.h \
 	monothek/ui/model/monothek_jukebox_track_model.h \
 	monothek/ui/model/monothek_jukebox_end_model.h \
-	monothek/ui/model/monothek_jukebox_qrcode_model.h
+	monothek/ui/model/monothek_jukebox_qrcode_model.h \
+	monothek/ui/model/monothek_diskjokey_sequencer_model.h \
+	monothek/ui/model/monothek_diskjokey_end_model.h \
+	monothek/ui/model/monothek_diskjokey_qrcode_model.h
 
 deprecated_libmonothek_model_c_sources =
 
@@ -107,7 +110,10 @@ libmonothek_model_c_sources = \
 	monothek/ui/model/monothek_jukebox_playlist_model.c \
 	monothek/ui/model/monothek_jukebox_track_model.c \
 	monothek/ui/model/monothek_jukebox_end_model.c \
-	monothek/ui/model/monothek_jukebox_qrcode_model.c
+	monothek/ui/model/monothek_jukebox_qrcode_model.c \
+	monothek/ui/model/monothek_diskjokey_sequencer_model.c \
+	monothek/ui/model/monothek_diskjokey_end_model.c \
+	monothek/ui/model/monothek_diskjokey_qrcode_model.c
 
 deprecated_libmonothek_controller_h_sources =
 
@@ -136,6 +142,9 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_jukebox_track_view.h \
 	monothek/ui/view/monothek_jukebox_end_view.h \
 	monothek/ui/view/monothek_jukebox_qrcode_view.h \
+	monothek/ui/view/monothek_diskjokey_sequencer_view.h \
+	monothek/ui/view/monothek_diskjokey_end_view.h \
+	monothek/ui/view/monothek_diskjokey_qrcode_view.h \
 	monothek/ui/view/monothek_view.h
 
 deprecated_libmonothek_view_c_sources =
@@ -153,6 +162,9 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_jukebox_track_view.c \
 	monothek/ui/view/monothek_jukebox_end_view.c \
 	monothek/ui/view/monothek_jukebox_qrcode_view.c \
+	monothek/ui/view/monothek_diskjokey_sequencer_view.c \
+	monothek/ui/view/monothek_diskjokey_end_view.c \
+	monothek/ui/view/monothek_diskjokey_qrcode_view.c \
 	monothek/ui/view/monothek_view.c
 
 # monothek_ui all files

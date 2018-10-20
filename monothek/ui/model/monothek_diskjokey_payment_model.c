@@ -45,7 +45,7 @@ void monothek_diskjokey_payment_model_finalize(GObject *gobject);
  * @section_id:
  * @include: monothek/ui/model/monothek_diskjokey_payment_model.h
  *
- * #MonothekDiskjokeyPaymentModel is the MVC's start model.
+ * #MonothekDiskjokeyPaymentModel is the MVC's payment model.
  */
 
 enum{

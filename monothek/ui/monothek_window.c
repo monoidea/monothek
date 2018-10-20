@@ -35,6 +35,9 @@
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
 #include <monothek/ui/view/monothek_jukebox_qrcode_view.h>
+#include <monothek/ui/view/monothek_diskjokey_sequencer_view.h>
+#include <monothek/ui/view/monothek_diskjokey_end_view.h>
+#include <monothek/ui/view/monothek_diskjokey_qrcode_view.h>
 
 #include <stdlib.h>
 
@@ -249,6 +252,8 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox playlist view */
   view = monothek_jukebox_playlist_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -276,6 +281,31 @@ monothek_window_init(MonothekWindow *window)
   view = monothek_jukebox_qrcode_view_new();
   gtk_widget_set_no_show_all(view,
 			     TRUE);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  /* diskjokey sequencer view */
+  view = monothek_diskjokey_sequencer_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  /* diskjokey end view */
+  view = monothek_diskjokey_end_view_new();
+  gtk_widget_set_no_show_all(view,
+			     TRUE);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  /* diskjokey qrcode view */
+  view = monothek_diskjokey_qrcode_view_new();
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
