@@ -35,10 +35,18 @@
 typedef struct _MonothekActionBox MonothekActionBox;
 typedef struct _MonothekActionBoxClass MonothekActionBoxClass;
 
+typedef enum{
+  MONOTHEK_ACTION_BOX_BUTTON_1            = 1,
+}MonothekActionBoxButtonMask;
+
 struct _MonothekActionBox
 {
   GObject gobject;
 
+  guint button_mask;
+
+  gboolean is_active;
+  
   gchar *action_identifier;
   
   guint x0;
@@ -63,6 +71,8 @@ struct _MonothekActionBoxClass
 };
 
 GType monothek_action_box_get_type(void);
+
+gboolean monothek_action_box_get_active(MonothekActionBox *action_box);
 
 void monothek_action_box_activate(MonothekActionBox *action_box);
 void monothek_action_box_clicked(MonothekActionBox *action_box);

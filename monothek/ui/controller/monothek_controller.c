@@ -46,6 +46,16 @@ gboolean monothek_controller_is_connected(AgsConnectable *connectable);
 void monothek_controller_connect(AgsConnectable *connectable);
 void monothek_controller_disconnect(AgsConnectable *connectable);
 
+gboolean monothek_controller_motion_notify_event_callback(GtkWidget *widget,
+							  GdkEvent *event,
+							  MonothekController *controller);
+gboolean monothek_controller_button_press_event_callback(GtkWidget *widget,
+							 GdkEvent *event,
+							 MonothekController *controller);
+gboolean monothek_controller_button_release_event_callback(GtkWidget *widget,
+							   GdkEvent *event,
+							   MonothekController *controller);
+
 /**
  * SECTION:monothek_controller
  * @short_description: The  controller object.
@@ -299,6 +309,7 @@ monothek_controller_is_connected(AgsConnectable *connectable)
 void
 monothek_controller_connect(AgsConnectable *connectable)
 {
+  MonothekView *view;
   MonothekController *controller;
 
   controller = MONOTHEK_CONTROLLER(connectable);
@@ -309,12 +320,26 @@ monothek_controller_connect(AgsConnectable *connectable)
 
   monothek_controller_set_flags(controller, MONOTHEK_CONTROLLER_CONNECTED);
 
-  //TODO:JK: implement me
+  g_object_get(controller,
+	       "view", &view,
+	       NULL);
+
+  if(view != NULL){
+    g_signal_connect(G_OBJECT(view), "motion-notify-event",
+		     G_CALLBACK(monothek_controller_motion_notify_event_callback), controller);
+
+    g_signal_connect(G_OBJECT(view), "button-press-event",
+		     G_CALLBACK(monothek_controller_button_press_event_callback), controller);
+    
+    g_signal_connect(G_OBJECT(view), "button-release-event",
+		     G_CALLBACK(monothek_controller_button_release_event_callback), controller);
+  }
 }
 
 void
 monothek_controller_disconnect(AgsConnectable *connectable)
 {
+  MonothekView *view;
   MonothekController *controller;
 
   controller = MONOTHEK_CONTROLLER(connectable);
@@ -325,7 +350,140 @@ monothek_controller_disconnect(AgsConnectable *connectable)
 
   monothek_controller_unset_flags(controller, MONOTHEK_CONTROLLER_CONNECTED);
 
-  //TODO:JK: implement me
+  g_object_get(controller,
+	       "view", &view,
+	       NULL);
+
+  if(view != NULL){
+    g_object_disconnect(G_OBJECT(view),
+			"motion-notify-event",
+			G_CALLBACK(monothek_controller_motion_notify_event_callback),
+			controller,
+			"button-press-event",
+			G_CALLBACK(monothek_controller_button_press_event_callback),
+			controller,
+			"button-release-event",
+			G_CALLBACK(monothek_controller_button_release_event_callback),
+			controller,
+			NULL);
+  }
+}
+
+gboolean
+monothek_controller_motion_notify_event_callback(GtkWidget *widget,
+						 GdkEvent *event,
+						 MonothekController *controller)
+{
+  GList *list_start, *list;
+  
+  g_object_get(controller,
+	       "action-box", &list_start,
+	       NULL);
+
+  list = list_start;
+
+  while(list != NULL){
+    guint x0, y0;
+    guint width, height;
+
+    g_object_get(G_OBJECT(list->data),
+		 "x0", &x0,
+		 "y0", &y0,
+		 "width", &width,
+		 "height", &height,
+		 NULL);
+
+    if(x0 >= ((GdkEventButton *) event)->x &&
+       x0 + width < ((GdkEventButton *) event)->x &&
+       y0 >= ((GdkEventButton *) event)->y &&
+       y0 + height < ((GdkEventButton *) event)->y){
+      if(!monothek_action_box_get_active(list->data)){
+	monothek_action_box_enter(list->data);
+      }
+    }else{
+      if(monothek_action_box_get_active(list->data)){
+	monothek_action_box_leave(list->data);
+      }
+    }
+    
+    list = list->next;
+  }
+
+  return(FALSE);
+}
+
+gboolean
+monothek_controller_button_press_event_callback(GtkWidget *widget,
+						GdkEvent *event,
+						MonothekController *controller)
+{
+  GList *list_start, *list;
+  
+  g_object_get(controller,
+	       "action-box", &list_start,
+	       NULL);
+
+  list = list_start;
+
+  while(list != NULL){
+    guint x0, y0;
+    guint width, height;
+
+    g_object_get(G_OBJECT(list->data),
+		 "x0", &x0,
+		 "y0", &y0,
+		 "width", &width,
+		 "height", &height,
+		 NULL);
+
+    if(x0 >= ((GdkEventButton *) event)->x &&
+       x0 + width < ((GdkEventButton *) event)->x &&
+       y0 >= ((GdkEventButton *) event)->y &&
+       y0 + height < ((GdkEventButton *) event)->y){
+      monothek_action_box_pressed(list->data);
+    }
+    
+    list = list->next;
+  }
+
+  return(FALSE);
+}
+
+gboolean
+monothek_controller_button_release_event_callback(GtkWidget *widget,
+						  GdkEvent *event,
+						  MonothekController *controller)
+{
+  GList *list_start, *list;
+  
+  g_object_get(controller,
+	       "action-box", &list_start,
+	       NULL);
+
+  list = list_start;
+
+  while(list != NULL){
+    guint x0, y0;
+    guint width, height;
+
+    g_object_get(G_OBJECT(list->data),
+		 "x0", &x0,
+		 "y0", &y0,
+		 "width", &width,
+		 "height", &height,
+		 NULL);
+
+    if(x0 >= ((GdkEventButton *) event)->x &&
+       x0 + width < ((GdkEventButton *) event)->x &&
+       y0 >= ((GdkEventButton *) event)->y &&
+       y0 + height < ((GdkEventButton *) event)->y){
+      monothek_action_box_released(list->data);
+    }
+    
+    list = list->next;
+  }
+
+  return(FALSE);
 }
 
 /**

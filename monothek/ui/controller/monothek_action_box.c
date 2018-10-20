@@ -38,6 +38,15 @@ void monothek_action_box_get_property(GObject *gobject,
 				      GParamSpec *param_spec);
 void monothek_action_box_finalize(GObject *gobject);
 
+void monothek_action_box_real_activate(MonothekActionBox *action_box);
+void monothek_action_box_real_clicked(MonothekActionBox *action_box);
+
+void monothek_action_box_real_enter(MonothekActionBox *action_box);
+void monothek_action_box_real_leave(MonothekActionBox *action_box);
+
+void monothek_action_box_real_pressed(MonothekActionBox *action_box);
+void monothek_action_box_real_released(MonothekActionBox *action_box);
+
 /**
  * SECTION:monothek_action_box
  * @short_description: The  action_box object.
@@ -209,14 +218,14 @@ monothek_action_box_class_init(MonothekActionBoxClass *action_box)
 				  param_spec);
   
   /* MonothekStartController */
-  action_box->activate = NULL;
-  action_box->clicked = NULL;
+  action_box->activate = monothek_action_box_real_activate;
+  action_box->clicked = monothek_action_box_real_clicked;
 
-  action_box->enter = NULL;
-  action_box->leave = NULL;
+  action_box->enter = monothek_action_box_real_enter;
+  action_box->leave = monothek_action_box_real_leave;
 
-  action_box->pressed = NULL;
-  action_box->released = NULL;
+  action_box->pressed = monothek_action_box_real_pressed;
+  action_box->released = monothek_action_box_real_released;
 
   /* signals */
   /**
@@ -325,6 +334,8 @@ monothek_action_box_class_init(MonothekActionBoxClass *action_box)
 void
 monothek_action_box_init(MonothekActionBox *action_box)
 {
+  action_box->is_active = FALSE;
+  
   action_box->action_identifier = NULL;
   
   action_box->x0 = 0;
@@ -448,6 +459,32 @@ monothek_action_box_finalize(GObject *gobject)
 }
 
 /**
+ * monothek_action_box_get_active:
+ * @action_box: the #MonothekActionBox
+ * 
+ * Get if @action_box is active.
+ * 
+ * Returns: %TRUE if is active, otherwise %FALSE
+ * 
+ * Since: 1.0.0
+ */
+gboolean
+monothek_action_box_get_active(MonothekActionBox *action_box)
+{
+  if(!MONOTHEK_IS_ACTION_BOX(action_box)){
+    return(FALSE);
+  }
+
+  return(action_box->is_active);
+}
+
+void
+monothek_action_box_real_activate(MonothekActionBox *action_box)
+{
+  action_box->is_active = TRUE;
+}
+
+/**
  * monothek_action_box_activate:
  * @action_box: the #MonothekActionBox
  * 
@@ -464,6 +501,14 @@ monothek_action_box_activate(MonothekActionBox *action_box)
   g_signal_emit(G_OBJECT(action_box),
 		action_box_signals[ACTIVATE], 0);
   g_object_unref((GObject *) action_box);
+}
+
+void
+monothek_action_box_real_clicked(MonothekActionBox *action_box)
+{
+  action_box->button_mask &= (~MONOTHEK_ACTION_BOX_BUTTON_1);
+  
+  action_box->is_active = FALSE;
 }
 
 /**
@@ -485,6 +530,12 @@ monothek_action_box_clicked(MonothekActionBox *action_box)
   g_object_unref((GObject *) action_box);
 }
 
+void
+monothek_action_box_real_enter(MonothekActionBox *action_box)
+{
+  monothek_action_box_activate(action_box);
+}
+
 /**
  * monothek_action_box_enter:
  * @action_box: the #MonothekActionBox
@@ -502,6 +553,12 @@ monothek_action_box_enter(MonothekActionBox *action_box)
   g_signal_emit(G_OBJECT(action_box),
 		action_box_signals[ENTER], 0);
   g_object_unref((GObject *) action_box);
+}
+
+void
+monothek_action_box_real_leave(MonothekActionBox *action_box)
+{
+  action_box->is_active = FALSE;
 }
 
 /**
@@ -523,6 +580,16 @@ monothek_action_box_leave(MonothekActionBox *action_box)
   g_object_unref((GObject *) action_box);
 }
   
+void
+monothek_action_box_real_pressed(MonothekActionBox *action_box)
+{
+  if(!monothek_action_box_get_active(action_box)){
+    monothek_action_box_enter(action_box);
+  }
+
+  action_box->button_mask |= MONOTHEK_ACTION_BOX_BUTTON_1;
+}
+
 /**
  * monothek_action_box_pressed:
  * @action_box: the #MonothekActionBox
@@ -540,6 +607,12 @@ monothek_action_box_pressed(MonothekActionBox *action_box)
   g_signal_emit(G_OBJECT(action_box),
 		action_box_signals[PRESSED], 0);
   g_object_unref((GObject *) action_box);
+}
+
+void
+monothek_action_box_real_released(MonothekActionBox *action_box)
+{
+  monothek_action_box_clicked(action_box);
 }
 
 /**
