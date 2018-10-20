@@ -50,6 +50,8 @@ void monothek_start_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_JUKEBOX_START_ACTIVE,
+  PROP_DISKJOKEY_START_ACTIVE,
 };
 
 static gpointer monothek_start_model_parent_class = NULL;
@@ -103,6 +105,37 @@ monothek_start_model_class_init(MonothekStartModelClass *start_model)
   gobject->finalize = monothek_start_model_finalize;
 
   /* properties */
+  /**
+   * MonothekStartModel:jukebox-start-active:
+   *
+   * If jukebox start is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-start-active",
+				    i18n_pspec("jukebox start active"),
+				    i18n_pspec("If jukebox start is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_START_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekStartModel:diskjokey-start-active:
+   *
+   * If diskjokey start is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("diskjokey-start-active",
+				    i18n_pspec("diskjokey start active"),
+				    i18n_pspec("If diskjokey start is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DISKJOKEY_START_ACTIVE,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +143,9 @@ monothek_start_model_class_init(MonothekStartModelClass *start_model)
 void
 monothek_start_model_init(MonothekStartModel *start_model)
 {
-  //TODO:JK: implement me
+  start_model->jukebox_start_active = FALSE;
+
+  start_model->diskjokey_start_active = FALSE;
 }
 
 void
@@ -124,6 +159,16 @@ monothek_start_model_set_property(GObject *gobject,
   start_model = MONOTHEK_START_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_JUKEBOX_START_ACTIVE:
+    {
+      start_model->jukebox_start_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_DISKJOKEY_START_ACTIVE:
+    {
+      start_model->diskjokey_start_active = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -141,6 +186,18 @@ monothek_start_model_get_property(GObject *gobject,
   start_model = MONOTHEK_START_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_JUKEBOX_START_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  start_model->jukebox_start_active);
+    }
+    break;
+  case PROP_DISKJOKEY_START_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  start_model->diskjokey_start_active);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

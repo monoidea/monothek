@@ -626,6 +626,14 @@ monothek_view_real_draw(MonothekView *view)
   cairo_destroy(cr);
 }
 
+/**
+ * monothek_view_draw:
+ * @view: the #MonothekView
+ * 
+ * Draw view.
+ * 
+ * Since: 1.0.0
+ */
 void
 monothek_view_draw(MonothekView *view)
 {

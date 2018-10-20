@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: monothek 1.0.0-PRERELEASE\n"
 "Report-Msgid-Bugs-To: jkraehemann@gmail.com\n"
-"POT-Creation-Date: 2018-10-18 23:09+0200\n"
+"POT-Creation-Date: 2018-10-20 12:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,26 +26,34 @@ msgstr ""
 msgid "unknown soundcard backend - NULL"
 msgstr ""
 
-#: monothek/ui/view/monothek_view.c:147
+#: monothek/ui/view/monothek_view.c:148
 msgid "jukebox ground color"
 msgstr ""
 
-#: monothek/ui/view/monothek_view.c:148
+#: monothek/ui/view/monothek_view.c:149
 msgid "The jukebox's ground color"
 msgstr ""
 
-#: monothek/ui/view/monothek_view.c:165
+#: monothek/ui/view/monothek_view.c:166
 msgid "diskjokey ground color"
 msgstr ""
 
-#: monothek/ui/view/monothek_view.c:166
+#: monothek/ui/view/monothek_view.c:167
 msgid "The diskjokey's ground color"
 msgstr ""
 
-#: monothek/ui/view/monothek_view.c:183
+#: monothek/ui/view/monothek_view.c:184
 msgid "font"
 msgstr ""
 
-#: monothek/ui/view/monothek_view.c:184
+#: monothek/ui/view/monothek_view.c:185
 msgid "The font to be used for drawing strings"
+msgstr ""
+
+#: monothek/ui/view/monothek_view.c:200
+msgid "model"
+msgstr ""
+
+#: monothek/ui/view/monothek_view.c:201
+msgid "The model of view"
 msgstr ""

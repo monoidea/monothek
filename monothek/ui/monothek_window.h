@@ -35,6 +35,11 @@
 typedef struct _MonothekWindow MonothekWindow;
 typedef struct _MonothekWindowClass MonothekWindowClass;
 
+/**
+ * MonothekWindowFlags:
+ * @MONOTHEK_WINDOW_ADDED_TO_REGISTRY: the window was added to registry, see #MonothekConnectable::add_to_registry()
+ * @MONOTHEK_WINDOW_CONNECTED: the window was connected by #MonothekConnectable::connect()
+ */
 typedef enum{
   MONOTHEK_WINDOW_ADDED_TO_REGISTRY           = 1,
   MONOTHEK_WINDOW_CONNECTED                   = 1 <<  1,
@@ -46,15 +51,27 @@ struct _MonothekWindow
 
   guint flags;
 
+  GType current_view_type;
+
   GtkBox *view;
 };
 
 struct _MonothekWindowClass
 {
   GtkWindowClass window;
+
+  void (*change_view)(MonothekWindow *window,
+		      GType view_type, GType view_type_old);
 };
 
 GType monothek_window_get_type(void);
+
+gboolean monothek_window_test_flags(MonothekWindow *window, guint flags);
+void monothek_window_set_flags(MonothekWindow *window, guint flags);
+void monothek_window_unset_flags(MonothekWindow *window, guint flags);
+
+void monothek_window_change_view(MonothekWindow *window,
+				 GType view_type, GType view_type_old);
 
 MonothekWindow* monothek_window_new(GObject *application_context);
 

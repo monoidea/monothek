@@ -38,6 +38,10 @@ typedef struct _MonothekStartModelClass MonothekStartModelClass;
 struct _MonothekStartModel
 {
   GObject gobject;
+
+  gboolean jukebox_start_active;
+  
+  gboolean diskjokey_start_active;
 };
 
 struct _MonothekStartModelClass

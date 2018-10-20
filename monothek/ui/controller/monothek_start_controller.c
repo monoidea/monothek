@@ -73,7 +73,7 @@ monothek_start_controller_get_type()
       (GInstanceInitFunc) monothek_start_controller_init,
     };
 
-    monothek_type_start_controller = g_type_register_static(G_TYPE_OBJECT,
+    monothek_type_start_controller = g_type_register_static(MONOTHEK_TYPE_CONTROLLER,
 							    "MonothekStartController", &monothek_start_controller_info,
 							    0);
 

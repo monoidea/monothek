@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/object/monothek_marshal.h>
+
 #include <monothek/ui/monothek_application_context.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
@@ -59,8 +61,14 @@ void monothek_window_finalize(GObject *gobject);
 void monothek_window_connect(AgsConnectable *connectable);
 void monothek_window_disconnect(AgsConnectable *connectable);
 
+gboolean monothek_window_is_ready(AgsConnectable *connectable);
+gboolean monothek_window_is_connected(AgsConnectable *connectable);
 void monothek_window_show(GtkWidget *widget);
+void monothek_window_show_all(GtkWidget *widget);
 gboolean monothek_window_delete_event(GtkWidget *widget, GdkEventAny *event);
+
+void monothek_window_real_change_view(MonothekWindow *window,
+				      GType view_type, GType view_type_old);
 
 /**
  * SECTION:monothek_window
@@ -75,9 +83,16 @@ gboolean monothek_window_delete_event(GtkWidget *widget, GdkEventAny *event);
 
 enum{
   PROP_0,
+  PROP_CURRENT_VIEW_TYPE,
+};
+
+enum{
+  CHANGE_VIEW,
+  LAST_SIGNAL,
 };
 
 static gpointer monothek_window_parent_class = NULL;
+static guint window_signals[LAST_SIGNAL];
 
 GType
 monothek_window_get_type()
@@ -124,6 +139,7 @@ monothek_window_class_init(MonothekWindowClass *window)
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+
   GParamSpec *param_spec;
 
   monothek_window_parent_class = g_type_class_peek_parent(window);
@@ -137,19 +153,60 @@ monothek_window_class_init(MonothekWindowClass *window)
   gobject->finalize = monothek_window_finalize;
 
   /* properties */
+  /**
+   * MonothekWindow:current-view-type:
+   *
+   * The current view's #GType.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_gtype("current-view-type",
+				   i18n_pspec("current view type"),
+				   i18n_pspec("The type of the current view"),
+				   G_TYPE_NONE,
+				   G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_CURRENT_VIEW_TYPE,
+				  param_spec);
 
   /* GtkWidgetClass */
   widget = (GtkWidgetClass *) window;
 
   widget->show = monothek_window_show;
+  widget->show_all = monothek_window_show_all;
   widget->delete_event = monothek_window_delete_event;
+
+  /* MonothekWindowClass */
+  window->change_view = monothek_window_real_change_view;
+  
+  /* signals */
+  /**
+   * MonothekWindow::change-view:
+   * @window: the #MonothekWindow
+   * @view_type: the view's type to set as current
+   * @view_type_old: the previous view's type was set as current
+   *
+   * The ::change-view signal modifies the current view.
+   *
+   * Since: 1.0.0
+   */
+  window_signals[CHANGE_VIEW] = 
+    g_signal_new("change-view",
+		 G_TYPE_FROM_CLASS(window),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekWindowClass, change_view),
+		 NULL, NULL,
+		 monothek_cclosure_marshal_VOID__ULONG_ULONG,
+		 G_TYPE_NONE, 2,
+		 G_TYPE_ULONG, G_TYPE_ULONG);
 }
 
 void
 monothek_window_connectable_interface_init(AgsConnectableInterface *connectable)
 {
-  connectable->is_ready = NULL;
-  connectable->is_connected = NULL;
+  connectable->is_ready = monothek_window_is_ready;
+  connectable->is_connected = monothek_window_is_connected;
+								 
   connectable->connect = monothek_window_connect;
   connectable->disconnect = monothek_window_disconnect;
 }
@@ -186,11 +243,11 @@ monothek_window_init(MonothekWindow *window)
   gtk_container_add(window,
 		    window->view);
 #endif
+
+  window->current_view_type = G_TYPE_NONE;
   
   /* start view */
   view = monothek_start_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -198,8 +255,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* closed view */
   view = monothek_closed_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -207,8 +262,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* outage view */
   view = monothek_outage_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -216,8 +269,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox payment view */
   view = monothek_jukebox_payment_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -225,8 +276,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* diskjokey payment view */
   view = monothek_diskjokey_payment_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -234,8 +283,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox mode view */
   view = monothek_jukebox_mode_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -243,8 +290,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox no test view */
   view = monothek_jukebox_no_test_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -252,8 +297,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox playlist view */
   view = monothek_jukebox_playlist_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -261,8 +304,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox track view */
   view = monothek_jukebox_track_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -270,8 +311,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox end view */
   view = monothek_jukebox_end_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -279,8 +318,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* jukebox qrcode view */
   view = monothek_jukebox_qrcode_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -288,8 +325,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* diskjokey sequencer view */
   view = monothek_diskjokey_sequencer_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -297,8 +332,6 @@ monothek_window_init(MonothekWindow *window)
 
   /* diskjokey end view */
   view = monothek_diskjokey_end_view_new();
-  gtk_widget_set_no_show_all(view,
-			     TRUE);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -323,6 +356,11 @@ monothek_window_set_property(GObject *gobject,
   window = MONOTHEK_WINDOW(gobject);
 
   switch(prop_id){
+  case PROP_CURRENT_VIEW_TYPE:
+    {
+      window->current_view_type = g_value_get_gtype(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -340,6 +378,12 @@ monothek_window_get_property(GObject *gobject,
   window = MONOTHEK_WINDOW(gobject);
 
   switch(prop_id){
+  case PROP_CURRENT_VIEW_TYPE:
+    {
+      g_value_set_gtype(value,
+			window->current_view_type);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -357,6 +401,34 @@ monothek_window_finalize(GObject *gobject)
   G_OBJECT_CLASS(monothek_window_parent_class)->finalize(gobject);
 }
 
+gboolean
+monothek_window_is_ready(AgsConnectable *connectable)
+{
+  MonothekWindow *window;
+
+  gboolean retval;
+  
+  window = MONOTHEK_WINDOW(connectable);
+
+  retval = ((MONOTHEK_WINDOW_ADDED_TO_REGISTRY & (window->flags)) != 0) ? TRUE: FALSE;
+  
+  return(retval);
+}
+
+gboolean
+monothek_window_is_connected(AgsConnectable *connectable)
+{
+  MonothekWindow *window;
+
+  gboolean retval;
+  
+  window = MONOTHEK_WINDOW(connectable);
+
+  retval = ((MONOTHEK_WINDOW_CONNECTED & (window->flags)) != 0) ? TRUE: FALSE;
+  
+  return(retval);
+}
+
 void
 monothek_window_connect(AgsConnectable *connectable)
 {
@@ -366,11 +438,23 @@ monothek_window_connect(AgsConnectable *connectable)
 
   window = MONOTHEK_WINDOW(connectable);
 
-  if((MONOTHEK_WINDOW_CONNECTED & (window->flags)) != 0){
+  if(!monothek_window_test_flags(window, MONOTHEK_WINDOW_CONNECTED)){
     return;
   }
 
-  window->flags |= MONOTHEK_WINDOW_CONNECTED;  
+  monothek_window_set_flags(window, MONOTHEK_WINDOW_CONNECTED);
+
+  /* view */
+  list =
+    list_start = gtk_container_get_children(window->view);
+
+  while(list != NULL){
+    ags_connectable_connect(list->data);
+
+    list = list->next;
+  }
+  
+  g_list_free(list_start);
 }
 
 void
@@ -382,11 +466,23 @@ monothek_window_disconnect(AgsConnectable *connectable)
 
   window = MONOTHEK_WINDOW(connectable);
 
-  if((MONOTHEK_WINDOW_CONNECTED & (window->flags)) == 0){
+  if(monothek_window_test_flags(window, MONOTHEK_WINDOW_CONNECTED)){
     return;
   }
 
-  window->flags &= (~MONOTHEK_WINDOW_CONNECTED);
+  monothek_window_unset_flags(window, MONOTHEK_WINDOW_CONNECTED);
+
+  /* view */
+  list =
+    list_start = gtk_container_get_children(window->view);
+
+  while(list != NULL){
+    ags_connectable_disconnect(list->data);
+
+    list = list->next;
+  }
+  
+  g_list_free(list_start);
 }
 
 void
@@ -394,15 +490,175 @@ monothek_window_show(GtkWidget *widget)
 {
   MonothekWindow *window;
 
+  GList *list_start, *list;
+
   window = (MonothekWindow *) widget;
 
   GTK_WIDGET_CLASS(monothek_window_parent_class)->show(widget);
+
+  list =
+    list_start = gtk_container_get_children(window->view);
+
+  /* hide all */
+  while(list != NULL){
+    gtk_widget_hide(list->data);
+      
+    list = list->next;
+  }   
+}
+
+void
+monothek_window_show_all(GtkWidget *widget)
+{
+  MonothekWindow *window;
+
+  GList *list_start, *list;
+
+  window = (MonothekWindow *) widget;
+
+  GTK_WIDGET_CLASS(monothek_window_parent_class)->show_all(widget);
+
+  list =
+    list_start = gtk_container_get_children(window->view);
+
+  /* hide all */
+  while(list != NULL){
+    gtk_widget_hide(list->data);
+      
+    list = list->next;
+  }   
 }
 
 gboolean
 monothek_window_delete_event(GtkWidget *widget, GdkEventAny *event)
 {
   return(TRUE);
+}
+
+/**
+ * monothek_window_test_flags:
+ * @window: the #MonothekWindow
+ * @flags: the flags
+ * 
+ * Test @window to have @flags set. 
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ * 
+ * Since: 1.0.0
+ */
+gboolean
+monothek_window_test_flags(MonothekWindow *window, guint flags)
+{
+  gboolean retval;
+
+  if(!MONOTHEK_IS_WINDOW(window)){
+    return(FALSE);
+  }
+
+  retval = (flags & (window->flags)) ? TRUE: FALSE;
+
+  return(retval);
+}
+
+/**
+ * monothek_window_set_flags:
+ * @window: the #MonothekWindow
+ * @flags: the flags
+ * 
+ * Set @flags for  @window.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_window_set_flags(MonothekWindow *window, guint flags)
+{
+  if(!MONOTHEK_IS_WINDOW(window)){
+    return;
+  }
+
+  window->flags |= flags;
+}
+
+/**
+ * monothek_window_unset_flags:
+ * @window: the #MonothekWindow
+ * @flags: the flags
+ * 
+ * Unset @flags for  @window.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_window_unset_flags(MonothekWindow *window, guint flags)
+{
+  if(!MONOTHEK_IS_WINDOW(window)){
+    return;
+  }
+
+  window->flags &= (~flags);
+}
+
+void
+monothek_window_real_change_view(MonothekWindow *window,
+				 GType view_type, GType view_type_old)
+{
+  GList *list_start, *list;
+
+  list =
+    list_start = gtk_container_get_children(window->view);
+
+  /* hide old view */
+  if(view_type_old != G_TYPE_NONE){
+    while(list != NULL){
+      if(G_OBJECT_TYPE(list->data) == view_type_old){
+	gtk_widget_hide(list->data);
+
+	break;
+      }
+
+      list = list->next;
+    }   
+  }
+
+  /* show new view */
+  if(view_type != G_TYPE_NONE){
+    while(list != NULL){      
+      if(G_OBJECT_TYPE(list->data) == view_type){
+	gtk_widget_show(list->data);
+	gtk_widget_queue_draw(list->data);
+	
+	break;
+      }
+
+      list = list->next;
+    }
+  }
+  
+  g_list_free(list_start);
+}
+
+/**
+ * monothek_window_change_view:
+ * @window: the #MonothekWindow
+ * @view_type: the view's #GType to set as current view
+ * @view_type_old: the view's #GType previously set as current view
+ * 
+ * Change visible view.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_window_change_view(MonothekWindow *window,
+			    GType view_type, GType view_type_old)
+{
+  g_return_if_fail(MONOTHEK_IS_WINDOW(window));
+
+  /* emit */
+  g_object_ref((GObject *) window);
+  g_signal_emit(G_OBJECT(window),
+		window_signals[CHANGE_VIEW], 0,
+		view_type, window->current_view_type);
+  g_object_unref((GObject *) window);  
 }
 
 /**

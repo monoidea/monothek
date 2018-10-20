@@ -25,6 +25,8 @@
 
 #include <gtk/gtk.h>
 
+#include <monothek/ui/controller/monothek_controller.h>
+
 #define MONOTHEK_TYPE_START_CONTROLLER                (monothek_start_controller_get_type())
 #define MONOTHEK_START_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_START_CONTROLLER, MonothekStartController))
 #define MONOTHEK_START_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_START_CONTROLLER, MonothekStartControllerClass))
@@ -37,12 +39,12 @@ typedef struct _MonothekStartControllerClass MonothekStartControllerClass;
 
 struct _MonothekStartController
 {
-  GObject gobject;
+  MonothekController controller;
 };
 
 struct _MonothekStartControllerClass
 {
-  GObjectClass gobject;
+  MonothekControllerClass controller;
 
   void (*launch_jukebox)(MonothekStartController *start_controller);
   void (*launch_diskjokey)(MonothekStartController *start_controller);

@@ -36,6 +36,7 @@ EXTRA_DIST = config.rpath \
 	m4/Makefile.in \
 	monothek/i18n.h \
 	monothek/gettext.h \
+	monothek/object/monothek_marshallers.list \
 	m4/README \
 	po/README
 
@@ -47,8 +48,8 @@ CLEANFILES = \
 # include
 # nobase_include_HEADERS += $(libmonothek_la_HEADERS_0)
 
-libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
-libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
+libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_object_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
+libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_object_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
 
 # library libmonothek
 libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
@@ -76,6 +77,19 @@ libmonothek_c_sources = \
 	$(deprecated_libmonothek_c_sources) \
 	monothek/ui/monothek_application_context.c \
 	monothek/ui/monothek_window.c
+
+
+deprecated_libmonothek_object_h_sources =
+
+libmonothek_object_h_sources = \
+	$(deprecated_libmonothek_object_h_sources) \
+	monothek/object/monothek_marshal.h
+
+deprecated_libmonothek_object_c_sources =
+
+libmonothek_object_c_sources = \
+	$(deprecated_libmonothek_object_c_sources) \
+	monothek/object/monothek_marshal.c
 
 deprecated_libmonothek_model_h_sources =
 
@@ -119,13 +133,17 @@ deprecated_libmonothek_controller_h_sources =
 
 libmonothek_controller_h_sources = \
 	$(deprecated_libmonothek_controller_h_sources) \
-	monothek/ui/controller/monothek_start_controller.h
+	monothek/ui/controller/monothek_action_box.h \
+	monothek/ui/controller/monothek_start_controller.h \
+	monothek/ui/controller/monothek_controller.h
 
 deprecated_libmonothek_controller_c_sources =
 
 libmonothek_controller_c_sources = \
 	$(deprecated_libmonothek_controller_c_sources) \
-	monothek/ui/controller/monothek_start_controller.c
+	monothek/ui/controller/monothek_action_box.c \
+	monothek/ui/controller/monothek_start_controller.c \
+	monothek/ui/controller/monothek_controller.c
 
 deprecated_libmonothek_view_h_sources =
 
@@ -173,6 +191,11 @@ monothek_uiheaders = \
 
 monothek_ui_c_sources = \
 	monothek/monothek_main.c
+
+gen-marshallers:
+	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list >> monothek/object/monothek_marshal.h
+	glib-genmarshal --prefix=monothek_cclosure_marshal --body monothek/object/monothek_marshallers.list >> monothek/object/monothek_marshal.c
+	echo "generated marshallers in monothek/object/"
 
 check-gettext:
 	@if test x$(USE_NLS) != "xyes" ; then echo "Missing gettext. Rerun configure and check for" \
