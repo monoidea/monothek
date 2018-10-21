@@ -4,7 +4,7 @@ ags (1.0.0)
 	* implemented MonothekApplicationContext
 	* implemented MonothekWindow
 	* implemented MonothekView
-	* TODO:JK: implemented MonothekStartView, MonothekStartModel and MonthekStartController
+	* implemented MonothekStartView, MonothekStartModel and MonthekStartController
 	* TODO:JK: implemented MonothekClosedView, MonothekClosedModel and MonthekClosedController
 	* TODO:JK: implemented MonothekOutageView, MonothekOutageModel and MonthekOutageController
 	* TODO:JK: implemented MonothekJukeboxPaymentView, MonothekJukeboxPaymentModel and MonthekJukeboxPaymentController

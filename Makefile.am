@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = po
 
 ACLOCAL_AMFLAGS = -I m4
-AM_CPPFLAGS = -std=gnu99 -include errno.h -I$(top_srcdir) -DSRCDIR=\"$(srcdir)\" -DDESTDIR=\"$(DESTDIR)$(datadir)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security
+AM_CPPFLAGS = -std=gnu99 -include errno.h -I$(top_srcdir) -DMONOTHEK_DEVEL_MODE=1 -DSRCDIR=\"$(srcdir)\" -DDESTDIR=\"$(DESTDIR)$(datadir)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security
 
 # what flags you want to pass to the C compiler & linker
 CFLAGS =  @CFLAGS@
@@ -135,6 +135,8 @@ libmonothek_controller_h_sources = \
 	$(deprecated_libmonothek_controller_h_sources) \
 	monothek/ui/controller/monothek_action_box.h \
 	monothek/ui/controller/monothek_start_controller.h \
+	monothek/ui/controller/monothek_jukebox_payment_controller.h \
+	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
 	monothek/ui/controller/monothek_controller.h
 
 deprecated_libmonothek_controller_c_sources =
@@ -143,6 +145,8 @@ libmonothek_controller_c_sources = \
 	$(deprecated_libmonothek_controller_c_sources) \
 	monothek/ui/controller/monothek_action_box.c \
 	monothek/ui/controller/monothek_start_controller.c \
+	monothek/ui/controller/monothek_jukebox_payment_controller.c \
+	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
 	monothek/ui/controller/monothek_controller.c
 
 deprecated_libmonothek_view_h_sources =

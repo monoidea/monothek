@@ -28,8 +28,14 @@
 
 #include <monothek/ui/controller/monothek_controller.h>
 #include <monothek/ui/controller/monothek_start_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
+#include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
 
 #include <monothek/ui/model/monothek_start_model.h>
+#include <monothek/ui/model/monothek_closed_model.h>
+#include <monothek/ui/model/monothek_outage_model.h>
+#include <monothek/ui/model/monothek_jukebox_payment_model.h>
+#include <monothek/ui/model/monothek_diskjokey_payment_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
 #include <monothek/ui/view/monothek_closed_view.h>
@@ -284,6 +290,11 @@ monothek_window_init(MonothekWindow *window)
 	       NULL);
   
   /* closed view */
+  model = monothek_closed_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_closed_view_new();
   gtk_box_pack_start(window->view,
 		     view,
@@ -291,6 +302,11 @@ monothek_window_init(MonothekWindow *window)
 		     0);
 
   /* outage view */
+  model = monothek_outage_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_outage_view_new();
   gtk_box_pack_start(window->view,
 		     view,
@@ -298,25 +314,70 @@ monothek_window_init(MonothekWindow *window)
 		     0);
 
   /* jukebox payment view */
+  model = monothek_jukebox_payment_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_jukebox_payment_view_new();
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
 
+  controller = monothek_jukebox_payment_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+
   /* diskjokey payment view */
+  model = monothek_diskjokey_payment_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_diskjokey_payment_view_new();
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
 
+  controller = monothek_diskjokey_payment_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+
   /* jukebox mode view */
+  model = monothek_jukebox_payment_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_jukebox_mode_view_new();
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
+
+  controller = monothek_jukebox_payment_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
 
   /* jukebox no test view */
   view = monothek_jukebox_no_test_view_new();
