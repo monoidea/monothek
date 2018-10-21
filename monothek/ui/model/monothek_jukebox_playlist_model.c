@@ -110,7 +110,30 @@ monothek_jukebox_playlist_model_class_init(MonothekJukeboxPlaylistModelClass *ju
 void
 monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playlist_model)
 {
-  //TODO:JK: implement me
+  guint i;
+
+  jukebox_playlist_model->song_filename = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+
+  jukebox_playlist_model->song_select_active = (gboolean *) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gboolean));
+
+  jukebox_playlist_model->song_title = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  jukebox_playlist_model->artist = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  jukebox_playlist_model->album = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  jukebox_playlist_model->duration = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  
+  for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+    jukebox_playlist_model->song_select_active[i] = FALSE;
+
+    jukebox_playlist_model->song_filename[i] = NULL;
+
+    jukebox_playlist_model->song_title[i] = NULL;
+    jukebox_playlist_model->artist[i] = NULL;
+    jukebox_playlist_model->album[i] = NULL;
+    
+    jukebox_playlist_model->duration[i] = (struct timespec *) malloc(sizeof(struct timespec));
+    jukebox_playlist_model->duration[i]->tv_sec = 0;
+    jukebox_playlist_model->duration[i]->tv_nsec = 0;    
+  }
 }
 
 void

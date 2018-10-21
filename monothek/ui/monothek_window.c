@@ -30,6 +30,7 @@
 #include <monothek/ui/controller/monothek_start_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_playlist_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
 
 #include <monothek/ui/model/monothek_start_model.h>
@@ -405,11 +406,29 @@ monothek_window_init(MonothekWindow *window)
 		     0);
 
   /* jukebox playlist view */
+  model = monothek_jukebox_playlist_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_jukebox_playlist_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
+
+  controller = monothek_jukebox_playlist_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
 
   /* jukebox track view */
   view = monothek_jukebox_track_view_new();

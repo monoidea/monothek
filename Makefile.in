@@ -184,6 +184,7 @@ am__objects_7 = $(am__objects_1) \
 	monothek/ui/controller/libmonothek_la-monothek_start_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_payment_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo \
+	monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_controller.lo
 am__objects_8 = $(am__objects_1) \
@@ -249,6 +250,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo \
+	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo \
@@ -663,6 +665,7 @@ libmonothek_controller_h_sources = \
 	monothek/ui/controller/monothek_start_controller.h \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_jukebox_mode_controller.h \
+	monothek/ui/controller/monothek_jukebox_playlist_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
 	monothek/ui/controller/monothek_controller.h
 
@@ -673,6 +676,7 @@ libmonothek_controller_c_sources = \
 	monothek/ui/controller/monothek_start_controller.c \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_jukebox_mode_controller.c \
+	monothek/ui/controller/monothek_jukebox_playlist_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
 	monothek/ui/controller/monothek_controller.c
 
@@ -945,6 +949,9 @@ monothek/ui/controller/libmonothek_la-monothek_jukebox_payment_controller.lo:  \
 monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo:  \
+	monothek/ui/controller/$(am__dirstamp) \
+	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
@@ -1044,6 +1051,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo@am__quote@ # am--include-marker
@@ -1251,6 +1259,13 @@ monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo: monot
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_jukebox_mode_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_mode_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_mode_controller.c
+
+monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo: monothek/ui/controller/monothek_jukebox_playlist_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_playlist_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_playlist_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_jukebox_playlist_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_playlist_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_playlist_controller.c
 
 monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo: monothek/ui/controller/monothek_diskjokey_payment_controller.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo `test -f 'monothek/ui/controller/monothek_diskjokey_payment_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_diskjokey_payment_controller.c
@@ -1764,6 +1779,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo
@@ -1850,6 +1866,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo

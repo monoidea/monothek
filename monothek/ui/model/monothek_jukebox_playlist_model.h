@@ -25,6 +25,8 @@
 
 #include <gtk/gtk.h>
 
+#include <time.h>
+
 #define MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL                (monothek_jukebox_playlist_model_get_type())
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModel))
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModelClass))
@@ -32,12 +34,24 @@
 #define MONOTHEK_IS_JUKEBOX_PLAYLIST_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL))
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModelClass))
 
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT (12)
+
 typedef struct _MonothekJukeboxPlaylistModel MonothekJukeboxPlaylistModel;
 typedef struct _MonothekJukeboxPlaylistModelClass MonothekJukeboxPlaylistModelClass;
 
 struct _MonothekJukeboxPlaylistModel
 {
   GObject gobject;
+
+  gboolean *song_select_active;
+ 
+  gchar **song_filename;
+
+  gchar **song_title;
+  gchar **artist;
+  gchar **album;
+
+  struct timespec **duration;
 };
 
 struct _MonothekJukeboxPlaylistModelClass

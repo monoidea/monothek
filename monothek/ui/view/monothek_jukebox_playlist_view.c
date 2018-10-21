@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/model/monothek_jukebox_playlist_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -245,6 +247,8 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 {
   MonothekJukeboxPlaylistView *jukebox_playlist_view;
   
+  MonothekJukeboxPlaylistModel *jukebox_playlist_model;
+
   cairo_t *cr;
 
   guint width, height;
@@ -264,6 +268,10 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
   if(cr == NULL){
     return;
   }
+
+  g_object_get(view,
+	       "model", &jukebox_playlist_model,
+	       NULL);
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
@@ -400,6 +408,33 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
     jukebox_font = g_strdup_printf("%s Bold", view->font);
 
+    if(jukebox_playlist_model != NULL &&
+       jukebox_playlist_model->song_select_active[i]){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    /* jukebox - song row */
+    cairo_set_line_width(cr,
+			 jukebox_playlist_view->song_box_line_width);
+    cairo_rectangle(cr,
+		    (double) jukebox_playlist_view->table_x0, (double) jukebox_playlist_view->table_y0 + (i * (jukebox_playlist_view->row_height + jukebox_playlist_view->row_spacing)),
+		    (double) jukebox_playlist_view->row_width, (double) jukebox_playlist_view->row_height);
+
+    if(jukebox_playlist_model != NULL &&
+       jukebox_playlist_model->song_select_active[i]){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
+
     /* jukebox - titel */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "(null)", -1);
@@ -484,14 +519,14 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    /* jukebox - song row */
-    cairo_set_line_width(cr,
-			 jukebox_playlist_view->song_box_line_width);
-    cairo_rectangle(cr,
-		    (double) jukebox_playlist_view->table_x0, (double) jukebox_playlist_view->table_y0 + (i * (jukebox_playlist_view->row_height + jukebox_playlist_view->row_spacing)),
-		    (double) jukebox_playlist_view->row_width, (double) jukebox_playlist_view->row_height);
-    cairo_stroke(cr);
-
+    if(jukebox_playlist_model != NULL &&
+       jukebox_playlist_model->song_select_active[i]){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+    
     g_free(jukebox_font);
   }
   
