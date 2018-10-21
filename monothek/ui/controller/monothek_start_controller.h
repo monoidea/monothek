@@ -40,6 +40,9 @@ typedef struct _MonothekStartControllerClass MonothekStartControllerClass;
 struct _MonothekStartController
 {
   MonothekController controller;
+
+  MonothekActionBox *jukebox_launch;
+  MonothekActionBox *diskjokey_launch;
 };
 
 struct _MonothekStartControllerClass

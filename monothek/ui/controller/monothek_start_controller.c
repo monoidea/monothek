@@ -22,13 +22,39 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/monothek_window.h>
+
+#include <monothek/ui/model/monothek_start_model.h>
+
+#include <monothek/ui/view/monothek_start_view.h>
+#include <monothek/ui/view/monothek_jukebox_payment_view.h>
+#include <monothek/ui/view/monothek_diskjokey_payment_view.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
 
 void monothek_start_controller_class_init(MonothekStartControllerClass *start_controller);
+void monothek_start_controller_connectable_interface_init(AgsConnectableInterface *connectable);
 void monothek_start_controller_init(MonothekStartController *start_controller);
 void monothek_start_controller_finalize(GObject *gobject);
+
+void monothek_start_controller_connect(AgsConnectable *connectable);
+void monothek_start_controller_disconnect(AgsConnectable *connectable);
+
+void monothek_start_controller_jukebox_launch_enter_callback(MonothekActionBox *action_box,
+							     MonothekStartController *start_controller);
+void monothek_start_controller_jukebox_launch_leave_callback(MonothekActionBox *action_box,
+							     MonothekStartController *start_controller);
+void monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *action_box,
+							       MonothekStartController *start_controller);
+
+void monothek_start_controller_diskjokey_launch_enter_callback(MonothekActionBox *action_box,
+							       MonothekStartController *start_controller);
+void monothek_start_controller_diskjokey_launch_leave_callback(MonothekActionBox *action_box,
+							       MonothekStartController *start_controller);
+void monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *action_box,
+								 MonothekStartController *start_controller);
 
 void monothek_start_controller_real_launch_jukebox(MonothekStartController *start_controller);
 void monothek_start_controller_real_launch_diskjokey(MonothekStartController *start_controller);
@@ -50,6 +76,7 @@ enum{
 };
 
 static gpointer monothek_start_controller_parent_class = NULL;
+static AgsConnectableInterface* monothek_start_controller_parent_connectable_interface;
 
 static guint start_controller_signals[LAST_SIGNAL];
 
@@ -73,9 +100,19 @@ monothek_start_controller_get_type()
       (GInstanceInitFunc) monothek_start_controller_init,
     };
 
+    static const GInterfaceInfo monothek_connectable_interface_info = {
+      (GInterfaceInitFunc) monothek_start_controller_connectable_interface_init,
+      NULL, /* interface_finalize */
+      NULL, /* interface_data */
+    };
+
     monothek_type_start_controller = g_type_register_static(MONOTHEK_TYPE_CONTROLLER,
 							    "MonothekStartController", &monothek_start_controller_info,
 							    0);
+
+    g_type_add_interface_static(monothek_type_start_controller,
+				AGS_TYPE_CONNECTABLE,
+				&monothek_connectable_interface_info);
 
     g_once_init_leave(&g_define_type_id__volatile, monothek_type_start_controller);
   }
@@ -137,9 +174,40 @@ monothek_start_controller_class_init(MonothekStartControllerClass *start_control
 }
 
 void
+monothek_start_controller_connectable_interface_init(AgsConnectableInterface *connectable)
+{  
+  monothek_start_controller_parent_connectable_interface = g_type_interface_peek_parent(connectable);
+
+  connectable->connect = monothek_start_controller_connect;
+  connectable->disconnect = monothek_start_controller_disconnect;
+}
+
+void
 monothek_start_controller_init(MonothekStartController *start_controller)
 {
-  //TODO:JK: implement me
+  MonothekActionBox *action_box;
+
+  start_controller->jukebox_launch = 
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "jukebox-launch",
+						    "x0", 320,
+						    "y0", 600,
+						    "width", 360,
+						    "height", 120,
+						    NULL);
+  monothek_controller_add_action_box(start_controller,
+				     action_box);
+  
+  start_controller->diskjokey_launch = 
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "diskjokey-launch",
+						    "x0", 1240,
+						    "y0", 600,
+						    "width", 360,
+						    "height", 120,
+						    NULL);
+  monothek_controller_add_action_box(start_controller,
+				     action_box);  
 }
 
 void
@@ -154,9 +222,185 @@ monothek_start_controller_finalize(GObject *gobject)
 }
 
 void
+monothek_start_controller_connect(AgsConnectable *connectable)
+{
+  MonothekStartController *start_controller;
+
+  start_controller = MONOTHEK_START_CONTROLLER(connectable);
+
+  if(monothek_controller_test_flags(start_controller, MONOTHEK_CONTROLLER_CONNECTED)){
+    return;
+  }
+
+  monothek_start_controller_parent_connectable_interface->connect(connectable);
+  
+  g_signal_connect(start_controller->jukebox_launch, "enter",
+		   G_CALLBACK(monothek_start_controller_jukebox_launch_enter_callback), start_controller);
+  g_signal_connect(start_controller->jukebox_launch, "leave",
+		   G_CALLBACK(monothek_start_controller_jukebox_launch_leave_callback), start_controller);
+  g_signal_connect(start_controller->jukebox_launch, "clicked",
+		   G_CALLBACK(monothek_start_controller_jukebox_launch_clicked_callback), start_controller);
+
+  g_signal_connect(start_controller->diskjokey_launch, "enter",
+		   G_CALLBACK(monothek_start_controller_diskjokey_launch_enter_callback), start_controller);
+  g_signal_connect(start_controller->diskjokey_launch, "leave",
+		   G_CALLBACK(monothek_start_controller_diskjokey_launch_leave_callback), start_controller);
+  g_signal_connect(start_controller->diskjokey_launch, "clicked",
+		   G_CALLBACK(monothek_start_controller_diskjokey_launch_clicked_callback), start_controller);
+}
+
+void
+monothek_start_controller_disconnect(AgsConnectable *connectable)
+{
+  MonothekStartController *start_controller;
+
+  start_controller = MONOTHEK_START_CONTROLLER(connectable);
+
+  if(!monothek_controller_test_flags(start_controller, MONOTHEK_CONTROLLER_CONNECTED)){
+    return;
+  }
+
+  monothek_start_controller_parent_connectable_interface->disconnect(connectable);
+
+  g_object_disconnect(start_controller->jukebox_launch, "enter",
+		      G_CALLBACK(monothek_start_controller_jukebox_launch_enter_callback),
+		      start_controller,
+		      start_controller->jukebox_launch,
+		      "leave",
+		      G_CALLBACK(monothek_start_controller_jukebox_launch_leave_callback),
+		      start_controller,
+		      start_controller->jukebox_launch,
+		      "clicked",
+		      G_CALLBACK(monothek_start_controller_jukebox_launch_clicked_callback),
+		      start_controller,
+		      NULL);
+
+  g_object_disconnect(start_controller->diskjokey_launch,
+		      "enter",
+		      G_CALLBACK(monothek_start_controller_diskjokey_launch_enter_callback),
+		      start_controller,
+		      start_controller->diskjokey_launch,
+		      "leave",
+		      G_CALLBACK(monothek_start_controller_diskjokey_launch_leave_callback),
+		      start_controller,
+		      start_controller->diskjokey_launch,
+		      "clicked",
+		      G_CALLBACK(monothek_start_controller_diskjokey_launch_clicked_callback),
+		      start_controller,
+		      NULL);
+}
+
+void
+monothek_start_controller_jukebox_launch_enter_callback(MonothekActionBox *action_box,
+							MonothekStartController *start_controller)
+{
+  MonothekStartView *view;
+  
+  MonothekStartModel *model;
+
+  g_message("enter");
+  
+  g_object_get(start_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-start-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_start_controller_jukebox_launch_leave_callback(MonothekActionBox *action_box,
+							MonothekStartController *start_controller)
+{
+  MonothekStartView *view;
+  
+  MonothekStartModel *model;
+
+  g_message("leave");
+
+  g_object_get(start_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-start-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *action_box,
+							  MonothekStartController *start_controller)
+{
+  g_message("clicked");
+
+  monothek_start_controller_launch_jukebox(start_controller);
+}
+
+void
+monothek_start_controller_diskjokey_launch_enter_callback(MonothekActionBox *action_box,
+							  MonothekStartController *start_controller)
+{
+  MonothekStartView *view;
+  
+  MonothekStartModel *model;
+
+  g_object_get(start_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "diskjokey-start-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_start_controller_diskjokey_launch_leave_callback(MonothekActionBox *action_box,
+							  MonothekStartController *start_controller)
+{
+  MonothekStartView *view;
+  
+  MonothekStartModel *model;
+
+  g_object_get(start_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "diskjokey-start-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *action_box,
+							    MonothekStartController *start_controller)
+{
+  monothek_start_controller_launch_diskjokey(start_controller);
+}
+
+void
 monothek_start_controller_real_launch_jukebox(MonothekStartController *start_controller)
 {
-  //TODO:JK: implement me
+  MonothekWindow *window;
+  MonothekStartView *view;
+  
+  g_object_get(start_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW, G_TYPE_NONE);
 }
 
 /**
@@ -181,7 +425,18 @@ monothek_start_controller_launch_jukebox(MonothekStartController *start_controll
 void
 monothek_start_controller_real_launch_diskjokey(MonothekStartController *start_controller)
 {
-  //TODO:JK: implement me
+  MonothekWindow *window;
+  MonothekStartView *view;
+  
+  g_object_get(start_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW, G_TYPE_NONE);
 }
 
 /**

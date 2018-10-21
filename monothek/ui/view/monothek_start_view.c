@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/model/monothek_start_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -260,6 +262,8 @@ void
 monothek_start_view_draw(MonothekView *view)
 {
   MonothekStartView *start_view;
+
+  MonothekStartModel *start_model;
   
   cairo_t *cr;
 
@@ -280,6 +284,10 @@ monothek_start_view_draw(MonothekView *view)
     return;
   }
 
+  g_object_get(view,
+	       "model", &start_model,
+	       NULL);
+  
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
 
@@ -357,33 +365,73 @@ monothek_start_view_draw(MonothekView *view)
     g_object_unref(layout);
     
     /* jukebox - start */
-    layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "START", -1);
-    desc = pango_font_description_from_string(jukebox_font);
-    pango_font_description_set_size(desc,
-				    38 * PANGO_SCALE);
-    pango_layout_set_font_description(layout, desc);
-    pango_font_description_free(desc);
+    if(start_model == NULL ||
+       !start_model->jukebox_start_active){
+      layout = pango_cairo_create_layout(cr);
+      pango_layout_set_text(layout, "START", -1);
+      desc = pango_font_description_from_string(jukebox_font);
+      pango_font_description_set_size(desc,
+				      38 * PANGO_SCALE);
+      pango_layout_set_font_description(layout, desc);
+      pango_font_description_free(desc);
 
-    pango_layout_get_pixel_extents(layout,
-				   &ink_rect,
-				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 639.0);
+      pango_layout_get_pixel_extents(layout,
+				     &ink_rect,
+				     &logical_rect);
+      cairo_move_to(cr,
+		    (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 639.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
-    g_object_unref(layout);
+      g_object_unref(layout);
 
-    cairo_set_line_width(cr,
-			 start_view->jukebox_start_box_line_width);
-    cairo_rectangle(cr,
-		    (double) start_view->jukebox_start_box_x0, (double) start_view->jukebox_start_box_y0,
-		    (double) start_view->jukebox_start_box_width, (double) start_view->jukebox_start_box_height);
-    cairo_stroke(cr);
+      cairo_set_line_width(cr,
+			   start_view->jukebox_start_box_line_width);
+      cairo_rectangle(cr,
+		      (double) start_view->jukebox_start_box_x0, (double) start_view->jukebox_start_box_y0,
+		      (double) start_view->jukebox_start_box_width, (double) start_view->jukebox_start_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   start_view->jukebox_start_box_line_width);
+      cairo_rectangle(cr,
+		      (double) start_view->jukebox_start_box_x0, (double) start_view->jukebox_start_box_y0,
+		      (double) start_view->jukebox_start_box_width, (double) start_view->jukebox_start_box_height);
+      cairo_fill(cr);
 
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+      
+      layout = pango_cairo_create_layout(cr);
+      pango_layout_set_text(layout, "START", -1);
+      desc = pango_font_description_from_string(jukebox_font);
+      pango_font_description_set_size(desc,
+				      38 * PANGO_SCALE);
+      pango_layout_set_font_description(layout, desc);
+      pango_font_description_free(desc);
+
+      pango_layout_get_pixel_extents(layout,
+				     &ink_rect,
+				     &logical_rect);
+      cairo_move_to(cr,
+		    (double) 80.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 639.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+    
     /* jukebox - description */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "CHOOSE A TITLE AND\nDANCE TO IT TILL IT ENDS", -1);
@@ -477,32 +525,72 @@ monothek_start_view_draw(MonothekView *view)
     g_object_unref(layout);
     
     /* diskjokey - start */
-    layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "START", -1);
-    desc = pango_font_description_from_string(diskjokey_font);
-    pango_font_description_set_size(desc,
-				    38 * PANGO_SCALE);
-    pango_layout_set_font_description(layout, desc);
-    pango_font_description_free(desc);
+    if(start_model == NULL ||
+       !start_model->diskjokey_start_active){
+      layout = pango_cairo_create_layout(cr);
+      pango_layout_set_text(layout, "START", -1);
+      desc = pango_font_description_from_string(diskjokey_font);
+      pango_font_description_set_size(desc,
+				      38 * PANGO_SCALE);
+      pango_layout_set_font_description(layout, desc);
+      pango_font_description_free(desc);
 
-    pango_layout_get_pixel_extents(layout,
-				   &ink_rect,
-				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 639.0);
+      pango_layout_get_pixel_extents(layout,
+				     &ink_rect,
+				     &logical_rect);
+      cairo_move_to(cr,
+		    (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 639.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
-    g_object_unref(layout);
+      g_object_unref(layout);
 
-    cairo_set_line_width(cr,
-			 start_view->diskjokey_start_box_line_width);
-    cairo_rectangle(cr,
-		    (double) start_view->diskjokey_start_box_x0, (double) start_view->diskjokey_start_box_y0,
-		    (double) start_view->diskjokey_start_box_width, (double) start_view->diskjokey_start_box_height);
-    cairo_stroke(cr);
+      cairo_set_line_width(cr,
+			   start_view->diskjokey_start_box_line_width);
+      cairo_rectangle(cr,
+		      (double) start_view->diskjokey_start_box_x0, (double) start_view->diskjokey_start_box_y0,
+		      (double) start_view->diskjokey_start_box_width, (double) start_view->diskjokey_start_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   start_view->diskjokey_start_box_line_width);
+      cairo_rectangle(cr,
+		      (double) start_view->diskjokey_start_box_x0, (double) start_view->diskjokey_start_box_y0,
+		      (double) start_view->diskjokey_start_box_width, (double) start_view->diskjokey_start_box_height);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+      
+      layout = pango_cairo_create_layout(cr);
+      pango_layout_set_text(layout, "START", -1);
+      desc = pango_font_description_from_string(diskjokey_font);
+      pango_font_description_set_size(desc,
+				      38 * PANGO_SCALE);
+      pango_layout_set_font_description(layout, desc);
+      pango_font_description_free(desc);
+
+      pango_layout_get_pixel_extents(layout,
+				     &ink_rect,
+				     &logical_rect);
+      cairo_move_to(cr,
+		    (double) 1000.0 + ((840.0 / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 639.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
     
     /* diskjokey - description */
     layout = pango_cairo_create_layout(cr);

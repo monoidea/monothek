@@ -68,6 +68,7 @@ gboolean monothek_controller_button_release_event_callback(GtkWidget *widget,
 
 enum{
   PROP_0,
+  PROP_MODEL,
   PROP_VIEW,
   PROP_ACTION_BOX,
 };
@@ -134,6 +135,22 @@ monothek_controller_class_init(MonothekControllerClass *controller)
 
   /* properties */
   /**
+   * MonothekController:model:
+   *
+   * The assigned #GObject implementing the model.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_object("model",
+				   i18n_pspec("assigned model"),
+				   i18n_pspec("The model it is assigned with"),
+				   G_TYPE_OBJECT,
+				   G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_MODEL,
+				  param_spec);
+
+  /**
    * MonothekController:view:
    *
    * The assigned #MonothekView.
@@ -148,7 +165,7 @@ monothek_controller_class_init(MonothekControllerClass *controller)
   g_object_class_install_property(gobject,
 				  PROP_VIEW,
 				  param_spec);
-
+  
   /**
    * MonothekControlelr:action-box:
    *
@@ -178,6 +195,10 @@ monothek_controller_connectable_interface_init(AgsConnectableInterface *connecta
 void
 monothek_controller_init(MonothekController *controller)
 {
+  controller->flags = 0;
+  
+  controller->model = NULL;
+
   controller->view = NULL;
 
   controller->action_box = NULL;
@@ -185,15 +206,36 @@ monothek_controller_init(MonothekController *controller)
 
 void
 monothek_controller_set_property(GObject *gobject,
-			     guint prop_id,
-			     const GValue *value,
-			     GParamSpec *param_spec)
+				 guint prop_id,
+				 const GValue *value,
+				 GParamSpec *param_spec)
 {
   MonothekController *controller;
 
   controller = MONOTHEK_CONTROLLER(gobject);
 
   switch(prop_id){
+  case PROP_MODEL:
+    {
+      GObject *model;
+
+      model = g_value_get_object(value);
+
+      if(model == controller->model){
+	return;
+      }
+
+      if(controller->model != NULL){
+	g_object_unref(controller->model);
+      }
+
+      if(model != NULL){
+	g_object_ref(model);
+      }
+
+      controller->model = model;
+    }
+    break;
   case PROP_VIEW:
     {
       MonothekView *view;
@@ -233,15 +275,21 @@ monothek_controller_set_property(GObject *gobject,
 
 void
 monothek_controller_get_property(GObject *gobject,
-			     guint prop_id,
-			     GValue *value,
-			     GParamSpec *param_spec)
+				 guint prop_id,
+				 GValue *value,
+				 GParamSpec *param_spec)
 {
   MonothekController *controller;
 
   controller = MONOTHEK_CONTROLLER(gobject);
 
   switch(prop_id){
+  case PROP_MODEL:
+    {
+      g_value_set_object(value,
+			 controller->model);
+    }
+    break;
   case PROP_VIEW:
     {
       g_value_set_object(value,
@@ -314,7 +362,7 @@ monothek_controller_connect(AgsConnectable *connectable)
 
   controller = MONOTHEK_CONTROLLER(connectable);
 
-  if(!monothek_controller_test_flags(controller, MONOTHEK_CONTROLLER_CONNECTED)){
+  if(monothek_controller_test_flags(controller, MONOTHEK_CONTROLLER_CONNECTED)){
     return;
   }
 
@@ -344,7 +392,7 @@ monothek_controller_disconnect(AgsConnectable *connectable)
 
   controller = MONOTHEK_CONTROLLER(connectable);
 
-  if(monothek_controller_test_flags(controller, MONOTHEK_CONTROLLER_CONNECTED)){
+  if(!monothek_controller_test_flags(controller, MONOTHEK_CONTROLLER_CONNECTED)){
     return;
   }
 
@@ -393,10 +441,10 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
 		 "height", &height,
 		 NULL);
 
-    if(x0 >= ((GdkEventButton *) event)->x &&
-       x0 + width < ((GdkEventButton *) event)->x &&
-       y0 >= ((GdkEventButton *) event)->y &&
-       y0 + height < ((GdkEventButton *) event)->y){
+    if(x0 >= ((GdkEventMotion *) event)->x &&
+       x0 + width < ((GdkEventMotion *) event)->x &&
+       y0 >= ((GdkEventMotion *) event)->y &&
+       y0 + height < ((GdkEventMotion *) event)->y){
       if(!monothek_action_box_get_active(list->data)){
 	monothek_action_box_enter(list->data);
       }
@@ -409,6 +457,8 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
     list = list->next;
   }
 
+  g_list_free(list_start);
+  
   return(FALSE);
 }
 
@@ -418,7 +468,7 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
 						MonothekController *controller)
 {
   GList *list_start, *list;
-  
+
   g_object_get(controller,
 	       "action-box", &list_start,
 	       NULL);
@@ -436,15 +486,17 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
 		 "height", &height,
 		 NULL);
 
-    if(x0 >= ((GdkEventButton *) event)->x &&
-       x0 + width < ((GdkEventButton *) event)->x &&
-       y0 >= ((GdkEventButton *) event)->y &&
-       y0 + height < ((GdkEventButton *) event)->y){
+    if(x0 <= ((GdkEventButton *) event)->x &&
+       x0 + width > ((GdkEventButton *) event)->x &&
+       y0 <= ((GdkEventButton *) event)->y &&
+       y0 + height > ((GdkEventButton *) event)->y){
       monothek_action_box_pressed(list->data);
     }
     
     list = list->next;
   }
+
+  g_list_free(list_start);
 
   return(FALSE);
 }
@@ -473,15 +525,17 @@ monothek_controller_button_release_event_callback(GtkWidget *widget,
 		 "height", &height,
 		 NULL);
 
-    if(x0 >= ((GdkEventButton *) event)->x &&
-       x0 + width < ((GdkEventButton *) event)->x &&
-       y0 >= ((GdkEventButton *) event)->y &&
-       y0 + height < ((GdkEventButton *) event)->y){
+    if(x0 <= ((GdkEventButton *) event)->x &&
+       x0 + width > ((GdkEventButton *) event)->x &&
+       y0 <= ((GdkEventButton *) event)->y &&
+       y0 + height > ((GdkEventButton *) event)->y){
       monothek_action_box_released(list->data);
     }
     
     list = list->next;
   }
+
+  g_list_free(list_start);
 
   return(FALSE);
 }
@@ -563,14 +617,14 @@ monothek_controller_add_action_box(MonothekController *controller,
 				   MonothekActionBox *action_box)
 {
   if(!MONOTHEK_IS_CONTROLLER(controller) ||
-     !MONOTHEK_IS_ACTION_BOX(controller)){
+     !MONOTHEK_IS_ACTION_BOX(action_box)){
     return;
   }
 
   if(g_list_find(controller->action_box, action_box) == NULL){
     g_object_ref(action_box);
-    g_list_prepend(controller->action_box,
-		   action_box);
+    controller->action_box = g_list_prepend(controller->action_box,
+					    action_box);
   }
 }
 
@@ -588,15 +642,42 @@ monothek_controller_remove_action_box(MonothekController *controller,
 				      MonothekActionBox *action_box)
 {
   if(!MONOTHEK_IS_CONTROLLER(controller) ||
-     !MONOTHEK_IS_ACTION_BOX(controller)){
+     !MONOTHEK_IS_ACTION_BOX(action_box)){
     return;
   }
 
   if(g_list_find(controller->action_box, action_box) != NULL){
     g_object_unref(action_box);
-    g_list_remove(controller->action_box,
-		  action_box);
+    controller->action_box = g_list_remove(controller->action_box,
+					   action_box);
   }
+}
+
+/**
+ * monothek_controller_find_view_type:
+ * @list: the #GList-struct containing #MonothekController
+ * @view_type: the view type to match
+ * 
+ * Find @view_type in @list.
+ * 
+ * Returns: the matching #GList-struct if found, else %NULL
+ * 
+ * Since: 1.0.0
+ */
+GList*
+monothek_controller_find_view_type(GList *list,
+				   GType view_type)
+{
+  while(list != NULL){
+    if(MONOTHEK_IS_CONTROLLER(list->data) &&
+       G_OBJECT_TYPE(MONOTHEK_CONTROLLER(list->data)->view) == view_type){
+      return(list);
+    }
+
+    list = list->next;
+  }
+
+  return(NULL);
 }
 
 /**

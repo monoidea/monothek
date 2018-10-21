@@ -54,6 +54,8 @@ struct _MonothekController
   GObject gobject;
 
   guint flags;
+
+  GObject *model;
   
   MonothekView *view;
 
@@ -75,6 +77,9 @@ void monothek_controller_add_action_box(MonothekController *controller,
 					MonothekActionBox *action_box);
 void monothek_controller_remove_action_box(MonothekController *controller,
 					   MonothekActionBox *action_box);
+
+GList* monothek_controller_find_view_type(GList *list,
+					  GType view_type);
 
 MonothekController* monothek_controller_new();
 

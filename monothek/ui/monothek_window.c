@@ -26,6 +26,11 @@
 
 #include <monothek/ui/monothek_application_context.h>
 
+#include <monothek/ui/controller/monothek_controller.h>
+#include <monothek/ui/controller/monothek_start_controller.h>
+
+#include <monothek/ui/model/monothek_start_model.h>
+
 #include <monothek/ui/view/monothek_start_view.h>
 #include <monothek/ui/view/monothek_closed_view.h>
 #include <monothek/ui/view/monothek_outage_view.h>
@@ -217,6 +222,10 @@ monothek_window_init(MonothekWindow *window)
   GtkWidget *scrolled_window;
   MonothekView *view;
   
+  MonothekController *controller;
+
+  GObject *model;
+
   GError *error;
 
   window->flags = 0;
@@ -233,8 +242,13 @@ monothek_window_init(MonothekWindow *window)
   gtk_container_add(window,
 		    scrolled_window);
 #endif
+
+  window->model = NULL;
+  window->controller = NULL;  
   
   /* view - vbox */
+  window->current_view_type = G_TYPE_NONE;
+  
   window->view = (GtkVBox *) gtk_vbox_new(FALSE,
 					  0);
 #if 0
@@ -243,16 +257,32 @@ monothek_window_init(MonothekWindow *window)
   gtk_container_add(window,
 		    window->view);
 #endif
-
-  window->current_view_type = G_TYPE_NONE;
   
   /* start view */
+  model = monothek_start_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+  
   view = monothek_start_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
 
+  controller = monothek_start_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+  
   /* closed view */
   view = monothek_closed_view_new();
   gtk_box_pack_start(window->view,
@@ -397,6 +427,12 @@ monothek_window_finalize(GObject *gobject)
 
   window = (MonothekWindow *) gobject;
 
+  g_list_free_full(window->model,
+		   g_object_unref);
+  
+  g_list_free_full(window->controller,
+		   g_object_unref);
+
   /* call parent */
   G_OBJECT_CLASS(monothek_window_parent_class)->finalize(gobject);
 }
@@ -449,7 +485,7 @@ monothek_window_connect(AgsConnectable *connectable)
     list_start = gtk_container_get_children(window->view);
 
   while(list != NULL){
-    ags_connectable_connect(list->data);
+    ags_connectable_connect(AGS_CONNECTABLE(list->data));
 
     list = list->next;
   }
@@ -477,7 +513,7 @@ monothek_window_disconnect(AgsConnectable *connectable)
     list_start = gtk_container_get_children(window->view);
 
   while(list != NULL){
-    ags_connectable_disconnect(list->data);
+    ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 
     list = list->next;
   }
@@ -611,6 +647,15 @@ monothek_window_real_change_view(MonothekWindow *window,
   if(view_type_old != G_TYPE_NONE){
     while(list != NULL){
       if(G_OBJECT_TYPE(list->data) == view_type_old){
+	GList *controller;
+
+	controller = monothek_controller_find_view_type(window->controller,
+							view_type_old);
+
+	if(controller != NULL){
+	  ags_connectable_disconnect(AGS_CONNECTABLE(controller->data));
+	}
+	
 	gtk_widget_hide(list->data);
 
 	break;
@@ -624,9 +669,18 @@ monothek_window_real_change_view(MonothekWindow *window,
   if(view_type != G_TYPE_NONE){
     while(list != NULL){      
       if(G_OBJECT_TYPE(list->data) == view_type){
+	GList *controller;
+	
 	gtk_widget_show(list->data);
 	gtk_widget_queue_draw(list->data);
-	
+
+	controller = monothek_controller_find_view_type(window->controller,
+							view_type);
+
+	if(controller != NULL){
+	  ags_connectable_connect(AGS_CONNECTABLE(controller->data));
+	}
+
 	break;
       }
 

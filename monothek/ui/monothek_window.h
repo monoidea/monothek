@@ -51,8 +51,11 @@ struct _MonothekWindow
 
   guint flags;
 
+  GList *model;
+  
+  GList *controller;
+  
   GType current_view_type;
-
   GtkBox *view;
 };
 
