@@ -29,12 +29,15 @@
 #include <monothek/ui/controller/monothek_controller.h>
 #include <monothek/ui/controller/monothek_start_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
 
 #include <monothek/ui/model/monothek_start_model.h>
 #include <monothek/ui/model/monothek_closed_model.h>
 #include <monothek/ui/model/monothek_outage_model.h>
 #include <monothek/ui/model/monothek_jukebox_payment_model.h>
+#include <monothek/ui/model/monothek_jukebox_mode_model.h>
+#include <monothek/ui/model/monothek_jukebox_playlist_model.h>
 #include <monothek/ui/model/monothek_diskjokey_payment_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
@@ -296,6 +299,9 @@ monothek_window_init(MonothekWindow *window)
 				 model);
 
   view = monothek_closed_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -308,6 +314,9 @@ monothek_window_init(MonothekWindow *window)
 				 model);
 
   view = monothek_outage_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -320,6 +329,9 @@ monothek_window_init(MonothekWindow *window)
 				 model);
 
   view = monothek_jukebox_payment_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -342,6 +354,9 @@ monothek_window_init(MonothekWindow *window)
 				 model);
 
   view = monothek_diskjokey_payment_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
@@ -358,18 +373,21 @@ monothek_window_init(MonothekWindow *window)
 	       NULL);
 
   /* jukebox mode view */
-  model = monothek_jukebox_payment_model_new();
+  model = monothek_jukebox_mode_model_new();
   g_object_ref(model);
   window->model = g_list_prepend(window->model,
 				 model);
 
   view = monothek_jukebox_mode_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
 
-  controller = monothek_jukebox_payment_controller_new();
+  controller = monothek_jukebox_mode_controller_new();
   g_object_ref(controller);
   window->controller = g_list_prepend(window->controller,
 				      controller);

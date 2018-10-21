@@ -27,7 +27,7 @@
 #include <monothek/ui/model/monothek_jukebox_payment_model.h>
 
 #include <monothek/ui/view/monothek_jukebox_payment_view.h>
-#include <monothek/ui/view/monothek_jukebox_playlist_view.h>
+#include <monothek/ui/view/monothek_jukebox_mode_view.h>
 
 #include <stdlib.h>
 
@@ -188,8 +188,6 @@ monothek_jukebox_payment_controller_connect(AgsConnectable *connectable)
 #ifdef MONOTHEK_DEVEL_MODE
   {
     MonothekView *view;
-
-    g_message("connect");
     
     g_object_get(jukebox_payment_controller,
 		 "view", &view,
@@ -215,6 +213,8 @@ monothek_jukebox_payment_controller_disconnect(AgsConnectable *connectable)
 
   monothek_jukebox_payment_controller_parent_connectable_interface->disconnect(connectable);
 
+  //empty
+
 #ifdef MONOTHEK_DEVEL_MODE
   {
     MonothekView *view;
@@ -237,9 +237,7 @@ gboolean
 monothek_jukebox_payment_controller_key_press_event_callback(GtkWidget *widget,
 							     GdkEvent *event,
 							     MonothekJukeboxPaymentController *jukebox_payment_controller)
-{
-  g_message("key");
-  
+{  
   monothek_jukebox_payment_controller_transaction_completed(jukebox_payment_controller);
   
   return(FALSE);
@@ -260,7 +258,7 @@ monothek_jukebox_payment_controller_real_transaction_completed(MonothekJukeboxPa
 				   MONOTHEK_TYPE_WINDOW);
 
   monothek_window_change_view(window,
-			      MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, G_TYPE_NONE);
+			      MONOTHEK_TYPE_JUKEBOX_MODE_VIEW, G_TYPE_NONE);
 }
 
 /**

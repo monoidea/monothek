@@ -188,8 +188,6 @@ monothek_diskjokey_payment_controller_connect(AgsConnectable *connectable)
 #ifdef MONOTHEK_DEVEL_MODE
   {
     MonothekView *view;
-
-    g_message("connect");
     
     g_object_get(diskjokey_payment_controller,
 		 "view", &view,
@@ -215,6 +213,8 @@ monothek_diskjokey_payment_controller_disconnect(AgsConnectable *connectable)
 
   monothek_diskjokey_payment_controller_parent_connectable_interface->disconnect(connectable);
 
+  //empty
+
 #ifdef MONOTHEK_DEVEL_MODE
   {
     MonothekView *view;
@@ -237,9 +237,7 @@ gboolean
 monothek_diskjokey_payment_controller_key_press_event_callback(GtkWidget *widget,
 							       GdkEvent *event,
 							       MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
-{
-  g_message("key");
-  
+{  
   monothek_diskjokey_payment_controller_transaction_completed(diskjokey_payment_controller);
   
   return(FALSE);

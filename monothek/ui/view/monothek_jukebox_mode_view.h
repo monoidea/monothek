@@ -44,9 +44,6 @@ struct _MonothekJukeboxModeView
 {
   MonothekView monothek_view;
 
-  guint attempts;
-  guint max_attempts;
-
   //test  
   gdouble test_box_line_width;
 

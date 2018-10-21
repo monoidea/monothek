@@ -32,12 +32,21 @@
 #define MONOTHEK_IS_JUKEBOX_MODE_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL))
 #define MONOTHEK_JUKEBOX_MODE_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL, MonothekJukeboxModeModelClass))
 
+#define MONOTHEK_JUKEBOX_MODE_MODEL_DEFAULT_MAX_ATTEMPTS (3)
+
 typedef struct _MonothekJukeboxModeModel MonothekJukeboxModeModel;
 typedef struct _MonothekJukeboxModeModelClass MonothekJukeboxModeModelClass;
 
 struct _MonothekJukeboxModeModel
 {
   GObject gobject;
+
+  guint attempts;
+  guint max_attempts;
+
+  gboolean jukebox_test_active;
+  gboolean jukebox_play_active;
+  gboolean jukebox_cancel_active;
 };
 
 struct _MonothekJukeboxModeModelClass
