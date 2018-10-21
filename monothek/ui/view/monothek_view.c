@@ -470,6 +470,9 @@ monothek_view_size_allocate(GtkWidget *widget,
   
   widget->allocation = *allocation;
 
+  widget->allocation.x = 0;
+  widget->allocation.y = 0;
+
   widget->allocation.width = 1920;
   widget->allocation.height = 1080;
 }

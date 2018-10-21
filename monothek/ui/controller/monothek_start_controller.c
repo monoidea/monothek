@@ -262,29 +262,26 @@ monothek_start_controller_disconnect(AgsConnectable *connectable)
 
   monothek_start_controller_parent_connectable_interface->disconnect(connectable);
 
-  g_object_disconnect(start_controller->jukebox_launch, "enter",
+  g_object_disconnect(start_controller->jukebox_launch,
+		      "any_signal::enter",
 		      G_CALLBACK(monothek_start_controller_jukebox_launch_enter_callback),
 		      start_controller,
-		      start_controller->jukebox_launch,
-		      "leave",
+		      "any_signal::leave",
 		      G_CALLBACK(monothek_start_controller_jukebox_launch_leave_callback),
 		      start_controller,
-		      start_controller->jukebox_launch,
-		      "clicked",
+		      "any_signal::clicked",
 		      G_CALLBACK(monothek_start_controller_jukebox_launch_clicked_callback),
 		      start_controller,
 		      NULL);
 
   g_object_disconnect(start_controller->diskjokey_launch,
-		      "enter",
+		      "any_signal::enter",
 		      G_CALLBACK(monothek_start_controller_diskjokey_launch_enter_callback),
 		      start_controller,
-		      start_controller->diskjokey_launch,
-		      "leave",
+		      "any_signal::leave",
 		      G_CALLBACK(monothek_start_controller_diskjokey_launch_leave_callback),
 		      start_controller,
-		      start_controller->diskjokey_launch,
-		      "clicked",
+		      "any_signal::clicked",
 		      G_CALLBACK(monothek_start_controller_diskjokey_launch_clicked_callback),
 		      start_controller,
 		      NULL);
@@ -297,8 +294,6 @@ monothek_start_controller_jukebox_launch_enter_callback(MonothekActionBox *actio
   MonothekStartView *view;
   
   MonothekStartModel *model;
-
-  g_message("enter");
   
   g_object_get(start_controller,
 	       "model", &model,
@@ -319,8 +314,6 @@ monothek_start_controller_jukebox_launch_leave_callback(MonothekActionBox *actio
   
   MonothekStartModel *model;
 
-  g_message("leave");
-
   g_object_get(start_controller,
 	       "model", &model,
 	       "view", &view,
@@ -336,8 +329,6 @@ void
 monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *action_box,
 							  MonothekStartController *start_controller)
 {
-  g_message("clicked");
-
   monothek_start_controller_launch_jukebox(start_controller);
 }
 

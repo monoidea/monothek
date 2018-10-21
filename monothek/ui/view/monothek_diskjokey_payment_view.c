@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/model/monothek_diskjokey_payment_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>

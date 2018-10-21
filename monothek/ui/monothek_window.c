@@ -640,6 +640,10 @@ monothek_window_real_change_view(MonothekWindow *window,
 {
   GList *list_start, *list;
 
+  if(window->current_view_type == view_type){
+    return;
+  }
+  
   list =
     list_start = gtk_container_get_children(window->view);
 
@@ -687,6 +691,8 @@ monothek_window_real_change_view(MonothekWindow *window,
       list = list->next;
     }
   }
+
+  window->current_view_type = view_type;
   
   g_list_free(list_start);
 }

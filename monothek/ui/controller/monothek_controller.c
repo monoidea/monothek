@@ -404,13 +404,13 @@ monothek_controller_disconnect(AgsConnectable *connectable)
 
   if(view != NULL){
     g_object_disconnect(G_OBJECT(view),
-			"motion-notify-event",
+			"any_signal::motion-notify-event",
 			G_CALLBACK(monothek_controller_motion_notify_event_callback),
 			controller,
-			"button-press-event",
+			"any_signal::button-press-event",
 			G_CALLBACK(monothek_controller_button_press_event_callback),
 			controller,
-			"button-release-event",
+			"any_signal::button-release-event",
 			G_CALLBACK(monothek_controller_button_release_event_callback),
 			controller,
 			NULL);
@@ -441,10 +441,10 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
 		 "height", &height,
 		 NULL);
 
-    if(x0 >= ((GdkEventMotion *) event)->x &&
-       x0 + width < ((GdkEventMotion *) event)->x &&
-       y0 >= ((GdkEventMotion *) event)->y &&
-       y0 + height < ((GdkEventMotion *) event)->y){
+    if(x0 <= ((GdkEventMotion *) event)->x &&
+       x0 + width > ((GdkEventMotion *) event)->x &&
+       y0 <= ((GdkEventMotion *) event)->y &&
+       y0 + height > ((GdkEventMotion *) event)->y){
       if(!monothek_action_box_get_active(list->data)){
 	monothek_action_box_enter(list->data);
       }
