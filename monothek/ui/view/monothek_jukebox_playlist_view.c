@@ -437,7 +437,19 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
     /* jukebox - titel */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "(null)", -1);
+
+    if(jukebox_playlist_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%s", jukebox_playlist_model->song_title[i]);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "(null)", -1);
+    }
+    
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    18 * PANGO_SCALE);
@@ -458,7 +470,19 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
     /* jukebox - artist */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "(null)", -1);
+
+    if(jukebox_playlist_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%s", jukebox_playlist_model->artist[i]);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "(null)", -1);
+    }
+
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    18 * PANGO_SCALE);
@@ -479,7 +503,19 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
     /* jukebox - album */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "(null)", -1);
+
+    if(jukebox_playlist_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%s", jukebox_playlist_model->album[i]);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "(null)", -1);
+    }
+
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    18 * PANGO_SCALE);
@@ -500,7 +536,19 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
     /* jukebox - duration */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "0:00", -1);
+
+    if(jukebox_playlist_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%d:%.2d", (guint) floor(jukebox_playlist_model->duration[i]->tv_sec / 60.0), jukebox_playlist_model->duration[i]->tv_sec % 60);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "0:00", -1);
+    }
+
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    18 * PANGO_SCALE);

@@ -22,6 +22,15 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include <libxml/xlink.h>
+#include <libxml/xpath.h>
+#include <libxml/valid.h>
+#include <libxml/xmlIO.h>
+#include <libxml/xmlmemory.h>
+#include <libxml/xmlsave.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -110,9 +119,18 @@ monothek_jukebox_playlist_model_class_init(MonothekJukeboxPlaylistModelClass *ju
 void
 monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playlist_model)
 {
+  xmlDoc *doc;
+  xmlNode *root_node;
+  xmlNode *song_node;
+  xmlNode *current_node;
+  
+  gchar *playlist_filename;
+  
   guint i;
 
+  /* set default value */
   jukebox_playlist_model->song_filename = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  jukebox_playlist_model->cover_filename = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
 
   jukebox_playlist_model->song_select_active = (gboolean *) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gboolean));
 
@@ -125,14 +143,111 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
     jukebox_playlist_model->song_select_active[i] = FALSE;
 
     jukebox_playlist_model->song_filename[i] = NULL;
+    jukebox_playlist_model->cover_filename[i] = NULL;
 
-    jukebox_playlist_model->song_title[i] = NULL;
-    jukebox_playlist_model->artist[i] = NULL;
-    jukebox_playlist_model->album[i] = NULL;
+    jukebox_playlist_model->song_title[i] = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_SONG_TITEL;
+    jukebox_playlist_model->artist[i] = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ARTIST;
+    jukebox_playlist_model->album[i] = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ALBUM;
     
     jukebox_playlist_model->duration[i] = (struct timespec *) malloc(sizeof(struct timespec));
-    jukebox_playlist_model->duration[i]->tv_sec = 0;
+    jukebox_playlist_model->duration[i]->tv_sec = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_DURATION_SEC;
     jukebox_playlist_model->duration[i]->tv_nsec = 0;    
+  }
+
+  /* read from XML */  
+  playlist_filename = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME;
+
+  doc = xmlReadFile(playlist_filename, NULL, 0);
+
+  root_node = xmlDocGetRootElement(doc);
+
+  song_node = root_node->children;
+  i = 0;
+  
+  while(song_node != NULL){
+    if(song_node->type == XML_ELEMENT_NODE){
+      if(!xmlStrncmp("song",
+		     song_node->name,
+		     5)){
+	current_node = song_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    gchar *str;
+	      
+	    if(!xmlStrncmp("file",
+			   current_node->name,
+			   5)){
+	      str = xmlNodeGetContent(current_node);
+
+	      jukebox_playlist_model->song_filename[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("artist",
+				 current_node->name,
+				 7)){
+	      str = xmlNodeGetContent(current_node);
+
+	      jukebox_playlist_model->artist[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("song-title",
+				 current_node->name,
+				 11)){
+	      str = xmlNodeGetContent(current_node);
+
+	      jukebox_playlist_model->song_title[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("album",
+				 current_node->name,
+				 6)){
+	      str = xmlNodeGetContent(current_node);
+
+	      jukebox_playlist_model->album[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("duration",
+				 current_node->name,
+				 9)){
+	      xmlNode *child;
+
+	      child = current_node->children;
+
+	      while(child != NULL){
+		if(child->type == XML_ELEMENT_NODE){
+		  if(!xmlStrncmp("timeval-sec",
+				 child->name,
+				 12)){
+		    guint duration_sec;
+		    
+		    str = xmlNodeGetContent(child);
+
+		    duration_sec = 0;
+		    
+		    if(str != NULL){
+		      duration_sec = g_ascii_strtoull(str,
+						      NULL,
+						      10);
+		    }
+		      
+		    jukebox_playlist_model->duration[i]->tv_sec = duration_sec;
+		    
+		    break;
+		  }
+		}
+
+		child = child->next;
+	      }
+	    }else if(!xmlStrncmp("cover",
+				 current_node->name,
+				 6)){
+	      str = xmlNodeGetContent(current_node);
+
+	      jukebox_playlist_model->cover_filename[i] = g_strdup(str);
+	    }
+	  }
+
+	  current_node = current_node->next;
+	}
+
+	i++;
+      }
+    }
+
+    song_node = song_node->next;
   }
 }
 

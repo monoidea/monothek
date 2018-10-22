@@ -239,13 +239,13 @@ monothek_jukebox_playlist_controller_disconnect(AgsConnectable *connectable)
 
   for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_SONG_ROW_COUNT; i++){
     g_object_disconnect(jukebox_playlist_controller->song_select[i],
-			"enter",
+			"any_signal::enter",
 			G_CALLBACK(monothek_jukebox_playlist_controller_jukebox_song_select_enter_callback),
 			jukebox_playlist_controller,
-			"leave",
+			"any_signal::leave",
 			G_CALLBACK(monothek_jukebox_playlist_controller_jukebox_song_select_leave_callback),
 			jukebox_playlist_controller,
-			"clicked",
+			"any_signal::clicked",
 			G_CALLBACK(monothek_jukebox_playlist_controller_jukebox_song_select_clicked_callback),
 			jukebox_playlist_controller,
 			NULL);

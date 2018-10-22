@@ -37,6 +37,10 @@ AC_CHECK_LIB([dl], [main], , AC_MSG_ERROR("No dl library present"))
 # FIXME: Replace `main' with a function in `-lm':
 AC_CHECK_LIB([m], [main], , AC_MSG_ERROR("No math library present"))
 
+PKG_CHECK_MODULES([LIBXML2], [libxml-2.0 >= 2.8.0])
+AC_SUBST(LIBXML2_CFLAGS)
+AC_SUBST(LIBXML2_LIBS)
+
 PKG_CHECK_MODULES([GOBJECT], [gobject-2.0 >= 2.32.3 glib-2.0 >= 2.32.3 gmodule-2.0 >= 2.32.3 gthread-2.0 >= 2.32.3])
 AC_SUBST(GOBJECT_CFLAGS)
 AC_SUBST(GOBJECT_LIBS)

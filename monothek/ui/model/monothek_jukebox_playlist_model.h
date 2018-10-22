@@ -34,7 +34,14 @@
 #define MONOTHEK_IS_JUKEBOX_PLAYLIST_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL))
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModelClass))
 
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME SRCDIR "/monothek.share/monothek/playlist/jukebox.xml"
+
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT (12)
+
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_SONG_TITEL "FANTASY GIRL"
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ARTIST "KLANGTHERAPEUTEN"
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ALBUM "FANTASY GIRL / BOOTY CITY"
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_DURATION_SEC (372)
 
 typedef struct _MonothekJukeboxPlaylistModel MonothekJukeboxPlaylistModel;
 typedef struct _MonothekJukeboxPlaylistModelClass MonothekJukeboxPlaylistModelClass;
@@ -46,6 +53,7 @@ struct _MonothekJukeboxPlaylistModel
   gboolean *song_select_active;
  
   gchar **song_filename;
+  gchar **cover_filename;
 
   gchar **song_title;
   gchar **artist;
