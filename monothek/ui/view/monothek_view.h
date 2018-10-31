@@ -74,6 +74,10 @@ struct _MonothekViewClass
 
 GType monothek_view_get_type(void);
 
+gboolean monothek_view_test_flags(MonothekView *view, guint flags);
+void monothek_view_set_flags(MonothekView *view, guint flags);
+void monothek_view_unset_flags(MonothekView *view, guint flags);
+
 void monothek_view_draw(MonothekView *view);
 
 MonothekView* monothek_view_new();

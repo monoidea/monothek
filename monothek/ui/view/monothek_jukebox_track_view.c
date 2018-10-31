@@ -22,6 +22,11 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
+#include <monothek/ui/model/monothek_jukebox_track_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -215,7 +220,14 @@ monothek_jukebox_track_view_connect(AgsConnectable *connectable)
 {
   MonothekJukeboxTrackView *jukebox_track_view;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
   GList *list, *list_jukebox_track;
+
+  gchar *song_filename;
+  
+  GValue *jukebox_song_filename;
 
   jukebox_track_view = MONOTHEK_JUKEBOX_TRACK_VIEW(connectable);
 
@@ -224,8 +236,21 @@ monothek_jukebox_track_view_connect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_track_view_parent_connectable_interface->connect(connectable);
+  
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+  
+  /* get jukebox song filename */
+  jukebox_song_filename = g_hash_table_lookup(session->value,
+					      "jukebox-song-filename");
 
-  //TODO:JK: implement me
+  song_filename = g_value_get_string(jukebox_song_filename);
+
+  /* load song filename */
+  monothek_jukebox_track_model_load_song_filename(MONOTHEK_VIEW(jukebox_track_view)->model,
+						  song_filename);
 }
 
 void
@@ -251,6 +276,8 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 {
   MonothekJukeboxTrackView *jukebox_track_view;
   
+  MonothekJukeboxTrackModel *jukebox_track_model;
+
   cairo_t *cr;
 
   guint width, height;
@@ -270,7 +297,28 @@ monothek_jukebox_track_view_draw(MonothekView *view)
     return;
   }
 
+  g_object_get(view,
+	       "model", &jukebox_track_model,
+	       NULL);
+
   cairo_surface_flush(cairo_get_target(cr));
+
+  if(jukebox_track_model != NULL &&
+     jukebox_track_model->cover_filename != NULL){
+    cairo_surface_t *surface;
+
+    surface = cairo_image_surface_create_from_png(jukebox_track_model->cover_filename);
+    cairo_surface_reference(surface);
+    
+    cairo_set_source_surface(cr,
+			     surface,
+			     (double) jukebox_track_view->cover_box_x0, (double) jukebox_track_view->cover_box_y0);
+
+    cairo_paint(cr);
+
+    cairo_surface_destroy(surface);
+  }
+
   cairo_push_group(cr);
 
   x_jukebox_track = 0;
@@ -373,7 +421,19 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
     /* jukebox - titel */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "(null)", -1);
+
+    if(jukebox_track_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%s", jukebox_track_model->song_title);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "(null)", -1);
+    }
+
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    30 * PANGO_SCALE);
@@ -392,9 +452,21 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    /* jukebox - artist */
+    /* jukebox - artist and album */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "(null)", -1);
+
+    if(jukebox_track_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%s - %s", jukebox_track_model->artist, jukebox_track_model->album);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "(null)", -1);
+    }
+
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    19 * PANGO_SCALE);

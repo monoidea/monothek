@@ -24,22 +24,29 @@
 
 #include <monothek/object/monothek_marshal.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
 #include <monothek/ui/monothek_application_context.h>
 
 #include <monothek/ui/controller/monothek_controller.h>
 #include <monothek/ui/controller/monothek_start_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
+#include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_playlist_controller.h>
-#include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_track_controller.h>
+#include <monothek/ui/controller/monothek_diskjokey_sequencer_controller.h>
 
 #include <monothek/ui/model/monothek_start_model.h>
 #include <monothek/ui/model/monothek_closed_model.h>
 #include <monothek/ui/model/monothek_outage_model.h>
 #include <monothek/ui/model/monothek_jukebox_payment_model.h>
+#include <monothek/ui/model/monothek_diskjokey_payment_model.h>
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
 #include <monothek/ui/model/monothek_jukebox_playlist_model.h>
-#include <monothek/ui/model/monothek_diskjokey_payment_model.h>
+#include <monothek/ui/model/monothek_jukebox_track_model.h>
+#include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
 #include <monothek/ui/view/monothek_closed_view.h>
@@ -234,6 +241,9 @@ monothek_window_init(MonothekWindow *window)
   
   MonothekController *controller;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
   GObject *model;
 
   GError *error;
@@ -245,6 +255,15 @@ monothek_window_init(MonothekWindow *window)
   
   gtk_window_set_title((GtkWindow *) window,
 		       "monoidea's monothek");
+
+  session_manager = monothek_session_manager_get_instance();
+
+  session = monothek_session_new();
+  g_object_set(session,
+	       "session-id", MONOTHEK_SESSION_DEFAULT_SESSION,
+	       NULL);
+  monothek_session_manager_add_session(session_manager,
+				       session);
 
 #if 0
   /* scrolled window */
@@ -431,11 +450,29 @@ monothek_window_init(MonothekWindow *window)
 	       NULL);
 
   /* jukebox track view */
+  model = monothek_jukebox_track_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_jukebox_track_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
+
+  controller = monothek_jukebox_track_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
 
   /* jukebox end view */
   view = monothek_jukebox_end_view_new();
@@ -452,11 +489,29 @@ monothek_window_init(MonothekWindow *window)
 		     0);
 
   /* diskjokey sequencer view */
+  model = monothek_diskjokey_sequencer_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_diskjokey_sequencer_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
+
+  controller = monothek_diskjokey_sequencer_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
 
   /* diskjokey end view */
   view = monothek_diskjokey_end_view_new();
@@ -755,6 +810,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 							view_type_old);
 
 	if(controller != NULL){
+	  ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 	  ags_connectable_disconnect(AGS_CONNECTABLE(controller->data));
 	}
 	
@@ -781,6 +837,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 
 	if(controller != NULL){
 	  ags_connectable_connect(AGS_CONNECTABLE(controller->data));
+	  ags_connectable_connect(AGS_CONNECTABLE(list->data));
 	}
 
 	break;

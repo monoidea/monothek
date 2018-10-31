@@ -23,12 +23,16 @@
 
 #include <gdk/gdkkeysyms.h>
 
+#include <ags/libags.h>
+#include <ags/libags-audio.h>
+
 #include <stdlib.h>
 #include <math.h>
 
 #include <monothek/i18n.h>
 
 void monothek_view_class_init(MonothekViewClass *view);
+void monothek_view_connectable_interface_init(AgsConnectableInterface *connectable);
 void monothek_view_init(MonothekView *view);
 void monothek_view_set_property(GObject *gobject,
 				guint prop_id,
@@ -39,6 +43,11 @@ void monothek_view_get_property(GObject *gobject,
 				GValue *value,
 				GParamSpec *param_spec);
 void monothek_view_finalize(GObject *gobject);
+
+gboolean monothek_view_is_ready(AgsConnectable *connectable);
+gboolean monothek_view_is_connected(AgsConnectable *connectable);
+void monothek_view_connect(AgsConnectable *connectable);
+void monothek_view_disconnect(AgsConnectable *connectable);
 
 void monothek_view_map(GtkWidget *widget);
 void monothek_view_realize(GtkWidget *widget);
@@ -108,9 +117,19 @@ monothek_view_get_type(void)
       (GInstanceInitFunc) monothek_view_init,
     };
 
+    static const GInterfaceInfo monothek_connectable_interface_info = {
+      (GInterfaceInitFunc) monothek_view_connectable_interface_init,
+      NULL, /* interface_finalize */
+      NULL, /* interface_data */
+    };
+
     monothek_type_view = g_type_register_static(GTK_TYPE_WIDGET,
 						"MonothekView", &monothek_view_info,
 						0);
+
+    g_type_add_interface_static(monothek_type_view,
+				AGS_TYPE_CONNECTABLE,
+				&monothek_connectable_interface_info);
 
     g_once_init_leave(&g_define_type_id__volatile, monothek_type_view);
   }
@@ -239,6 +258,16 @@ monothek_view_class_init(MonothekViewClass *view)
 		 NULL, NULL,
 		 g_cclosure_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
+}
+
+void
+monothek_view_connectable_interface_init(AgsConnectableInterface *connectable)
+{
+  connectable->is_ready = monothek_view_is_ready;
+  connectable->is_connected = monothek_view_is_connected;
+  
+  connectable->connect = monothek_view_connect;
+  connectable->disconnect = monothek_view_disconnect;
 }
 
 void
@@ -376,6 +405,62 @@ monothek_view_finalize(GObject *gobject)
   
   /* call parent */
   G_OBJECT_CLASS(monothek_view_parent_class)->finalize(gobject);
+}
+
+gboolean
+monothek_view_is_ready(AgsConnectable *connectable)
+{
+  MonothekView *view;
+
+  gboolean retval;
+  
+  view = MONOTHEK_VIEW(connectable);
+
+  retval = ((MONOTHEK_VIEW_ADDED_TO_REGISTRY & (view->flags)) != 0) ? TRUE: FALSE;
+  
+  return(retval);
+}
+
+gboolean
+monothek_view_is_connected(AgsConnectable *connectable)
+{
+  MonothekView *view;
+
+  gboolean retval;
+  
+  view = MONOTHEK_VIEW(connectable);
+
+  retval = ((MONOTHEK_VIEW_CONNECTED & (view->flags)) != 0) ? TRUE: FALSE;
+  
+  return(retval);
+}
+
+void
+monothek_view_connect(AgsConnectable *connectable)
+{
+  MonothekView *view;
+
+  view = MONOTHEK_VIEW(connectable);
+
+  if(monothek_view_test_flags(view, MONOTHEK_VIEW_CONNECTED)){
+    return;
+  }
+
+  monothek_view_set_flags(view, MONOTHEK_VIEW_CONNECTED);
+}
+
+void
+monothek_view_disconnect(AgsConnectable *connectable)
+{
+  MonothekView *view;
+
+  view = MONOTHEK_VIEW(connectable);
+
+  if(!monothek_view_test_flags(view, MONOTHEK_VIEW_CONNECTED)){
+    return;
+  }
+
+  monothek_view_unset_flags(view, MONOTHEK_VIEW_CONNECTED);
 }
 
 void
@@ -639,6 +724,69 @@ monothek_view_real_draw(MonothekView *view)
 
   cairo_surface_mark_dirty(cairo_get_target(cr));
   cairo_destroy(cr);
+}
+
+/**
+ * monothek_view_test_flags:
+ * @view: the #MonothekView
+ * @flags: the flags
+ * 
+ * Test @view to have @flags set. 
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ * 
+ * Since: 1.0.0
+ */
+gboolean
+monothek_view_test_flags(MonothekView *view, guint flags)
+{
+  gboolean retval;
+
+  if(!MONOTHEK_IS_VIEW(view)){
+    return(FALSE);
+  }
+
+  retval = (flags & (view->flags)) ? TRUE: FALSE;
+
+  return(retval);
+}
+
+/**
+ * monothek_view_set_flags:
+ * @view: the #MonothekView
+ * @flags: the flags
+ * 
+ * Set @flags for  @view.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_view_set_flags(MonothekView *view, guint flags)
+{
+  if(!MONOTHEK_IS_VIEW(view)){
+    return;
+  }
+
+  view->flags |= flags;
+}
+
+/**
+ * monothek_view_unset_flags:
+ * @view: the #MonothekView
+ * @flags: the flags
+ * 
+ * Unset @flags for  @view.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_view_unset_flags(MonothekView *view, guint flags)
+{
+  if(!MONOTHEK_IS_VIEW(view)){
+    return;
+  }
+
+  view->flags &= (~flags);
 }
 
 /**

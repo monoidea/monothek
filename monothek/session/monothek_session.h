@@ -36,6 +36,8 @@
 #define AGS_IS_XORG_SESSION_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_SESSION))
 #define MONOTHEK_SESSION_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_SESSION, MonothekSessionClass))
 
+#define MONOTHEK_SESSION_DEFAULT_SESSION "default-session"
+
 typedef struct _MonothekSession MonothekSession;
 typedef struct _MonothekSessionClass MonothekSessionClass;
 

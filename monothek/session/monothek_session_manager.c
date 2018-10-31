@@ -17,10 +17,12 @@
  * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <monothek/ui/model/monothek_session_manager.h>
+#include <monothek/session/monothek_session_manager.h>
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
+
+#include <monothek/session/monothek_session.h>
 
 #include <stdlib.h>
 

@@ -25,6 +25,8 @@
 
 #include <gtk/gtk.h>
 
+#include <time.h>
+
 #define MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL                (monothek_jukebox_track_model_get_type())
 #define MONOTHEK_JUKEBOX_TRACK_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL, MonothekJukeboxTrackModel))
 #define MONOTHEK_JUKEBOX_TRACK_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL, MonothekJukeboxTrackModelClass))
@@ -39,10 +41,17 @@ struct _MonothekJukeboxTrackModel
 {
   GObject gobject;
 
+  gchar *song_filename;
+  gboolean test_mode;
+  
   gchar *cover_filename;
   
-  gchar *title;
+  gchar *song_title;
+  
   gchar *artist;
+  gchar *album;
+
+  struct timespec *duration;
 };
 
 struct _MonothekJukeboxTrackModelClass
@@ -51,6 +60,9 @@ struct _MonothekJukeboxTrackModelClass
 };
 
 GType monothek_jukebox_track_model_get_type(void);
+
+void monothek_jukebox_track_model_load_song_filename(MonothekJukeboxTrackModel *jukebox_track_model,
+						     gchar *song_filename);
 
 MonothekJukeboxTrackModel* monothek_jukebox_track_model_new();
 

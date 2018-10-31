@@ -22,6 +22,9 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
@@ -485,6 +488,34 @@ monothek_jukebox_mode_controller_real_test(MonothekJukeboxModeController *jukebo
   MonothekWindow *window;
   MonothekJukeboxModeView *view;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *jukebox_mode;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set jukebox mode - test */
+  jukebox_mode = g_hash_table_lookup(session->value,
+				     "jukebox-mode");
+
+  if(jukebox_mode == NULL){
+    jukebox_mode = g_new0(GValue,
+			  1);
+    g_value_init(jukebox_mode,
+		 G_TYPE_STRING);
+
+    g_hash_table_insert(session->value,
+			"jukebox-mode", jukebox_mode);
+  }
+
+  g_value_set_string(jukebox_mode,
+		     "test");
+  
+  /* change view */
   g_object_get(jukebox_mode_controller,
 	       "view", &view,
 	       NULL);
@@ -521,6 +552,34 @@ monothek_jukebox_mode_controller_real_play(MonothekJukeboxModeController *jukebo
   MonothekWindow *window;
   MonothekJukeboxModeView *view;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *jukebox_mode;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set jukebox mode - play */
+  jukebox_mode = g_hash_table_lookup(session->value,
+				     "jukebox-mode");
+
+  if(jukebox_mode == NULL){
+    jukebox_mode = g_new0(GValue,
+			  1);
+    g_value_init(jukebox_mode,
+		 G_TYPE_STRING);
+
+    g_hash_table_insert(session->value,
+			"jukebox-mode", jukebox_mode);
+  }
+
+  g_value_set_string(jukebox_mode,
+		     "play");
+  
+  /* change view */
   g_object_get(jukebox_mode_controller,
 	       "view", &view,
 	       NULL);
@@ -559,6 +618,7 @@ monothek_jukebox_mode_controller_real_cancel(MonothekJukeboxModeController *juke
 
   MonothekJukeboxModeModel *model;
 
+  /* change view */
   g_object_get(jukebox_mode_controller,
 	       "view", &view,
 	       "model", &model,

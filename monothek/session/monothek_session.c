@@ -17,7 +17,7 @@
  * along with Monothek.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <monothek/ui/model/monothek_session.h>
+#include <monothek/session/monothek_session.h>
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
@@ -26,8 +26,8 @@
 
 #include <monothek/i18n.h>
 
-void monothek_session_class_init(MonotheksessionClass *session);
-void monothek_session_init(Monotheksession *session);
+void monothek_session_class_init(MonothekSessionClass *session);
+void monothek_session_init(MonothekSession *session);
 void monothek_session_set_property(GObject *gobject,
 				   guint prop_id,
 				   const GValue *value,
@@ -41,11 +41,11 @@ void monothek_session_finalize(GObject *gobject);
 /**
  * SECTION:monothek_session
  * @short_description: The start model object.
- * @title: Monotheksession
+ * @title: MonothekSession
  * @section_id:
  * @include: monothek/ui/model/monothek_session.h
  *
- * #Monotheksession is the MVC's start model.
+ * #MonothekSession is the MVC's start model.
  */
 
 enum{
@@ -64,19 +64,19 @@ monothek_session_get_type()
     GType monothek_type_session = 0;
 
     static const GTypeInfo monothek_session_info = {
-      sizeof (MonotheksessionClass),
+      sizeof (MonothekSessionClass),
       NULL, /* base_init */
       NULL, /* base_finalize */
       (GClassInitFunc) monothek_session_class_init,
       NULL, /* class_finalize */
       NULL, /* class_data */
-      sizeof (Monotheksession),
+      sizeof (MonothekSession),
       0,    /* n_preallocs */
       (GInstanceInitFunc) monothek_session_init,
     };
 
     monothek_type_session = g_type_register_static(G_TYPE_OBJECT,
-						   "Monotheksession", &monothek_session_info,
+						   "MonothekSession", &monothek_session_info,
 						   0);
 
     g_once_init_leave(&g_define_type_id__volatile, monothek_type_session);
@@ -86,7 +86,7 @@ monothek_session_get_type()
 }
 
 void
-monothek_session_class_init(MonotheksessionClass *session)
+monothek_session_class_init(MonothekSessionClass *session)
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
@@ -124,7 +124,7 @@ monothek_session_class_init(MonotheksessionClass *session)
 }
 
 void
-monothek_session_init(Monotheksession *session)
+monothek_session_init(MonothekSession *session)
 {
   session->session_id = NULL;
 
@@ -141,16 +141,16 @@ monothek_session_set_property(GObject *gobject,
 			      const GValue *value,
 			      GParamSpec *param_spec)
 {
-  Monotheksession *session;
+  MonothekSession *session;
 
   session = MONOTHEK_SESSION(gobject);
 
   switch(prop_id){
   case PROP_SESSION_ID:
     {
-      char *session_id;
+      gchar *session_id;
 
-      session_id = (char *) g_value_get_string(value);
+      session_id = (gchar *) g_value_get_string(value);
 
       if(session_id == session->session_id){
 	return;
@@ -161,6 +161,8 @@ monothek_session_set_property(GObject *gobject,
       }
       
       session->session_id = g_strdup(session_id);
+    }
+    break; 
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -173,7 +175,7 @@ monothek_session_get_property(GObject *gobject,
 			      GValue *value,
 			      GParamSpec *param_spec)
 {
-  Monotheksession *session;
+  MonothekSession *session;
 
   session = MONOTHEK_SESSION(gobject);
 
@@ -192,9 +194,9 @@ monothek_session_get_property(GObject *gobject,
 void
 monothek_session_finalize(GObject *gobject)
 {
-  Monotheksession *session;
+  MonothekSession *session;
 
-  session = (Monotheksession *) gobject;
+  session = (MonothekSession *) gobject;
   
   /* call parent */
   G_OBJECT_CLASS(monothek_session_parent_class)->finalize(gobject);
@@ -203,19 +205,20 @@ monothek_session_finalize(GObject *gobject)
 /**
  * monothek_session_new:
  *
- * Creates an #Monotheksession
+ * Creates an #MonothekSession
  *
- * Returns: a new #Monotheksession
+ * Returns: a new #MonothekSession
  *
  * Since: 1.0.0
  */
-Monotheksession*
+MonothekSession*
 monothek_session_new()
 {
-  Monotheksession *session;
+  MonothekSession *session;
 
-  session = (Monotheksession *) g_object_new(MONOTHEK_TYPE_SESSION,
+  session = (MonothekSession *) g_object_new(MONOTHEK_TYPE_SESSION,
 					     NULL);
   
   return(session);
 }
+

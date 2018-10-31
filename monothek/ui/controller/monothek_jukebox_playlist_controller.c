@@ -22,6 +22,9 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_jukebox_playlist_model.h>
@@ -342,6 +345,34 @@ monothek_jukebox_playlist_controller_real_select_song(MonothekJukeboxPlaylistCon
   MonothekWindow *window;
   MonothekJukeboxPlaylistView *view;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *jukebox_song_filename;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set jukebox song filename */
+  jukebox_song_filename = g_hash_table_lookup(session->value,
+					      "jukebox-song-filename");
+
+  if(jukebox_song_filename == NULL){
+    jukebox_song_filename = g_new0(GValue,
+				   1);
+    g_value_init(jukebox_song_filename,
+		 G_TYPE_STRING);
+
+    g_hash_table_insert(session->value,
+			"jukebox-song-filename", jukebox_song_filename);
+  }
+
+  g_value_set_string(jukebox_song_filename,
+		     song_filename);
+  
+  /* change view */
   g_object_get(jukebox_playlist_controller,
 	       "view", &view,
 	       NULL);
@@ -369,7 +400,8 @@ monothek_jukebox_playlist_controller_select_song(MonothekJukeboxPlaylistControll
   
   g_object_ref((GObject *) jukebox_playlist_controller);
   g_signal_emit(G_OBJECT(jukebox_playlist_controller),
-		jukebox_playlist_controller_signals[SELECT_SONG], 0);
+		jukebox_playlist_controller_signals[SELECT_SONG], 0,
+		song_filename);
   g_object_unref((GObject *) jukebox_playlist_controller);
 }
 

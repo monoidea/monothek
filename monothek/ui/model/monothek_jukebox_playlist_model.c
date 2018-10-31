@@ -145,9 +145,9 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
     jukebox_playlist_model->song_filename[i] = NULL;
     jukebox_playlist_model->cover_filename[i] = NULL;
 
-    jukebox_playlist_model->song_title[i] = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_SONG_TITEL;
-    jukebox_playlist_model->artist[i] = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ARTIST;
-    jukebox_playlist_model->album[i] = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ALBUM;
+    jukebox_playlist_model->song_title[i] = NULL;
+    jukebox_playlist_model->artist[i] = NULL;
+    jukebox_playlist_model->album[i] = NULL;
     
     jukebox_playlist_model->duration[i] = (struct timespec *) malloc(sizeof(struct timespec));
     jukebox_playlist_model->duration[i]->tv_sec = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_DURATION_SEC;
@@ -249,6 +249,11 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
 
     song_node = song_node->next;
   }
+
+  /* free XML doc */
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+  xmlMemoryDump();
 }
 
 void
@@ -290,8 +295,62 @@ monothek_jukebox_playlist_model_finalize(GObject *gobject)
 {
   MonothekJukeboxPlaylistModel *jukebox_playlist_model;
 
+  guint i;
+  
   jukebox_playlist_model = (MonothekJukeboxPlaylistModel *) gobject;
   
+  if(jukebox_playlist_model->song_select_active != NULL){
+    free(jukebox_playlist_model->song_select_active);
+  }
+    
+  if(jukebox_playlist_model->song_filename != NULL){
+    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+      g_free(jukebox_playlist_model->song_filename[i]);
+    }
+
+    free(jukebox_playlist_model->song_filename);
+  }
+  
+  if(jukebox_playlist_model->cover_filename != NULL){
+    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+      g_free(jukebox_playlist_model->cover_filename[i]);
+    }
+
+    free(jukebox_playlist_model->cover_filename);
+  }
+
+  if(jukebox_playlist_model->song_title != NULL){
+    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+      g_free(jukebox_playlist_model->song_title[i]);
+    }
+
+    free(jukebox_playlist_model->song_title);
+  }
+
+  if(jukebox_playlist_model->artist != NULL){
+    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+      g_free(jukebox_playlist_model->artist[i]);
+    }
+
+    free(jukebox_playlist_model->artist);
+  }
+
+  if(jukebox_playlist_model->album != NULL){
+    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+      g_free(jukebox_playlist_model->album[i]);
+    }
+
+    free(jukebox_playlist_model->album);
+  }
+
+  if(jukebox_playlist_model->duration != NULL){
+    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+      free(jukebox_playlist_model->duration[i]);
+    }
+    
+    free(jukebox_playlist_model->duration);
+  }
+
   /* call parent */
   G_OBJECT_CLASS(monothek_jukebox_playlist_model_parent_class)->finalize(gobject);
 }
