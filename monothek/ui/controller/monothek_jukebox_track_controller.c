@@ -34,12 +34,12 @@
 #include <monothek/ui/view/monothek_jukebox_no_test_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
 
-#include <stdlib.h>
-
 #ifdef __APPLE__
 #include <mach/clock.h>
 #include <mach/mach.h>
 #endif
+
+#include <stdlib.h>
 
 #include <monothek/i18n.h>
 
@@ -233,6 +233,14 @@ monothek_jukebox_track_controller_init(MonothekJukeboxTrackController *jukebox_t
 										NULL,
 										NULL);
   }
+
+  jukebox_track_controller->start_time = (struct timespec *) malloc(sizeof(struct timespec));
+  jukebox_track_controller->start_time->tv_sec = 0;
+  jukebox_track_controller->start_time->tv_nsec = 0;
+  
+  jukebox_track_controller->timer = (struct timespec *) malloc(sizeof(struct timespec));
+  jukebox_track_controller->timer->tv_sec = 0;
+  jukebox_track_controller->timer->tv_nsec = 0;
 }
 
 void
@@ -266,6 +274,10 @@ monothek_jukebox_track_controller_connect(AgsConnectable *connectable)
   g_timeout_add(1000 / 30,
 		(GSourceFunc) monothek_jukebox_track_controller_progress_increase_timeout,
 		(gpointer) jukebox_track_controller);
+
+  /* start playback */
+  monothek_jukebox_track_controller_run(jukebox_track_controller,
+					TRUE);
 }
 
 void
@@ -399,7 +411,11 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 
     jukebox_track_controller->timer->tv_sec = 0;
     jukebox_track_controller->timer->tv_nsec = 0;
+
+    //TODO:JK: implement me
   }else{
+    //TODO:JK: implement me
+
     monothek_jukebox_track_controller_completed(jukebox_track_controller);
   }
 }

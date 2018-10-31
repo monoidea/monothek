@@ -47,6 +47,9 @@ void monothek_jukebox_track_view_finalize(GObject *gobject);
 void monothek_jukebox_track_view_connect(AgsConnectable *connectable);
 void monothek_jukebox_track_view_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_track_view_progress_callback(GtkAdjustment *adjustment,
+						   MonothekJukeboxTrackView *jukebox_track_view);
+
 void monothek_jukebox_track_view_draw(MonothekView *view);
 
 /**
@@ -236,6 +239,9 @@ monothek_jukebox_track_view_connect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_track_view_parent_connectable_interface->connect(connectable);
+
+  g_signal_connect(jukebox_track_view->progress, "value-changed",
+		   G_CALLBACK(monothek_jukebox_track_view_progress_callback), jukebox_track_view);
   
   /* find session */
   session_manager = monothek_session_manager_get_instance();
@@ -268,7 +274,18 @@ monothek_jukebox_track_view_disconnect(AgsConnectable *connectable)
 
   monothek_jukebox_track_view_parent_connectable_interface->disconnect(connectable);
 
-  //TODO:JK: implement me
+  g_object_disconnect(jukebox_track_view->progress,
+		      "value-changed",
+		      G_CALLBACK(monothek_jukebox_track_view_progress_callback),
+		      jukebox_track_view,
+		      NULL);
+}
+
+void
+monothek_jukebox_track_view_progress_callback(GtkAdjustment *adjustment,
+					      MonothekJukeboxTrackView *jukebox_track_view)
+{
+  gtk_widget_queue_draw(jukebox_track_view);
 }
 
 void
@@ -348,6 +365,19 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 		  (double) jukebox_track_view->progress_box_width, (double) jukebox_track_view->progress_box_height);
   cairo_stroke(cr);
 
+  {
+    gdouble value;
+
+    value = jukebox_track_view->progress->value;
+
+    if(value > 0.0){
+      cairo_rectangle(cr,
+		      (double) jukebox_track_view->progress_box_x0, (double) jukebox_track_view->progress_box_y0,
+		      (double) value * jukebox_track_view->progress_box_width, (double) jukebox_track_view->progress_box_height);
+      cairo_fill(cr);
+    }
+  }
+  
   /* jukebox - time */
   {
     PangoLayout *layout;
@@ -364,7 +394,21 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
     /* jukebox - total */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "0:00", -1);
+
+    if(jukebox_track_model != NULL){
+      gchar *str;
+
+      str = g_strdup_printf("%d:%.2d",
+			    (guint) floor(jukebox_track_model->duration->tv_sec / 60.0),
+			    jukebox_track_model->duration->tv_sec % 60);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "0:00", -1);
+    }
+    
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    19 * PANGO_SCALE);
@@ -385,7 +429,25 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
     /* jukebox - remaining */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "-0:00", -1);
+
+    if(jukebox_track_model != NULL){
+      gchar *str;
+
+      gdouble value;
+
+      value = jukebox_track_view->progress->value;
+      
+      str = g_strdup_printf("%d:%.2d",
+			    (guint) floor(value * jukebox_track_model->duration->tv_sec / 60.0),
+			    (guint) (value * jukebox_track_model->duration->tv_sec) % 60);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "-0:00", -1);
+    }
+
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    19 * PANGO_SCALE);
