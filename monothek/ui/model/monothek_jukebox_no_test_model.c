@@ -50,6 +50,8 @@ void monothek_jukebox_no_test_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_JUKEBOX_PLAY_ACTIVE,
+  PROP_JUKEBOX_CANCEL_ACTIVE,
 };
 
 static gpointer monothek_jukebox_no_test_model_parent_class = NULL;
@@ -103,6 +105,37 @@ monothek_jukebox_no_test_model_class_init(MonothekJukeboxNoTestModelClass *jukeb
   gobject->finalize = monothek_jukebox_no_test_model_finalize;
 
   /* properties */
+  /**
+   * MonothekJukeboxNoTestModel:jukebox-play-active:
+   *
+   * If jukebox play is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-play-active",
+				    i18n_pspec("jukebox play active"),
+				    i18n_pspec("If jukebox play is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_PLAY_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxNoTestModel:jukebox-cancel-active:
+   *
+   * If jukebox cancel is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-cancel-active",
+				    i18n_pspec("jukebox cancel active"),
+				    i18n_pspec("If jukebox cancel is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_CANCEL_ACTIVE,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +143,8 @@ monothek_jukebox_no_test_model_class_init(MonothekJukeboxNoTestModelClass *jukeb
 void
 monothek_jukebox_no_test_model_init(MonothekJukeboxNoTestModel *jukebox_no_test_model)
 {
-  //TODO:JK: implement me
+  jukebox_no_test_model->jukebox_play_active = FALSE;
+  jukebox_no_test_model->jukebox_cancel_active = FALSE;
 }
 
 void
@@ -124,6 +158,16 @@ monothek_jukebox_no_test_model_set_property(GObject *gobject,
   jukebox_no_test_model = MONOTHEK_JUKEBOX_NO_TEST_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_JUKEBOX_PLAY_ACTIVE:
+    {
+      jukebox_no_test_model->jukebox_play_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_JUKEBOX_CANCEL_ACTIVE:
+    {
+      jukebox_no_test_model->jukebox_cancel_active = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -141,6 +185,18 @@ monothek_jukebox_no_test_model_get_property(GObject *gobject,
   jukebox_no_test_model = MONOTHEK_JUKEBOX_NO_TEST_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_JUKEBOX_PLAY_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_no_test_model->jukebox_play_active);
+    }
+    break;
+  case PROP_JUKEBOX_CANCEL_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_no_test_model->jukebox_cancel_active);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

@@ -22,6 +22,9 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
 
 #include <stdlib.h>
@@ -222,7 +225,14 @@ monothek_jukebox_mode_view_connect(AgsConnectable *connectable)
 {
   MonothekJukeboxModeView *jukebox_mode_view;
 
-  GList *list, *list_jukebox_mode;
+  MonothekJukeboxModeModel *jukebox_mode_model;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  guint test_count;
+  
+  GValue *jukebox_test_count;
 
   jukebox_mode_view = MONOTHEK_JUKEBOX_MODE_VIEW(connectable);
 
@@ -232,7 +242,28 @@ monothek_jukebox_mode_view_connect(AgsConnectable *connectable)
 
   monothek_jukebox_mode_view_parent_connectable_interface->connect(connectable);
 
-  //TODO:JK: implement me
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+  
+  /* get jukebox song filename */
+  jukebox_test_count = g_hash_table_lookup(session->value,
+					   "jukebox-test-count");
+
+  test_count = 0;
+
+  if(jukebox_test_count != NULL){
+    test_count = g_value_get_uint(jukebox_test_count);
+  }
+  
+  g_object_get(jukebox_mode_view,
+	       "model", &jukebox_mode_model,
+	       NULL);
+
+  g_object_set(jukebox_mode_model,
+	       "attempts", test_count,
+	       NULL);
 }
 
 void

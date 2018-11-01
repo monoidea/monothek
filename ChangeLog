@@ -10,8 +10,10 @@ ags (1.0.0)
 	* TODO:JK: implemented MonothekJukeboxPaymentView, MonothekJukeboxPaymentModel and MonthekJukeboxPaymentController
 	* TODO:JK: implemented MonothekDiskjokeyPaymentView, MonothekDiskjokeyPaymentModel and MonthekDiskjokeyPaymentController
 	* implemented MonothekJukeboxModeView, MonothekJukeboxModeModel and MonthekJukeboxModeController
+	* implemented MonothekJukeboxNoTestView, MonothekJukeboxNoTestModel and MonthekJukeboxNoTestController
 	* implemented MonothekJukeboxPlaylistView, MonothekJukeboxPlaylistModel and MonthekJukeboxPlaylistController
 	* TODO:JK: implemented MonothekJukeboxTrackView, MonothekJukeboxTrackModel and MonthekJukeboxTrackController
+	* TODO:JK: implemented MonothekJukeboxEndView, MonothekJukeboxEndModel and MonthekJukeboxEndController
 	* TODO:JK: implemented MonothekJukeboxQrcodeView, MonothekJukeboxQrcodeModel and MonthekJukeboxQrcodeController
 	* TODO:JK: implemented MonothekDiskjokeySequencerView, MonothekDiskjokeySequencerModel and MonthekDiskjokeySequencerController
 	* TODO:JK: implemented MonothekDiskjokeyQrcodeView, MonothekDiskjokeyQrcodeModel and MonthekDiskjokeyQrcodeController

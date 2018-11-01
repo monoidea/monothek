@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/model/monothek_jukebox_end_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -247,6 +249,8 @@ monothek_jukebox_end_view_draw(MonothekView *view)
 {
   MonothekJukeboxEndView *jukebox_end_view;
   
+  MonothekJukeboxEndModel *jukebox_end_model;
+
   cairo_t *cr;
 
   guint width, height;
@@ -265,6 +269,10 @@ monothek_jukebox_end_view_draw(MonothekView *view)
   if(cr == NULL){
     return;
   }
+
+  g_object_get(view,
+	       "model", &jukebox_end_model,
+	       NULL);
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
@@ -331,6 +339,33 @@ monothek_jukebox_end_view_draw(MonothekView *view)
 
     jukebox_font = g_strdup_printf("%s Bold", view->font);
 
+    /* jukebox - continue box */
+    if(jukebox_end_model != NULL &&
+       jukebox_end_model->jukebox_restart_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    cairo_set_line_width(cr,
+			 jukebox_end_view->continue_box_line_width);
+    cairo_rectangle(cr,
+		    (double) jukebox_end_view->continue_box_x0, (double) jukebox_end_view->continue_box_y0,
+		    (double) jukebox_end_view->continue_box_width, (double) jukebox_end_view->continue_box_height);
+
+    if(jukebox_end_model != NULL &&
+       jukebox_end_model->jukebox_restart_active){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
+
     /* jukebox - continue */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "CONTINUE", -1);
@@ -352,13 +387,16 @@ monothek_jukebox_end_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    /* jukebox - continue box */
-    cairo_set_line_width(cr,
-			 jukebox_end_view->continue_box_line_width);
-    cairo_rectangle(cr,
-		    (double) jukebox_end_view->continue_box_x0, (double) jukebox_end_view->continue_box_y0,
-		    (double) jukebox_end_view->continue_box_width, (double) jukebox_end_view->continue_box_height);
-    cairo_stroke(cr);
+    if(jukebox_end_model != NULL &&
+       jukebox_end_model->jukebox_restart_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    /* free font string */
+    g_free(jukebox_font);
   }
 
   /* quit */
@@ -374,6 +412,33 @@ monothek_jukebox_end_view_draw(MonothekView *view)
     static const guint font_size = 100;
 
     jukebox_font = g_strdup_printf("%s Bold", view->font);
+
+    /* jukebox - quit box */
+    if(jukebox_end_model != NULL &&
+       jukebox_end_model->jukebox_quit_and_save_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    cairo_set_line_width(cr,
+			 jukebox_end_view->quit_box_line_width);
+    cairo_rectangle(cr,
+		    (double) jukebox_end_view->quit_box_x0, (double) jukebox_end_view->quit_box_y0,
+		    (double) jukebox_end_view->quit_box_width, (double) jukebox_end_view->quit_box_height);
+
+    if(jukebox_end_model != NULL &&
+       jukebox_end_model->jukebox_quit_and_save_active){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
 
     /* jukebox - quit */
     layout = pango_cairo_create_layout(cr);
@@ -396,13 +461,16 @@ monothek_jukebox_end_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    /* jukebox - quit box */
-    cairo_set_line_width(cr,
-			 jukebox_end_view->quit_box_line_width);
-    cairo_rectangle(cr,
-		    (double) jukebox_end_view->quit_box_x0, (double) jukebox_end_view->quit_box_y0,
-		    (double) jukebox_end_view->quit_box_width, (double) jukebox_end_view->quit_box_height);
-    cairo_stroke(cr);
+    if(jukebox_end_model != NULL &&
+       jukebox_end_model->jukebox_quit_and_save_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    /* free font string */
+    g_free(jukebox_font);
   }
   
   /* paint */

@@ -50,6 +50,8 @@ void monothek_jukebox_end_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_JUKEBOX_RESTART_ACTIVE,
+  PROP_JUKEBOX_QUIT_AND_SAVE_ACTIVE,
 };
 
 static gpointer monothek_jukebox_end_model_parent_class = NULL;
@@ -103,6 +105,37 @@ monothek_jukebox_end_model_class_init(MonothekJukeboxEndModelClass *jukebox_end_
   gobject->finalize = monothek_jukebox_end_model_finalize;
 
   /* properties */
+  /**
+   * MonothekJukeboxEndModel:jukebox-restart-active:
+   *
+   * If jukebox restart is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-restart-active",
+				    i18n_pspec("jukebox restart active"),
+				    i18n_pspec("If jukebox restart is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_RESTART_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxEndModel:jukebox-quit-and-save-active:
+   *
+   * If jukebox quit and save is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-quit-and-save-active",
+				    i18n_pspec("jukebox quit and save active"),
+				    i18n_pspec("If jukebox quit and save is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_QUIT_AND_SAVE_ACTIVE,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +143,8 @@ monothek_jukebox_end_model_class_init(MonothekJukeboxEndModelClass *jukebox_end_
 void
 monothek_jukebox_end_model_init(MonothekJukeboxEndModel *jukebox_end_model)
 {
-  //TODO:JK: implement me
+  jukebox_end_model->jukebox_restart_active = FALSE;
+  jukebox_end_model->jukebox_quit_and_save_active = FALSE;
 }
 
 void
@@ -124,6 +158,16 @@ monothek_jukebox_end_model_set_property(GObject *gobject,
   jukebox_end_model = MONOTHEK_JUKEBOX_END_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_JUKEBOX_RESTART_ACTIVE:
+    {
+      jukebox_end_model->jukebox_restart_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_JUKEBOX_QUIT_AND_SAVE_ACTIVE:
+    {
+      jukebox_end_model->jukebox_quit_and_save_active = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -141,6 +185,18 @@ monothek_jukebox_end_model_get_property(GObject *gobject,
   jukebox_end_model = MONOTHEK_JUKEBOX_END_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_JUKEBOX_RESTART_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_end_model->jukebox_restart_active);
+    }
+    break;
+  case PROP_JUKEBOX_QUIT_AND_SAVE_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_end_model->jukebox_quit_and_save_active);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

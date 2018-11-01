@@ -226,8 +226,6 @@ monothek_jukebox_track_view_connect(AgsConnectable *connectable)
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  GList *list, *list_jukebox_track;
-
   gchar *song_filename;
   
   GValue *jukebox_song_filename;
@@ -275,7 +273,7 @@ monothek_jukebox_track_view_disconnect(AgsConnectable *connectable)
   monothek_jukebox_track_view_parent_connectable_interface->disconnect(connectable);
 
   g_object_disconnect(jukebox_track_view->progress,
-		      "value-changed",
+		      "any_signal::value-changed",
 		      G_CALLBACK(monothek_jukebox_track_view_progress_callback),
 		      jukebox_track_view,
 		      NULL);

@@ -38,6 +38,9 @@ typedef struct _MonothekJukeboxNoTestModelClass MonothekJukeboxNoTestModelClass;
 struct _MonothekJukeboxNoTestModel
 {
   GObject gobject;
+
+  gboolean jukebox_play_active;
+  gboolean jukebox_cancel_active;
 };
 
 struct _MonothekJukeboxNoTestModelClass

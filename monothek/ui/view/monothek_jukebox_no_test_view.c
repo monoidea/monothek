@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/model/monothek_jukebox_no_test_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -246,6 +248,8 @@ void
 monothek_jukebox_no_test_view_draw(MonothekView *view)
 {
   MonothekJukeboxNoTestView *jukebox_no_test_view;
+
+  MonothekJukeboxNoTestModel *jukebox_no_test_model;
   
   cairo_t *cr;
 
@@ -265,6 +269,10 @@ monothek_jukebox_no_test_view_draw(MonothekView *view)
   if(cr == NULL){
     return;
   }
+
+  g_object_get(view,
+	       "model", &jukebox_no_test_model,
+	       NULL);
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
@@ -330,6 +338,32 @@ monothek_jukebox_no_test_view_draw(MonothekView *view)
 
     jukebox_font = g_strdup_printf("%s Bold", view->font);
 
+    if(jukebox_no_test_model != NULL &&
+       jukebox_no_test_model->jukebox_play_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    cairo_set_line_width(cr,
+			 jukebox_no_test_view->play_box_line_width);
+    cairo_rectangle(cr,
+		    (double) jukebox_no_test_view->play_box_x0, (double) jukebox_no_test_view->play_box_y0,
+		    (double) jukebox_no_test_view->play_box_width, (double) jukebox_no_test_view->play_box_height);
+
+    if(jukebox_no_test_model != NULL &&
+       jukebox_no_test_model->jukebox_play_active){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
+    
     /* play */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "PLAY", -1);
@@ -353,12 +387,13 @@ monothek_jukebox_no_test_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    cairo_set_line_width(cr,
-			 jukebox_no_test_view->play_box_line_width);
-    cairo_rectangle(cr,
-		    (double) jukebox_no_test_view->play_box_x0, (double) jukebox_no_test_view->play_box_y0,
-		    (double) jukebox_no_test_view->play_box_width, (double) jukebox_no_test_view->play_box_height);
-    cairo_stroke(cr);
+    if(jukebox_no_test_model != NULL &&
+       jukebox_no_test_model->jukebox_play_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
 
     /* free font string */
     g_free(jukebox_font);
@@ -376,6 +411,32 @@ monothek_jukebox_no_test_view_draw(MonothekView *view)
     static const guint font_size = 100;
 
     jukebox_font = g_strdup_printf("%s Bold", view->font);
+
+    if(jukebox_no_test_model != NULL &&
+       jukebox_no_test_model->jukebox_cancel_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    cairo_set_line_width(cr,
+			 jukebox_no_test_view->cancel_box_line_width);
+    cairo_rectangle(cr,
+		    (double) jukebox_no_test_view->cancel_box_x0, (double) jukebox_no_test_view->cancel_box_y0,
+		    (double) jukebox_no_test_view->cancel_box_width, (double) jukebox_no_test_view->cancel_box_height);
+
+    if(jukebox_no_test_model != NULL &&
+       jukebox_no_test_model->jukebox_cancel_active){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
 
     /* cancel */
     layout = pango_cairo_create_layout(cr);
@@ -400,12 +461,13 @@ monothek_jukebox_no_test_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
-    cairo_set_line_width(cr,
-			 jukebox_no_test_view->cancel_box_line_width);
-    cairo_rectangle(cr,
-		    (double) jukebox_no_test_view->cancel_box_x0, (double) jukebox_no_test_view->cancel_box_y0,
-		    (double) jukebox_no_test_view->cancel_box_width, (double) jukebox_no_test_view->cancel_box_height);
-    cairo_stroke(cr);
+    if(jukebox_no_test_model != NULL &&
+       jukebox_no_test_model->jukebox_cancel_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
 
     /* free font string */
     g_free(jukebox_font);

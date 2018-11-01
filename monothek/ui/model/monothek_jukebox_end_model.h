@@ -38,6 +38,9 @@ typedef struct _MonothekJukeboxEndModelClass MonothekJukeboxEndModelClass;
 struct _MonothekJukeboxEndModel
 {
   GObject gobject;
+
+  gboolean jukebox_restart_active;
+  gboolean jukebox_quit_and_save_active;
 };
 
 struct _MonothekJukeboxEndModelClass

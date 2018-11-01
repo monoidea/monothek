@@ -237,7 +237,7 @@ monothek_view_class_init(MonothekViewClass *view)
   widget->key_press_event = monothek_view_key_press;
   widget->key_release_event = monothek_view_key_release;
   widget->motion_notify_event = monothek_view_motion_notify;
-
+  
   /* MonothekViewClass */
   view->draw = monothek_view_real_draw;
   
@@ -529,12 +529,6 @@ monothek_view_realize(GtkWidget *widget)
 			   GTK_STATE_NORMAL);
 
   gtk_widget_queue_resize(widget);
-}
-
-void
-monothek_view_show(GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS(monothek_view_parent_class)->show(widget);
 }
 
 void

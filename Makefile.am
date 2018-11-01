@@ -151,8 +151,10 @@ libmonothek_controller_h_sources = \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
 	monothek/ui/controller/monothek_jukebox_mode_controller.h \
+	monothek/ui/controller/monothek_jukebox_no_test_controller.h \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.h \
 	monothek/ui/controller/monothek_jukebox_track_controller.h \
+	monothek/ui/controller/monothek_jukebox_end_controller.h \
 	monothek/ui/controller/monothek_diskjokey_sequencer_controller.h \
 	monothek/ui/controller/monothek_controller.h
 
@@ -165,8 +167,10 @@ libmonothek_controller_c_sources = \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
 	monothek/ui/controller/monothek_jukebox_mode_controller.c \
+	monothek/ui/controller/monothek_jukebox_no_test_controller.c \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.c \
 	monothek/ui/controller/monothek_jukebox_track_controller.c \
+	monothek/ui/controller/monothek_jukebox_end_controller.c \
 	monothek/ui/controller/monothek_diskjokey_sequencer_controller.c \
 	monothek/ui/controller/monothek_controller.c
 

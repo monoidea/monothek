@@ -34,8 +34,11 @@
 #include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_no_test_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_playlist_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_track_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_end_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_qrcode_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_sequencer_controller.h>
 
 #include <monothek/ui/model/monothek_start_model.h>
@@ -44,8 +47,11 @@
 #include <monothek/ui/model/monothek_jukebox_payment_model.h>
 #include <monothek/ui/model/monothek_diskjokey_payment_model.h>
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
+#include <monothek/ui/model/monothek_jukebox_no_test_model.h>
 #include <monothek/ui/model/monothek_jukebox_playlist_model.h>
 #include <monothek/ui/model/monothek_jukebox_track_model.h>
+#include <monothek/ui/model/monothek_jukebox_end_model.h>
+#include <monothek/ui/model/monothek_jukebox_qrcode_model.h>
 #include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
@@ -810,10 +816,10 @@ monothek_window_real_change_view(MonothekWindow *window,
 							view_type_old);
 
 	if(controller != NULL){
-	  ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 	  ags_connectable_disconnect(AGS_CONNECTABLE(controller->data));
 	}
 	
+	ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 	gtk_widget_hide(list->data);
 
 	break;
@@ -828,18 +834,23 @@ monothek_window_real_change_view(MonothekWindow *window,
     while(list != NULL){      
       if(G_OBJECT_TYPE(list->data) == view_type){
 	GList *controller;
+
+	gtk_box_reorder_child(window->view,
+			      list->data,
+			      0);
 	
 	gtk_widget_show(list->data);
 	gtk_widget_queue_draw(list->data);
 
+	ags_connectable_connect(AGS_CONNECTABLE(list->data));
+	
 	controller = monothek_controller_find_view_type(window->controller,
 							view_type);
 
 	if(controller != NULL){
 	  ags_connectable_connect(AGS_CONNECTABLE(controller->data));
-	  ags_connectable_connect(AGS_CONNECTABLE(list->data));
 	}
-
+	
 	break;
       }
 
