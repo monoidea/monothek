@@ -45,7 +45,7 @@ void monothek_session_manager_finalize(GObject *gobject);
  * @short_description: The start model object.
  * @title: MonothekSessionManager
  * @section_id:
- * @include: monothek/ui/model/monothek_session_manager.h
+ * @include: monothek/session/monothek_session_manager.h
  *
  * #MonothekSessionManager is the MVC's start model.
  */
@@ -207,8 +207,8 @@ void
 monothek_session_manager_add_session(MonothekSessionManager *session_manager,
 				     GObject *session)
 {
-  if(!MONOTHEK_SESSION_MANAGER(session_manager) ||
-     !MONOTHEK_SESSION(session)){
+  if(!MONOTHEK_IS_SESSION_MANAGER(session_manager) ||
+     !MONOTHEK_IS_SESSION(session)){
     return;
   }
 
@@ -233,8 +233,8 @@ void
 monothek_session_manager_remove_session(MonothekSessionManager *session_manager,
 					GObject *session)
 {
-  if(!MONOTHEK_SESSION_MANAGER(session_manager) ||
-     !MONOTHEK_SESSION(session)){
+  if(!MONOTHEK_IS_SESSION_MANAGER(session_manager) ||
+     !MONOTHEK_IS_SESSION(session)){
     return;
   }
 
@@ -265,7 +265,7 @@ monothek_session_manager_find_session(MonothekSessionManager *session_manager,
   
   GList *start_list, *list;
   
-  if(!MONOTHEK_SESSION_MANAGER(session_manager) ||
+  if(!MONOTHEK_IS_SESSION_MANAGER(session_manager) ||
      session_id == NULL){
     return(NULL);
   }

@@ -48,8 +48,8 @@ CLEANFILES = \
 # include
 # nobase_include_HEADERS += $(libmonothek_la_HEADERS_0)
 
-libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_object_h_sources) $(libmonothek_session_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
-libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
+libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_object_h_sources) $(libmonothek_session_h_sources) $(libmonothek_audio_file_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
+libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_audio_file_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
 
 # library libmonothek
 libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
@@ -103,6 +103,18 @@ libmonothek_session_c_sources = \
 	$(deprecated_libmonothek_session_c_sources) \
 	monothek/session/monothek_session.c \
 	monothek/session/monothek_session_manager.c
+
+deprecated_libmonothek_audio_file_h_sources =
+
+libmonothek_audio_file_h_sources = \
+	$(deprecated_libmonothek_audio_file_h_sources) \
+	monothek/audio/file/monothek_audio_file_manager.h
+
+deprecated_libmonothek_audio_file_c_sources =
+
+libmonothek_audio_file_c_sources = \
+	$(deprecated_libmonothek_audio_file_c_sources) \
+	monothek/audio/file/monothek_audio_file_manager.c
 
 deprecated_libmonothek_model_h_sources =
 

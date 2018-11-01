@@ -43,7 +43,7 @@ void monothek_session_finalize(GObject *gobject);
  * @short_description: The start model object.
  * @title: MonothekSession
  * @section_id:
- * @include: monothek/ui/model/monothek_session.h
+ * @include: monothek/session/monothek_session.h
  *
  * #MonothekSession is the MVC's start model.
  */
