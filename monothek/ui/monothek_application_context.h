@@ -69,7 +69,7 @@ struct _MonothekApplicationContext
   GList *sound_server;
   
   GList *audio;
-
+  
   MonothekWindow *window;
 };
 

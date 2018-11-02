@@ -566,6 +566,8 @@ monothek_jukebox_track_model_load_song_filename(MonothekJukeboxTrackModel *jukeb
       }
     }
   }
+
+  g_free(xpath);
   
   /* free XML doc */
   xmlFreeDoc(doc);

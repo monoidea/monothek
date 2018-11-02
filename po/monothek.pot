@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: monothek 1.0.0-PRERELEASE\n"
 "Report-Msgid-Bugs-To: jkraehemann@gmail.com\n"
-"POT-Creation-Date: 2018-10-31 21:41+0100\n"
+"POT-Creation-Date: 2018-11-02 13:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: monothek/ui/monothek_application_context.c:1054
+#: monothek/ui/monothek_application_context.c:1076
 #, c-format
 msgid "unknown soundcard backend - %s"
 msgstr ""
 
-#: monothek/ui/monothek_application_context.c:1064
+#: monothek/ui/monothek_application_context.c:1086
 msgid "unknown soundcard backend - NULL"
 msgstr ""
 

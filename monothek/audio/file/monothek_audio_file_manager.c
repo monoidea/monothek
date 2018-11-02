@@ -330,6 +330,7 @@ monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_m
       continue;
     }
 
+    g_message("MonothekAudioFileManager - reading: %s", filename->data);
     ags_audio_file_read_wave(audio_file,
 			     0,
 			     0.0, 0);

@@ -23,6 +23,15 @@
 #include <ags/libags-audio.h>
 #include <ags/libags-gui.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
+#include <monothek/audio/monothek_rack.h>
+
+#include <monothek/audio/file/monothek_audio_file_manager.h>
+
+#include <monothek/ui/model/monothek_jukebox_playlist_model.h>
+
 #include <pango/pango.h>
 
 #include <libxml/parser.h>
@@ -918,6 +927,9 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
 			      MONOTHEK_TYPE_START_VIEW, G_TYPE_NONE);
   
   /* start gui thread */
+  g_atomic_int_set(&(monothek_application_context->gui_ready),
+		   TRUE);
+
   gtk_main();
 }
 
@@ -926,8 +938,15 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 {
   MonothekApplicationContext *monothek_application_context;
 
+  MonothekRack *rack;
+
+  MonothekAudioFileManager *audio_file_manager;
+  
   AgsAudioLoop *audio_loop;
   GObject *soundcard;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
 
   AgsMessageDelivery *message_delivery;
   AgsMessageQueue *message_queue;
@@ -941,6 +960,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   AgsConfig *config;
 
   GList *list;  
+  GSList *slist;
   
   struct passwd *pw;
 
@@ -955,12 +975,14 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   gboolean is_output;
   guint i;
   
+  GValue *rack_value;
+
   monothek_application_context = (MonothekApplicationContext *) application_context;
 
   audio_loop = AGS_APPLICATION_CONTEXT(monothek_application_context)->main_loop;
 
   config = ags_config_get_instance();
-
+  
   /* call parent */
   //  AGS_APPLICATION_CONTEXT_CLASS(monothek_application_context_parent_class)->setup(application_context);
 
@@ -1232,6 +1254,79 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   
   /* AgsThreadPool */
   monothek_application_context->thread_pool = AGS_TASK_THREAD(application_context->task_thread)->thread_pool;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* audio file manager */
+  audio_file_manager = monothek_audio_file_manager_get_instance();
+
+  slist = NULL;
+  
+  {
+    xmlDoc *doc;
+    xmlNode *current_node;
+    xmlXPathContext *xpath_context;
+    xmlXPathObject *xpath_object;
+    xmlNode **node;
+
+    gchar *xpath;
+    gchar *playlist_filename;
+
+    /* read from XML */  
+    playlist_filename = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME;
+
+    doc = xmlReadFile(playlist_filename, NULL, 0);
+
+    xpath = g_strdup_printf("/playlist/song/file");
+
+    xpath_context = xmlXPathNewContext(doc);
+    xpath_object = xmlXPathEval((xmlChar *) xpath,
+				xpath_context);
+
+    if(xpath_object->nodesetval != NULL){
+      node = xpath_object->nodesetval->nodeTab;
+
+      for(i = 0; i < xpath_object->nodesetval->nodeNr; i++){
+	if(node[i]->type == XML_ELEMENT_NODE){
+	  gchar *str;
+
+	  str = xmlNodeGetContent(node[i]);
+
+	  slist = g_slist_prepend(slist,
+				  g_strdup(str));
+	}
+      }
+    }
+
+    g_free(xpath);
+  
+    /* free XML doc */
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+    xmlMemoryDump();
+  }
+  
+  monothek_audio_file_manager_load_playlist(audio_file_manager,
+					    slist);
+  g_slist_free_full(slist,
+		    g_free);
+  
+  /* rack */
+  rack = monothek_rack_new(soundcard);
+
+  rack_value = g_new0(GValue,
+		      1);
+  g_value_init(rack_value,
+	       G_TYPE_OBJECT);
+
+  g_value_set_object(rack_value,
+		     rack);
+  
+  g_hash_table_insert(session->value,
+		      "rack", rack_value);
 }
 
 void
