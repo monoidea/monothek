@@ -40,12 +40,12 @@ void monothek_session_finalize(GObject *gobject);
 
 /**
  * SECTION:monothek_session
- * @short_description: The start model object.
+ * @short_description: The session object
  * @title: MonothekSession
  * @section_id:
  * @include: monothek/session/monothek_session.h
  *
- * #MonothekSession is the MVC's start model.
+ * #MonothekSession stores data.
  */
 
 enum{
@@ -197,6 +197,12 @@ monothek_session_finalize(GObject *gobject)
   MonothekSession *session;
 
   session = (MonothekSession *) gobject;
+
+  g_free(session->session_id);
+
+  if(session->value != NULL){
+    g_hash_table_unref(session->value);
+  }
   
   /* call parent */
   G_OBJECT_CLASS(monothek_session_parent_class)->finalize(gobject);

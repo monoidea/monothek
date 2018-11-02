@@ -40,12 +40,12 @@ void monothek_audio_file_manager_finalize(GObject *gobject);
 
 /**
  * SECTION:monothek_audio_file_manager
- * @short_description: The start model object.
+ * @short_description: The audio file manager
  * @title: MonothekAudioFileManager
  * @section_id:
  * @include: monothek/audio_file/monothek_audio_file_manager.h
  *
- * #MonothekAudioFileManager is the MVC's start model.
+ * #MonothekAudioFileManager stores audio files.
  */
 
 enum{
@@ -313,6 +313,13 @@ monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_m
   while(filename != NULL){
     AgsAudioFile *audio_file;
 
+    if(monothek_audio_file_manager_find_audio_file(audio_file_manager,
+						   filename->data) != NULL){
+      filename = filename->next;
+      
+      continue;
+    }
+    
     audio_file = ags_audio_file_new(filename->data,
 				    NULL,
 				    -1);

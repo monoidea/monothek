@@ -42,12 +42,12 @@ void monothek_session_manager_finalize(GObject *gobject);
 
 /**
  * SECTION:monothek_session_manager
- * @short_description: The start model object.
+ * @short_description: The session manager
  * @title: MonothekSessionManager
  * @section_id:
  * @include: monothek/session/monothek_session_manager.h
  *
- * #MonothekSessionManager is the MVC's start model.
+ * #MonothekSessionManager stores the sessions.
  */
 
 enum{
