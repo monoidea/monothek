@@ -169,6 +169,7 @@ am__objects_6 = $(am__objects_1) \
 	monothek/session/libmonothek_la-monothek_session.lo \
 	monothek/session/libmonothek_la-monothek_session_manager.lo
 am__objects_7 = $(am__objects_1) \
+	monothek/audio/libmonothek_la-monothek_rack.lo \
 	monothek/audio/libmonothek_la-monothek_recall_factory.lo
 am__objects_8 = $(am__objects_1) \
 	monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio.lo \
@@ -264,6 +265,7 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/monothek
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
+	monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Plo \
 	monothek/audio/$(DEPDIR)/libmonothek_la-monothek_recall_factory.Plo \
 	monothek/audio/file/$(DEPDIR)/libmonothek_la-monothek_audio_file_manager.Plo \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio.Plo \
@@ -677,11 +679,13 @@ libmonothek_session_c_sources = \
 deprecated_libmonothek_audio_h_sources = 
 libmonothek_audio_h_sources = \
 	$(deprecated_libmonothek_audio_h_sources) \
+	monothek/audio/monothek_rack.h \
 	monothek/audio/monothek_recall_factory.h
 
 deprecated_libmonothek_audio_c_sources = 
 libmonothek_audio_c_sources = \
 	$(deprecated_libmonothek_audio_c_sources) \
+	monothek/audio/monothek_rack.c \
 	monothek/audio/monothek_recall_factory.c
 
 deprecated_libmonothek_recall_h_sources = 
@@ -1005,6 +1009,9 @@ monothek/audio/$(am__dirstamp):
 monothek/audio/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) monothek/audio/$(DEPDIR)
 	@: > monothek/audio/$(DEPDIR)/$(am__dirstamp)
+monothek/audio/libmonothek_la-monothek_rack.lo:  \
+	monothek/audio/$(am__dirstamp) \
+	monothek/audio/$(DEPDIR)/$(am__dirstamp)
 monothek/audio/libmonothek_la-monothek_recall_factory.lo:  \
 	monothek/audio/$(am__dirstamp) \
 	monothek/audio/$(DEPDIR)/$(am__dirstamp)
@@ -1227,6 +1234,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/$(DEPDIR)/ui-monothek_main.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/$(DEPDIR)/libmonothek_la-monothek_recall_factory.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/file/$(DEPDIR)/libmonothek_la-monothek_audio_file_manager.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio.Plo@am__quote@ # am--include-marker
@@ -1347,6 +1355,13 @@ monothek/session/libmonothek_la-monothek_session_manager.lo: monothek/session/mo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/session/monothek_session_manager.c' object='monothek/session/libmonothek_la-monothek_session_manager.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/session/libmonothek_la-monothek_session_manager.lo `test -f 'monothek/session/monothek_session_manager.c' || echo '$(srcdir)/'`monothek/session/monothek_session_manager.c
+
+monothek/audio/libmonothek_la-monothek_rack.lo: monothek/audio/monothek_rack.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/audio/libmonothek_la-monothek_rack.lo -MD -MP -MF monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Tpo -c -o monothek/audio/libmonothek_la-monothek_rack.lo `test -f 'monothek/audio/monothek_rack.c' || echo '$(srcdir)/'`monothek/audio/monothek_rack.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Tpo monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/audio/monothek_rack.c' object='monothek/audio/libmonothek_la-monothek_rack.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/audio/libmonothek_la-monothek_rack.lo `test -f 'monothek/audio/monothek_rack.c' || echo '$(srcdir)/'`monothek/audio/monothek_rack.c
 
 monothek/audio/libmonothek_la-monothek_recall_factory.lo: monothek/audio/monothek_recall_factory.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/audio/libmonothek_la-monothek_recall_factory.lo -MD -MP -MF monothek/audio/$(DEPDIR)/libmonothek_la-monothek_recall_factory.Tpo -c -o monothek/audio/libmonothek_la-monothek_recall_factory.lo `test -f 'monothek/audio/monothek_recall_factory.c' || echo '$(srcdir)/'`monothek/audio/monothek_recall_factory.c
@@ -2095,6 +2110,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libmonothekLTLIBRARIES \
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 		-rm -f monothek/$(DEPDIR)/ui-monothek_main.Po
+	-rm -f monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Plo
 	-rm -f monothek/audio/$(DEPDIR)/libmonothek_la-monothek_recall_factory.Plo
 	-rm -f monothek/audio/file/$(DEPDIR)/libmonothek_la-monothek_audio_file_manager.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio.Plo
@@ -2198,6 +2214,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
 		-rm -f monothek/$(DEPDIR)/ui-monothek_main.Po
+	-rm -f monothek/audio/$(DEPDIR)/libmonothek_la-monothek_rack.Plo
 	-rm -f monothek/audio/$(DEPDIR)/libmonothek_la-monothek_recall_factory.Plo
 	-rm -f monothek/audio/file/$(DEPDIR)/libmonothek_la-monothek_audio_file_manager.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio.Plo

@@ -108,12 +108,14 @@ deprecated_libmonothek_audio_h_sources =
 
 libmonothek_audio_h_sources = \
 	$(deprecated_libmonothek_audio_h_sources) \
+	monothek/audio/monothek_rack.h \
 	monothek/audio/monothek_recall_factory.h
 
 deprecated_libmonothek_audio_c_sources =
 
 libmonothek_audio_c_sources = \
 	$(deprecated_libmonothek_audio_c_sources) \
+	monothek/audio/monothek_rack.c \
 	monothek/audio/monothek_recall_factory.c
 
 deprecated_libmonothek_recall_h_sources =

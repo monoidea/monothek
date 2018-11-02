@@ -21,3 +21,7 @@ ags (1.0.0)
 	* implemented MonothekActionBox
 	* implemented MonothekSessionManager
 	* implemented MonothekSession
+	* implemented MonothekRack
+	* implemented MonothekRecallFactory
+	* TODO:JK: implemented monothek-copy-pattern recall
+	* TODO:JK: implemented monothek-play-wave recall

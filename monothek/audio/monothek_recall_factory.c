@@ -1021,12 +1021,12 @@ monothek_recall_factory_create_play_wave(AgsAudio *audio,
  * Since: 1.0.0
  */
 GList*
-ags_recall_factory_create(AgsAudio *audio,
-			  AgsRecallContainer *play_container, AgsRecallContainer *recall_container,
-			  gchar *plugin_name,
-			  guint start_audio_channel, guint stop_audio_channel,
-			  guint start_pad, guint stop_pad,
-			  guint create_flags, guint recall_flags)
+monothek_recall_factory_create(AgsAudio *audio,
+			       AgsRecallContainer *play_container, AgsRecallContainer *recall_container,
+			       gchar *plugin_name,
+			       guint start_audio_channel, guint stop_audio_channel,
+			       guint start_pad, guint stop_pad,
+			       guint create_flags, guint recall_flags)
 {
   GList *recall;
   
