@@ -22,3 +22,13 @@ Monothek was designed by monoidea. See http://monoidea.ch for further
 information.
 
 The web-service is available from http://monothek.ch
+
+Install
+====
+
+Monothek uses common build system of automake. To compile and install
+run:
+
+./configure --prefix=/usr
+make
+make install
