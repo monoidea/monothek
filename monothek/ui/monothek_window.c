@@ -481,18 +481,54 @@ monothek_window_init(MonothekWindow *window)
 	       NULL);
 
   /* jukebox end view */
+  model = monothek_jukebox_end_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_jukebox_end_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
 
+  controller = monothek_jukebox_end_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+
   /* jukebox qrcode view */
+  model = monothek_jukebox_qrcode_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_jukebox_qrcode_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
+
+  controller = monothek_jukebox_qrcode_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
 
   /* diskjokey sequencer view */
   model = monothek_diskjokey_sequencer_model_new();

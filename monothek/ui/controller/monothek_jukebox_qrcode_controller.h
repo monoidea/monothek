@@ -46,12 +46,12 @@ struct _MonothekJukeboxQrcodeControllerClass
 {
   MonothekControllerClass controller;
 
-  void (*timeout)(MonothekJukeboxEndController *jukebox_end_controller);
+  void (*timeout)(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 };
 
 GType monothek_jukebox_qrcode_controller_get_type(void);
 
-void monothek_jukebox_end_controller_timeout(MonothekJukeboxEndController *jukebox_end_controller);
+void monothek_jukebox_qrcode_controller_timeout(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 
 MonothekJukeboxQrcodeController* monothek_jukebox_qrcode_controller_new();
 

@@ -1301,6 +1301,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
       }
     }
 
+    slist = g_slist_reverse(slist);
+
     g_free(xpath);
   
     /* free XML doc */

@@ -30,6 +30,7 @@
 #include <monothek/ui/model/monothek_jukebox_qrcode_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
+#include <monothek/ui/view/monothek_jukebox_qrcode_view.h>
 
 #include <stdlib.h>
 
