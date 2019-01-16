@@ -41,6 +41,9 @@
 #define MONOTHEK_VERSION "1.0.0"
 #define MONOTHEK_BUILD_ID "Wed Oct 17 18:17:09 UTC 2018"
 
+#define MONOTHEK_DEFAULT_DIRECTORY ".monothek"
+#define MONOTHEK_DEFAULT_CONFIG "monothek.conf"
+  
 typedef struct _MonothekApplicationContext MonothekApplicationContext;
 typedef struct _MonothekApplicationContextClass MonothekApplicationContextClass;
 
@@ -60,15 +63,24 @@ struct _MonothekApplicationContext
 
   GList *worker;
   
-  AgsThread *soundcard_thread;
-  AgsThread *export_thread;
+  GObject *default_soundcard;
+
+  AgsThread *default_soundcard_thread;
+  AgsThread *default_export_thread;
+
+  AgsThread *gui_thread;
+  
+  AgsThread *autosave_thread;
+
+  AgsServer *server;
   
   GList *soundcard;
   GList *sequencer;
 
   GList *sound_server;
-  
   GList *audio;
+
+  GList *osc_server;
   
   MonothekWindow *window;
 };

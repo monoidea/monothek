@@ -754,6 +754,10 @@ monothek_rack_create_player(MonothekRack *rack)
 	       NULL);
 
   audio = ags_audio_new(rack->output_soundcard);
+  ags_audio_set_flags(audio, (AGS_AUDIO_SYNC |
+                              AGS_AUDIO_OUTPUT_HAS_RECYCLING |
+                              AGS_AUDIO_INPUT_HAS_RECYCLING));
+  ags_audio_set_ability_flags(audio, (AGS_SOUND_ABILITY_WAVE));
   
   ags_connectable_connect(audio);
   
@@ -809,6 +813,15 @@ monothek_rack_create_sequencer(MonothekRack *rack)
 	       NULL);
 
   audio = ags_audio_new(rack->output_soundcard);
+  ags_audio_set_flags(audio, (AGS_AUDIO_SYNC |
+                              AGS_AUDIO_ASYNC |
+                              AGS_AUDIO_OUTPUT_HAS_RECYCLING |
+                              AGS_AUDIO_INPUT_HAS_RECYCLING |
+                              AGS_AUDIO_INPUT_HAS_FILE));
+  ags_audio_set_ability_flags(audio, (AGS_SOUND_ABILITY_SEQUENCER));
+  ags_audio_set_behaviour_flags(audio, (AGS_SOUND_BEHAVIOUR_PATTERN_MODE |
+                                        AGS_SOUND_BEHAVIOUR_REVERSE_MAPPING |
+                                        AGS_SOUND_BEHAVIOUR_DEFAULTS_TO_INPUT));
   
   ags_connectable_connect(audio);
   
@@ -1022,7 +1035,6 @@ monothek_rack_setup_tree(MonothekRack *rack)
 		 NULL);
   }
 }
-
 
 /**
  * monothek_rack_new:

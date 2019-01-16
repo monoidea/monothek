@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <playlist>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/FAUN - Federkleid.ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/FAUN - Federkleid.wav</file>
     <artist>FAUN</artist>
     <song-title>Federkleid</song-title>
     <album>Midgard</album>
@@ -11,7 +11,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/faun-midgard.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Ellie Goulding - Lights (Bassnectar Remix).ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Ellie Goulding - Lights (Bassnectar Remix).wav</file>
     <artist>Ellie Goulding</artist>
     <song-title>Lights (Bassnectar Remix)</song-title>
     <album>Lights</album>
@@ -21,7 +21,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/ellie-goulding-lights.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Infected\ Mushroom\ -\ Spitfire\ \[Monstercat\ Release\].ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Infected\ Mushroom\ -\ Spitfire.wav</file>
     <artist>Infected Mushroom</artist>
     <song-title>Spitfire</song-title>
     <album>Spitfire</album>
@@ -31,7 +31,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/infected-mushroom-spitfire.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/OVERWERK - Toccata.ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/OVERWERK - Toccata.wav</file>
     <artist>OVERWERK</artist>
     <song-title>Toccata</song-title>
     <album>OW</album>
@@ -41,7 +41,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/overwerk-ow.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Shatter Me Featuring Lzzy Hale - Lindsey Stirling.ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Shatter Me Featuring Lzzy Hale - Lindsey Stirling.wav</file>
     <artist>Lindsey Stirling ft. Lzzy Hale</artist>
     <song-title>Shatter Me</song-title>
     <album>Shatter Me</album>
@@ -51,7 +51,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/lindsey-stirling-lzzy-hale-shatter-me.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/The Chainsmokers - Don't Let Me Down ft. Daya.ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/The Chainsmokers - Don't Let Me Down ft. Daya.wav</file>
     <artist>The Chainsmokers ft. Daya</artist>
     <song-title>Don't Let Me Down</song-title>
     <album>Collage</album>
@@ -61,7 +61,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/the-chainsmokers-collage.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Tron Legacy - Son Of Flynn (Remix) - Extended!.ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Tron Legacy - Son Of Flynn (Remix) - Extended!.wav</file>
     <artist>Daft Punk</artist>
     <song-title>Son Of Flynn</song-title>
     <album>Tron Legacy</album>
@@ -71,7 +71,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/daft-punk-tron-legacy.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/clubbed to death - Matrix soundtrack.ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/clubbed to death - Matrix soundtrack.wav</file>
     <artist>Rob Dougan</artist>
     <song-title>Clubbed To Death</song-title>
     <album>Clubbed To Death #2</album>
@@ -81,7 +81,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/rob-dougan-clubbed-to-death.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/X Ambassadors - Renegades (Lyric Video).ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/X Ambassadors - Renegades (Lyric Video).wav</file>
     <artist>X Ambassadors</artist>
     <song-title>Renegades</song-title>
     <album>VHS</album>
@@ -91,7 +91,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/x-ambassadors-vhs.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Rudimental - Feel The Love ft. John Newman [Official Video].ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Rudimental - Feel The Love ft. John Newman [Official Video].wav</file>
     <artist>Rudimental ft. John Newman</artist>
     <song-title>Feel The Love</song-title>
     <album>Home</album>
@@ -101,7 +101,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/rudimental-home.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Blind Faith ft. Liam Bailey - Chase and Status (No More Idols).ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Blind Faith ft. Liam Bailey - Chase and Status (No More Idols).wav</file>
     <artist>Blind Faith ft. Liam Bailey</artist>
     <song-title>Chase and Status</song-title>
     <album>No More Idols</album>
@@ -111,7 +111,7 @@
     <cover>/home/joelkraehemann/monoidea/jukebox/album-cover/blind-faith-no-more-idols.png</cover>
   </song>
   <song>
-    <file>/home/joelkraehemann/monoidea/jukebox/title/Marilyn Manson - The Nobodies (Against All Gods Remix).ogg</file>
+    <file>/home/joelkraehemann/monoidea/jukebox/title/Marilyn Manson - The Nobodies (Against All Gods Remix).wav</file>
     <artist>Marilyn Manson</artist>
     <song-title>The Nobodies</song-title>
     <album>Holy Wood</album>

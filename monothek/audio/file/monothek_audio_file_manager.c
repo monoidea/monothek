@@ -313,6 +313,8 @@ monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_m
   while(filename != NULL){
     AgsAudioFile *audio_file;
 
+    guint format;
+    
     if(monothek_audio_file_manager_find_audio_file(audio_file_manager,
 						   filename->data) != NULL){
       filename = filename->next;
@@ -330,6 +332,10 @@ monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_m
       continue;
     }
 
+    g_object_get(audio_file->sound_resource,
+		 "format", &format,
+		 NULL);
+    
     g_message("MonothekAudioFileManager - reading: %s", filename->data);
     ags_audio_file_read_wave(audio_file,
 			     0,

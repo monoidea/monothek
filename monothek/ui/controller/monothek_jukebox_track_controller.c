@@ -25,6 +25,10 @@
 #include <monothek/session/monothek_session_manager.h>
 #include <monothek/session/monothek_session.h>
 
+#include <monothek/audio/monothek_rack.h>
+
+#include <monothek/audio/file/monothek_audio_file_manager.h>
+
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_jukebox_track_model.h>
@@ -391,11 +395,53 @@ void
 monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukebox_track_controller,
 					   gboolean do_run)
 {
+  MonothekRack *rack;
+
+  AgsTaskThread *task_thread;
+  
+  AgsApplicationContext *application_context;  
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+  
+  GValue *rack_value;
+
+  application_context = ags_application_context_get_instance();
+
+  task_thread = ags_concurrency_provider_get_task_thread(AGS_CONCURRENCY_PROVIDER(application_context));
+  
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  if(rack_value == NULL){
+    return;
+  }
+  
+  rack = g_value_get_object(rack_value);
+  
   if(do_run){
+    MonothekAudioFileManager *audio_file_manager;
+    AgsAudioFile *audio_file;
+    
+    AgsStartAudio *start_audio;
+    AgsStartSoundcard *start_soundcard;
+
+    GList *start_wave, *wave;
+    GList *task;
+    
+    gchar *filename;
+    
 #ifdef __APPLE__
     clock_serv_t cclock;
     mach_timespec_t mts;
 #endif
+
+    GValue *filename_value;
 
 #ifdef __APPLE__
     host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
@@ -412,7 +458,64 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
     jukebox_track_controller->timer->tv_sec = 0;
     jukebox_track_controller->timer->tv_nsec = 0;
 
-    //TODO:JK: implement me
+    /* load track */
+    audio_file_manager = monothek_audio_file_manager_get_instance();
+
+    filename_value = g_hash_table_lookup(session->value,
+					 "jukebox-song-filename");
+
+    filename = g_value_get_string(filename_value);
+    audio_file = monothek_audio_file_manager_find_audio_file(audio_file_manager,
+							     filename);
+
+    /* clear wave */
+    g_object_get(rack->player,
+		 "wave", &start_wave,
+		 NULL);
+
+    wave = start_wave;
+
+    while(wave != NULL){
+      ags_audio_remove_wave(rack->player,
+			    wave->data);
+
+      wave = wave->next;
+    }
+
+    g_list_free(start_wave);
+    
+    /* add wave */
+    g_object_get(audio_file,
+		 "wave", &start_wave,
+		 NULL);
+    
+    wave = start_wave;
+
+    while(wave != NULL){
+      ags_audio_add_wave(rack->player,
+			 wave->data);
+
+      wave = wave->next;
+    }
+
+    g_list_free(start_wave);
+    
+    /* start audio */
+    task = NULL;
+    
+    start_audio = ags_start_audio_new(rack->player,
+				      AGS_SOUND_SCOPE_WAVE);
+    task = g_list_prepend(task,
+			  start_audio);
+
+    start_soundcard = ags_start_soundcard_new(application_context);
+    task = g_list_prepend(task,
+			  start_soundcard);
+
+    task = g_list_reverse(task);
+    
+    ags_task_thread_append_tasks(task_thread,
+				 task);
   }else{
     //TODO:JK: implement me
 

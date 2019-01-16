@@ -388,9 +388,9 @@ CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
-	$(top_srcdir)/monothek/config.h.in ABOUT-NLS AUTHORS ChangeLog \
-	README compile config.guess config.rpath config.sub depcomp \
-	install-sh ltmain.sh missing
+	$(top_srcdir)/monothek/config.h.in ABOUT-NLS AUTHORS COPYING \
+	ChangeLog README compile config.guess config.rpath config.sub \
+	depcomp install-sh ltmain.sh missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
