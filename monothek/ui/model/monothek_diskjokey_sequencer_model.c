@@ -22,6 +22,15 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include <libxml/xlink.h>
+#include <libxml/xpath.h>
+#include <libxml/valid.h>
+#include <libxml/xmlIO.h>
+#include <libxml/xmlmemory.h>
+#include <libxml/xmlsave.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -110,7 +119,220 @@ monothek_diskjokey_sequencer_model_class_init(MonothekDiskjokeySequencerModelCla
 void
 monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model)
 {
-  //TODO:JK: implement me
+  xmlDoc *doc;
+  xmlNode *root_node;
+  xmlNode *sample_node;
+  xmlNode *current_node;
+
+  gchar *techno_filename;
+  gchar *house_filename;
+  gchar *hip_hop_filename;
+  xmlChar *str;
+  
+  guint i, j;
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+      diskjokey_sequencer_model->pad_active[i][j] = FALSE;
+    }
+  }
+
+  diskjokey_sequencer_model->techno_active = FALSE;
+  diskjokey_sequencer_model->house_active = FALSE;
+  diskjokey_sequencer_model->hip_hop_active = FALSE;
+  
+  diskjokey_sequencer_model->random_active = FALSE;
+  diskjokey_sequencer_model->clear_active = FALSE;
+
+  diskjokey_sequencer_model->run_active = FALSE;
+
+  diskjokey_sequencer_model->active_column = -1;
+
+  diskjokey_sequencer_model->current_tab = 0;
+  
+  diskjokey_sequencer_model->bpm = 120.0;
+
+  diskjokey_sequencer_model->swing = 0.0;
+
+  /* techno resources */
+  diskjokey_sequencer_model->techno_label = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
+  diskjokey_sequencer_model->techno_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    diskjokey_sequencer_model->techno_label = NULL;
+    diskjokey_sequencer_model->techno_sample = NULL;
+  }
+  
+  diskjokey_sequencer_model->techno_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
+  diskjokey_sequencer_model->techno_sample[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
+
+  techno_filename = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME;
+  
+  doc = xmlReadFile(techno_filename, NULL, 0);
+
+  root_node = xmlDocGetRootElement(doc);
+
+  sample_node = root_node->children;
+  i = 0;
+
+  while(sample_node != NULL){
+    if(sample_node->type == XML_ELEMENT_NODE){
+      if(!xmlStrncmp("sample",
+		     sample_node->name,
+		     5)){
+	current_node = sample_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    if(!xmlStrncmp("file",
+			   current_node->name,
+			   5)){
+	      str = xmlNodeGetContent(current_node);
+
+	      diskjokey_sequencer_model->techno_sample[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("label",
+				 current_node->name,
+				 6)){
+	      str = xmlNodeGetContent(current_node);
+
+	      diskjokey_sequencer_model->techno_label[i] = g_strdup(str);
+	    }
+	  }
+
+	  current_node = current_node->next;
+	}
+
+	i++;
+      }
+    }
+
+    sample_node = sample_node->next;
+  }
+
+  /* free XML doc */
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+  xmlMemoryDump();
+  
+  /* house resources */
+  diskjokey_sequencer_model->house_label = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
+  diskjokey_sequencer_model->house_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    diskjokey_sequencer_model->house_label = NULL;
+    diskjokey_sequencer_model->house_sample = NULL;
+  }
+  
+  diskjokey_sequencer_model->house_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
+  diskjokey_sequencer_model->house_sample[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
+
+  house_filename = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME;
+  
+  doc = xmlReadFile(house_filename, NULL, 0);
+
+  root_node = xmlDocGetRootElement(doc);
+
+  sample_node = root_node->children;
+  i = 0;
+
+  while(sample_node != NULL){
+    if(sample_node->type == XML_ELEMENT_NODE){
+      if(!xmlStrncmp("sample",
+		     sample_node->name,
+		     5)){
+	current_node = sample_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    if(!xmlStrncmp("file",
+			   current_node->name,
+			   5)){
+	      str = xmlNodeGetContent(current_node);
+
+	      diskjokey_sequencer_model->house_sample[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("label",
+				 current_node->name,
+				 6)){
+	      str = xmlNodeGetContent(current_node);
+
+	      diskjokey_sequencer_model->house_label[i] = g_strdup(str);
+	    }
+	  }
+
+	  current_node = current_node->next;
+	}
+
+	i++;
+      }
+    }
+
+    sample_node = sample_node->next;
+  }
+
+  /* free XML doc */
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+  xmlMemoryDump();
+
+  /* hip-hop resources */
+  diskjokey_sequencer_model->hip_hop_label = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
+  diskjokey_sequencer_model->hip_hop_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    diskjokey_sequencer_model->hip_hop_label = NULL;
+    diskjokey_sequencer_model->hip_hop_sample = NULL;
+  }
+  
+  diskjokey_sequencer_model->hip_hop_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
+  diskjokey_sequencer_model->hip_hop_sample[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
+
+  hip_hop_filename = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIP_HOP_FILENAME;
+
+  doc = xmlReadFile(hip_hop_filename, NULL, 0);
+
+  root_node = xmlDocGetRootElement(doc);
+
+  sample_node = root_node->children;
+  i = 0;
+
+  while(sample_node != NULL){
+    if(sample_node->type == XML_ELEMENT_NODE){
+      if(!xmlStrncmp("sample",
+		     sample_node->name,
+		     5)){
+	current_node = sample_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    if(!xmlStrncmp("file",
+			   current_node->name,
+			   5)){
+	      str = xmlNodeGetContent(current_node);
+
+	      diskjokey_sequencer_model->hip_hop_sample[i] = g_strdup(str);
+	    }else if(!xmlStrncmp("label",
+				 current_node->name,
+				 6)){
+	      str = xmlNodeGetContent(current_node);
+
+	      diskjokey_sequencer_model->hip_hop_label[i] = g_strdup(str);
+	    }
+	  }
+
+	  current_node = current_node->next;
+	}
+
+	i++;
+      }
+    }
+
+    sample_node = sample_node->next;
+  }
+
+  /* free XML doc */
+  xmlFreeDoc(doc);
+  xmlCleanupParser();
+  xmlMemoryDump();
 }
 
 void

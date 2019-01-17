@@ -129,15 +129,15 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
   guint i;
 
   /* set default value */
-  jukebox_playlist_model->song_filename = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
-  jukebox_playlist_model->cover_filename = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  jukebox_playlist_model->song_filename = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
+  jukebox_playlist_model->cover_filename = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
 
   jukebox_playlist_model->song_select_active = (gboolean *) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gboolean));
 
-  jukebox_playlist_model->song_title = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
-  jukebox_playlist_model->artist = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
-  jukebox_playlist_model->album = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
-  jukebox_playlist_model->duration = (gchar **) malloc(MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT * sizeof(gchar *));
+  jukebox_playlist_model->song_title = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
+  jukebox_playlist_model->artist = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
+  jukebox_playlist_model->album = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
+  jukebox_playlist_model->duration = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
   
   for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
     jukebox_playlist_model->song_select_active[i] = FALSE;
@@ -154,7 +154,14 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
     jukebox_playlist_model->duration[i]->tv_nsec = 0;    
   }
 
-  /* read from XML */  
+  jukebox_playlist_model->song_filename[MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT] = NULL;
+  jukebox_playlist_model->cover_filename[MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT] = NULL;
+
+  jukebox_playlist_model->song_title[MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT] = NULL;
+  jukebox_playlist_model->artist[MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT] = NULL;
+  jukebox_playlist_model->album[MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT] = NULL;
+
+  /* read from XML */
   playlist_filename = MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME;
 
   doc = xmlReadFile(playlist_filename, NULL, 0);
