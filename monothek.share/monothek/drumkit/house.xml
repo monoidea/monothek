@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<drumkit>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Kick_short.flac</file>
+    <label>Kick</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Lo Tom.flac</file>
+    <label>Tom</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Hat_closed.flac</file>
+    <label>Hi-Hat</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Snare_lo1.flac</file>
+    <label>Snare</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Clap.flac</file>
+    <label>Clap</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Md Conga.flac</file>
+    <label>Conga</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Maracas.flac</file>
+    <label>Maracas</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Clave.flac</file>
+    <label>Clave</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Cowbell.flac</file>
+    <label>Cowbell</label>
+  </sample>
+</drumkit>

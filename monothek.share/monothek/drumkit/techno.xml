@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<drumkit>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/sim_k02-0.wav</file>
+    <label>Kick</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/rhythm77_low_tom.wav</file>
+    <label>Tom</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/rhythm77_ch.wav</file>
+    <label>Closed-Hat</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/909sn.wav</file>
+    <label>Snare</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/909clap.wav</file>
+    <label>Clap</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/sim_bass_23_01.wav</file>
+    <label>Bass</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/808_xOver_2.wav</file>
+    <label>xOver</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/fx_10.wav</file>
+    <label>FX-01</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/techno/rhythm77_oh.wav</file>
+    <label>Rhythm</label>
+  </sample>
+</drumkit>

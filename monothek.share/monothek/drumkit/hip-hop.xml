@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<drumkit>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/kick_1.wav</file>
+    <label>Kick</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/kick_3.wav</file>
+    <label>Kick</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/chh_1.wav</file>
+    <label>Hi-Hat</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/ohh_3.wav</file>
+    <label>Hi-Hat</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/hit_smear_1.wav</file>
+    <label>Hit Smear</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/hit_smear_3.wav</file>
+    <label>Hit Smear</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/clap_1.wav</file>
+    <label>Clap</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/snare_1.wav</file>
+    <label>Snare</label>
+  </sample>
+  <sample>
+    <file>/home/joelkraehemann/monoidea/drumkits/hip-hop/snare_scr.wav</file>
+    <label>Snare</label>
+  </sample>
+</drumkit>

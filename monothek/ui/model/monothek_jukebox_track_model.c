@@ -475,7 +475,7 @@ monothek_jukebox_track_model_load_song_filename(MonothekJukeboxTrackModel *jukeb
 
   doc = xmlReadFile(playlist_filename, NULL, 0);
 
-  xpath = g_strdup_printf("/playlist/song/file[text()='%s']/ancestor::*[self::song][1]", song_filename);
+  xpath = g_strdup_printf("/playlist/song/file[text()='%s']/ancestor::*[self::song][1]", ags_string_util_escape_single_quote(song_filename));
 
   xpath_context = xmlXPathNewContext(doc);
   xpath_object = xmlXPathEval((xmlChar *) xpath,
