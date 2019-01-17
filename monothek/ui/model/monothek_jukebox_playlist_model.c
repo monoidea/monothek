@@ -137,7 +137,7 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
   jukebox_playlist_model->song_title = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
   jukebox_playlist_model->artist = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
   jukebox_playlist_model->album = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
-  jukebox_playlist_model->duration = (gchar **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(gchar *));
+  jukebox_playlist_model->duration = (struct timespec **) malloc((MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT + 1) * sizeof(struct timespec *));
   
   for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
     jukebox_playlist_model->song_select_active[i] = FALSE;

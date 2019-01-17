@@ -39,6 +39,8 @@
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIP_HOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
 
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC (6000)
+
 typedef struct _MonothekDiskjokeySequencerModel MonothekDiskjokeySequencerModel;
 typedef struct _MonothekDiskjokeySequencerModelClass MonothekDiskjokeySequencerModelClass;
 
@@ -46,7 +48,7 @@ struct _MonothekDiskjokeySequencerModel
 {
   GObject gobject;
 
-  gboolean pad_active[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT][MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT];
+  gboolean **pad_active;
 
   gboolean techno_active;
   gboolean house_active;
@@ -74,7 +76,7 @@ struct _MonothekDiskjokeySequencerModel
   gchar **hip_hop_label;
   gchar **hip_hop_sample;
 
-  struct timespec **duration;
+  struct timespec *duration;
 };
 
 struct _MonothekDiskjokeySequencerModelClass

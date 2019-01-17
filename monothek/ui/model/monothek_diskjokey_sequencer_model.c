@@ -131,13 +131,17 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   
   guint i, j;
 
+  diskjokey_sequencer_model->pad_active = (gboolean **) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT * sizeof(gboolean *));
+
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    diskjokey_sequencer_model->pad_active[i] = (gboolean *) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT * sizeof(gboolean));
+    
     for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
       diskjokey_sequencer_model->pad_active[i][j] = FALSE;
     }
   }
 
-  diskjokey_sequencer_model->techno_active = FALSE;
+  diskjokey_sequencer_model->techno_active = TRUE;
   diskjokey_sequencer_model->house_active = FALSE;
   diskjokey_sequencer_model->hip_hop_active = FALSE;
   
@@ -159,8 +163,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   diskjokey_sequencer_model->techno_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
 
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
-    diskjokey_sequencer_model->techno_label = NULL;
-    diskjokey_sequencer_model->techno_sample = NULL;
+    diskjokey_sequencer_model->techno_label[i] = NULL;
+    diskjokey_sequencer_model->techno_sample[i] = NULL;
   }
   
   diskjokey_sequencer_model->techno_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
@@ -219,8 +223,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   diskjokey_sequencer_model->house_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
 
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
-    diskjokey_sequencer_model->house_label = NULL;
-    diskjokey_sequencer_model->house_sample = NULL;
+    diskjokey_sequencer_model->house_label[i] = NULL;
+    diskjokey_sequencer_model->house_sample[i] = NULL;
   }
   
   diskjokey_sequencer_model->house_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
@@ -279,8 +283,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   diskjokey_sequencer_model->hip_hop_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
 
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
-    diskjokey_sequencer_model->hip_hop_label = NULL;
-    diskjokey_sequencer_model->hip_hop_sample = NULL;
+    diskjokey_sequencer_model->hip_hop_label[i] = NULL;
+    diskjokey_sequencer_model->hip_hop_sample[i] = NULL;
   }
   
   diskjokey_sequencer_model->hip_hop_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
@@ -333,6 +337,11 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   xmlFreeDoc(doc);
   xmlCleanupParser();
   xmlMemoryDump();
+
+  /* duration */
+  diskjokey_sequencer_model->duration = (struct timespec *) malloc(sizeof(struct timespec));
+  diskjokey_sequencer_model->duration->tv_sec = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC;
+  diskjokey_sequencer_model->duration->tv_nsec = 0;    
 }
 
 void

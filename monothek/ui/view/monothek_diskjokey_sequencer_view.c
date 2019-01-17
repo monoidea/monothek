@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -374,6 +376,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 {
   MonothekDiskjokeySequencerView *diskjokey_sequencer_view;
   
+  MonothekDiskjokeySequencerModel *diskjokey_sequencer_model;
+
   cairo_t *cr;
 
   guint width, height;
@@ -393,6 +397,10 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
   if(cr == NULL){
     return;
   }
+
+  g_object_get(view,
+	       "model", &diskjokey_sequencer_model,
+	       NULL);
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
@@ -423,7 +431,7 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 
     diskjokey_font = g_strdup_printf("%s Bold", view->font);
 
-    label = g_strdup_printf("%d", j + 1);
+    label = g_strdup_printf("%d", (diskjokey_sequencer_model->current_tab * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT) + j + 1);
     
     /* columns */
     layout = pango_cairo_create_layout(cr);
@@ -467,7 +475,15 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 
     diskjokey_font = g_strdup_printf("%s Bold", view->font);
 
-    label = g_strdup_printf("(null)");
+    if(diskjokey_sequencer_model->techno_active){
+      label = g_strdup(diskjokey_sequencer_model->techno_label[i]);
+    }else if(diskjokey_sequencer_model->house_active){
+      label = g_strdup(diskjokey_sequencer_model->house_label[i]);
+    }else if(diskjokey_sequencer_model->hip_hop_active){
+      label = g_strdup(diskjokey_sequencer_model->hip_hop_label[i]);
+    }else{
+      label = g_strdup("(null)");
+    }
     
     /* rows */
     layout = pango_cairo_create_layout(cr);
@@ -505,7 +521,12 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
       cairo_rectangle(cr,
 		      (double) diskjokey_sequencer_view->pattern_x0 + (j * (diskjokey_sequencer_view->pad_width + diskjokey_sequencer_view->pattern_column_spacing)), (double) diskjokey_sequencer_view->pattern_y0 + (i * (diskjokey_sequencer_view->pad_height + diskjokey_sequencer_view->pattern_row_spacing)),
 		      (double) diskjokey_sequencer_view->pad_width, (double) diskjokey_sequencer_view->pad_height);
-      cairo_stroke(cr);
+
+      if(diskjokey_sequencer_model->pad_active[i][(diskjokey_sequencer_model->current_tab * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT) + j]){
+	cairo_fill(cr);
+      }else{
+	cairo_stroke(cr);
+      }
     }
   }
 
@@ -537,15 +558,52 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) 270.0,
-		  (double) 820.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       diskjokey_sequencer_model->current_tab != 0){
+      cairo_move_to(cr,
+		    (double) 270.0,
+		    (double) 820.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[0]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[0], (double) diskjokey_sequencer_view->tab_box_y0[0],
+		      (double) diskjokey_sequencer_view->tab_box_width[0], (double) diskjokey_sequencer_view->tab_box_height[0]);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[0]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[0], (double) diskjokey_sequencer_view->tab_box_y0[0],
+		      (double) diskjokey_sequencer_view->tab_box_width[0], (double) diskjokey_sequencer_view->tab_box_height[0]);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+
+      cairo_move_to(cr,
+		    (double) 270.0,
+		    (double) 820.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* tab 2 */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "TAB 2", -1);
@@ -560,15 +618,52 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) 590.0,
-		  (double) 820.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       diskjokey_sequencer_model->current_tab != 1){
+      cairo_move_to(cr,
+		    (double) 590.0,
+		    (double) 820.0);
+      
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+      
+      g_object_unref(layout);
 
-    g_object_unref(layout);
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[1]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[1], (double) diskjokey_sequencer_view->tab_box_y0[1],
+		      (double) diskjokey_sequencer_view->tab_box_width[1], (double) diskjokey_sequencer_view->tab_box_height[1]);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[1]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[1], (double) diskjokey_sequencer_view->tab_box_y0[1],
+		      (double) diskjokey_sequencer_view->tab_box_width[1], (double) diskjokey_sequencer_view->tab_box_height[1]);
+      cairo_fill(cr);
 
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+      
+      cairo_move_to(cr,
+		    (double) 590.0,
+		    (double) 820.0);
+      
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+      
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* tab 3 */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "TAB 3", -1);
@@ -583,15 +678,52 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) 910.0,
-		  (double) 820.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       diskjokey_sequencer_model->current_tab != 2){
+      cairo_move_to(cr,
+		    (double) 910.0,
+		    (double) 820.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[2]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[2], (double) diskjokey_sequencer_view->tab_box_y0[2],
+		      (double) diskjokey_sequencer_view->tab_box_width[2], (double) diskjokey_sequencer_view->tab_box_height[2]);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[2]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[2], (double) diskjokey_sequencer_view->tab_box_y0[2],
+		      (double) diskjokey_sequencer_view->tab_box_width[2], (double) diskjokey_sequencer_view->tab_box_height[2]);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+
+      cairo_move_to(cr,
+		    (double) 910.0,
+		    (double) 820.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* tab 4 */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "TAB 4", -1);
@@ -606,38 +738,55 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) 1230.0,
-		  (double) 820.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       diskjokey_sequencer_model->current_tab != 3){
+      cairo_move_to(cr,
+		    (double) 1230.0,
+		    (double) 820.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+  
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[3]);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[3], (double) diskjokey_sequencer_view->tab_box_y0[3],
+		      (double) diskjokey_sequencer_view->tab_box_width[3], (double) diskjokey_sequencer_view->tab_box_height[3]);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->tab_box_line_width[3]);  
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->tab_box_x0[3], (double) diskjokey_sequencer_view->tab_box_y0[3],
+		      (double) diskjokey_sequencer_view->tab_box_width[3], (double) diskjokey_sequencer_view->tab_box_height[3]);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+
+      cairo_move_to(cr,
+		    (double) 1230.0,
+		    (double) 820.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* free font string */
     g_free(diskjokey_font);
   }
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->tab_box_x0[0], (double) diskjokey_sequencer_view->tab_box_y0[0],
-		  (double) diskjokey_sequencer_view->tab_box_width[0], (double) diskjokey_sequencer_view->tab_box_height[0]);
-  cairo_stroke(cr);
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->tab_box_x0[1], (double) diskjokey_sequencer_view->tab_box_y0[1],
-		  (double) diskjokey_sequencer_view->tab_box_width[1], (double) diskjokey_sequencer_view->tab_box_height[1]);
-  cairo_stroke(cr);
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->tab_box_x0[2], (double) diskjokey_sequencer_view->tab_box_y0[2],
-		  (double) diskjokey_sequencer_view->tab_box_width[2], (double) diskjokey_sequencer_view->tab_box_height[2]);
-  cairo_stroke(cr);
-  
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->tab_box_x0[3], (double) diskjokey_sequencer_view->tab_box_y0[3],
-		  (double) diskjokey_sequencer_view->tab_box_width[3], (double) diskjokey_sequencer_view->tab_box_height[3]);
-  cairo_stroke(cr);
 
   /* bpm */
   cairo_rectangle(cr,
@@ -804,11 +953,6 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
   cairo_fill(cr);
 
   /* techno */
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->techno_box_x0, (double) diskjokey_sequencer_view->techno_box_y0,
-		  (double) diskjokey_sequencer_view->techno_box_width, (double) diskjokey_sequencer_view->techno_box_height);
-  cairo_stroke(cr);
-
   {
     PangoLayout *layout;
     PangoFontDescription *desc;
@@ -836,15 +980,52 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) diskjokey_sequencer_view->techno_box_x0 + ((diskjokey_sequencer_view->techno_box_width / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 132.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       !diskjokey_sequencer_model->techno_active){
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->techno_box_x0 + ((diskjokey_sequencer_view->techno_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 132.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->techno_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->techno_box_x0, (double) diskjokey_sequencer_view->techno_box_y0,
+		      (double) diskjokey_sequencer_view->techno_box_width, (double) diskjokey_sequencer_view->techno_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->techno_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->techno_box_x0, (double) diskjokey_sequencer_view->techno_box_y0,
+		      (double) diskjokey_sequencer_view->techno_box_width, (double) diskjokey_sequencer_view->techno_box_height);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+      
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->techno_box_x0 + ((diskjokey_sequencer_view->techno_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 132.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* free font string */
     g_free(diskjokey_font);
   }
