@@ -37,7 +37,7 @@
 
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME SRCDIR "/monothek.share/monothek/drumkit/techno.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
-#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIP_HOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
 
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC (6000)
 
@@ -52,7 +52,7 @@ struct _MonothekDiskjokeySequencerModel
 
   gboolean techno_active;
   gboolean house_active;
-  gboolean hip_hop_active;
+  gboolean hiphop_active;
 
   gboolean random_active;
   gboolean clear_active;
@@ -73,8 +73,8 @@ struct _MonothekDiskjokeySequencerModel
   gchar **house_label;
   gchar **house_sample;
 
-  gchar **hip_hop_label;
-  gchar **hip_hop_sample;
+  gchar **hiphop_label;
+  gchar **hiphop_sample;
 
   struct timespec *duration;
 };
@@ -85,6 +85,12 @@ struct _MonothekDiskjokeySequencerModelClass
 };
 
 GType monothek_diskjokey_sequencer_model_get_type(void);
+
+void monothek_diskjokey_sequencer_model_set_pad_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
+						       guint x, guint y,
+						       gboolean is_active);
+gboolean monothek_diskjokey_sequencer_model_get_pad_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
+							   guint x, guint y);
 
 MonothekDiskjokeySequencerModel* monothek_diskjokey_sequencer_model_new();
 

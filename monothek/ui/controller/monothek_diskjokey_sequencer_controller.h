@@ -40,6 +40,19 @@ typedef struct _MonothekDiskjokeySequencerControllerClass MonothekDiskjokeySeque
 struct _MonothekDiskjokeySequencerController
 {
   MonothekController controller;
+
+  MonothekActionBox ***pad;
+
+  MonothekActionBox *techno;
+  MonothekActionBox *house;
+  MonothekActionBox *hiphop;
+
+  MonothekActionBox *clear;
+  MonothekActionBox *random;
+
+  MonothekActionBox *run;
+
+  MonothekActionBox **tab;
 };
 
 struct _MonothekDiskjokeySequencerControllerClass

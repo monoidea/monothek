@@ -22,6 +22,11 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
+#include <monothek/audio/monothek_rack.h>
+
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
@@ -40,6 +45,52 @@ void monothek_diskjokey_sequencer_controller_finalize(GObject *gobject);
 
 void monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable);
 void monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable);
+
+void monothek_diskjokey_sequencer_controller_pad_enter_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_pad_leave_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_pad_clicked_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
+void monothek_diskjokey_sequencer_controller_techno_enter_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_techno_leave_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_techno_clicked_callback(MonothekActionBox *action_box,
+								     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_house_enter_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_house_leave_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_house_clicked_callback(MonothekActionBox *action_box,
+								    MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_hiphop_enter_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_hiphop_leave_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_hiphop_clicked_callback(MonothekActionBox *action_box,
+								     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
+void monothek_diskjokey_sequencer_controller_random_enter_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_random_leave_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_random_clicked_callback(MonothekActionBox *action_box,
+								     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_clear_enter_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_clear_leave_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_clear_clicked_callback(MonothekActionBox *action_box,
+								    MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
+void monothek_diskjokey_sequencer_controller_tab_enter_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
 void monothek_diskjokey_sequencer_controller_real_toggle_pad(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 							     guint x, guint y);
@@ -76,17 +127,17 @@ void monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencer
  */
 
 enum{
-  TOGGLE_PAD,
-  SWITCH_PAGE,
-  SELECT_BANK,
-  CHANGE_BPM,
-  CHANGE_SWING,
-  CHANGE_DURATION,
-  LOAD_DRUM_KIT,
-  CLEAR,
-  RANDOM,
-  RUN,
-  LAST_SIGNAL,
+     TOGGLE_PAD,
+     SWITCH_PAGE,
+     SELECT_BANK,
+     CHANGE_BPM,
+     CHANGE_SWING,
+     CHANGE_DURATION,
+     LOAD_DRUM_KIT,
+     CLEAR,
+     RANDOM,
+     RUN,
+     LAST_SIGNAL,
 };
 
 static gpointer monothek_diskjokey_sequencer_controller_parent_class = NULL;
@@ -148,21 +199,21 @@ monothek_diskjokey_sequencer_controller_class_init(MonothekDiskjokeySequencerCon
   gobject->finalize = monothek_diskjokey_sequencer_controller_finalize;
 
   /* MonothekDiskjokeySequencerController */
-  diskjokey_sequencer_controller->toggle_pad = monothek_diskjokey_sequencer_controller_toggle_pad;
+  diskjokey_sequencer_controller->toggle_pad = monothek_diskjokey_sequencer_controller_real_toggle_pad;
 
-  diskjokey_sequencer_controller->switch_page = monothek_diskjokey_sequencer_controller_switch_page;
-  diskjokey_sequencer_controller->select_bank = monothek_diskjokey_sequencer_controller_select_bank;
+  diskjokey_sequencer_controller->switch_page = monothek_diskjokey_sequencer_controller_real_switch_page;
+  diskjokey_sequencer_controller->select_bank = monothek_diskjokey_sequencer_controller_real_select_bank;
 
-  diskjokey_sequencer_controller->change_bpm = monothek_diskjokey_sequencer_controller_change_bpm;
-  diskjokey_sequencer_controller->change_swing = monothek_diskjokey_sequencer_controller_change_swing;
-  diskjokey_sequencer_controller->change_duration = monothek_diskjokey_sequencer_controller_change_duration;
+  diskjokey_sequencer_controller->change_bpm = monothek_diskjokey_sequencer_controller_real_change_bpm;
+  diskjokey_sequencer_controller->change_swing = monothek_diskjokey_sequencer_controller_real_change_swing;
+  diskjokey_sequencer_controller->change_duration = monothek_diskjokey_sequencer_controller_real_change_duration;
 
-  diskjokey_sequencer_controller->load_drum_kit = monothek_diskjokey_sequencer_controller_load_drum_kit;
+  diskjokey_sequencer_controller->load_drum_kit = monothek_diskjokey_sequencer_controller_real_load_drum_kit;
   
-  diskjokey_sequencer_controller->clear = monothek_diskjokey_sequencer_controller_clear;
-  diskjokey_sequencer_controller->random = monothek_diskjokey_sequencer_controller_random;
+  diskjokey_sequencer_controller->clear = monothek_diskjokey_sequencer_controller_real_clear;
+  diskjokey_sequencer_controller->random = monothek_diskjokey_sequencer_controller_real_random;
 
-  diskjokey_sequencer_controller->run = monothek_diskjokey_sequencer_controller_run;
+  diskjokey_sequencer_controller->run = monothek_diskjokey_sequencer_controller_real_run;
 
   /* signals */
   /**
@@ -368,7 +419,169 @@ monothek_diskjokey_sequencer_controller_connectable_interface_init(AgsConnectabl
 void
 monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //empty
+  MonothekActionBox *action_box;
+
+  guint i, j;
+
+  /* pattern */
+  diskjokey_sequencer_controller->pad = (MonothekActionBox ***) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT * sizeof(MonothekActionBox **));
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    diskjokey_sequencer_controller->pad[i] = (MonothekActionBox **) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT * sizeof(MonothekActionBox *));
+
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+      gchar *str;
+
+      str = g_strdup_printf("pad: %d,%d", j, i);
+      
+      diskjokey_sequencer_controller->pad[i][j] =
+	action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+							"action-identifier", str,
+							"x0", 160 + j * 80,
+							"y0", 80 + i * 80,
+							"width", 60,
+							"height", 60,
+							NULL);
+
+      monothek_controller_add_action_box(diskjokey_sequencer_controller,
+					 action_box);
+
+      g_free(str);
+    }
+  }
+
+  /* techno */
+  diskjokey_sequencer_controller->techno =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "techno",
+						    "x0", 1460,
+						    "y0", 80,
+						    "width", 420,
+						    "height", 140,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* house */
+  diskjokey_sequencer_controller->house =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "house",
+						    "x0", 1460,
+						    "y0", 240,
+						    "width", 420,
+						    "height", 140,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* hiphop */
+  diskjokey_sequencer_controller->hiphop =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "hiphop",
+						    "x0", 1460,
+						    "y0", 400,
+						    "width", 420,
+						    "height", 140,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* clear */
+  diskjokey_sequencer_controller->clear =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "clear",
+						    "x0", 1680,
+						    "y0", 560,
+						    "width", 200,
+						    "height", 60,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* random */
+  diskjokey_sequencer_controller->random =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "random",
+						    "x0", 1460,
+						    "y0", 560,
+						    "width", 200,
+						    "height", 60,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* run */
+  diskjokey_sequencer_controller->run =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "run",
+						    "x0", 1460,
+						    "y0", 880,
+						    "width", 420,
+						    "height", 140,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+  
+  /* tab #0 */
+  diskjokey_sequencer_controller->tab = (MonothekActionBox **) malloc(4 * sizeof(MonothekActionBox *));
+
+  diskjokey_sequencer_controller->tab[0] =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "tab: 0",
+						    "x0", 160,
+						    "y0", 800,
+						    "width", 300,
+						    "height", 60,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* tab #1 */
+  diskjokey_sequencer_controller->tab[1] =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "tab: 1",
+						    "x0", 480,
+						    "y0", 800,
+						    "width", 300,
+						    "height", 60,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* tab #2 */
+  diskjokey_sequencer_controller->tab[2] =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "tab: 2",
+						    "x0", 800,
+						    "y0", 800,
+						    "width", 300,
+						    "height", 60,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
+  /* tab #3 */
+  diskjokey_sequencer_controller->tab[3] =
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "tab: 3",
+						    "x0", 1120,
+						    "y0", 800,
+						    "width", 300,
+						    "height", 60,
+						    NULL);
+
+  monothek_controller_add_action_box(diskjokey_sequencer_controller,
+				     action_box);
+
 }
 
 void
@@ -387,6 +600,8 @@ monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable)
 {
   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
 
+  guint i, j;
+
   diskjokey_sequencer_controller = MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(connectable);
 
   if(monothek_controller_test_flags(diskjokey_sequencer_controller, MONOTHEK_CONTROLLER_CONNECTED)){
@@ -394,12 +609,69 @@ monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable)
   }
 
   monothek_diskjokey_sequencer_controller_parent_connectable_interface->connect(connectable);
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+      g_signal_connect(diskjokey_sequencer_controller->pad[i][j], "enter",
+		       G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_enter_callback), diskjokey_sequencer_controller);
+      g_signal_connect(diskjokey_sequencer_controller->pad[i][j], "leave",
+		       G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_leave_callback), diskjokey_sequencer_controller);
+      g_signal_connect(diskjokey_sequencer_controller->pad[i][j], "clicked",
+		       G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_clicked_callback), diskjokey_sequencer_controller);
+    }
+  }
+
+  g_signal_connect(diskjokey_sequencer_controller->techno, "enter",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_enter_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->techno, "leave",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_leave_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->techno, "clicked",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_clicked_callback), diskjokey_sequencer_controller);
+
+  g_signal_connect(diskjokey_sequencer_controller->house, "enter",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_house_enter_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->house, "leave",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_house_leave_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->house, "clicked",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_house_clicked_callback), diskjokey_sequencer_controller);
+
+  g_signal_connect(diskjokey_sequencer_controller->hiphop, "enter",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_enter_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->hiphop, "leave",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_leave_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->hiphop, "clicked",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_clicked_callback), diskjokey_sequencer_controller);
+
+  g_signal_connect(diskjokey_sequencer_controller->clear, "enter",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_enter_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->clear, "leave",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_leave_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->clear, "clicked",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_clicked_callback), diskjokey_sequencer_controller);
+
+  g_signal_connect(diskjokey_sequencer_controller->random, "enter",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_random_enter_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->random, "leave",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_random_leave_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->random, "clicked",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_random_clicked_callback), diskjokey_sequencer_controller);
+
+  for(i = 0; i < 4; i++){
+    g_signal_connect(diskjokey_sequencer_controller->tab[i], "enter",
+		     G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_enter_callback), diskjokey_sequencer_controller);
+    g_signal_connect(diskjokey_sequencer_controller->tab[i], "leave",
+		     G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_leave_callback), diskjokey_sequencer_controller);
+    g_signal_connect(diskjokey_sequencer_controller->tab[i], "clicked",
+		     G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_clicked_callback), diskjokey_sequencer_controller);
+  }
 }
 
 void
 monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 {
   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
+
+  guint i, j;
 
   diskjokey_sequencer_controller = MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(connectable);
 
@@ -408,13 +680,449 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
   }
 
   monothek_diskjokey_sequencer_controller_parent_connectable_interface->disconnect(connectable);
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+      g_object_disconnect(diskjokey_sequencer_controller->pad[i][j],
+			  "any_signal::enter",
+			  G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_enter_callback),
+			  diskjokey_sequencer_controller,
+			  "any_signal::leave",
+			  G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_leave_callback),
+			  diskjokey_sequencer_controller,
+			  "any_signal::clicked",
+			  G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_clicked_callback),
+			  diskjokey_sequencer_controller,
+			  NULL);
+    }
+  }
+
+  g_object_disconnect(diskjokey_sequencer_controller->techno,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_enter_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_leave_callback),
+		      diskjokey_sequencer_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_clicked_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
+
+  g_object_disconnect(diskjokey_sequencer_controller->house,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_house_enter_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_house_leave_callback),
+		      diskjokey_sequencer_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_house_clicked_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
+
+  g_object_disconnect(diskjokey_sequencer_controller->hiphop,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_enter_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_leave_callback),
+		      diskjokey_sequencer_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_clicked_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
+
+  g_object_disconnect(diskjokey_sequencer_controller->clear,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_enter_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_leave_callback),
+		      diskjokey_sequencer_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_clicked_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
+
+  g_object_disconnect(diskjokey_sequencer_controller->random,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_random_enter_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_random_leave_callback),
+		      diskjokey_sequencer_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_random_clicked_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
+
+  for(i = 0; i < 4; i++){
+    g_object_disconnect(diskjokey_sequencer_controller->tab[i],
+			"any_signal::enter",
+			G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_enter_callback), diskjokey_sequencer_controller,
+			diskjokey_sequencer_controller,
+			"any_signal::leave",
+			G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_leave_callback),
+			diskjokey_sequencer_controller,
+			"any_signal::clicked",
+			G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_clicked_callback),
+			diskjokey_sequencer_controller,
+			NULL);
+  }
+}
+
+void
+monothek_diskjokey_sequencer_controller_pad_enter_callback(MonothekActionBox *action_box,
+							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  gchar *action_identifier;
+  
+  guint x, y;
+  
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_get(action_box,
+	       "action-identifier", &action_identifier,
+	       NULL);
+  
+  sscanf(action_identifier, "pad: %d,%d", &x, &y);
+  
+  monothek_diskjokey_sequencer_model_set_pad_active(model,
+						    x, y,
+						    TRUE);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_diskjokey_sequencer_controller_pad_leave_callback(MonothekActionBox *action_box,
+							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GList *start_pattern;
+
+  gchar *action_identifier;  
+
+  guint x, y;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_get(action_box,
+	       "action-identifier", &action_identifier,
+	       NULL);
+  
+  sscanf(action_identifier, "pad: %d,%d", &x, &y);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* input */
+  sequencer = rack->sequencer;
+  g_object_get(sequencer,
+	       "input", &channel,
+	       NULL);
+  
+  channel = ags_channel_pad_nth(channel,
+				y);
+
+  g_object_get(channel,
+	       "pattern", &start_pattern,
+	       NULL);
+
+  if(!ags_pattern_get_bit(start_pattern->data,
+			  0, 0, x)){
+    monothek_diskjokey_sequencer_model_set_pad_active(model,
+						      x, y,
+						      FALSE);
+    gtk_widget_queue_draw(view);
+  }
+}
+
+void
+monothek_diskjokey_sequencer_controller_pad_clicked_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GList *start_pattern;
+
+  gchar *action_identifier;
+  
+  guint x, y;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_get(action_box,
+	       "action-identifier", &action_identifier,
+	       NULL);
+  
+  sscanf(action_identifier, "pad: %d,%d", &x, &y);
+  
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* input */
+  sequencer = rack->sequencer;
+  g_object_get(sequencer,
+	       "input", &channel,
+	       NULL);
+  
+  channel = ags_channel_pad_nth(channel,
+				y);
+
+  g_object_get(channel,
+	       "pattern", &start_pattern,
+	       NULL);
+
+  if(ags_pattern_get_bit(start_pattern->data,
+			 0, 0, x)){
+    monothek_diskjokey_sequencer_model_set_pad_active(model,
+						      x, y,
+						      FALSE);
+  }else{
+    monothek_diskjokey_sequencer_model_set_pad_active(model,
+						      x, y,
+						      TRUE);
+  }
+  
+  gtk_widget_queue_draw(view);
+
+  monothek_diskjokey_sequencer_controller_toggle_pad(diskjokey_sequencer_controller,
+						     x, y);
+}
+
+void
+monothek_diskjokey_sequencer_controller_techno_enter_callback(MonothekActionBox *action_box,
+							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_techno_leave_callback(MonothekActionBox *action_box,
+							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_techno_clicked_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_house_enter_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_house_leave_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_house_clicked_callback(MonothekActionBox *action_box,
+							       MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_hiphop_enter_callback(MonothekActionBox *action_box,
+							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_hiphop_leave_callback(MonothekActionBox *action_box,
+							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_hiphop_clicked_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_random_enter_callback(MonothekActionBox *action_box,
+							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_random_leave_callback(MonothekActionBox *action_box,
+							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_random_clicked_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_clear_enter_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_clear_leave_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_clear_clicked_callback(MonothekActionBox *action_box,
+							       MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_tab_enter_callback(MonothekActionBox *action_box,
+							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBox *action_box,
+							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  //TODO:JK: implement me
 }
 
 void
 monothek_diskjokey_sequencer_controller_real_toggle_pad(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 							guint x, guint y)
 {
-  //TODO:JK: implement me
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  guint audio_channels;
+  guint i;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* input */
+  sequencer = rack->sequencer;
+  g_object_get(sequencer,
+	       "audio-channels", &audio_channels,
+	       "input", &channel,
+	       NULL);
+
+  channel = ags_channel_pad_nth(channel,
+				y);
+
+  for(i = 0; i < audio_channels; i++){
+    GList *start_pattern;
+
+    g_object_get(channel,
+		 "pattern", &start_pattern,
+		 NULL);
+    
+    ags_pattern_toggle_bit(start_pattern->data,
+			   0, 0, x);
+    
+    g_object_get(channel,
+		 "next", &channel,
+		 NULL);
+  }
 }
 
 /**

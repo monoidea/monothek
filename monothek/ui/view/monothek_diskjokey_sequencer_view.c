@@ -479,8 +479,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
       label = g_strdup(diskjokey_sequencer_model->techno_label[i]);
     }else if(diskjokey_sequencer_model->house_active){
       label = g_strdup(diskjokey_sequencer_model->house_label[i]);
-    }else if(diskjokey_sequencer_model->hip_hop_active){
-      label = g_strdup(diskjokey_sequencer_model->hip_hop_label[i]);
+    }else if(diskjokey_sequencer_model->hiphop_active){
+      label = g_strdup(diskjokey_sequencer_model->hiphop_label[i]);
     }else{
       label = g_strdup("(null)");
     }
@@ -1031,11 +1031,6 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
   }
   
   /* house */
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->house_box_x0, (double) diskjokey_sequencer_view->house_box_y0,
-		  (double) diskjokey_sequencer_view->house_box_width, (double) diskjokey_sequencer_view->house_box_height);
-  cairo_stroke(cr);
-
   {
     PangoLayout *layout;
     PangoFontDescription *desc;
@@ -1063,25 +1058,57 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) diskjokey_sequencer_view->house_box_x0 + ((diskjokey_sequencer_view->house_box_width / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 292.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       !diskjokey_sequencer_model->house_active){
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->house_box_x0 + ((diskjokey_sequencer_view->house_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 292.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->house_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->house_box_x0, (double) diskjokey_sequencer_view->house_box_y0,
+		      (double) diskjokey_sequencer_view->house_box_width, (double) diskjokey_sequencer_view->house_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->house_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->house_box_x0, (double) diskjokey_sequencer_view->house_box_y0,
+		      (double) diskjokey_sequencer_view->house_box_width, (double) diskjokey_sequencer_view->house_box_height);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->house_box_x0 + ((diskjokey_sequencer_view->house_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 292.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* free font string */
     g_free(diskjokey_font);
   }
 
   /* hiphop */
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->hiphop_box_x0, (double) diskjokey_sequencer_view->hiphop_box_y0,
-		  (double) diskjokey_sequencer_view->hiphop_box_width, (double) diskjokey_sequencer_view->hiphop_box_height);
-  cairo_stroke(cr);
-
   {
     PangoLayout *layout;
     PangoFontDescription *desc;
@@ -1109,14 +1136,51 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) diskjokey_sequencer_view->hiphop_box_x0 + ((diskjokey_sequencer_view->hiphop_box_width / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 452.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       !diskjokey_sequencer_model->hiphop_active){
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->hiphop_box_x0 + ((diskjokey_sequencer_view->hiphop_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 452.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->hiphop_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->hiphop_box_x0, (double) diskjokey_sequencer_view->hiphop_box_y0,
+		      (double) diskjokey_sequencer_view->hiphop_box_width, (double) diskjokey_sequencer_view->hiphop_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->hiphop_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->hiphop_box_x0, (double) diskjokey_sequencer_view->hiphop_box_y0,
+		      (double) diskjokey_sequencer_view->hiphop_box_width, (double) diskjokey_sequencer_view->hiphop_box_height);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->hiphop_box_x0 + ((diskjokey_sequencer_view->hiphop_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 452.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
 
     /* free font string */
     g_free(diskjokey_font);
@@ -1150,23 +1214,55 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) diskjokey_sequencer_view->random_box_x0 + ((diskjokey_sequencer_view->random_box_width / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 580.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       !diskjokey_sequencer_model->random_active){
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->random_box_x0 + ((diskjokey_sequencer_view->random_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 580.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->random_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->random_box_x0, (double) diskjokey_sequencer_view->random_box_y0,
+		      (double) diskjokey_sequencer_view->random_box_width, (double) diskjokey_sequencer_view->random_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->random_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->random_box_x0, (double) diskjokey_sequencer_view->random_box_y0,
+		      (double) diskjokey_sequencer_view->random_box_width, (double) diskjokey_sequencer_view->random_box_height);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->random_box_x0 + ((diskjokey_sequencer_view->random_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 580.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* free font string */
     g_free(diskjokey_font);
   }
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->random_box_x0, (double) diskjokey_sequencer_view->random_box_y0,
-		  (double) diskjokey_sequencer_view->random_box_width, (double) diskjokey_sequencer_view->random_box_height);
-  cairo_stroke(cr);
 
   /* clear */
   {
@@ -1196,23 +1292,55 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) diskjokey_sequencer_view->clear_box_x0 + ((diskjokey_sequencer_view->clear_box_width / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 580.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       !diskjokey_sequencer_model->clear_active){
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->clear_box_x0 + ((diskjokey_sequencer_view->clear_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 580.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->clear_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->clear_box_x0, (double) diskjokey_sequencer_view->clear_box_y0,
+		      (double) diskjokey_sequencer_view->clear_box_width, (double) diskjokey_sequencer_view->clear_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->clear_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->clear_box_x0, (double) diskjokey_sequencer_view->clear_box_y0,
+		      (double) diskjokey_sequencer_view->clear_box_width, (double) diskjokey_sequencer_view->clear_box_height);
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+      
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->clear_box_x0 + ((diskjokey_sequencer_view->clear_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 580.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* free font string */
     g_free(diskjokey_font);
   }
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->clear_box_x0, (double) diskjokey_sequencer_view->clear_box_y0,
-		  (double) diskjokey_sequencer_view->clear_box_width, (double) diskjokey_sequencer_view->clear_box_height);
-  cairo_stroke(cr);
 
   /* timer */
   {
@@ -1277,14 +1405,16 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 
     g_object_unref(layout);
 
+    cairo_set_line_width(cr,
+			 diskjokey_sequencer_view->timer_box_line_width);
+    cairo_rectangle(cr,
+		    (double) diskjokey_sequencer_view->timer_box_x0, (double) diskjokey_sequencer_view->timer_box_y0,
+		    (double) diskjokey_sequencer_view->timer_box_width, (double) diskjokey_sequencer_view->timer_box_height);
+    cairo_stroke(cr);
+
     /* free font string */
     g_free(diskjokey_font);
   }
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->timer_box_x0, (double) diskjokey_sequencer_view->timer_box_y0,
-		  (double) diskjokey_sequencer_view->timer_box_width, (double) diskjokey_sequencer_view->timer_box_height);
-  cairo_stroke(cr);
 
   /* stop */
   {
@@ -1314,23 +1444,55 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     pango_layout_get_pixel_extents(layout,
 				   &ink_rect,
 				   &logical_rect);
-    cairo_move_to(cr,
-		  (double) diskjokey_sequencer_view->stop_box_x0 + ((diskjokey_sequencer_view->stop_box_width / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 932.0);
 
-    pango_cairo_update_layout(cr, layout);
-    pango_cairo_show_layout(cr, layout);
+    if(diskjokey_sequencer_model == NULL ||
+       !diskjokey_sequencer_model->run_active){
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->stop_box_x0 + ((diskjokey_sequencer_view->stop_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 932.0);
 
-    g_object_unref(layout);
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
 
+      g_object_unref(layout);
+
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->stop_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->stop_box_x0, (double) diskjokey_sequencer_view->stop_box_y0,
+		      (double) diskjokey_sequencer_view->stop_box_width, (double) diskjokey_sequencer_view->stop_box_height);
+      cairo_stroke(cr);
+    }else{
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->stop_box_line_width);
+      cairo_rectangle(cr,
+		      (double) diskjokey_sequencer_view->stop_box_x0, (double) diskjokey_sequencer_view->stop_box_y0,
+		      (double) diskjokey_sequencer_view->stop_box_width, (double) diskjokey_sequencer_view->stop_box_height);
+      cairo_fill(cr);
+
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+      
+      cairo_move_to(cr,
+		    (double) diskjokey_sequencer_view->stop_box_x0 + ((diskjokey_sequencer_view->stop_box_width / 2.0) - (logical_rect.width / 2.0)),
+		    (double) 932.0);
+
+      pango_cairo_update_layout(cr, layout);
+      pango_cairo_show_layout(cr, layout);
+
+      g_object_unref(layout);
+
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+    
     /* free font string */
     g_free(diskjokey_font);
   }
-
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->stop_box_x0, (double) diskjokey_sequencer_view->stop_box_y0,
-		  (double) diskjokey_sequencer_view->stop_box_width, (double) diskjokey_sequencer_view->stop_box_height);
-  cairo_stroke(cr);
   
   /* paint */
   cairo_pop_group_to_source(cr);

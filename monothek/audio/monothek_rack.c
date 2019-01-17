@@ -822,6 +822,10 @@ monothek_rack_create_sequencer(MonothekRack *rack)
   ags_audio_set_behaviour_flags(audio, (AGS_SOUND_BEHAVIOUR_PATTERN_MODE |
                                         AGS_SOUND_BEHAVIOUR_REVERSE_MAPPING |
                                         AGS_SOUND_BEHAVIOUR_DEFAULTS_TO_INPUT));
+
+  audio->bank_dim[0] = 1;
+  audio->bank_dim[1] = 1;
+  audio->bank_dim[2] = 64;
   
   ags_connectable_connect(audio);
   
