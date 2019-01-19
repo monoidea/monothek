@@ -812,7 +812,7 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 
     diskjokey_font = g_strdup_printf("%s Bold", view->font);
 
-    bpm = g_strdup_printf("120");
+    bpm = g_strdup_printf("%.0f", diskjokey_sequencer_model->bpm);
     
     /* bpm */
     layout = pango_cairo_create_layout(cr);
@@ -870,7 +870,7 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
   cairo_fill(cr);
 
   cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->bpm_control_x0, (double) diskjokey_sequencer_view->bpm_control_y0 - 10.0,
+		  (double) diskjokey_sequencer_view->bpm_control_x0 + ((gdouble) diskjokey_sequencer_view->bpm_control_width / (diskjokey_sequencer_model->bpm_upper - diskjokey_sequencer_model->bpm_lower) * (diskjokey_sequencer_model->bpm - diskjokey_sequencer_model->bpm_lower)), (double) diskjokey_sequencer_view->bpm_control_y0 - 10.0,
 		  (double) 40.0, (double) 40.0);
   cairo_fill(cr);
 

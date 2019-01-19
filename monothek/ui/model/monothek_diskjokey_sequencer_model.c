@@ -264,7 +264,9 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->tab_active[i] = FALSE;
   }
   
-  diskjokey_sequencer_model->bpm = 120.0;
+  diskjokey_sequencer_model->bpm_upper = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER;
+  diskjokey_sequencer_model->bpm_lower = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER;
+  diskjokey_sequencer_model->bpm = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT;
 
   diskjokey_sequencer_model->swing = 0.0;
 

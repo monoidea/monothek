@@ -607,8 +607,8 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
     action_slider = (MonothekActionSlider *) g_object_new(MONOTHEK_TYPE_ACTION_SLIDER,
 							  "action-identifier", "bpm",
 							  "x0", 160,
-							  "y0", 880,
-							  "width", 140,
+							  "y0", 990 - 20,
+							  "width", 620,
 							  "height", 60,
 							  NULL);
   
@@ -822,6 +822,15 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 			diskjokey_sequencer_controller,
 			NULL);
   }
+
+  g_object_disconnect(diskjokey_sequencer_controller->bpm,
+		      "any_signal::change-value",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_change_value_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::move-slider",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_move_slider_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
 
   g_object_disconnect(diskjokey_sequencer_controller->run,
 		      "any_signal::enter",
@@ -1385,6 +1394,19 @@ monothek_diskjokey_sequencer_controller_bpm_change_value_callback(MonothekAction
 								  gdouble new_value,
 								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  model->bpm = new_value;
+  gtk_widget_queue_draw(view);
+  
   monothek_diskjokey_sequencer_controller_change_bpm(diskjokey_sequencer_controller,
 						     new_value);
 }
@@ -1700,7 +1722,22 @@ void
 monothek_diskjokey_sequencer_controller_real_change_bpm(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 							gdouble bpm)
 {
-  //TODO:JK: implement me
+  AgsApplyBpm *apply_bpm;
+
+  AgsTaskThread *task_thread;
+
+  AgsApplicationContext *application_context;
+
+  application_context = ags_application_context_get_instance();
+
+  task_thread = ags_concurrency_provider_get_task_thread(AGS_CONCURRENCY_PROVIDER(application_context));
+
+  /* get task thread */
+  apply_bpm = ags_apply_bpm_new(application_context,
+				bpm);
+
+  ags_task_thread_append_task(task_thread,
+			      apply_bpm);
 }
 
 /**
