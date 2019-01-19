@@ -199,6 +199,7 @@ deprecated_libmonothek_controller_h_sources =
 libmonothek_controller_h_sources = \
 	$(deprecated_libmonothek_controller_h_sources) \
 	monothek/ui/controller/monothek_action_box.h \
+	monothek/ui/controller/monothek_action_slider.h \
 	monothek/ui/controller/monothek_start_controller.h \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
@@ -216,6 +217,7 @@ deprecated_libmonothek_controller_c_sources =
 libmonothek_controller_c_sources = \
 	$(deprecated_libmonothek_controller_c_sources) \
 	monothek/ui/controller/monothek_action_box.c \
+	monothek/ui/controller/monothek_action_slider.c \
 	monothek/ui/controller/monothek_start_controller.c \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
@@ -276,8 +278,8 @@ monothek_ui_c_sources = \
 	monothek/monothek_main.c
 
 gen-marshallers:
-	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list >> monothek/object/monothek_marshal.h
-	glib-genmarshal --prefix=monothek_cclosure_marshal --body monothek/object/monothek_marshallers.list >> monothek/object/monothek_marshal.c
+	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.h
+	glib-genmarshal --prefix=monothek_cclosure_marshal --body monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.c
 	echo "generated marshallers in monothek/object/"
 
 check-gettext:

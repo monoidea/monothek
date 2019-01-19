@@ -71,6 +71,7 @@ enum{
   PROP_MODEL,
   PROP_VIEW,
   PROP_ACTION_BOX,
+  PROP_ACTION_SLIDER,
 };
 
 static gpointer monothek_controller_parent_class = NULL;
@@ -180,6 +181,21 @@ monothek_controller_class_init(MonothekControllerClass *controller)
   g_object_class_install_property(gobject,
 				  PROP_ACTION_BOX,
 				  param_spec);
+  
+  /**
+   * MonothekControlelr:action-slider:
+   *
+   * The assigned #GList-struct containing #MonothekActionSlider.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_pointer("action-slider",
+				    i18n_pspec("action slider list"),
+				    i18n_pspec("The action slider list"),
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_ACTION_SLIDER,
+				  param_spec);
 }
 
 void
@@ -202,6 +218,7 @@ monothek_controller_init(MonothekController *controller)
   controller->view = NULL;
 
   controller->action_box = NULL;
+  controller->action_slider = NULL;
 }
 
 void
@@ -267,6 +284,16 @@ monothek_controller_set_property(GObject *gobject,
 					 action_box);
     }
     break;
+  case PROP_ACTION_SLIDER:
+    {
+      MonothekActionSlider *action_slider;
+
+      action_slider = g_value_get_pointer(value);
+      
+      monothek_controller_add_action_slider(controller,
+					    action_slider);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -302,6 +329,12 @@ monothek_controller_get_property(GObject *gobject,
 			  g_list_copy(controller->action_box));
     }
     break;
+  case PROP_ACTION_SLIDER:
+    {
+      g_value_set_pointer(value,
+			  g_list_copy(controller->action_slider));
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -320,6 +353,9 @@ monothek_controller_finalize(GObject *gobject)
   }
   
   g_list_free_full(controller->action_box,
+		   g_object_unref);
+
+  g_list_free_full(controller->action_slider,
 		   g_object_unref);
   
   /* call parent */
@@ -469,6 +505,7 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
 {
   GList *list_start, *list;
 
+  /* action box */
   g_object_get(controller,
 	       "action-box", &list_start,
 	       NULL);
@@ -498,6 +535,51 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
 
   g_list_free(list_start);
 
+  /* action slider */
+  g_object_get(controller,
+	       "action-slider", &list_start,
+	       NULL);
+
+  list = list_start;
+
+  while(list != NULL){
+    guint x0, y0;
+    guint width, height;
+
+    g_object_get(G_OBJECT(list->data),
+		 "x0", &x0,
+		 "y0", &y0,
+		 "width", &width,
+		 "height", &height,
+		 NULL);
+
+    if(x0 <= ((GdkEventButton *) event)->x &&
+       x0 + width > ((GdkEventButton *) event)->x &&
+       y0 <= ((GdkEventButton *) event)->y &&
+       y0 + height > ((GdkEventButton *) event)->y){
+      GtkAdjustment *adjustment;
+      
+      gdouble new_value;
+
+      adjustment = MONOTHEK_ACTION_SLIDER(list->data)->adjustment;
+      
+      if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
+	new_value = (adjustment->upper - adjustment->lower) / width * (((GdkEventButton *) event)->x - x0);
+      }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
+	new_value = (adjustment->upper - adjustment->lower) / height * (((GdkEventButton *) event)->y - y0);
+      }
+      
+      monothek_action_slider_change_value(list->data,
+					  new_value);
+      monothek_action_slider_move_slider(list->data);
+      monothek_action_slider_value_changed(list->data);
+    }
+    
+    list = list->next;
+  }
+
+  g_list_free(list_start);
+  
   return(FALSE);
 }
 
@@ -650,6 +732,56 @@ monothek_controller_remove_action_box(MonothekController *controller,
     g_object_unref(action_box);
     controller->action_box = g_list_remove(controller->action_box,
 					   action_box);
+  }
+}
+
+/**
+ * monothek_controller_add_action_slider:
+ * @controller: the #MonothekController
+ * @action_slider: the #MonothekActionSlider
+ * 
+ * Add @action_slider to @controller.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_controller_add_action_slider(MonothekController *controller,
+				      MonothekActionSlider *action_slider)
+{
+  if(!MONOTHEK_IS_CONTROLLER(controller) ||
+     !MONOTHEK_IS_ACTION_SLIDER(action_slider)){
+    return;
+  }
+
+  if(g_list_find(controller->action_slider, action_slider) == NULL){
+    g_object_ref(action_slider);
+    controller->action_slider = g_list_prepend(controller->action_slider,
+					       action_slider);
+  }
+}
+
+/**
+ * monothek_controller_remove_action_slider:
+ * @controller: the #MonothekController
+ * @action_slider: the #MonothekActionSlider
+ * 
+ * Remove @action_slider from @controller.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_controller_remove_action_slider(MonothekController *controller,
+					 MonothekActionSlider *action_slider)
+{
+  if(!MONOTHEK_IS_CONTROLLER(controller) ||
+     !MONOTHEK_IS_ACTION_SLIDER(action_slider)){
+    return;
+  }
+
+  if(g_list_find(controller->action_slider, action_slider) != NULL){
+    g_object_unref(action_slider);
+    controller->action_slider = g_list_remove(controller->action_slider,
+					      action_slider);
   }
 }
 

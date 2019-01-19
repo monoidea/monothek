@@ -92,6 +92,18 @@ void monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBo
 void monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *action_box,
 								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
+void monothek_diskjokey_sequencer_controller_bpm_change_value_callback(MonothekActionBox *action_box,
+								       gdouble new_value,
+								       MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_bpm_move_slider_callback(MonothekActionBox *action_box,
+								      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
+void monothek_diskjokey_sequencer_controller_swing_change_value_callback(MonothekActionBox *action_box,
+									 gdouble new_value,
+									 MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_swing_move_slider_callback(MonothekActionBox *action_box,
+									MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
 void monothek_diskjokey_sequencer_controller_run_enter_callback(MonothekActionBox *action_box,
 								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 void monothek_diskjokey_sequencer_controller_run_leave_callback(MonothekActionBox *action_box,
@@ -427,6 +439,7 @@ void
 monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
   MonothekActionBox *action_box;
+  MonothekActionSlider *action_slider;
 
   guint i, j;
 
@@ -589,6 +602,22 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
   monothek_controller_add_action_box(diskjokey_sequencer_controller,
 				     action_box);
 
+  /* bpm */
+  diskjokey_sequencer_controller->bpm =
+    action_slider = (MonothekActionSlider *) g_object_new(MONOTHEK_TYPE_ACTION_SLIDER,
+							  "action-identifier", "bpm",
+							  "x0", 160,
+							  "y0", 880,
+							  "width", 140,
+							  "height", 60,
+							  NULL);
+  
+  action_slider->adjustment->upper = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER;
+  action_slider->adjustment->lower = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER;
+  action_slider->adjustment->value = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT;
+  
+  monothek_controller_add_action_slider(diskjokey_sequencer_controller,
+					action_slider);
 }
 
 void
@@ -672,6 +701,11 @@ monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable)
 		     G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_clicked_callback), diskjokey_sequencer_controller);
   }
 
+  g_signal_connect(diskjokey_sequencer_controller->bpm, "change-value",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_change_value_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->bpm, "move-slider",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_move_slider_callback), diskjokey_sequencer_controller);
+  
   g_signal_connect(diskjokey_sequencer_controller->run, "enter",
 		   G_CALLBACK(monothek_diskjokey_sequencer_controller_run_enter_callback), diskjokey_sequencer_controller);
   g_signal_connect(diskjokey_sequencer_controller->run, "leave",
@@ -1343,6 +1377,52 @@ monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *
   sscanf(action_identifier, "tab: %d", &x);
 
   model->current_tab = x;
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_diskjokey_sequencer_controller_bpm_change_value_callback(MonothekActionBox *action_box,
+								  gdouble new_value,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  monothek_diskjokey_sequencer_controller_change_bpm(diskjokey_sequencer_controller,
+						     new_value);
+}
+
+void
+monothek_diskjokey_sequencer_controller_bpm_move_slider_callback(MonothekActionBox *action_box,
+								 MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "view", &view,
+	       NULL);
+
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_diskjokey_sequencer_controller_swing_change_value_callback(MonothekActionBox *action_box,
+								    gdouble new_value,
+								    MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  monothek_diskjokey_sequencer_controller_change_swing(diskjokey_sequencer_controller,
+						       new_value);
+}
+
+void
+monothek_diskjokey_sequencer_controller_swing_move_slider_callback(MonothekActionBox *action_box,
+								   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "view", &view,
+	       NULL);
+
   gtk_widget_queue_draw(view);
 }
 

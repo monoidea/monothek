@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 
 #include <monothek/ui/controller/monothek_action_box.h>
+#include <monothek/ui/controller/monothek_action_slider.h>
 
 #include <monothek/ui/view/monothek_view.h>
 
@@ -60,6 +61,7 @@ struct _MonothekController
   MonothekView *view;
 
   GList *action_box;
+  GList *action_slider;
 };
 
 struct _MonothekControllerClass
@@ -73,14 +75,22 @@ gboolean monothek_controller_test_flags(MonothekController *controller, guint fl
 void monothek_controller_set_flags(MonothekController *controller, guint flags);
 void monothek_controller_unset_flags(MonothekController *controller, guint flags);
 
+/* fields */
 void monothek_controller_add_action_box(MonothekController *controller,
 					MonothekActionBox *action_box);
 void monothek_controller_remove_action_box(MonothekController *controller,
 					   MonothekActionBox *action_box);
 
+void monothek_controller_add_action_slider(MonothekController *controller,
+					   MonothekActionSlider *action_slider);
+void monothek_controller_remove_action_slider(MonothekController *controller,
+					      MonothekActionSlider *action_slider);
+
+/* query */
 GList* monothek_controller_find_view_type(GList *list,
 					  GType view_type);
 
+/* instantiate */
 MonothekController* monothek_controller_new();
 
 #endif /*__MONOTHEK_CONTROLLER_H__*/

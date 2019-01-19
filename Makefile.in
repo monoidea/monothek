@@ -199,6 +199,7 @@ am__objects_10 = $(am__objects_1) \
 	monothek/ui/model/libmonothek_la-monothek_diskjokey_qrcode_model.lo
 am__objects_11 = $(am__objects_1) \
 	monothek/ui/controller/libmonothek_la-monothek_action_box.lo \
+	monothek/ui/controller/libmonothek_la-monothek_action_slider.lo \
 	monothek/ui/controller/libmonothek_la-monothek_start_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_payment_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo \
@@ -283,6 +284,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo \
 	monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo \
+	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo \
@@ -764,6 +766,7 @@ deprecated_libmonothek_controller_h_sources =
 libmonothek_controller_h_sources = \
 	$(deprecated_libmonothek_controller_h_sources) \
 	monothek/ui/controller/monothek_action_box.h \
+	monothek/ui/controller/monothek_action_slider.h \
 	monothek/ui/controller/monothek_start_controller.h \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
@@ -780,6 +783,7 @@ deprecated_libmonothek_controller_c_sources =
 libmonothek_controller_c_sources = \
 	$(deprecated_libmonothek_controller_c_sources) \
 	monothek/ui/controller/monothek_action_box.c \
+	monothek/ui/controller/monothek_action_slider.c \
 	monothek/ui/controller/monothek_start_controller.c \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
@@ -1115,6 +1119,9 @@ monothek/ui/controller/$(DEPDIR)/$(am__dirstamp):
 monothek/ui/controller/libmonothek_la-monothek_action_box.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/controller/libmonothek_la-monothek_action_slider.lo:  \
+	monothek/ui/controller/$(am__dirstamp) \
+	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/controller/libmonothek_la-monothek_start_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
@@ -1258,6 +1265,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo@am__quote@ # am--include-marker
@@ -1545,6 +1553,13 @@ monothek/ui/controller/libmonothek_la-monothek_action_box.lo: monothek/ui/contro
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_action_box.c' object='monothek/ui/controller/libmonothek_la-monothek_action_box.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_action_box.lo `test -f 'monothek/ui/controller/monothek_action_box.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_action_box.c
+
+monothek/ui/controller/libmonothek_la-monothek_action_slider.lo: monothek/ui/controller/monothek_action_slider.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_action_slider.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_action_slider.lo `test -f 'monothek/ui/controller/monothek_action_slider.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_action_slider.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_action_slider.c' object='monothek/ui/controller/libmonothek_la-monothek_action_slider.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_action_slider.lo `test -f 'monothek/ui/controller/monothek_action_slider.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_action_slider.c
 
 monothek/ui/controller/libmonothek_la-monothek_start_controller.lo: monothek/ui/controller/monothek_start_controller.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_start_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_start_controller.lo `test -f 'monothek/ui/controller/monothek_start_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_start_controller.c
@@ -2142,6 +2157,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo
@@ -2247,6 +2263,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_application_context.Plo
 	-rm -f monothek/ui/$(DEPDIR)/libmonothek_la-monothek_window.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo
@@ -2336,8 +2353,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-libmonothekLTLIBRARIES
 
 
 gen-marshallers:
-	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list >> monothek/object/monothek_marshal.h
-	glib-genmarshal --prefix=monothek_cclosure_marshal --body monothek/object/monothek_marshallers.list >> monothek/object/monothek_marshal.c
+	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.h
+	glib-genmarshal --prefix=monothek_cclosure_marshal --body monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.c
 	echo "generated marshallers in monothek/object/"
 
 check-gettext:

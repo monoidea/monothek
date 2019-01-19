@@ -52,7 +52,7 @@ void monothek_action_box_real_released(MonothekActionBox *action_box);
  * @short_description: The  action_box object.
  * @title: MonothekActionBox
  * @section_id:
- * @include: monothek/ui/action_box/monothek_action_box.h
+ * @include: monothek/ui/controller/monothek_action_box.h
  *
  * #MonothekActionBox does listen do view's mouse events and synthesises
  * its very own events.
@@ -334,6 +334,8 @@ monothek_action_box_class_init(MonothekActionBoxClass *action_box)
 void
 monothek_action_box_init(MonothekActionBox *action_box)
 {
+  action_box->button_mask = 0;
+
   action_box->is_active = FALSE;
   
   action_box->action_identifier = NULL;
@@ -344,7 +346,6 @@ monothek_action_box_init(MonothekActionBox *action_box)
   action_box->width = 0;
   action_box->height = 0;
 }
-
 
 void
 monothek_action_box_set_property(GObject *gobject,

@@ -53,6 +53,9 @@ struct _MonothekDiskjokeySequencerController
   MonothekActionBox *run;
 
   MonothekActionBox **tab;
+
+  MonothekActionSlider *bpm;
+  MonothekActionSlider *swing;
 };
 
 struct _MonothekDiskjokeySequencerControllerClass

@@ -15,6 +15,15 @@ void monothek_cclosure_marshal_VOID__ULONG_ULONG (GClosure     *closure,
                                                   gpointer      invocation_hint,
                                                   gpointer      marshal_data);
 
+/* BOOLEAN:DOUBLE (monothek/object/monothek_marshallers.list:2) */
+extern
+void monothek_cclosure_marshal_BOOLEAN__DOUBLE (GClosure     *closure,
+                                                GValue       *return_value,
+                                                guint         n_param_values,
+                                                const GValue *param_values,
+                                                gpointer      invocation_hint,
+                                                gpointer      marshal_data);
+
 
 G_END_DECLS
 

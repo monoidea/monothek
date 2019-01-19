@@ -37,6 +37,14 @@
 
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT (4)
 
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER (100.0)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER (180.0)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT (120.0)
+
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_LOWER (0.0)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_UPPER (5.0)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT (0.0)
+
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME SRCDIR "/monothek.share/monothek/drumkit/techno.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
@@ -72,9 +80,13 @@ struct _MonothekDiskjokeySequencerModel
 
   guint current_tab;
   gboolean *tab_active;
-  
+
+  gdouble bpm_upper;
+  gdouble bpm_lower;
   gdouble bpm;
 
+  gdouble swing_upper;
+  gdouble swing_lower;
   gdouble swing;
   
   gchar **techno_label;
