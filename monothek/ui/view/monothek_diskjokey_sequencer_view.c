@@ -475,11 +475,11 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 
     diskjokey_font = g_strdup_printf("%s Bold", view->font);
 
-    if(diskjokey_sequencer_model->techno_active){
+    if(diskjokey_sequencer_model->current_genre == MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO){
       label = g_strdup(diskjokey_sequencer_model->techno_label[i]);
-    }else if(diskjokey_sequencer_model->house_active){
+    }else if(diskjokey_sequencer_model->current_genre == MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE){
       label = g_strdup(diskjokey_sequencer_model->house_label[i]);
-    }else if(diskjokey_sequencer_model->hiphop_active){
+    }else if(diskjokey_sequencer_model->current_genre == MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP){
       label = g_strdup(diskjokey_sequencer_model->hiphop_label[i]);
     }else{
       label = g_strdup("(null)");
@@ -560,7 +560,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       diskjokey_sequencer_model->current_tab != 0){
+       (diskjokey_sequencer_model->current_tab != 0 &&
+	!diskjokey_sequencer_model->tab_active[0])){
       cairo_move_to(cr,
 		    (double) 270.0,
 		    (double) 820.0);
@@ -620,7 +621,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       diskjokey_sequencer_model->current_tab != 1){
+       (diskjokey_sequencer_model->current_tab != 1 &&
+	!diskjokey_sequencer_model->tab_active[1])){
       cairo_move_to(cr,
 		    (double) 590.0,
 		    (double) 820.0);
@@ -680,7 +682,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       diskjokey_sequencer_model->current_tab != 2){
+       (diskjokey_sequencer_model->current_tab != 2 &&
+	!diskjokey_sequencer_model->tab_active[2])){
       cairo_move_to(cr,
 		    (double) 910.0,
 		    (double) 820.0);
@@ -740,7 +743,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       diskjokey_sequencer_model->current_tab != 3){
+       (diskjokey_sequencer_model->current_tab != 3 &&
+	!diskjokey_sequencer_model->tab_active[3])){
       cairo_move_to(cr,
 		    (double) 1230.0,
 		    (double) 820.0);
@@ -982,7 +986,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       !diskjokey_sequencer_model->techno_active){
+       (!diskjokey_sequencer_model->techno_active &&
+	diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO)){
       cairo_move_to(cr,
 		    (double) diskjokey_sequencer_view->techno_box_x0 + ((diskjokey_sequencer_view->techno_box_width / 2.0) - (logical_rect.width / 2.0)),
 		    (double) 132.0);
@@ -1060,7 +1065,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       !diskjokey_sequencer_model->house_active){
+       (!diskjokey_sequencer_model->house_active &&
+	diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE)){
       cairo_move_to(cr,
 		    (double) diskjokey_sequencer_view->house_box_x0 + ((diskjokey_sequencer_view->house_box_width / 2.0) - (logical_rect.width / 2.0)),
 		    (double) 292.0);
@@ -1138,7 +1144,8 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 				   &logical_rect);
 
     if(diskjokey_sequencer_model == NULL ||
-       !diskjokey_sequencer_model->hiphop_active){
+       (!diskjokey_sequencer_model->hiphop_active &&
+	diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP)){
       cairo_move_to(cr,
 		    (double) diskjokey_sequencer_view->hiphop_box_x0 + ((diskjokey_sequencer_view->hiphop_box_width / 2.0) - (logical_rect.width / 2.0)),
 		    (double) 452.0);

@@ -794,6 +794,8 @@ monothek_diskjokey_sequencer_controller_pad_enter_callback(MonothekActionBox *ac
 	       NULL);
   
   sscanf(action_identifier, "pad: %d,%d", &x, &y);
+
+  x += (model->current_tab * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT);
   
   monothek_diskjokey_sequencer_model_set_pad_active(model,
 						    x, y,
@@ -840,6 +842,8 @@ monothek_diskjokey_sequencer_controller_pad_leave_callback(MonothekActionBox *ac
 	       NULL);
   
   sscanf(action_identifier, "pad: %d,%d", &x, &y);
+
+  x += (model->current_tab * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT);
 
   /* get rack */
   rack_value = g_hash_table_lookup(session->value,
@@ -908,7 +912,8 @@ monothek_diskjokey_sequencer_controller_pad_clicked_callback(MonothekActionBox *
 	       NULL);
   
   sscanf(action_identifier, "pad: %d,%d", &x, &y);
-  
+
+  x += (model->current_tab * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT);
 
   /* get rack */
   rack_value = g_hash_table_lookup(session->value,
@@ -950,77 +955,214 @@ void
 monothek_diskjokey_sequencer_controller_techno_enter_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "techno-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_techno_leave_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "techno-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_techno_clicked_callback(MonothekActionBox *action_box,
 								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_house_enter_callback(MonothekActionBox *action_box,
 							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "house-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_house_leave_callback(MonothekActionBox *action_box,
 							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "house-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_house_clicked_callback(MonothekActionBox *action_box,
 							       MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE;
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_hiphop_enter_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "hiphop-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_hiphop_leave_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "hiphop-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_hiphop_clicked_callback(MonothekActionBox *action_box,
 								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP;
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_random_enter_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "random-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_random_leave_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "random-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
@@ -1034,14 +1176,40 @@ void
 monothek_diskjokey_sequencer_controller_clear_enter_callback(MonothekActionBox *action_box,
 							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "clear-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_clear_leave_callback(MonothekActionBox *action_box,
 							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "clear-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
 }
 
 void
@@ -1055,21 +1223,88 @@ void
 monothek_diskjokey_sequencer_controller_tab_enter_callback(MonothekActionBox *action_box,
 							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  gchar *action_identifier;  
+
+  guint x;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_get(action_box,
+	       "action-identifier", &action_identifier,
+	       NULL);
+  
+  sscanf(action_identifier, "tab: %d", &x);
+
+  monothek_diskjokey_sequencer_model_set_tab_active(model,
+						    x,
+						    TRUE);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBox *action_box,
 							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  gchar *action_identifier;  
+
+  guint x;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_get(action_box,
+	       "action-identifier", &action_identifier,
+	       NULL);
+  
+  sscanf(action_identifier, "tab: %d", &x);
+
+  monothek_diskjokey_sequencer_model_set_tab_active(model,
+						    x,
+						    FALSE);
+  gtk_widget_queue_draw(view);
 }
 
 void
 monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *action_box,
 							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  gchar *action_identifier;  
+
+  guint x;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_get(action_box,
+	       "action-identifier", &action_identifier,
+	       NULL);
+  
+  sscanf(action_identifier, "tab: %d", &x);
+
+  model->current_tab = x;
+  gtk_widget_queue_draw(view);
 }
 
 void

@@ -35,6 +35,8 @@
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT (9)
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT (64)
 
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT (4)
+
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME SRCDIR "/monothek.share/monothek/drumkit/techno.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
@@ -44,12 +46,19 @@
 typedef struct _MonothekDiskjokeySequencerModel MonothekDiskjokeySequencerModel;
 typedef struct _MonothekDiskjokeySequencerModelClass MonothekDiskjokeySequencerModelClass;
 
+typedef enum{
+  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO,
+  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE,
+  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP,
+}MonothekDiskjokeySequencerModelGenre;
+
 struct _MonothekDiskjokeySequencerModel
 {
   GObject gobject;
 
   gboolean **pad_active;
 
+  guint current_genre;
   gboolean techno_active;
   gboolean house_active;
   gboolean hiphop_active;
@@ -62,7 +71,8 @@ struct _MonothekDiskjokeySequencerModel
   gint active_column;
 
   guint current_tab;
-
+  gboolean *tab_active;
+  
   gdouble bpm;
 
   gdouble swing;
@@ -91,6 +101,12 @@ void monothek_diskjokey_sequencer_model_set_pad_active(MonothekDiskjokeySequence
 						       gboolean is_active);
 gboolean monothek_diskjokey_sequencer_model_get_pad_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
 							   guint x, guint y);
+
+void monothek_diskjokey_sequencer_model_set_tab_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
+						       guint x,
+						       gboolean is_active);
+gboolean monothek_diskjokey_sequencer_model_get_tab_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
+							   guint x);
 
 MonothekDiskjokeySequencerModel* monothek_diskjokey_sequencer_model_new();
 

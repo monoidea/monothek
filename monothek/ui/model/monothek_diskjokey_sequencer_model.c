@@ -59,6 +59,12 @@ void monothek_diskjokey_sequencer_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_TECHNO_ACTIVE,
+  PROP_HOUSE_ACTIVE,
+  PROP_HIPHOP_ACTIVE,
+  PROP_RANDOM_ACTIVE,
+  PROP_CLEAR_ACTIVE,
+  PROP_RUN_ACTIVE,
 };
 
 static gpointer monothek_diskjokey_sequencer_model_parent_class = NULL;
@@ -112,6 +118,101 @@ monothek_diskjokey_sequencer_model_class_init(MonothekDiskjokeySequencerModelCla
   gobject->finalize = monothek_diskjokey_sequencer_model_finalize;
 
   /* properties */
+  /**
+   * MonothekDiskjokeySequencerModel:techno-active:
+   *
+   * If techno is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("techno-active",
+				    i18n_pspec("techno active"),
+				    i18n_pspec("If techno is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_TECHNO_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeySequencerModel:house-active:
+   *
+   * If house is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("house-active",
+				    i18n_pspec("house active"),
+				    i18n_pspec("If house is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_HOUSE_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeySequencerModel:hiphop-active:
+   *
+   * If hiphop is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("hiphop-active",
+				    i18n_pspec("hiphop active"),
+				    i18n_pspec("If hiphop is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_HIPHOP_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeySequencerModel:random-active:
+   *
+   * If random is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("random-active",
+				    i18n_pspec("random active"),
+				    i18n_pspec("If random is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_RANDOM_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeySequencerModel:clear-active:
+   *
+   * If clear is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("clear-active",
+				    i18n_pspec("clear active"),
+				    i18n_pspec("If clear is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_CLEAR_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeySequencerModel:run-active:
+   *
+   * If run is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("run-active",
+				    i18n_pspec("run active"),
+				    i18n_pspec("If run is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_RUN_ACTIVE,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -141,6 +242,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     }
   }
 
+  diskjokey_sequencer_model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
+  
   diskjokey_sequencer_model->techno_active = TRUE;
   diskjokey_sequencer_model->house_active = FALSE;
   diskjokey_sequencer_model->hiphop_active = FALSE;
@@ -153,6 +256,13 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   diskjokey_sequencer_model->active_column = -1;
 
   diskjokey_sequencer_model->current_tab = 0;
+  diskjokey_sequencer_model->tab_active = (gboolean *) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT * sizeof(gboolean));
+
+  diskjokey_sequencer_model->tab_active[0] = TRUE;
+  
+  for(i = 1; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; i++){
+    diskjokey_sequencer_model->tab_active[i] = FALSE;
+  }
   
   diskjokey_sequencer_model->bpm = 120.0;
 
@@ -355,6 +465,36 @@ monothek_diskjokey_sequencer_model_set_property(GObject *gobject,
   diskjokey_sequencer_model = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_TECHNO_ACTIVE:
+    {
+      diskjokey_sequencer_model->techno_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_HOUSE_ACTIVE:
+    {
+      diskjokey_sequencer_model->house_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_HIPHOP_ACTIVE:
+    {
+      diskjokey_sequencer_model->hiphop_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_RANDOM_ACTIVE:
+    {
+      diskjokey_sequencer_model->random_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_CLEAR_ACTIVE:
+    {
+      diskjokey_sequencer_model->clear_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_RUN_ACTIVE:
+    {
+      diskjokey_sequencer_model->run_active = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -372,6 +512,42 @@ monothek_diskjokey_sequencer_model_get_property(GObject *gobject,
   diskjokey_sequencer_model = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_TECHNO_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_sequencer_model->techno_active);
+    }
+    break;
+  case PROP_HOUSE_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_sequencer_model->house_active);
+    }
+    break;
+  case PROP_HIPHOP_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_sequencer_model->hiphop_active);
+    }
+    break;
+  case PROP_RANDOM_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_sequencer_model->random_active);
+    }
+    break;
+  case PROP_CLEAR_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_sequencer_model->clear_active);
+    }
+    break;
+  case PROP_RUN_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_sequencer_model->run_active);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -389,6 +565,17 @@ monothek_diskjokey_sequencer_model_finalize(GObject *gobject)
   G_OBJECT_CLASS(monothek_diskjokey_sequencer_model_parent_class)->finalize(gobject);
 }
 
+/**
+ * monothek_diskjokey_sequencer_model_set_pad_active:
+ * @diskjokey_sequencer_model: the #MonothekDiskjokeySequencerModel
+ * @x: the pad's x position
+ * @y: the pad's y position
+ * @is_active: if %TRUE is active, otherwise %FALSE inactive
+ * 
+ * Set pad active at position @x and @y.
+ * 
+ * Since: 1.0.0
+ */
 void
 monothek_diskjokey_sequencer_model_set_pad_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
 						  guint x, guint y,
@@ -397,6 +584,18 @@ monothek_diskjokey_sequencer_model_set_pad_active(MonothekDiskjokeySequencerMode
   diskjokey_sequencer_model->pad_active[y][x] = is_active;
 }
 
+/**
+ * monothek_diskjokey_sequencer_model_set_pad_active:
+ * @diskjokey_sequencer_model: the #MonothekDiskjokeySequencerModel
+ * @x: the pad's x position
+ * @y: the pad's y position
+ * 
+ * Get pad active at position @x and @y.
+ * 
+ * Returns: %TRUE if active, otherwise %FALSE
+ * 
+ * Since: 1.0.0
+ */
 gboolean
 monothek_diskjokey_sequencer_model_get_pad_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
 						  guint x, guint y)
@@ -404,6 +603,46 @@ monothek_diskjokey_sequencer_model_get_pad_active(MonothekDiskjokeySequencerMode
   gboolean is_active;
   
   is_active = diskjokey_sequencer_model->pad_active[y][x];
+
+  return(is_active);
+}
+
+/**
+ * monothek_diskjokey_sequencer_model_set_tab_active:
+ * @diskjokey_sequencer_model: the #MonothekDiskjokeySequencerModel
+ * @x: the tab's x position
+ * @is_active: if %TRUE is active, otherwise %FALSE inactive
+ * 
+ * Set tab active at position @x.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_diskjokey_sequencer_model_set_tab_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
+						  guint x,
+						  gboolean is_active)
+{
+  diskjokey_sequencer_model->tab_active[x] = is_active;
+}
+
+/**
+ * monothek_diskjokey_sequencer_model_set_tab_active:
+ * @diskjokey_sequencer_model: the #MonothekDiskjokeySequencerModel
+ * @x: the tab's x position
+ * 
+ * Get tab active at position @x.
+ * 
+ * Returns: %TRUE if active, otherwise %FALSE
+ * 
+ * Since: 1.0.0
+ */
+gboolean
+monothek_diskjokey_sequencer_model_get_tab_active(MonothekDiskjokeySequencerModel *diskjokey_sequencer_model,
+						  guint x)
+{
+  gboolean is_active;
+  
+  is_active = diskjokey_sequencer_model->tab_active[x];
 
   return(is_active);
 }
