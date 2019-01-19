@@ -998,6 +998,17 @@ monothek_rack_create_sequencer(MonothekRack *rack)
 		 NULL);
   }
 
+  /* ags-volume */
+  ags_recall_factory_create(audio,
+			    NULL, NULL,
+			    "ags-volume",
+			    0, audio_channels,
+			    0, MONOTHEK_RACK_DEFAULT_SEQUENCER_INPUT_PADS,
+			    (AGS_RECALL_FACTORY_INPUT |
+			     AGS_RECALL_FACTORY_RECALL |
+			     AGS_RECALL_FACTORY_ADD),
+			    0);
+
   /* ags-buffer */
   ags_recall_factory_create(audio,
 			    NULL, NULL,
@@ -1008,7 +1019,8 @@ monothek_rack_create_sequencer(MonothekRack *rack)
 			     AGS_RECALL_FACTORY_RECALL |
 			     AGS_RECALL_FACTORY_ADD),
 			    0);
-    
+
+  /* ags-stream */
   ags_recall_factory_create(audio,
 			    NULL, NULL,
 			    "ags-stream",

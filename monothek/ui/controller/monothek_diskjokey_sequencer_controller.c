@@ -1876,6 +1876,11 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
       AgsAudioFile *audio_file;
 
       GList *audio_signal;
+      GList *start_recall, *recall;
+      
+      gchar *str;
+
+      guint pad;
       
       for(i = 0; i < audio_channels; i++){
 	g_message("%s", iter[0]);
@@ -1896,7 +1901,9 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	audio_signal = audio_file->audio_signal;
       
 	g_object_get(input,
+		     "pad", &pad,
 		     "first-recycling", &recycling,
+		     "recall", &start_recall,
 		     NULL);
 
 	ags_audio_signal_set_flags(audio_signal->data,
@@ -1904,6 +1911,34 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	ags_recycling_add_audio_signal(recycling,
 				       audio_signal->data);
 
+	/* apply know controls */
+	str = g_hash_table_lookup(model->techno_control[pad],
+				  "volume");
+
+	if(str != NULL){
+	  recall = ags_recall_template_find_type(start_recall,
+						 AGS_TYPE_VOLUME_CHANNEL);
+
+	  if(recall != NULL){
+	    AgsPort *port;
+	    
+	    GValue value = {0,};
+
+	    g_object_get(recall->data,
+			 "./volume[0]", &port,
+			 NULL);
+
+	    g_value_init(&value, G_TYPE_FLOAT);
+	    g_value_set_float(&value, g_ascii_strtod(str,
+						     NULL));
+
+	    ags_port_safe_write(port,
+				&value);
+	  }
+	}
+
+	g_list_free(start_recall);
+	
 	/* iterate */
 	g_object_get(input,
 		     "next", &input,
@@ -1921,6 +1956,11 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
       AgsAudioFile *audio_file;
 
       GList *audio_signal;
+      GList *start_recall, *recall;
+      
+      gchar *str;
+
+      guint pad;
 
       /* open audio file and read audio signal */
       audio_file = ags_audio_file_new(iter[0],
@@ -1946,6 +1986,34 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 				   AGS_AUDIO_SIGNAL_TEMPLATE);
 	ags_recycling_add_audio_signal(recycling,
 				       audio_signal->data);
+
+	/* apply know controls */
+	str = g_hash_table_lookup(model->house_control[pad],
+				  "volume");
+
+	if(str != NULL){
+	  recall = ags_recall_template_find_type(start_recall,
+						 AGS_TYPE_VOLUME_CHANNEL);
+
+	  if(recall != NULL){
+	    AgsPort *port;
+	    
+	    GValue value = {0,};
+
+	    g_object_get(recall->data,
+			 "./volume[0]", &port,
+			 NULL);
+
+	    g_value_init(&value, G_TYPE_FLOAT);
+	    g_value_set_float(&value, g_ascii_strtod(str,
+						     NULL));
+
+	    ags_port_safe_write(port,
+				&value);
+	  }
+	}
+
+	g_list_free(start_recall);
 
 	/* iterate */
 	g_object_get(input,
@@ -1964,6 +2032,11 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
       AgsAudioFile *audio_file;
 
       GList *audio_signal;
+      GList *start_recall, *recall;
+      
+      gchar *str;
+
+      guint pad;
 
       /* open audio file and read audio signal */
       audio_file = ags_audio_file_new(iter[0],
@@ -1989,6 +2062,34 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 				   AGS_AUDIO_SIGNAL_TEMPLATE);
 	ags_recycling_add_audio_signal(recycling,
 				       audio_signal->data);
+
+	/* apply know controls */
+	str = g_hash_table_lookup(model->hiphop_control[pad],
+				  "volume");
+
+	if(str != NULL){
+	  recall = ags_recall_template_find_type(start_recall,
+						 AGS_TYPE_VOLUME_CHANNEL);
+
+	  if(recall != NULL){
+	    AgsPort *port;
+	    
+	    GValue value = {0,};
+
+	    g_object_get(recall->data,
+			 "./volume[0]", &port,
+			 NULL);
+
+	    g_value_init(&value, G_TYPE_FLOAT);
+	    g_value_set_float(&value, g_ascii_strtod(str,
+						     NULL));
+
+	    ags_port_safe_write(port,
+				&value);
+	  }
+	}
+
+	g_list_free(start_recall);
 
 	/* iterate */
 	g_object_get(input,

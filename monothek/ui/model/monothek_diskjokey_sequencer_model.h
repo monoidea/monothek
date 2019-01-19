@@ -37,8 +37,8 @@
 
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT (4)
 
-#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER (100.0)
-#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER (180.0)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER (80.0)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER (160.0)
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT (120.0)
 
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_LOWER (0.0)
@@ -92,12 +92,18 @@ struct _MonothekDiskjokeySequencerModel
   gchar **techno_label;
   gchar **techno_sample;
 
+  GHashTable **techno_control;
+
   gchar **house_label;
   gchar **house_sample;
+
+  GHashTable **house_control;
 
   gchar **hiphop_label;
   gchar **hiphop_sample;
 
+  GHashTable **hiphop_control;
+  
   struct timespec *duration;
 };
 
