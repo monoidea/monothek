@@ -789,7 +789,8 @@ AgsAudio*
 monothek_rack_create_sequencer(MonothekRack *rack)
 {
   AgsAudio *audio;
-
+  AgsChannel *input;
+  
   AgsDelayAudio *play_delay_audio;
   AgsDelayAudioRun *play_delay_audio_run;
   AgsCountBeatsAudio *play_count_beats_audio;
@@ -897,7 +898,18 @@ monothek_rack_create_sequencer(MonothekRack *rack)
 
     g_value_init(&value, G_TYPE_BOOLEAN);
     g_value_set_boolean(&value, TRUE);
-    ags_port_safe_write(AGS_COUNT_BEATS_AUDIO(AGS_RECALL_AUDIO_RUN(play_count_beats_audio_run)->recall_audio)->notation_loop,
+    ags_port_safe_write(AGS_COUNT_BEATS_AUDIO(AGS_RECALL_AUDIO_RUN(play_count_beats_audio_run)->recall_audio)->sequencer_loop,
+			&value);
+
+    g_value_unset(&value);
+    g_value_init(&value, G_TYPE_UINT64);
+
+    g_value_set_uint64(&value, 0);
+    ags_port_safe_write(AGS_COUNT_BEATS_AUDIO(AGS_RECALL_AUDIO_RUN(play_count_beats_audio_run)->recall_audio)->sequencer_loop_start,
+			&value);
+
+    g_value_set_uint64(&value, 64);
+    ags_port_safe_write(AGS_COUNT_BEATS_AUDIO(AGS_RECALL_AUDIO_RUN(play_count_beats_audio_run)->recall_audio)->sequencer_loop_end,
 			&value);
   }else{
     play_count_beats_audio_run = NULL;
@@ -935,6 +947,88 @@ monothek_rack_create_sequencer(MonothekRack *rack)
 
   g_list_free(start_recall);
 
+  /* pattern */
+  g_object_get(audio,
+	       "input", &input,
+	       NULL);
+
+  while(input != NULL){
+    g_object_get(input,
+		 "recall", &start_recall,
+		 NULL);
+
+    recall = ags_recall_template_find_type(start_recall,
+					   MONOTHEK_TYPE_COPY_PATTERN_CHANNEL);
+
+    if(recall != NULL){
+      AgsPort *port;
+
+      MonothekCopyPatternChannel *copy_pattern_channel;
+      
+      GList *pattern;
+
+      GValue pattern_value = {0,};
+
+      copy_pattern_channel = MONOTHEK_COPY_PATTERN_CHANNEL(recall->data);
+      g_object_get(copy_pattern_channel,
+		   "pattern", &port,
+		   NULL);
+
+      g_object_get(input,
+		   "pattern", &pattern,
+		   NULL);
+
+      g_value_init(&pattern_value,
+		   G_TYPE_OBJECT);
+
+      g_value_set_object(&pattern_value,
+			 pattern->data);
+
+      ags_port_safe_write(port,
+			  &pattern_value);
+
+      g_list_free(pattern);
+    }
+
+    g_list_free(start_recall);
+    
+    /* iterate */
+    g_object_get(input,
+		 "next", &input,
+		 NULL);
+  }
+
+  /* ags-buffer */
+  ags_recall_factory_create(audio,
+			    NULL, NULL,
+			    "ags-buffer",
+			    0, audio_channels,
+			    0, MONOTHEK_RACK_DEFAULT_SEQUENCER_INPUT_PADS,
+			    (AGS_RECALL_FACTORY_INPUT |
+			     AGS_RECALL_FACTORY_RECALL |
+			     AGS_RECALL_FACTORY_ADD),
+			    0);
+    
+  ags_recall_factory_create(audio,
+			    NULL, NULL,
+			    "ags-stream",
+			    0, audio_channels,
+			    0, 1,
+			    (AGS_RECALL_FACTORY_OUTPUT |
+			     AGS_RECALL_FACTORY_PLAY |
+			     AGS_RECALL_FACTORY_ADD),
+			    0);
+
+  ags_recall_factory_create(audio,
+			    NULL, NULL,
+			    "ags-stream",
+			    0, audio_channels,
+			    0, MONOTHEK_RACK_DEFAULT_SEQUENCER_INPUT_PADS,
+			    (AGS_RECALL_FACTORY_INPUT |
+			     AGS_RECALL_FACTORY_RECALL |
+			     AGS_RECALL_FACTORY_ADD),
+			    0);
+  
   return(audio);
 }
 
@@ -1017,7 +1111,7 @@ monothek_rack_setup_tree(MonothekRack *rack)
   }
 
   /* link audio - mixer and sequencer */
-  g_object_get(rack->player,
+  g_object_get(rack->sequencer,
 	       "output", &output,
 	       NULL);
   

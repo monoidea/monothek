@@ -517,9 +517,22 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
     ags_task_thread_append_tasks(task_thread,
 				 task);
   }else{
-    //TODO:JK: implement me
+    AgsCancelAudio *cancel_audio;
 
-    monothek_jukebox_track_controller_completed(jukebox_track_controller);
+    GList *task;
+    
+    /* cancel audio */
+    task = NULL;
+    
+    cancel_audio = ags_cancel_audio_new(rack->player,
+					AGS_SOUND_SCOPE_WAVE);
+    task = g_list_prepend(task,
+			  cancel_audio);
+
+    task = g_list_reverse(task);
+    
+    ags_task_thread_append_tasks(task_thread,
+				 task);
   }
 }
 

@@ -92,6 +92,13 @@ void monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBo
 void monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *action_box,
 								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
+void monothek_diskjokey_sequencer_controller_run_enter_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_run_leave_callback(MonothekActionBox *action_box,
+								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+void monothek_diskjokey_sequencer_controller_run_clicked_callback(MonothekActionBox *action_box,
+								  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
 void monothek_diskjokey_sequencer_controller_real_toggle_pad(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 							     guint x, guint y);
 
@@ -664,6 +671,17 @@ monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable)
     g_signal_connect(diskjokey_sequencer_controller->tab[i], "clicked",
 		     G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_clicked_callback), diskjokey_sequencer_controller);
   }
+
+  g_signal_connect(diskjokey_sequencer_controller->run, "enter",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_run_enter_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->run, "leave",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_run_leave_callback), diskjokey_sequencer_controller);
+  g_signal_connect(diskjokey_sequencer_controller->run, "clicked",
+		   G_CALLBACK(monothek_diskjokey_sequencer_controller_run_clicked_callback), diskjokey_sequencer_controller);
+
+  /* initial setup */
+  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
+							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME);
 }
 
 void
@@ -770,6 +788,18 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 			diskjokey_sequencer_controller,
 			NULL);
   }
+
+  g_object_disconnect(diskjokey_sequencer_controller->run,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_enter_callback), diskjokey_sequencer_controller,
+		      diskjokey_sequencer_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_leave_callback),
+		      diskjokey_sequencer_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_clicked_callback),
+		      diskjokey_sequencer_controller,
+		      NULL);
 }
 
 void
@@ -1007,6 +1037,9 @@ monothek_diskjokey_sequencer_controller_techno_clicked_callback(MonothekActionBo
 
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
   gtk_widget_queue_draw(view);
+
+  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
+							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME);
 }
 
 void
@@ -1065,6 +1098,9 @@ monothek_diskjokey_sequencer_controller_house_clicked_callback(MonothekActionBox
 
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE;
   gtk_widget_queue_draw(view);
+
+  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
+							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME);
 }
 
 void
@@ -1123,6 +1159,9 @@ monothek_diskjokey_sequencer_controller_hiphop_clicked_callback(MonothekActionBo
 
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP;
   gtk_widget_queue_draw(view);
+
+  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
+							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME);
 }
 
 void
@@ -1305,6 +1344,141 @@ monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *
 
   model->current_tab = x;
   gtk_widget_queue_draw(view);
+}
+
+void
+monothek_diskjokey_sequencer_controller_run_enter_callback(MonothekActionBox *action_box,
+							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "run-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_diskjokey_sequencer_controller_run_leave_callback(MonothekActionBox *action_box,
+							   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+  
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GList *recall_id;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* check scope */
+  sequencer = rack->sequencer;
+
+  recall_id = ags_audio_check_scope(sequencer,
+				    AGS_SOUND_SCOPE_SEQUENCER);
+  
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  if(recall_id == NULL){
+    g_object_set(model,
+		 "run-active", FALSE,
+		 NULL);
+    gtk_widget_queue_draw(view);
+  }
+
+  g_list_free(recall_id);
+}
+
+void
+monothek_diskjokey_sequencer_controller_run_clicked_callback(MonothekActionBox *action_box,
+							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GList *recall_id;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* check scope */
+  sequencer = rack->sequencer;
+
+  recall_id = ags_audio_check_scope(sequencer,
+				    AGS_SOUND_SCOPE_SEQUENCER);
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+  
+  if(recall_id != NULL){
+    g_object_set(model,
+		 "run-active", FALSE,
+		 NULL);
+    gtk_widget_queue_draw(view);
+
+    monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,
+						FALSE);
+  }else{
+    g_object_set(model,
+		 "run-active", TRUE,
+		 NULL);
+    gtk_widget_queue_draw(view);
+
+    monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,
+						TRUE);
+  }
+
+  g_list_free(recall_id);
 }
 
 void
@@ -1533,7 +1707,181 @@ void
 monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 							   gchar *drum_kit)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *input;
+  
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GObject *output_soundcard;
+  
+  gchar **iter;
+
+  guint audio_channels;
+  guint i;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* model and view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       NULL);
+  
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* start/stop sequencer */
+  sequencer = rack->sequencer;
+
+  g_object_get(sequencer,
+	       "audio-channels", &audio_channels,
+	       "output-soundcard", &output_soundcard,
+	       "input", &input,
+	       NULL);
+  
+  if(!g_strcmp0(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME,
+		drum_kit)){
+    iter = model->techno_sample;
+
+    for(; iter[0] != NULL; iter++){
+      AgsRecycling *recycling;
+      AgsAudioFile *audio_file;
+
+      GList *audio_signal;
+      
+      for(i = 0; i < audio_channels; i++){
+	g_message("%s", iter[0]);
+      
+	/* open audio file and read audio signal */
+	audio_file = ags_audio_file_new(iter[0],
+					output_soundcard,
+					i);
+
+	if(!ags_audio_file_open(audio_file)){
+	  g_message("unable to open file - %s", iter[0]);
+	
+	  continue;
+	}
+
+	ags_audio_file_read_audio_signal(audio_file);
+      
+	audio_signal = audio_file->audio_signal;
+      
+	g_object_get(input,
+		     "first-recycling", &recycling,
+		     NULL);
+
+	ags_audio_signal_set_flags(audio_signal->data,
+				   AGS_AUDIO_SIGNAL_TEMPLATE);
+	ags_recycling_add_audio_signal(recycling,
+				       audio_signal->data);
+
+	/* iterate */
+	g_object_get(input,
+		     "next", &input,
+		     NULL);
+
+	audio_signal = audio_signal->next;
+      }
+    }
+  }else if(!g_strcmp0(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME,
+		      drum_kit)){
+    iter = model->house_sample;
+
+    for(; iter[0] != NULL; iter++){
+      AgsRecycling *recycling;
+      AgsAudioFile *audio_file;
+
+      GList *audio_signal;
+
+      /* open audio file and read audio signal */
+      audio_file = ags_audio_file_new(iter[0],
+				      output_soundcard,
+				      -1);
+
+      if(!ags_audio_file_open(audio_file)){
+	g_message("unable to open file - %s", iter[0]);
+	
+	continue;
+      }
+	   
+      ags_audio_file_read_audio_signal(audio_file);
+	   
+      audio_signal = audio_file->audio_signal;
+      
+      for(i = 0; i < audio_channels && audio_signal != NULL; i++){
+	g_object_get(input,
+		     "first-recycling", &recycling,
+		     NULL);
+
+	ags_audio_signal_set_flags(audio_signal->data,
+				   AGS_AUDIO_SIGNAL_TEMPLATE);
+	ags_recycling_add_audio_signal(recycling,
+				       audio_signal->data);
+
+	/* iterate */
+	g_object_get(input,
+		     "next", &input,
+		     NULL);
+
+	audio_signal = audio_signal->next;
+      }
+    }
+  }else if(!g_strcmp0(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME,
+		      drum_kit)){
+    iter = model->hiphop_sample;
+
+    for(; iter[0] != NULL; iter++){
+      AgsRecycling *recycling;
+      AgsAudioFile *audio_file;
+
+      GList *audio_signal;
+
+      /* open audio file and read audio signal */
+      audio_file = ags_audio_file_new(iter[0],
+				      output_soundcard,
+				      -1);
+
+      if(!ags_audio_file_open(audio_file)){
+	g_message("unable to open file - %s", iter[0]);
+	
+	continue;
+      }
+
+      ags_audio_file_read_audio_signal(audio_file);
+      
+      audio_signal = audio_file->audio_signal;
+      
+      for(i = 0; i < audio_channels && audio_signal != NULL; i++){
+	g_object_get(input,
+		     "first-recycling", &recycling,
+		     NULL);
+
+	ags_audio_signal_set_flags(audio_signal->data,
+				   AGS_AUDIO_SIGNAL_TEMPLATE);
+	ags_recycling_add_audio_signal(recycling,
+				       audio_signal->data);
+
+	/* iterate */
+	g_object_get(input,
+		     "next", &input,
+		     NULL);
+
+	audio_signal = audio_signal->next;
+      }
+    }
+  }
 }
 
 /**
@@ -1612,7 +1960,76 @@ void
 monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 						 gboolean do_run)
 {
-  //TODO:JK: implement me
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  AgsTaskThread *task_thread;
+  
+  AgsApplicationContext *application_context;  
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *rack_value;
+
+  application_context = ags_application_context_get_instance();
+
+  task_thread = ags_concurrency_provider_get_task_thread(AGS_CONCURRENCY_PROVIDER(application_context));
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* start/stop sequencer */
+  sequencer = rack->sequencer;
+
+  if(do_run){
+    AgsStartAudio *start_audio;
+    AgsStartSoundcard *start_soundcard;
+
+    GList *task;
+    
+    /* start audio */
+    task = NULL;
+    
+    start_audio = ags_start_audio_new(sequencer,
+				      AGS_SOUND_SCOPE_SEQUENCER);
+    task = g_list_prepend(task,
+			  start_audio);
+
+    start_soundcard = ags_start_soundcard_new(application_context);
+    task = g_list_prepend(task,
+			  start_soundcard);
+
+    task = g_list_reverse(task);
+    
+    ags_task_thread_append_tasks(task_thread,
+				 task);
+  }else{
+    AgsCancelAudio *cancel_audio;
+
+    GList *task;
+    
+    /* cancel audio */
+    task = NULL;
+    
+    cancel_audio = ags_cancel_audio_new(sequencer,
+					AGS_SOUND_SCOPE_SEQUENCER);
+    task = g_list_prepend(task,
+			  cancel_audio);
+
+    task = g_list_reverse(task);
+    
+    ags_task_thread_append_tasks(task_thread,
+				 task);
+  }
 }
 
 /**

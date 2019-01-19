@@ -195,7 +195,7 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
   /* play */
   if((AGS_RECALL_FACTORY_PLAY & (create_flags)) != 0){
     if((AGS_RECALL_FACTORY_REMAP & (create_flags)) == 0 ||
-       ags_recall_find_type(audio->play, MONOTHEK_TYPE_COPY_PATTERN_AUDIO) == NULL){
+       ags_recall_find_type(audio->play, AGS_TYPE_COPY_PATTERN_AUDIO) == NULL){
       if(play_container == NULL){
 	play_container = ags_recall_container_new();
       }
@@ -209,11 +209,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 								     "audio", audio,
 								     "recall-container", play_container,
 								     NULL);
-      ags_recall_set_flags(copy_pattern_audio,
+      ags_recall_set_flags((AgsRecall *) copy_pattern_audio,
 			   (AGS_RECALL_TEMPLATE));
-      ags_recall_set_ability_flags(copy_pattern_audio,
+      ags_recall_set_ability_flags((AgsRecall *) copy_pattern_audio,
 				   (AGS_SOUND_ABILITY_SEQUENCER));
-      ags_recall_set_behaviour_flags(copy_pattern_audio,
+      ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_audio,
 				     (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
       ags_audio_add_recall(audio, (GObject *) copy_pattern_audio, TRUE);
@@ -232,11 +232,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 									    "recall-audio", copy_pattern_audio,
 									    //TODO:JK: add missing dependency "count_beats_audio_run"
 									    NULL);
-      ags_recall_set_flags(copy_pattern_audio_run,
+      ags_recall_set_flags((AgsRecall *) copy_pattern_audio_run,
 			   (AGS_RECALL_TEMPLATE));
-      ags_recall_set_ability_flags(copy_pattern_audio_run,
+      ags_recall_set_ability_flags((AgsRecall *) copy_pattern_audio_run,
 				   (AGS_SOUND_ABILITY_SEQUENCER));
-      ags_recall_set_behaviour_flags(copy_pattern_audio_run,
+      ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_audio_run,
 				     (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
       ags_audio_add_recall(audio, (GObject *) copy_pattern_audio_run, TRUE);
@@ -253,7 +253,7 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 		     NULL);
 
 	list = ags_recall_find_type(list_start,
-				    MONOTHEK_TYPE_COPY_PATTERN_AUDIO);
+				    AGS_TYPE_COPY_PATTERN_AUDIO);
 	copy_pattern_audio = AGS_COPY_PATTERN_AUDIO(list->data);
 	g_list_free(list_start);
 	
@@ -319,11 +319,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 									   "recall-audio", copy_pattern_audio,
 									   // "pattern", channel->pattern->data,
 									   NULL);
-	ags_recall_set_flags(copy_pattern_channel,
+	ags_recall_set_flags((AgsRecall *) copy_pattern_channel,
 			     (AGS_RECALL_TEMPLATE));
-	ags_recall_set_ability_flags(copy_pattern_channel,
+	ags_recall_set_ability_flags((AgsRecall *) copy_pattern_channel,
 				     (AGS_SOUND_ABILITY_SEQUENCER));
-	ags_recall_set_behaviour_flags(copy_pattern_channel,
+	ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_channel,
 				       (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
 	ags_channel_add_recall(channel, (GObject *) copy_pattern_channel, TRUE);
@@ -346,11 +346,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 										  "recall-audio-run", copy_pattern_audio_run,
 										  "recall-channel", copy_pattern_channel,
 										  NULL);
-	ags_recall_set_flags(copy_pattern_channel_run,
+	ags_recall_set_flags((AgsRecall *) copy_pattern_channel_run,
 			     (AGS_RECALL_TEMPLATE));
-	ags_recall_set_ability_flags(copy_pattern_channel_run,
+	ags_recall_set_ability_flags((AgsRecall *) copy_pattern_channel_run,
 				     (AGS_SOUND_ABILITY_SEQUENCER));
-	ags_recall_set_behaviour_flags(copy_pattern_channel_run,
+	ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_channel_run,
 				       (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
 	ags_channel_add_recall(channel, (GObject *) copy_pattern_channel_run, TRUE);   
@@ -380,7 +380,7 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
     channel = start;
  
     if((AGS_RECALL_FACTORY_REMAP & (create_flags)) == 0 ||
-       ags_recall_find_type(audio->recall, MONOTHEK_TYPE_COPY_PATTERN_AUDIO) == NULL){
+       ags_recall_find_type(audio->recall, AGS_TYPE_COPY_PATTERN_AUDIO) == NULL){
       if(recall_container == NULL){
 	recall_container = ags_recall_container_new();
       }
@@ -393,11 +393,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 								     "audio", audio,
 								     "recall-container", recall_container,
 								     NULL);
-      ags_recall_set_flags(copy_pattern_audio,
+      ags_recall_set_flags((AgsRecall *) copy_pattern_audio,
 			   (AGS_RECALL_TEMPLATE));
-      ags_recall_set_ability_flags(copy_pattern_audio,
+      ags_recall_set_ability_flags((AgsRecall *) copy_pattern_audio,
 				   (AGS_SOUND_ABILITY_SEQUENCER));
-      ags_recall_set_behaviour_flags(copy_pattern_audio,
+      ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_audio,
 				     (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
       ags_audio_add_recall(audio, (GObject *) copy_pattern_audio, FALSE);
@@ -415,11 +415,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 									    "recall-audio", copy_pattern_audio,
 									    //TODO:JK: add missing dependency "count_beats_audio_run"
 									    NULL);
-      ags_recall_set_flags(copy_pattern_audio_run,
+      ags_recall_set_flags((AgsRecall *) copy_pattern_audio_run,
 			   (AGS_RECALL_TEMPLATE));
-      ags_recall_set_ability_flags(copy_pattern_audio_run,
+      ags_recall_set_ability_flags((AgsRecall *) copy_pattern_audio_run,
 				   (AGS_SOUND_ABILITY_SEQUENCER));
-      ags_recall_set_behaviour_flags(copy_pattern_audio_run,
+      ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_audio_run,
 				     (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
       ags_audio_add_recall(audio, (GObject *) copy_pattern_audio_run, FALSE);
@@ -437,7 +437,7 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 
 	list = ags_recall_find_type(list_start,
 				    MONOTHEK_TYPE_COPY_PATTERN_AUDIO);
-	copy_pattern_audio = AGS_COPY_PATTERN_AUDIO(list->data);
+	copy_pattern_audio = MONOTHEK_COPY_PATTERN_AUDIO(list->data);
 	g_list_free(list_start);
 	
 	recall = g_list_prepend(recall,
@@ -452,7 +452,7 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 		     NULL);
 	
 	list = ags_recall_find_template(list_start);
-	copy_pattern_audio_run = AGS_COPY_PATTERN_AUDIO_RUN(list->data);
+	copy_pattern_audio_run = MONOTHEK_COPY_PATTERN_AUDIO_RUN(list->data);
 	g_list_free(list_start);
 	
 	recall = g_list_prepend(recall,
@@ -494,7 +494,7 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 	ags_channel_add_recall_container(channel,
 					 (GObject *) recall_container);
 
-	/* MonothekCopyPatternChannel in channel->recall */
+	/* AgsCopyPatternChannel in channel->recall */
 	copy_pattern_channel = (MonothekCopyPatternChannel *) g_object_new(MONOTHEK_TYPE_COPY_PATTERN_CHANNEL,
 									   "output-soundcard", output_soundcard,
 									   "source", channel,
@@ -503,11 +503,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 									   "recall-audio", copy_pattern_audio,
 									   //"pattern", channel->pattern->data,
 									   NULL);
-	ags_recall_set_flags(copy_pattern_channel,
+	ags_recall_set_flags((AgsRecall *) copy_pattern_channel,
 			     (AGS_RECALL_TEMPLATE));
-	ags_recall_set_ability_flags(copy_pattern_channel,
+	ags_recall_set_ability_flags((AgsRecall *) copy_pattern_channel,
 				     (AGS_SOUND_ABILITY_SEQUENCER));
-	ags_recall_set_behaviour_flags(copy_pattern_channel,
+	ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_channel,
 				       (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
 	ags_channel_add_recall(channel, (GObject *) copy_pattern_channel, FALSE);
@@ -530,11 +530,11 @@ monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 										  "recall-audio-run", copy_pattern_audio_run,
 										  "recall-channel", copy_pattern_channel,
 										  NULL);
-	ags_recall_set_flags(copy_pattern_channel_run,
+	ags_recall_set_flags((AgsRecall *) copy_pattern_channel_run,
 			     (AGS_RECALL_TEMPLATE));
-	ags_recall_set_ability_flags(copy_pattern_channel_run,
+	ags_recall_set_ability_flags((AgsRecall *) copy_pattern_channel_run,
 				     (AGS_SOUND_ABILITY_SEQUENCER));
-	ags_recall_set_behaviour_flags(copy_pattern_channel_run,
+	ags_recall_set_behaviour_flags((AgsRecall *) copy_pattern_channel_run,
 				       (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
 
 	ags_channel_add_recall(channel, (GObject *) copy_pattern_channel_run, FALSE);   
