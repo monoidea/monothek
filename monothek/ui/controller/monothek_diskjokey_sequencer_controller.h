@@ -114,6 +114,8 @@ void monothek_diskjokey_sequencer_controller_random(MonothekDiskjokeySequencerCo
 void monothek_diskjokey_sequencer_controller_run(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 						 gboolean do_run);
 
+gboolean monothek_diskjokey_sequencer_controller_position_timeout(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
 MonothekDiskjokeySequencerController* monothek_diskjokey_sequencer_controller_new();
 
 #endif /*__MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER_H__*/

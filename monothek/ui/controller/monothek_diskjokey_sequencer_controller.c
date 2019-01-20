@@ -35,6 +35,7 @@
 #include <monothek/ui/view/monothek_diskjokey_end_view.h>
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <monothek/i18n.h>
 
@@ -163,6 +164,8 @@ static gpointer monothek_diskjokey_sequencer_controller_parent_class = NULL;
 static AgsConnectableInterface* monothek_diskjokey_sequencer_controller_parent_connectable_interface;
 
 static guint diskjokey_sequencer_controller_signals[LAST_SIGNAL];
+
+GHashTable *monothek_diskjokey_sequencer_controller_position = NULL;
 
 GType
 monothek_diskjokey_sequencer_controller_get_type()
@@ -618,6 +621,20 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
   
   monothek_controller_add_action_slider(diskjokey_sequencer_controller,
 					action_slider);
+
+  /* position timeout */
+  if(monothek_diskjokey_sequencer_controller_position == NULL){
+    monothek_diskjokey_sequencer_controller_position = g_hash_table_new_full(g_direct_hash, g_direct_equal,
+                                                     NULL,
+                                                     NULL);
+  }
+
+  g_hash_table_insert(monothek_diskjokey_sequencer_controller_position,
+                      diskjokey_sequencer_controller, monothek_diskjokey_sequencer_controller_position_timeout);
+  
+  g_timeout_add(1000 / 30,
+                (GSourceFunc) monothek_diskjokey_sequencer_controller_position_timeout,
+                (gpointer) diskjokey_sequencer_controller);
 }
 
 void
@@ -626,6 +643,10 @@ monothek_diskjokey_sequencer_controller_finalize(GObject *gobject)
   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
 
   diskjokey_sequencer_controller = (MonothekDiskjokeySequencerController *) gobject;
+
+  /* remove position */
+  g_hash_table_remove(monothek_diskjokey_sequencer_controller_position,
+                      diskjokey_sequencer_controller);
   
   /* call parent */
   G_OBJECT_CLASS(monothek_diskjokey_sequencer_controller_parent_class)->finalize(gobject);
@@ -1847,7 +1868,7 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
   session = monothek_session_manager_find_session(session_manager,
 						  MONOTHEK_SESSION_DEFAULT_SESSION);
 
-  /* model and view */
+  /* model */
   g_object_get(diskjokey_sequencer_controller,
 	       "model", &model,
 	       NULL);
@@ -2270,6 +2291,106 @@ monothek_diskjokey_sequencer_controller_run(MonothekDiskjokeySequencerController
 		diskjokey_sequencer_controller_signals[RUN], 0,
 		do_run);
   g_object_unref((GObject *) diskjokey_sequencer_controller);
+}
+
+gboolean
+monothek_diskjokey_sequencer_controller_position_timeout(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  if(g_hash_table_lookup(monothek_diskjokey_sequencer_controller_position,
+                         diskjokey_sequencer_controller) != NULL){
+    MonothekDiskjokeySequencerView *view;
+    
+    MonothekDiskjokeySequencerModel *model;
+    
+    MonothekRack *rack;
+    AgsAudio *sequencer;
+    AgsRecyclingContext *recycling_context, *parent_recycling_context;
+
+    MonothekSessionManager *session_manager;
+    MonothekSession *session;
+
+    GList *start_recall_id, *recall_id;
+    
+    GValue *rack_value;
+
+    /* find session */
+    session_manager = monothek_session_manager_get_instance();
+    session = monothek_session_manager_find_session(session_manager,
+						    MONOTHEK_SESSION_DEFAULT_SESSION);
+
+    /* model */
+    g_object_get(diskjokey_sequencer_controller,
+		 "model", &model,
+		 "view", &view,
+		 NULL);
+
+    /* get rack */
+    rack_value = g_hash_table_lookup(session->value,
+				     "rack");
+
+    rack = g_value_get_object(rack_value);
+
+    if(rack == NULL){
+      return(TRUE);
+    }
+    
+    /* start/stop sequencer */
+    sequencer = rack->sequencer;
+
+    recall_id = 
+      start_recall_id = ags_audio_check_scope(sequencer,
+					      AGS_SOUND_SCOPE_SEQUENCER);
+
+    while(recall_id != NULL){
+      g_object_get(recall_id->data,
+		   "recycling-context", &recycling_context,
+		   NULL);
+
+      if(recycling_context != NULL){
+	g_object_get(recycling_context,
+		     "parent", &parent_recycling_context,
+		     NULL);
+
+	if(parent_recycling_context == NULL){
+	  break;
+	}
+      }
+      
+      recall_id = recall_id->next;
+    }
+    
+    if(recall_id != NULL){
+      GList *start_play, *play;
+
+      g_object_get(sequencer,
+		   "play", &start_play,
+		   NULL);
+
+      play = ags_recall_find_type_with_recycling_context(start_play,
+							 AGS_TYPE_COUNT_BEATS_AUDIO_RUN,
+							 (GObject *) recycling_context);
+
+      if(play != NULL){
+	g_object_get(play->data,
+		     "sequencer-counter", &(model->active_column),
+		     NULL);
+
+	gtk_widget_queue_draw(view);
+      }else{
+	model->active_column = -1;
+      }
+
+      g_list_free(start_play);
+    }else{
+      model->active_column = -1;
+    }
+
+    g_list_free(start_recall_id);
+    
+    return(TRUE);
+  }else{
+    return(FALSE);
+  }
 }
 
 /**

@@ -44,6 +44,8 @@ struct _MonothekDiskjokeySequencerView
 {
   MonothekView monothek_view;
 
+  gdouble active_column_line_width;
+
   //pattern
   gdouble pattern_line_width;
 

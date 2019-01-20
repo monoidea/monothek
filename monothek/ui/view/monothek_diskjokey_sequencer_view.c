@@ -144,6 +144,8 @@ monothek_diskjokey_sequencer_view_connectable_interface_init(AgsConnectableInter
 void
 monothek_diskjokey_sequencer_view_init(MonothekDiskjokeySequencerView *diskjokey_sequencer_view)
 {
+  diskjokey_sequencer_view->active_column_line_width = 6.0;
+  
   /* pattern */
   diskjokey_sequencer_view->pattern_line_width = 5.0;
 
@@ -513,6 +515,28 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
   }
   
   /* pattern */
+  if(diskjokey_sequencer_model->active_column != -1){
+    if(diskjokey_sequencer_model->active_column >= diskjokey_sequencer_model->current_tab * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT &&
+       diskjokey_sequencer_model->active_column < (diskjokey_sequencer_model->current_tab + 1) * MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT){
+      cairo_set_line_width(cr,
+			   diskjokey_sequencer_view->active_column_line_width);
+
+      cairo_rectangle(cr,
+		      diskjokey_sequencer_view->pattern_x0 - 4 + (diskjokey_sequencer_model->active_column % MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT) * (diskjokey_sequencer_view->pad_width + diskjokey_sequencer_view->pattern_column_spacing), diskjokey_sequencer_view->pattern_y0 - 4,
+		      (double) diskjokey_sequencer_view->pad_width + 8, (double) MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_ROW_COUNT * (diskjokey_sequencer_view->pad_height + diskjokey_sequencer_view->pattern_row_spacing) - diskjokey_sequencer_view->pattern_row_spacing + 8);
+      
+      cairo_stroke(cr);
+      
+      for(i = 1; i < MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_ROW_COUNT; i++){
+	cairo_rectangle(cr,
+			diskjokey_sequencer_view->pattern_x0 - 5 + (diskjokey_sequencer_model->active_column % MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT) * (diskjokey_sequencer_view->pad_width + diskjokey_sequencer_view->pattern_column_spacing), (double) diskjokey_sequencer_view->pattern_y0 + (i * (diskjokey_sequencer_view->pad_height + diskjokey_sequencer_view->pattern_row_spacing)) - diskjokey_sequencer_view->pattern_row_spacing,
+			(double) diskjokey_sequencer_view->pad_width + 10, (double) diskjokey_sequencer_view->pattern_row_spacing);
+
+	cairo_fill(cr);
+      }
+    }
+  }
+  
   cairo_set_line_width(cr,
 		       diskjokey_sequencer_view->pattern_line_width);
 
