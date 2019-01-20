@@ -569,16 +569,8 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
       event_y = ((GdkEventButton *) event)->y;
       
       if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
-	if(x0 + width < event_x + 40){
-	  event_x = x0 + width - 40;
-	}
-	
 	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / width * (event_x - x0);
       }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
-	if(y0 + height > event_y + 40){
-	  event_y = y0 + height - 40;
-	}
-
 	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / height * (event_y - y0);
       }
       

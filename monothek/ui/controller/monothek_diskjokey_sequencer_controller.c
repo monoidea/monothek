@@ -610,7 +610,7 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
     action_slider = (MonothekActionSlider *) g_object_new(MONOTHEK_TYPE_ACTION_SLIDER,
 							  "action-identifier", "bpm",
 							  "x0", 160,
-							  "y0", 990 - 20,
+							  "y0", 990,
 							  "width", 620,
 							  "height", 60,
 							  NULL);
@@ -2371,10 +2371,14 @@ monothek_diskjokey_sequencer_controller_position_timeout(MonothekDiskjokeySequen
 							 (GObject *) recycling_context);
 
       if(play != NULL){
+	guint64 sequencer_counter;
+	
 	g_object_get(play->data,
-		     "sequencer-counter", &(model->active_column),
+		     "sequencer-counter", &sequencer_counter,
 		     NULL);
 
+	model->active_column = (guint) sequencer_counter;
+	
 	gtk_widget_queue_draw(view);
       }else{
 	model->active_column = -1;

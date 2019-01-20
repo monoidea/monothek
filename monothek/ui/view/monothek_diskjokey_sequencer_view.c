@@ -893,9 +893,16 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 		  (double) diskjokey_sequencer_view->bpm_control_width, (double) diskjokey_sequencer_view->bpm_control_height);
   cairo_fill(cr);
 
-  cairo_rectangle(cr,
-		  (double) diskjokey_sequencer_view->bpm_control_x0 + ((gdouble) diskjokey_sequencer_view->bpm_control_width / (diskjokey_sequencer_model->bpm_upper - diskjokey_sequencer_model->bpm_lower) * (diskjokey_sequencer_model->bpm - diskjokey_sequencer_model->bpm_lower)), (double) diskjokey_sequencer_view->bpm_control_y0 - 10.0,
-		  (double) 40.0, (double) 40.0);
+
+  if((diskjokey_sequencer_model->bpm - diskjokey_sequencer_model->bpm_lower) == (diskjokey_sequencer_model->bpm_upper - diskjokey_sequencer_model->bpm_lower) / 2.0){
+    cairo_rectangle(cr,
+		    (double) diskjokey_sequencer_view->bpm_control_x0 + ((gdouble) diskjokey_sequencer_view->bpm_control_width / 2.0), (double) diskjokey_sequencer_view->bpm_control_y0 - 10.0,
+		    (double) 40.0, (double) 40.0);
+  }else{
+    cairo_rectangle(cr,
+		    (double) diskjokey_sequencer_view->bpm_control_x0 + (((gdouble) diskjokey_sequencer_view->bpm_control_width - 40.0) / (diskjokey_sequencer_model->bpm_upper - diskjokey_sequencer_model->bpm_lower) * (diskjokey_sequencer_model->bpm - diskjokey_sequencer_model->bpm_lower)), (double) diskjokey_sequencer_view->bpm_control_y0 - 10.0,
+		    (double) 40.0, (double) 40.0);
+  }
   cairo_fill(cr);
 
   /* swing */
