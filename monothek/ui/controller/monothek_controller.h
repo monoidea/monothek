@@ -67,6 +67,8 @@ struct _MonothekController
 struct _MonothekControllerClass
 {
   GObjectClass gobject;
+
+  void (*reset)(MonothekController *controller);
 };
 
 GType monothek_controller_get_type(void);
@@ -89,6 +91,9 @@ void monothek_controller_remove_action_slider(MonothekController *controller,
 /* query */
 GList* monothek_controller_find_view_type(GList *list,
 					  GType view_type);
+
+/* events */
+void monothek_controller_reset(MonothekController *controller);
 
 /* instantiate */
 MonothekController* monothek_controller_new();

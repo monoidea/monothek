@@ -74,7 +74,13 @@ enum{
   PROP_ACTION_SLIDER,
 };
 
+enum{
+  RESET,
+  LAST_SIGNAL,
+};
+
 static gpointer monothek_controller_parent_class = NULL;
+static guint controller_signals[LAST_SIGNAL];
 
 GType
 monothek_controller_get_type()
@@ -196,6 +202,27 @@ monothek_controller_class_init(MonothekControllerClass *controller)
   g_object_class_install_property(gobject,
 				  PROP_ACTION_SLIDER,
 				  param_spec);
+
+  /* MonothekControllerClass */
+  controller->reset = NULL;
+  
+  /* signals */
+  /**
+   * MonothekController::reset:
+   * @controller: the #MonothekController
+   *
+   * The ::reset signal notifies to reset.
+   *
+   * Since: 1.0.0
+   */
+  controller_signals[RESET] = 
+    g_signal_new("reset",
+		 G_TYPE_FROM_CLASS(controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekControllerClass, reset),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
 }
 
 void
@@ -815,6 +842,26 @@ monothek_controller_find_view_type(GList *list,
   }
 
   return(NULL);
+}
+
+/**
+ * monothek_controller_reset:
+ * @controller: the #MonothekController
+ * 
+ * Reset @controller.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_controller_reset(MonothekController *controller)
+{
+  g_return_if_fail(MONOTHEK_IS_CONTROLLER(controller));
+
+  /* emit */
+  g_object_ref((GObject *) controller);
+  g_signal_emit(G_OBJECT(controller),
+		controller_signals[RESET], 0);
+  g_object_unref((GObject *) controller);  
 }
 
 /**

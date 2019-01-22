@@ -41,6 +41,8 @@ void monothek_diskjokey_payment_controller_finalize(GObject *gobject);
 void monothek_diskjokey_payment_controller_connect(AgsConnectable *connectable);
 void monothek_diskjokey_payment_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_diskjokey_payment_controller_reset(MonothekController *controller);
+
 #ifdef MONOTHEK_DEVEL_MODE
 gboolean monothek_diskjokey_payment_controller_key_press_event_callback(GtkWidget *widget,
 									GdkEvent *event,
@@ -114,6 +116,7 @@ monothek_diskjokey_payment_controller_class_init(MonothekDiskjokeyPaymentControl
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_diskjokey_payment_controller_parent_class = g_type_class_peek_parent(diskjokey_payment_controller);
 
@@ -122,7 +125,12 @@ monothek_diskjokey_payment_controller_class_init(MonothekDiskjokeyPaymentControl
 
   gobject->finalize = monothek_diskjokey_payment_controller_finalize;
 
-  /* MonothekDiskjokeyPaymentController */
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) diskjokey_payment_controller;
+  
+  controller->reset = monothek_diskjokey_payment_controller_reset;
+  
+  /* MonothekDiskjokeyPaymentControllerClass */
   diskjokey_payment_controller->transaction_completed = monothek_diskjokey_payment_controller_real_transaction_completed;
 
   /* signals */
@@ -230,6 +238,12 @@ monothek_diskjokey_payment_controller_disconnect(AgsConnectable *connectable)
 			NULL);
   }
 #endif
+}
+
+void
+monothek_diskjokey_payment_controller_reset(MonothekController *controller)
+{
+  //TODO:JK: implement me
 }
 
 #ifdef MONOTHEK_DEVEL_MODE

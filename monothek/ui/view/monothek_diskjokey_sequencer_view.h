@@ -147,6 +147,8 @@ struct _MonothekDiskjokeySequencerView
   gdouble clear_box_height;
 
   //timer
+  GtkAdjustment *progress;
+
   gdouble timer_box_line_width;
 
   gdouble timer_box_x0;

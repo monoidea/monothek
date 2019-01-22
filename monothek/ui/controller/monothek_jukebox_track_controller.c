@@ -55,6 +55,8 @@ void monothek_jukebox_track_controller_finalize(GObject *gobject);
 void monothek_jukebox_track_controller_connect(AgsConnectable *connectable);
 void monothek_jukebox_track_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_track_controller_reset(MonothekController *controller);
+
 void monothek_jukebox_track_controller_real_progress(MonothekJukeboxTrackController *jukebox_track_controller,
 						     gdouble value);
 void monothek_jukebox_track_controller_real_test_time_expired(MonothekJukeboxTrackController *jukebox_track_controller);
@@ -132,6 +134,7 @@ monothek_jukebox_track_controller_class_init(MonothekJukeboxTrackControllerClass
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_jukebox_track_controller_parent_class = g_type_class_peek_parent(jukebox_track_controller);
 
@@ -139,6 +142,11 @@ monothek_jukebox_track_controller_class_init(MonothekJukeboxTrackControllerClass
   gobject = (GObjectClass *) jukebox_track_controller;
 
   gobject->finalize = monothek_jukebox_track_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) jukebox_track_controller;
+  
+  controller->reset = monothek_jukebox_track_controller_reset;
 
   /* MonothekJukeboxTrackController */
   jukebox_track_controller->progress = monothek_jukebox_track_controller_real_progress;
@@ -245,6 +253,14 @@ monothek_jukebox_track_controller_init(MonothekJukeboxTrackController *jukebox_t
   jukebox_track_controller->timer = (struct timespec *) malloc(sizeof(struct timespec));
   jukebox_track_controller->timer->tv_sec = 0;
   jukebox_track_controller->timer->tv_nsec = 0;
+
+  /* progress timeout - add */
+  g_hash_table_insert(monothek_jukebox_track_controller_progress_increase,
+		      jukebox_track_controller, monothek_jukebox_track_controller_progress_increase_timeout);
+  
+  g_timeout_add(1000 / 30,
+		(GSourceFunc) monothek_jukebox_track_controller_progress_increase_timeout,
+		(gpointer) jukebox_track_controller);
 }
 
 void
@@ -253,6 +269,10 @@ monothek_jukebox_track_controller_finalize(GObject *gobject)
   MonothekJukeboxTrackController *jukebox_track_controller;
 
   jukebox_track_controller = (MonothekJukeboxTrackController *) gobject;
+
+  /* progress timeout - remove */
+  g_hash_table_remove(monothek_jukebox_track_controller_progress_increase,
+		      jukebox_track_controller);
   
   /* call parent */
   G_OBJECT_CLASS(monothek_jukebox_track_controller_parent_class)->finalize(gobject);
@@ -270,18 +290,6 @@ monothek_jukebox_track_controller_connect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_track_controller_parent_connectable_interface->connect(connectable);
-
-  /* progress timeout - add */
-  g_hash_table_insert(monothek_jukebox_track_controller_progress_increase,
-		      jukebox_track_controller, monothek_jukebox_track_controller_progress_increase_timeout);
-  
-  g_timeout_add(1000 / 30,
-		(GSourceFunc) monothek_jukebox_track_controller_progress_increase_timeout,
-		(gpointer) jukebox_track_controller);
-
-  /* start playback */
-  monothek_jukebox_track_controller_run(jukebox_track_controller,
-					TRUE);
 }
 
 void
@@ -296,10 +304,24 @@ monothek_jukebox_track_controller_disconnect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_track_controller_parent_connectable_interface->disconnect(connectable);
+}
 
-  /* progress timeout - remove */
-  g_hash_table_remove(monothek_jukebox_track_controller_progress_increase,
-		      jukebox_track_controller);
+void
+monothek_jukebox_track_controller_reset(MonothekController *controller)
+{
+  MonothekJukeboxTrackController *jukebox_track_controller;
+
+  jukebox_track_controller = MONOTHEK_JUKEBOX_TRACK_CONTROLLER(controller);
+
+  jukebox_track_controller->start_time->tv_sec = 0;
+  jukebox_track_controller->start_time->tv_nsec = 0;
+
+  jukebox_track_controller->timer->tv_sec = 0;
+  jukebox_track_controller->timer->tv_nsec = 0;
+
+  /* start playback */
+  monothek_jukebox_track_controller_run(controller,
+					TRUE);
 }
 
 void
@@ -331,14 +353,26 @@ monothek_jukebox_track_controller_real_progress(MonothekJukeboxTrackController *
 
   if(!g_strcmp0("play",
 		g_value_get_string(jukebox_mode))){
-    if(value == 1.0){
+    if(value >= 1.0){
       monothek_jukebox_track_controller_run(jukebox_track_controller,
 					    FALSE);
+
+      jukebox_track_controller->start_time->tv_sec = 0;
+      jukebox_track_controller->start_time->tv_nsec = 0;
+      
+      /* emit completed */
+      monothek_jukebox_track_controller_completed(jukebox_track_controller);
     }
   }else{
     if(jukebox_track_controller->timer->tv_sec > MONOTHEK_JUKEBOX_TRACK_CONTROLLER_TEST_TIME_SEC){
       monothek_jukebox_track_controller_run(jukebox_track_controller,
 					    FALSE);
+
+      jukebox_track_controller->start_time->tv_sec = 0;
+      jukebox_track_controller->start_time->tv_nsec = 0;
+
+      /* emit completed */
+      monothek_jukebox_track_controller_completed(jukebox_track_controller);
     }
   }
 }
@@ -562,7 +596,7 @@ void
 monothek_jukebox_track_controller_real_completed(MonothekJukeboxTrackController *jukebox_track_controller)
 {
   MonothekWindow *window;
-  MonothekJukeboxModeView *view;
+  MonothekJukeboxTrackView *view;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
@@ -675,6 +709,10 @@ monothek_jukebox_track_controller_progress_increase_timeout(GObject *gobject)
     struct timespec time_now;
     
     gdouble value;
+
+    if(jukebox_track_controller->start_time->tv_sec == 0){
+      return(TRUE);
+    }
     
     g_object_get(jukebox_track_controller,
 		 "model", &jukebox_track_model,

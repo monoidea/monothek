@@ -40,6 +40,8 @@
 #include <monothek/ui/controller/monothek_jukebox_end_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_qrcode_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_sequencer_controller.h>
+#include <monothek/ui/controller/monothek_diskjokey_end_controller.h>
+#include <monothek/ui/controller/monothek_diskjokey_qrcode_controller.h>
 
 #include <monothek/ui/model/monothek_start_model.h>
 #include <monothek/ui/model/monothek_closed_model.h>
@@ -53,6 +55,8 @@
 #include <monothek/ui/model/monothek_jukebox_end_model.h>
 #include <monothek/ui/model/monothek_jukebox_qrcode_model.h>
 #include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
+#include <monothek/ui/model/monothek_diskjokey_end_model.h>
+#include <monothek/ui/model/monothek_diskjokey_qrcode_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
 #include <monothek/ui/view/monothek_closed_view.h>
@@ -556,18 +560,54 @@ monothek_window_init(MonothekWindow *window)
 	       NULL);
 
   /* diskjokey end view */
+  model = monothek_diskjokey_end_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_diskjokey_end_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
 
+  controller = monothek_diskjokey_end_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+
   /* diskjokey qrcode view */
+  model = monothek_diskjokey_qrcode_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
   view = monothek_diskjokey_qrcode_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
   gtk_box_pack_start(window->view,
 		     view,
 		     FALSE, FALSE,
 		     0);
+
+  controller = monothek_diskjokey_qrcode_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
 }
 
 void
@@ -885,6 +925,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 
 	if(controller != NULL){
 	  ags_connectable_connect(AGS_CONNECTABLE(controller->data));
+	  monothek_controller_reset(controller->data);
 	}
 	
 	break;

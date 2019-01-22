@@ -210,6 +210,8 @@ am__objects_11 = $(am__objects_1) \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_end_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_qrcode_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_diskjokey_sequencer_controller.lo \
+	monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo \
+	monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_controller.lo
 am__objects_12 = $(am__objects_1) \
 	monothek/ui/view/libmonothek_la-monothek_start_view.lo \
@@ -286,7 +288,9 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo \
+	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo \
+	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo \
@@ -777,6 +781,8 @@ libmonothek_controller_h_sources = \
 	monothek/ui/controller/monothek_jukebox_end_controller.h \
 	monothek/ui/controller/monothek_jukebox_qrcode_controller.h \
 	monothek/ui/controller/monothek_diskjokey_sequencer_controller.h \
+	monothek/ui/controller/monothek_diskjokey_end_controller.h \
+	monothek/ui/controller/monothek_diskjokey_qrcode_controller.h \
 	monothek/ui/controller/monothek_controller.h
 
 deprecated_libmonothek_controller_c_sources = 
@@ -794,6 +800,8 @@ libmonothek_controller_c_sources = \
 	monothek/ui/controller/monothek_jukebox_end_controller.c \
 	monothek/ui/controller/monothek_jukebox_qrcode_controller.c \
 	monothek/ui/controller/monothek_diskjokey_sequencer_controller.c \
+	monothek/ui/controller/monothek_diskjokey_end_controller.c \
+	monothek/ui/controller/monothek_diskjokey_qrcode_controller.c \
 	monothek/ui/controller/monothek_controller.c
 
 deprecated_libmonothek_view_h_sources = 
@@ -1152,6 +1160,12 @@ monothek/ui/controller/libmonothek_la-monothek_jukebox_qrcode_controller.lo:  \
 monothek/ui/controller/libmonothek_la-monothek_diskjokey_sequencer_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo:  \
+	monothek/ui/controller/$(am__dirstamp) \
+	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo:  \
+	monothek/ui/controller/$(am__dirstamp) \
+	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/controller/libmonothek_la-monothek_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
@@ -1267,7 +1281,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo@am__quote@ # am--include-marker
@@ -1630,6 +1646,20 @@ monothek/ui/controller/libmonothek_la-monothek_diskjokey_sequencer_controller.lo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_diskjokey_sequencer_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_diskjokey_sequencer_controller.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_diskjokey_sequencer_controller.lo `test -f 'monothek/ui/controller/monothek_diskjokey_sequencer_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_diskjokey_sequencer_controller.c
+
+monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo: monothek/ui/controller/monothek_diskjokey_end_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo `test -f 'monothek/ui/controller/monothek_diskjokey_end_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_diskjokey_end_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_diskjokey_end_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_diskjokey_end_controller.lo `test -f 'monothek/ui/controller/monothek_diskjokey_end_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_diskjokey_end_controller.c
+
+monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo: monothek/ui/controller/monothek_diskjokey_qrcode_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo `test -f 'monothek/ui/controller/monothek_diskjokey_qrcode_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_diskjokey_qrcode_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_diskjokey_qrcode_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo `test -f 'monothek/ui/controller/monothek_diskjokey_qrcode_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_diskjokey_qrcode_controller.c
 
 monothek/ui/controller/libmonothek_la-monothek_controller.lo: monothek/ui/controller/monothek_controller.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_controller.lo `test -f 'monothek/ui/controller/monothek_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_controller.c
@@ -2159,7 +2189,9 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo
@@ -2265,7 +2297,9 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_box.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_action_slider.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_payment_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_qrcode_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_diskjokey_sequencer_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo

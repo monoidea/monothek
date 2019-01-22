@@ -65,6 +65,7 @@ enum{
   PROP_RANDOM_ACTIVE,
   PROP_CLEAR_ACTIVE,
   PROP_RUN_ACTIVE,
+  PROP_DURATION,
 };
 
 static gpointer monothek_diskjokey_sequencer_model_parent_class = NULL;
@@ -212,6 +213,21 @@ monothek_diskjokey_sequencer_model_class_init(MonothekDiskjokeySequencerModelCla
 				    G_PARAM_READABLE | G_PARAM_WRITABLE);
   g_object_class_install_property(gobject,
 				  PROP_RUN_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeySequencerModel:duration:
+   *
+   * The assigned duration.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_pointer("duration",
+				   i18n_pspec("duration"),
+				   i18n_pspec("The assigned duration"),
+				   G_PARAM_READABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DURATION,
 				  param_spec);
 
   /* MonothekModel */
@@ -528,7 +544,7 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   /* duration */
   diskjokey_sequencer_model->duration = (struct timespec *) malloc(sizeof(struct timespec));
   diskjokey_sequencer_model->duration->tv_sec = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC;
-  diskjokey_sequencer_model->duration->tv_nsec = 0;    
+  diskjokey_sequencer_model->duration->tv_nsec = 0;
 }
 
 void
@@ -623,6 +639,11 @@ monothek_diskjokey_sequencer_model_get_property(GObject *gobject,
     {
       g_value_set_boolean(value,
 			  diskjokey_sequencer_model->run_active);
+    }
+    break;
+  case PROP_DURATION:
+    {
+      g_value_set_pointer(value, diskjokey_sequencer_model->duration);
     }
     break;
   default:

@@ -38,6 +38,9 @@ typedef struct _MonothekDiskjokeyEndModelClass MonothekDiskjokeyEndModelClass;
 struct _MonothekDiskjokeyEndModel
 {
   GObject gobject;
+
+  gboolean diskjokey_restart_active;
+  gboolean diskjokey_quit_and_save_active;
 };
 
 struct _MonothekDiskjokeyEndModelClass

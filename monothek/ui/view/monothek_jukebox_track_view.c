@@ -162,7 +162,7 @@ monothek_jukebox_track_view_init(MonothekJukeboxTrackView *jukebox_track_view)
   jukebox_track_view->cover_box_height = 440.0;
 
   /* progress */
-  jukebox_track_view->progress = gtk_adjustment_new(0.0, 0.0, 1.0, 0.001, 0.01, 0.01);
+  jukebox_track_view->progress = gtk_adjustment_new(0.0, 0.0, 1.0, 0.0001, 0.01, 0.01);
   
   jukebox_track_view->progress_box_line_width = 5.0;
 

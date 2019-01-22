@@ -49,7 +49,7 @@
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
 
-#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC (6000)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC (600)
 
 typedef struct _MonothekDiskjokeySequencerModel MonothekDiskjokeySequencerModel;
 typedef struct _MonothekDiskjokeySequencerModelClass MonothekDiskjokeySequencerModelClass;

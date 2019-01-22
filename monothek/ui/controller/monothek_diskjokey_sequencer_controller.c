@@ -34,6 +34,11 @@
 #include <monothek/ui/view/monothek_diskjokey_sequencer_view.h>
 #include <monothek/ui/view/monothek_diskjokey_end_view.h>
 
+#ifdef __APPLE__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -46,6 +51,8 @@ void monothek_diskjokey_sequencer_controller_finalize(GObject *gobject);
 
 void monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable);
 void monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable);
+
+void monothek_diskjokey_sequencer_controller_reset(MonothekController *controller);
 
 void monothek_diskjokey_sequencer_controller_pad_enter_callback(MonothekActionBox *action_box,
 								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
@@ -133,8 +140,13 @@ void monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjoke
 void monothek_diskjokey_sequencer_controller_real_clear(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 void monothek_diskjokey_sequencer_controller_real_random(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
+void monothek_diskjokey_sequencer_controller_real_progress(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+							   gdouble value);
+
 void monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 						      gboolean do_run);
+
+void monothek_diskjokey_sequencer_controller_real_completed(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
 /**
  * SECTION:monothek_diskjokey_sequencer_controller
@@ -156,7 +168,9 @@ enum{
      LOAD_DRUM_KIT,
      CLEAR,
      RANDOM,
+     PROGRESS,
      RUN,
+     COMPLETED,
      LAST_SIGNAL,
 };
 
@@ -166,6 +180,7 @@ static AgsConnectableInterface* monothek_diskjokey_sequencer_controller_parent_c
 static guint diskjokey_sequencer_controller_signals[LAST_SIGNAL];
 
 GHashTable *monothek_diskjokey_sequencer_controller_position = NULL;
+GHashTable *monothek_diskjokey_sequencer_controller_progress_increase = NULL;
 
 GType
 monothek_diskjokey_sequencer_controller_get_type()
@@ -212,6 +227,7 @@ monothek_diskjokey_sequencer_controller_class_init(MonothekDiskjokeySequencerCon
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_diskjokey_sequencer_controller_parent_class = g_type_class_peek_parent(diskjokey_sequencer_controller);
 
@@ -219,6 +235,11 @@ monothek_diskjokey_sequencer_controller_class_init(MonothekDiskjokeySequencerCon
   gobject = (GObjectClass *) diskjokey_sequencer_controller;
 
   gobject->finalize = monothek_diskjokey_sequencer_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) diskjokey_sequencer_controller;
+  
+  controller->reset = monothek_diskjokey_sequencer_controller_reset;
 
   /* MonothekDiskjokeySequencerController */
   diskjokey_sequencer_controller->toggle_pad = monothek_diskjokey_sequencer_controller_real_toggle_pad;
@@ -235,7 +256,9 @@ monothek_diskjokey_sequencer_controller_class_init(MonothekDiskjokeySequencerCon
   diskjokey_sequencer_controller->clear = monothek_diskjokey_sequencer_controller_real_clear;
   diskjokey_sequencer_controller->random = monothek_diskjokey_sequencer_controller_real_random;
 
+  diskjokey_sequencer_controller->progress = monothek_diskjokey_sequencer_controller_real_progress;
   diskjokey_sequencer_controller->run = monothek_diskjokey_sequencer_controller_real_run;
+  diskjokey_sequencer_controller->completed = monothek_diskjokey_sequencer_controller_real_completed;
 
   /* signals */
   /**
@@ -410,6 +433,25 @@ monothek_diskjokey_sequencer_controller_class_init(MonothekDiskjokeySequencerCon
 		 G_TYPE_NONE, 0);
 
   /**
+   * MonothekDiskjokeySequencerController::progress:
+   * @diskjokey_sequencer_controller: the #MonothekDiskjokeySequencerController
+   * @value: a gdouble ranging from 0.0 to 1.0
+   *
+   * The ::progress signal notifies about progress.
+   *
+   * Since: 1.0.0
+   */
+  diskjokey_sequencer_controller_signals[PROGRESS] =
+    g_signal_new("progress",
+		 G_TYPE_FROM_CLASS(diskjokey_sequencer_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekDiskjokeySequencerControllerClass, progress),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__DOUBLE,
+		 G_TYPE_NONE, 1,
+		 G_TYPE_DOUBLE);
+
+  /**
    * MonothekDiskjokeySequencerController::run:
    * @diskjokey_sequencer_controller: the #MonothekDiskjokeySequencerController
    * @do_run: if %TRUE start playback, else if %FALSE stop playback
@@ -427,6 +469,23 @@ monothek_diskjokey_sequencer_controller_class_init(MonothekDiskjokeySequencerCon
 		 g_cclosure_marshal_VOID__BOOLEAN,
 		 G_TYPE_NONE, 1,
 		 G_TYPE_BOOLEAN);
+
+  /**
+   * MonothekDiskjokeySequencerController::completed:
+   * @diskjokey_sequencer_controller: the #MonothekDiskjokeySequencerController
+   *
+   * The ::completed signal notifies about completed sequencer session.
+   *
+   * Since: 1.0.0
+   */
+  diskjokey_sequencer_controller_signals[COMPLETED] =
+    g_signal_new("completed",
+		 G_TYPE_FROM_CLASS(diskjokey_sequencer_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekDiskjokeySequencerControllerClass, completed),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
 }
 
 void
@@ -621,7 +680,7 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
   
   monothek_controller_add_action_slider(diskjokey_sequencer_controller,
 					action_slider);
-
+  
   /* position timeout */
   if(monothek_diskjokey_sequencer_controller_position == NULL){
     monothek_diskjokey_sequencer_controller_position = g_hash_table_new_full(g_direct_hash, g_direct_equal,
@@ -635,6 +694,29 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
   g_timeout_add(1000 / 30,
                 (GSourceFunc) monothek_diskjokey_sequencer_controller_position_timeout,
                 (gpointer) diskjokey_sequencer_controller);
+
+  /* progress */
+  if(monothek_diskjokey_sequencer_controller_progress_increase == NULL){
+    monothek_diskjokey_sequencer_controller_progress_increase = g_hash_table_new_full(g_direct_hash, g_direct_equal,
+										      NULL,
+										      NULL);
+  }
+
+  diskjokey_sequencer_controller->start_time = (struct timespec *) malloc(sizeof(struct timespec));
+  diskjokey_sequencer_controller->start_time->tv_sec = 0;
+  diskjokey_sequencer_controller->start_time->tv_nsec = 0;
+  
+  diskjokey_sequencer_controller->timer = (struct timespec *) malloc(sizeof(struct timespec));
+  diskjokey_sequencer_controller->timer->tv_sec = 0;
+  diskjokey_sequencer_controller->timer->tv_nsec = 0;
+
+  /* progress timeout - add */
+  g_hash_table_insert(monothek_diskjokey_sequencer_controller_progress_increase,
+		      diskjokey_sequencer_controller, monothek_diskjokey_sequencer_controller_progress_increase_timeout);
+  
+  g_timeout_add(1000 / 30,
+		(GSourceFunc) monothek_diskjokey_sequencer_controller_progress_increase_timeout,
+		(gpointer) diskjokey_sequencer_controller);
 }
 
 void
@@ -648,6 +730,10 @@ monothek_diskjokey_sequencer_controller_finalize(GObject *gobject)
   g_hash_table_remove(monothek_diskjokey_sequencer_controller_position,
                       diskjokey_sequencer_controller);
   
+  /* progress timeout - remove */
+  g_hash_table_remove(monothek_diskjokey_sequencer_controller_progress_increase,
+		      diskjokey_sequencer_controller);
+
   /* call parent */
   G_OBJECT_CLASS(monothek_diskjokey_sequencer_controller_parent_class)->finalize(gobject);
 }
@@ -733,10 +819,6 @@ monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable)
 		   G_CALLBACK(monothek_diskjokey_sequencer_controller_run_leave_callback), diskjokey_sequencer_controller);
   g_signal_connect(diskjokey_sequencer_controller->run, "clicked",
 		   G_CALLBACK(monothek_diskjokey_sequencer_controller_run_clicked_callback), diskjokey_sequencer_controller);
-
-  /* initial setup */
-  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
-							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME);
 }
 
 void
@@ -772,7 +854,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->techno,
 		      "any_signal::enter",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_enter_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_enter_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::leave",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_techno_leave_callback),
@@ -784,7 +866,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->house,
 		      "any_signal::enter",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_house_enter_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_house_enter_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::leave",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_house_leave_callback),
@@ -796,7 +878,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->hiphop,
 		      "any_signal::enter",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_enter_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_enter_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::leave",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_hiphop_leave_callback),
@@ -808,7 +890,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->clear,
 		      "any_signal::enter",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_enter_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_enter_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::leave",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_clear_leave_callback),
@@ -820,7 +902,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->random,
 		      "any_signal::enter",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_random_enter_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_random_enter_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::leave",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_random_leave_callback),
@@ -833,7 +915,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
   for(i = 0; i < 4; i++){
     g_object_disconnect(diskjokey_sequencer_controller->tab[i],
 			"any_signal::enter",
-			G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_enter_callback), diskjokey_sequencer_controller,
+			G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_enter_callback),
 			diskjokey_sequencer_controller,
 			"any_signal::leave",
 			G_CALLBACK(monothek_diskjokey_sequencer_controller_tab_leave_callback),
@@ -846,7 +928,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->bpm,
 		      "any_signal::change-value",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_change_value_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_change_value_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::move-slider",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_bpm_move_slider_callback),
@@ -855,7 +937,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 
   g_object_disconnect(diskjokey_sequencer_controller->run,
 		      "any_signal::enter",
-		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_enter_callback), diskjokey_sequencer_controller,
+		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_enter_callback),
 		      diskjokey_sequencer_controller,
 		      "any_signal::leave",
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_leave_callback),
@@ -864,6 +946,81 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_diskjokey_sequencer_controller_run_clicked_callback),
 		      diskjokey_sequencer_controller,
 		      NULL);
+}
+
+void
+monothek_diskjokey_sequencer_controller_reset(MonothekController *controller)
+{
+  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
+  MonothekDiskjokeySequencerModel *model;
+
+  gdouble bpm;
+  gdouble swing;
+
+#ifdef __APPLE__
+  clock_serv_t cclock;
+  mach_timespec_t mts;
+#endif
+
+  diskjokey_sequencer_controller = MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(controller);
+  
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       NULL);
+
+  model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
+
+  model->techno_active = TRUE;
+  model->house_active = FALSE;
+  model->hiphop_active = FALSE;
+
+  model->random_active = FALSE;
+  model->clear_active = FALSE;
+
+  model->run_active = FALSE;
+
+  model->active_column = -1;
+
+  model->current_tab = 0;
+
+  model->tab_active[0] = TRUE;
+  model->tab_active[1] = FALSE;
+  model->tab_active[2] = FALSE;
+  model->tab_active[3] = FALSE;
+
+  /* bpm */
+  bpm = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT;
+  
+  model->bpm = bpm;
+  monothek_diskjokey_sequencer_controller_change_bpm(diskjokey_sequencer_controller,
+						     bpm);
+
+  /* swing */
+  swing = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT;
+  
+  model->swing = swing;
+  monothek_diskjokey_sequencer_controller_change_swing(diskjokey_sequencer_controller,
+						       swing);
+  
+  /* load drum kit */
+  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
+							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME);
+
+  /* reset timer */
+#ifdef __APPLE__
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+  clock_get_time(cclock, &mts);
+  mach_port_deallocate(mach_task_self(), cclock);
+    
+  diskjokey_sequencer_controller->start_time->tv_sec = mts.tv_sec;
+  diskjokey_sequencer_controller->start_time->tv_nsec = mts.tv_nsec;
+#else
+  clock_gettime(CLOCK_MONOTONIC, diskjokey_sequencer_controller->start_time);
+#endif
+
+  diskjokey_sequencer_controller->timer->tv_sec = 0;
+  diskjokey_sequencer_controller->timer->tv_nsec = 0;
 }
 
 void
@@ -1333,7 +1490,8 @@ monothek_diskjokey_sequencer_controller_tab_enter_callback(MonothekActionBox *ac
   gchar *action_identifier;  
 
   guint x;
-
+  guint i;
+  
   /* model and view */
   g_object_get(diskjokey_sequencer_controller,
 	       "model", &model,
@@ -1346,9 +1504,24 @@ monothek_diskjokey_sequencer_controller_tab_enter_callback(MonothekActionBox *ac
   
   sscanf(action_identifier, "tab: %d", &x);
 
-  monothek_diskjokey_sequencer_model_set_tab_active(model,
-						    x,
-						    TRUE);
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; i++){
+    gboolean is_active;
+
+    is_active = FALSE;
+
+    if(i == x){
+      is_active = TRUE;
+    }
+
+    if(i == model->current_tab){
+      is_active = TRUE;
+    }
+    
+    monothek_diskjokey_sequencer_model_set_tab_active(model,
+						      i,
+						      is_active);
+  }
+  
   gtk_widget_queue_draw(view);
 }
 
@@ -1363,7 +1536,8 @@ monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBox *ac
   gchar *action_identifier;  
 
   guint x;
-
+  guint i;
+  
   /* model and view */
   g_object_get(diskjokey_sequencer_controller,
 	       "model", &model,
@@ -1376,9 +1550,24 @@ monothek_diskjokey_sequencer_controller_tab_leave_callback(MonothekActionBox *ac
   
   sscanf(action_identifier, "tab: %d", &x);
 
-  monothek_diskjokey_sequencer_model_set_tab_active(model,
-						    x,
-						    FALSE);
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; i++){
+    gboolean is_active;
+
+    is_active = FALSE;
+    
+    if(i == x){
+      is_active = FALSE;
+    }
+
+    if(i == model->current_tab){
+      is_active = TRUE;
+    }
+
+    monothek_diskjokey_sequencer_model_set_tab_active(model,
+						      i,
+						      is_active);
+  }
+  
   gtk_widget_queue_draw(view);
 }
 
@@ -1393,7 +1582,8 @@ monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *
   gchar *action_identifier;  
 
   guint x;
-
+  guint i;
+  
   /* model and view */
   g_object_get(diskjokey_sequencer_controller,
 	       "model", &model,
@@ -1407,6 +1597,21 @@ monothek_diskjokey_sequencer_controller_tab_clicked_callback(MonothekActionBox *
   sscanf(action_identifier, "tab: %d", &x);
 
   model->current_tab = x;
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; i++){
+    gboolean is_active;
+
+    is_active = FALSE;
+
+    if(i == model->current_tab){
+      is_active = TRUE;
+    }
+    
+    monothek_diskjokey_sequencer_model_set_tab_active(model,
+						      i,
+						      is_active);
+  }
+
   gtk_widget_queue_draw(view);
 }
 
@@ -2196,6 +2401,62 @@ monothek_diskjokey_sequencer_controller_random(MonothekDiskjokeySequencerControl
 }
 
 void
+monothek_diskjokey_sequencer_controller_real_progress(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+						      gdouble value)
+{
+  MonothekDiskjokeySequencerView *diskjokey_sequencer_view;
+  
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  g_object_get(diskjokey_sequencer_controller,
+	       "view", &diskjokey_sequencer_view,
+	       NULL);
+
+  gtk_adjustment_set_value(diskjokey_sequencer_view->progress,
+			   value);
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* stop sequencer */
+  if(value >= 1.0){
+    monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,
+						FALSE);
+
+    diskjokey_sequencer_controller->start_time->tv_sec = 0;
+    diskjokey_sequencer_controller->start_time->tv_nsec = 0;
+
+    /* emit completed */
+    monothek_diskjokey_sequencer_controller_completed(diskjokey_sequencer_controller);
+  }
+}
+
+/**
+ * monothek_diskjokey_sequencer_controller_progress:
+ * @diskjokey_sequencer_controller: the #MonothekDiskjokeySequencerController
+ * @value: a gdouble ranging from 0.0 to 1.0
+ * 
+ * Notify about progress.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_diskjokey_sequencer_controller_progress(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+						 gdouble value)
+{
+  g_return_if_fail(MONOTHEK_IS_DISKJOKEY_SEQUENCER_CONTROLLER(diskjokey_sequencer_controller));
+  
+  g_object_ref((GObject *) diskjokey_sequencer_controller);
+  g_signal_emit(G_OBJECT(diskjokey_sequencer_controller),
+		diskjokey_sequencer_controller_signals[PROGRESS], 0,
+		value);
+  g_object_unref((GObject *) diskjokey_sequencer_controller);
+}
+
+void
 monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 						 gboolean do_run)
 {
@@ -2290,6 +2551,52 @@ monothek_diskjokey_sequencer_controller_run(MonothekDiskjokeySequencerController
   g_signal_emit(G_OBJECT(diskjokey_sequencer_controller),
 		diskjokey_sequencer_controller_signals[RUN], 0,
 		do_run);
+  g_object_unref((GObject *) diskjokey_sequencer_controller);
+}
+
+void
+monothek_diskjokey_sequencer_controller_real_completed(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  MonothekWindow *window;
+  MonothekDiskjokeySequencerView *view;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  /* change view */
+  g_object_get(diskjokey_sequencer_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* change view */
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_DISKJOKEY_END_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_diskjokey_sequencer_controller_completed:
+ * @diskjokey_sequencer_controller: the #MonothekDiskjokeySequencerController
+ * 
+ * Completed sequencer session.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_diskjokey_sequencer_controller_completed(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_DISKJOKEY_SEQUENCER_CONTROLLER(diskjokey_sequencer_controller));
+  
+  g_object_ref((GObject *) diskjokey_sequencer_controller);
+  g_signal_emit(G_OBJECT(diskjokey_sequencer_controller),
+		diskjokey_sequencer_controller_signals[COMPLETED], 0);
   g_object_unref((GObject *) diskjokey_sequencer_controller);
 }
 
@@ -2390,6 +2697,80 @@ monothek_diskjokey_sequencer_controller_position_timeout(MonothekDiskjokeySequen
     }
 
     g_list_free(start_recall_id);
+    
+    return(TRUE);
+  }else{
+    return(FALSE);
+  }
+}
+
+gboolean
+monothek_diskjokey_sequencer_controller_progress_increase_timeout(GObject *gobject)
+{
+  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
+
+  diskjokey_sequencer_controller = gobject;
+  
+  if(g_hash_table_lookup(monothek_diskjokey_sequencer_controller_progress_increase,
+			 gobject) != NULL){
+    MonothekDiskjokeySequencerModel *diskjokey_sequencer_model;
+
+#ifdef __APPLE__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+#endif
+
+    struct timespec *duration;
+    struct timespec time_now;
+    
+    gdouble value;
+
+    if(diskjokey_sequencer_controller->start_time->tv_sec == 0){
+      return(TRUE);
+    }
+    
+    g_object_get(diskjokey_sequencer_controller,
+		 "model", &diskjokey_sequencer_model,
+		 NULL);
+    
+    g_object_get(diskjokey_sequencer_model,
+		 "duration", &duration,
+		 NULL);
+    
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    
+    time_now.tv_sec = mts.tv_sec;
+    time_now.tv_nsec = mts.tv_nsec;
+#else
+    clock_gettime(CLOCK_MONOTONIC, &time_now);
+#endif
+
+    /* calculate timer */
+    if(time_now.tv_nsec >= diskjokey_sequencer_controller->start_time->tv_nsec){
+      diskjokey_sequencer_controller->timer->tv_sec = time_now.tv_sec - diskjokey_sequencer_controller->start_time->tv_sec;
+      diskjokey_sequencer_controller->timer->tv_nsec = time_now.tv_nsec - diskjokey_sequencer_controller->start_time->tv_nsec;
+    }else{
+      diskjokey_sequencer_controller->timer->tv_sec = time_now.tv_sec - diskjokey_sequencer_controller->start_time->tv_sec - 1;
+      diskjokey_sequencer_controller->timer->tv_nsec = NSEC_PER_SEC - diskjokey_sequencer_controller->start_time->tv_nsec + time_now.tv_sec;
+    }
+
+    /* calculate progress */
+    if(duration->tv_sec > 0){
+      if(duration->tv_sec < diskjokey_sequencer_controller->timer->tv_sec){
+	value = 1.0;
+      }else{
+	value = 1.0 / duration->tv_sec * diskjokey_sequencer_controller->timer->tv_sec;
+      }
+    }else{
+      value = 0.0;
+    }
+    
+    monothek_diskjokey_sequencer_controller_progress(diskjokey_sequencer_controller,
+						     value);
     
     return(TRUE);
   }else{

@@ -45,6 +45,8 @@ void monothek_jukebox_playlist_controller_finalize(GObject *gobject);
 void monothek_jukebox_playlist_controller_connect(AgsConnectable *connectable);
 void monothek_jukebox_playlist_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_playlist_controller_reset(MonothekController *controller);
+
 void monothek_jukebox_playlist_controller_jukebox_song_select_enter_callback(MonothekActionBox *action_box,
 									     MonothekJukeboxPlaylistController *jukebox_playlist_controller);
 void monothek_jukebox_playlist_controller_jukebox_song_select_leave_callback(MonothekActionBox *action_box,
@@ -120,6 +122,7 @@ monothek_jukebox_playlist_controller_class_init(MonothekJukeboxPlaylistControlle
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_jukebox_playlist_controller_parent_class = g_type_class_peek_parent(jukebox_playlist_controller);
 
@@ -127,6 +130,11 @@ monothek_jukebox_playlist_controller_class_init(MonothekJukeboxPlaylistControlle
   gobject = (GObjectClass *) jukebox_playlist_controller;
 
   gobject->finalize = monothek_jukebox_playlist_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) jukebox_playlist_controller;
+  
+  controller->reset = monothek_jukebox_playlist_controller_reset;
 
   /* MonothekJukeboxPlaylistController */
   jukebox_playlist_controller->select_song = monothek_jukebox_playlist_controller_real_select_song;
@@ -252,6 +260,22 @@ monothek_jukebox_playlist_controller_disconnect(AgsConnectable *connectable)
 			G_CALLBACK(monothek_jukebox_playlist_controller_jukebox_song_select_clicked_callback),
 			jukebox_playlist_controller,
 			NULL);
+  }
+}
+
+void
+monothek_jukebox_playlist_controller_reset(MonothekController *controller)
+{
+  MonothekJukeboxPlaylistModel *model;
+
+  guint i;
+  
+  g_object_get(controller,
+	       "model", &model,
+	       NULL);
+
+  for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
+    model->song_select_active[i] = FALSE;
   }
 }
 

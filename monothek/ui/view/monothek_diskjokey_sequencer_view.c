@@ -44,6 +44,9 @@ void monothek_diskjokey_sequencer_view_finalize(GObject *gobject);
 void monothek_diskjokey_sequencer_view_connect(AgsConnectable *connectable);
 void monothek_diskjokey_sequencer_view_disconnect(AgsConnectable *connectable);
 
+void monothek_diskjokey_sequencer_view_progress_callback(GtkAdjustment *adjustment,
+							 MonothekDiskjokeySequencerView *diskjokey_sequencer_view);
+
 void monothek_diskjokey_sequencer_view_draw(MonothekView *view);
 
 /**
@@ -274,6 +277,8 @@ monothek_diskjokey_sequencer_view_init(MonothekDiskjokeySequencerView *diskjokey
   diskjokey_sequencer_view->clear_box_height = 60.0;
 
   /* timer */
+  diskjokey_sequencer_view->progress = gtk_adjustment_new(0.0, 0.0, 1.0, 0.0001, 0.01, 0.01);
+
   diskjokey_sequencer_view->timer_box_line_width = 5.0;
 
   diskjokey_sequencer_view->timer_box_x0 = 1460.0;
@@ -352,7 +357,8 @@ monothek_diskjokey_sequencer_view_connect(AgsConnectable *connectable)
 
   monothek_diskjokey_sequencer_view_parent_connectable_interface->connect(connectable);
 
-  //TODO:JK: implement me
+  g_signal_connect(diskjokey_sequencer_view->progress, "value-changed",
+		   G_CALLBACK(monothek_diskjokey_sequencer_view_progress_callback), diskjokey_sequencer_view);
 }
 
 void
@@ -370,7 +376,18 @@ monothek_diskjokey_sequencer_view_disconnect(AgsConnectable *connectable)
 
   monothek_diskjokey_sequencer_view_parent_connectable_interface->disconnect(connectable);
 
-  //TODO:JK: implement me
+  g_object_disconnect(diskjokey_sequencer_view->progress,
+		      "any_signal::value-changed",
+		      G_CALLBACK(monothek_diskjokey_sequencer_view_progress_callback),
+		      diskjokey_sequencer_view,
+		      NULL);
+}
+
+void
+monothek_diskjokey_sequencer_view_progress_callback(GtkAdjustment *adjustment,
+						    MonothekDiskjokeySequencerView *diskjokey_sequencer_view)
+{
+  gtk_widget_queue_draw(diskjokey_sequencer_view);
 }
 
 void
@@ -1389,7 +1406,6 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
     PangoRectangle logical_rect;
     
     gchar *diskjokey_font;
-    gchar *timer;
     
     static const guint font_size = 100;
 
@@ -1418,11 +1434,28 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 
     g_object_unref(layout);
     
-    timer = g_strdup_printf("10:00");
     
     /* timer */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, timer, -1);
+
+    if(diskjokey_sequencer_model != NULL){
+      gchar *str;
+
+      gdouble value;
+
+      value = diskjokey_sequencer_view->progress->value;
+      
+      str = g_strdup_printf("%d:%.2d",
+			    9 - (guint) floor(value * diskjokey_sequencer_model->duration->tv_sec / 60.0),
+			    59 - (guint) (value * diskjokey_sequencer_model->duration->tv_sec) % 60);
+      
+      pango_layout_set_text(layout, str, -1);
+
+      g_free(str);
+    }else{
+      pango_layout_set_text(layout, "10:00", -1);
+    }
+
     desc = pango_font_description_from_string(diskjokey_font);
     pango_font_description_set_size(desc,
 				    40 * PANGO_SCALE);

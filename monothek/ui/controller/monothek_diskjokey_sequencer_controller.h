@@ -56,6 +56,9 @@ struct _MonothekDiskjokeySequencerController
 
   MonothekActionSlider *bpm;
   MonothekActionSlider *swing;
+
+  struct timespec *start_time;
+  struct timespec *timer;
 };
 
 struct _MonothekDiskjokeySequencerControllerClass
@@ -83,12 +86,16 @@ struct _MonothekDiskjokeySequencerControllerClass
   void (*clear)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
   void (*random)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
+  void (*progress)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		   gdouble value);
+
   void (*run)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 	      gboolean do_run);
+
+  void (*completed)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 };
 
 GType monothek_diskjokey_sequencer_controller_get_type(void);
-
 
 void monothek_diskjokey_sequencer_controller_toggle_pad(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 							guint x, guint y);
@@ -111,10 +118,16 @@ void monothek_diskjokey_sequencer_controller_load_drum_kit(MonothekDiskjokeySequ
 void monothek_diskjokey_sequencer_controller_clear(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 void monothek_diskjokey_sequencer_controller_random(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
 
+void monothek_diskjokey_sequencer_controller_progress(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+						      gdouble value);
+
 void monothek_diskjokey_sequencer_controller_run(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
 						 gboolean do_run);
 
+void monothek_diskjokey_sequencer_controller_completed(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
 gboolean monothek_diskjokey_sequencer_controller_position_timeout(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+gboolean monothek_diskjokey_sequencer_controller_progress_increase_timeout(GObject *gobject);
 
 MonothekDiskjokeySequencerController* monothek_diskjokey_sequencer_controller_new();
 
