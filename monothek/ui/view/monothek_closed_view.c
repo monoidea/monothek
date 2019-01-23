@@ -354,7 +354,7 @@ monothek_closed_view_draw(MonothekView *view)
   cairo_destroy(cr);
 
 #ifndef __APPLE__
-  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
+  //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
 }
 

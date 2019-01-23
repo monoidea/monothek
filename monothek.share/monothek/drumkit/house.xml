@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <drumkit>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Kick_short.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Kick_short.wav</file>
     <label>Kick</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Lo Tom.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Lo Tom.wav</file>
     <label>Tom</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Hat_closed.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Hat_closed.wav</file>
     <label>Hi-Hat</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Snare_lo1.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Snare_lo1.wav</file>
     <label>Snare</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Clap.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Clap.wav</file>
     <label>Clap</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Md Conga.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Md Conga.wav</file>
     <label>Conga</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Maracas.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Maracas.wav</file>
     <label>Maracas</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Clave.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Clave.wav</file>
     <label>Clave</label>
     <control>
       <volume>0.25</volume>
     </control>
   </sample>
   <sample>
-    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Cowbell.flac</file>
+    <file>/home/joelkraehemann/monoidea/drumkits/house/808 Cowbell.wav</file>
     <label>Cowbell</label>
     <control>
       <volume>0.25</volume>

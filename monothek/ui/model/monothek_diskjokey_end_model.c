@@ -50,6 +50,8 @@ void monothek_diskjokey_end_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_DISKJOKEY_RESTART_ACTIVE,
+  PROP_DISKJOKEY_QUIT_AND_SAVE_ACTIVE,
 };
 
 static gpointer monothek_diskjokey_end_model_parent_class = NULL;
@@ -103,6 +105,37 @@ monothek_diskjokey_end_model_class_init(MonothekDiskjokeyEndModelClass *diskjoke
   gobject->finalize = monothek_diskjokey_end_model_finalize;
 
   /* properties */
+  /**
+   * MonothekDiskjokeyEndModel:diskjokey-restart-active:
+   *
+   * If diskjokey restart is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("diskjokey-restart-active",
+				    i18n_pspec("diskjokey restart active"),
+				    i18n_pspec("If diskjokey restart is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DISKJOKEY_RESTART_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekDiskjokeyEndModel:diskjokey-quit-and-save-active:
+   *
+   * If diskjokey quit and save is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("diskjokey-quit-and-save-active",
+				    i18n_pspec("diskjokey quit and save active"),
+				    i18n_pspec("If diskjokey quit and save is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DISKJOKEY_QUIT_AND_SAVE_ACTIVE,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +143,8 @@ monothek_diskjokey_end_model_class_init(MonothekDiskjokeyEndModelClass *diskjoke
 void
 monothek_diskjokey_end_model_init(MonothekDiskjokeyEndModel *diskjokey_end_model)
 {
-  //TODO:JK: implement me
+  diskjokey_end_model->diskjokey_restart_active = FALSE;
+  diskjokey_end_model->diskjokey_quit_and_save_active = FALSE;
 }
 
 void
@@ -124,6 +158,16 @@ monothek_diskjokey_end_model_set_property(GObject *gobject,
   diskjokey_end_model = MONOTHEK_DISKJOKEY_END_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_DISKJOKEY_RESTART_ACTIVE:
+    {
+      diskjokey_end_model->diskjokey_restart_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_DISKJOKEY_QUIT_AND_SAVE_ACTIVE:
+    {
+      diskjokey_end_model->diskjokey_quit_and_save_active = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -141,6 +185,18 @@ monothek_diskjokey_end_model_get_property(GObject *gobject,
   diskjokey_end_model = MONOTHEK_DISKJOKEY_END_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_DISKJOKEY_RESTART_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_end_model->diskjokey_restart_active);
+    }
+    break;
+  case PROP_DISKJOKEY_QUIT_AND_SAVE_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_end_model->diskjokey_quit_and_save_active);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

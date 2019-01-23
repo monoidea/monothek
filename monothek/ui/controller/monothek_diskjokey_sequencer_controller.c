@@ -511,7 +511,7 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
     diskjokey_sequencer_controller->pad[i] = (MonothekActionBox **) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT * sizeof(MonothekActionBox *));
 
-    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; j++){
       gchar *str;
 
       str = g_strdup_printf("pad: %d,%d", j, i);
@@ -754,7 +754,7 @@ monothek_diskjokey_sequencer_controller_connect(AgsConnectable *connectable)
   monothek_diskjokey_sequencer_controller_parent_connectable_interface->connect(connectable);
 
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
-    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; j++){
       g_signal_connect(diskjokey_sequencer_controller->pad[i][j], "enter",
 		       G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_enter_callback), diskjokey_sequencer_controller);
       g_signal_connect(diskjokey_sequencer_controller->pad[i][j], "leave",
@@ -837,7 +837,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
   monothek_diskjokey_sequencer_controller_parent_connectable_interface->disconnect(connectable);
 
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
-    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT; j++){
       g_object_disconnect(diskjokey_sequencer_controller->pad[i][j],
 			  "any_signal::enter",
 			  G_CALLBACK(monothek_diskjokey_sequencer_controller_pad_enter_callback),
@@ -1122,6 +1122,8 @@ monothek_diskjokey_sequencer_controller_pad_leave_callback(MonothekActionBox *ac
 						      FALSE);
     gtk_widget_queue_draw(view);
   }
+
+  g_list_free(start_pattern);
 }
 
 void
@@ -1256,6 +1258,11 @@ monothek_diskjokey_sequencer_controller_techno_clicked_callback(MonothekActionBo
 	       "view", &view,
 	       NULL);
 
+  g_object_set(model,
+	       "house-active", FALSE,
+	       "hiphop-active", FALSE,
+	       NULL);
+
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
   gtk_widget_queue_draw(view);
 
@@ -1317,6 +1324,11 @@ monothek_diskjokey_sequencer_controller_house_clicked_callback(MonothekActionBox
 	       "view", &view,
 	       NULL);
 
+  g_object_set(model,
+	       "techno-active", FALSE,
+	       "hiphop-active", FALSE,
+	       NULL);
+
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE;
   gtk_widget_queue_draw(view);
 
@@ -1376,6 +1388,11 @@ monothek_diskjokey_sequencer_controller_hiphop_clicked_callback(MonothekActionBo
   g_object_get(diskjokey_sequencer_controller,
 	       "model", &model,
 	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "techno-active", FALSE,
+	       "house-active", FALSE,
 	       NULL);
 
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP;
@@ -1476,7 +1493,7 @@ void
 monothek_diskjokey_sequencer_controller_clear_clicked_callback(MonothekActionBox *action_box,
 							       MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  monothek_diskjokey_sequencer_controller_clear(diskjokey_sequencer_controller);
 }
 
 void
@@ -1855,6 +1872,8 @@ monothek_diskjokey_sequencer_controller_real_toggle_pad(MonothekDiskjokeySequenc
     
     ags_pattern_toggle_bit(start_pattern->data,
 			   0, 0, x);
+
+    g_list_free(start_pattern);
     
     g_object_get(channel,
 		 "next", &channel,
@@ -2170,13 +2189,13 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 		     "next", &input,
 		     NULL);
 
-	audio_signal = audio_signal->next;
+	//	audio_signal = audio_signal->next;
       }
     }
   }else if(!g_strcmp0(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME,
 		      drum_kit)){
     iter = model->house_sample;
-
+    
     for(; iter[0] != NULL; iter++){
       AgsRecycling *recycling;
       AgsAudioFile *audio_file;
@@ -2204,6 +2223,8 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
       audio_signal = audio_file->audio_signal;
       
       for(i = 0; i < audio_channels && audio_signal != NULL; i++){
+	g_message("%s", iter[0]);
+
 	g_object_get(input,
 		     "first-recycling", &recycling,
 		     NULL);
@@ -2246,7 +2267,7 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 		     "next", &input,
 		     NULL);
 
-	audio_signal = audio_signal->next;
+	//	audio_signal = audio_signal->next;
       }
     }
   }else if(!g_strcmp0(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME,
@@ -2280,6 +2301,8 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
       audio_signal = audio_file->audio_signal;
       
       for(i = 0; i < audio_channels && audio_signal != NULL; i++){
+	g_message("%s", iter[0]);
+
 	g_object_get(input,
 		     "first-recycling", &recycling,
 		     NULL);
@@ -2322,7 +2345,7 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 		     "next", &input,
 		     NULL);
 
-	audio_signal = audio_signal->next;
+	//	audio_signal = audio_signal->next;
       }
     }
   }
@@ -2353,7 +2376,77 @@ monothek_diskjokey_sequencer_controller_load_drum_kit(MonothekDiskjokeySequencer
 void
 monothek_diskjokey_sequencer_controller_real_clear(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  guint audio_channels;
+  guint x;
+  guint i, j;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* model */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* input */
+  sequencer = rack->sequencer;
+  g_object_get(sequencer,
+	       "audio-channels", &audio_channels,
+	       "input", &channel,
+	       NULL);
+
+  while(channel != NULL){
+    GList *start_pattern;
+
+    g_object_get(channel,
+		 "pattern", &start_pattern,
+		 NULL);
+
+    for(x = 0; x < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; x++){
+      if(ags_pattern_get_bit(AGS_PATTERN(start_pattern->data), 0, 0, x)){
+	ags_pattern_toggle_bit(AGS_PATTERN(start_pattern->data),
+			       0, 0, x);
+      }
+    }
+
+    g_list_free(start_pattern);
+    
+    g_object_get(channel,
+		 "next", &channel,
+		 NULL);
+  }
+
+  for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+    for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+      monothek_diskjokey_sequencer_model_set_pad_active(model,
+							j, i,
+							FALSE);
+    }
+  }
+
+  gtk_widget_queue_draw(view);
 }
 
 /**
@@ -2634,6 +2727,10 @@ monothek_diskjokey_sequencer_controller_position_timeout(MonothekDiskjokeySequen
     /* get rack */
     rack_value = g_hash_table_lookup(session->value,
 				     "rack");
+
+    if(rack_value == NULL){
+      return(TRUE);
+    }
 
     rack = g_value_get_object(rack_value);
 
