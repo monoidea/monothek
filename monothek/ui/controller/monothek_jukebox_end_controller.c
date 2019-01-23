@@ -45,6 +45,8 @@ void monothek_jukebox_end_controller_finalize(GObject *gobject);
 void monothek_jukebox_end_controller_connect(AgsConnectable *connectable);
 void monothek_jukebox_end_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_end_controller_reset(MonothekController *controller);
+
 void monothek_jukebox_end_controller_jukebox_restart_enter_callback(MonothekActionBox *action_box,
 								    MonothekJukeboxEndController *jukebox_end_controller);
 void monothek_jukebox_end_controller_jukebox_restart_leave_callback(MonothekActionBox *action_box,
@@ -128,6 +130,7 @@ monothek_jukebox_end_controller_class_init(MonothekJukeboxEndControllerClass *ju
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_jukebox_end_controller_parent_class = g_type_class_peek_parent(jukebox_end_controller);
 
@@ -135,6 +138,11 @@ monothek_jukebox_end_controller_class_init(MonothekJukeboxEndControllerClass *ju
   gobject = (GObjectClass *) jukebox_end_controller;
 
   gobject->finalize = monothek_jukebox_end_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) jukebox_end_controller;
+  
+  controller->reset = monothek_jukebox_end_controller_reset;
 
   /* MonothekJukeboxEndController */
   jukebox_end_controller->restart = monothek_jukebox_end_controller_real_restart;
@@ -288,6 +296,22 @@ monothek_jukebox_end_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_jukebox_end_controller_jukebox_quit_and_save_clicked_callback),
 		      jukebox_end_controller,
 		      NULL);
+}
+
+void
+monothek_jukebox_end_controller_reset(MonothekController *controller)
+{
+  MonothekJukeboxEndController *jukebox_end_controller;
+  MonothekJukeboxEndModel *model;
+
+  jukebox_end_controller = MONOTHEK_JUKEBOX_END_CONTROLLER(controller);
+  
+  g_object_get(jukebox_end_controller,
+	       "model", &model,
+	       NULL);
+
+  model->jukebox_restart_active = FALSE;
+  model->jukebox_quit_and_save_active = FALSE;
 }
 
 void

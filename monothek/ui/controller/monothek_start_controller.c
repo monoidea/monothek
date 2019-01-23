@@ -42,6 +42,8 @@ void monothek_start_controller_finalize(GObject *gobject);
 void monothek_start_controller_connect(AgsConnectable *connectable);
 void monothek_start_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_start_controller_reset(MonothekController *controller);
+
 void monothek_start_controller_jukebox_launch_enter_callback(MonothekActionBox *action_box,
 							     MonothekStartController *start_controller);
 void monothek_start_controller_jukebox_launch_leave_callback(MonothekActionBox *action_box,
@@ -125,6 +127,7 @@ monothek_start_controller_class_init(MonothekStartControllerClass *start_control
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_start_controller_parent_class = g_type_class_peek_parent(start_controller);
 
@@ -132,6 +135,11 @@ monothek_start_controller_class_init(MonothekStartControllerClass *start_control
   gobject = (GObjectClass *) start_controller;
 
   gobject->finalize = monothek_start_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) start_controller;
+  
+  controller->reset = monothek_start_controller_reset;
 
   /* MonothekStartController */
   start_controller->launch_jukebox = monothek_start_controller_real_launch_jukebox;
@@ -285,6 +293,22 @@ monothek_start_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_start_controller_diskjokey_launch_clicked_callback),
 		      start_controller,
 		      NULL);
+}
+
+void
+monothek_start_controller_reset(MonothekController *controller)
+{
+  MonothekStartController *start_controller;
+  MonothekStartModel *model;
+
+  start_controller = MONOTHEK_START_CONTROLLER(controller);
+  
+  g_object_get(start_controller,
+	       "model", &model,
+	       NULL);
+
+  model->jukebox_start_active = FALSE;
+  model->diskjokey_start_active = FALSE;
 }
 
 void

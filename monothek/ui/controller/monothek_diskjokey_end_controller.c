@@ -45,6 +45,8 @@ void monothek_diskjokey_end_controller_finalize(GObject *gobject);
 void monothek_diskjokey_end_controller_connect(AgsConnectable *connectable);
 void monothek_diskjokey_end_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_diskjokey_end_controller_reset(MonothekController *controller);
+
 void monothek_diskjokey_end_controller_diskjokey_restart_enter_callback(MonothekActionBox *action_box,
 									MonothekDiskjokeyEndController *diskjokey_end_controller);
 void monothek_diskjokey_end_controller_diskjokey_restart_leave_callback(MonothekActionBox *action_box,
@@ -128,6 +130,7 @@ monothek_diskjokey_end_controller_class_init(MonothekDiskjokeyEndControllerClass
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_diskjokey_end_controller_parent_class = g_type_class_peek_parent(diskjokey_end_controller);
 
@@ -135,6 +138,11 @@ monothek_diskjokey_end_controller_class_init(MonothekDiskjokeyEndControllerClass
   gobject = (GObjectClass *) diskjokey_end_controller;
 
   gobject->finalize = monothek_diskjokey_end_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) diskjokey_end_controller;
+  
+  controller->reset = monothek_diskjokey_end_controller_reset;
 
   /* MonothekDiskjokeyEndController */
   diskjokey_end_controller->restart = monothek_diskjokey_end_controller_real_restart;
@@ -288,6 +296,22 @@ monothek_diskjokey_end_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_diskjokey_end_controller_diskjokey_quit_and_save_clicked_callback),
 		      diskjokey_end_controller,
 		      NULL);
+}
+
+void
+monothek_diskjokey_end_controller_reset(MonothekController *controller)
+{
+  MonothekDiskjokeyEndController *diskjokey_end_controller;
+  MonothekDiskjokeyEndModel *model;
+
+  diskjokey_end_controller = MONOTHEK_DISKJOKEY_END_CONTROLLER(controller);
+  
+  g_object_get(diskjokey_end_controller,
+	       "model", &model,
+	       NULL);
+
+  model->diskjokey_restart_active = FALSE;
+  model->diskjokey_quit_and_save_active = FALSE;
 }
 
 void
