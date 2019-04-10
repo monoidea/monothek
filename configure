@@ -670,6 +670,8 @@ LIBAGS_AUDIO_LIBS
 LIBAGS_AUDIO_CFLAGS
 LIBAGS_LIBS
 LIBAGS_CFLAGS
+LIBQRENCODE_LIBS
+LIBQRENCODE_CFLAGS
 GOBJECT_LIBS
 GOBJECT_CFLAGS
 LIBXML2_LIBS
@@ -850,6 +852,8 @@ LIBXML2_CFLAGS
 LIBXML2_LIBS
 GOBJECT_CFLAGS
 GOBJECT_LIBS
+LIBQRENCODE_CFLAGS
+LIBQRENCODE_LIBS
 LIBAGS_CFLAGS
 LIBAGS_LIBS
 LIBAGS_AUDIO_CFLAGS
@@ -1554,6 +1558,10 @@ Some influential environment variables:
               C compiler flags for GOBJECT, overriding pkg-config
   GOBJECT_LIBS
               linker flags for GOBJECT, overriding pkg-config
+  LIBQRENCODE_CFLAGS
+              C compiler flags for LIBQRENCODE, overriding pkg-config
+  LIBQRENCODE_LIBS
+              linker flags for LIBQRENCODE, overriding pkg-config
   LIBAGS_CFLAGS
               C compiler flags for LIBAGS, overriding pkg-config
   LIBAGS_LIBS linker flags for LIBAGS, overriding pkg-config
@@ -11568,6 +11576,12 @@ lt_prog_compiler_static=
 	lt_prog_compiler_pic='-KPIC'
 	lt_prog_compiler_static='-static'
         ;;
+      # flang / f18. f95 an alias for gfortran or flang on Debian
+      flang* | f18* | f95*)
+	lt_prog_compiler_wl='-Wl,'
+	lt_prog_compiler_pic='-fPIC'
+	lt_prog_compiler_static='-static'
+        ;;
       # icc used to be incompatible with GCC.
       # ICC 10 doesn't accept -KPIC any more.
       icc* | ifort*)
@@ -15547,6 +15561,100 @@ See \`config.log' for more details" "$LINENO" 5; }
 else
 	GOBJECT_CFLAGS=$pkg_cv_GOBJECT_CFLAGS
 	GOBJECT_LIBS=$pkg_cv_GOBJECT_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+fi
+
+
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBQRENCODE" >&5
+$as_echo_n "checking for LIBQRENCODE... " >&6; }
+
+if test -n "$LIBQRENCODE_CFLAGS"; then
+    pkg_cv_LIBQRENCODE_CFLAGS="$LIBQRENCODE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libqrencode >= 4.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libqrencode >= 4.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBQRENCODE_CFLAGS=`$PKG_CONFIG --cflags "libqrencode >= 4.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$LIBQRENCODE_LIBS"; then
+    pkg_cv_LIBQRENCODE_LIBS="$LIBQRENCODE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libqrencode >= 4.0.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libqrencode >= 4.0.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBQRENCODE_LIBS=`$PKG_CONFIG --libs "libqrencode >= 4.0.0" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libqrencode >= 4.0.0" 2>&1`
+        else
+	        LIBQRENCODE_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libqrencode >= 4.0.0" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBQRENCODE_PKG_ERRORS" >&5
+
+	as_fn_error $? "Package requirements (libqrencode >= 4.0.0) were not met:
+
+$LIBQRENCODE_PKG_ERRORS
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables LIBQRENCODE_CFLAGS
+and LIBQRENCODE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details." "$LINENO" 5
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
+is in your PATH or set the PKG_CONFIG environment variable to the full
+path to pkg-config.
+
+Alternatively, you may set the environment variables LIBQRENCODE_CFLAGS
+and LIBQRENCODE_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+See \`config.log' for more details" "$LINENO" 5; }
+else
+	LIBQRENCODE_CFLAGS=$pkg_cv_LIBQRENCODE_CFLAGS
+	LIBQRENCODE_LIBS=$pkg_cv_LIBQRENCODE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
