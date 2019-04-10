@@ -48,20 +48,20 @@ CLEANFILES = \
 # include
 # nobase_include_HEADERS += $(libmonothek_la_HEADERS_0)
 
-libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_object_h_sources) $(libmonothek_session_h_sources) $(libmonothek_audio_h_sources) $(libmonothek_recall_h_sources) $(libmonothek_audio_file_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
-libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_audio_c_sources) $(libmonothek_recall_c_sources) $(libmonothek_audio_file_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
+libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_lib_h_sources) $(libmonothek_object_h_sources) $(libmonothek_session_h_sources) $(libmonothek_audio_h_sources) $(libmonothek_recall_h_sources) $(libmonothek_audio_file_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
+libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_lib_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_audio_c_sources) $(libmonothek_recall_c_sources) $(libmonothek_audio_file_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
 
 # library libmonothek
-libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
+libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
 libmonothek_la_LDFLAGS = $(LDFLAGS) -version-info 1:0:0 -shared -fPIC -Wl,-soname,libmonothek.so -pthread
-libmonothek_la_LIBADD = -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
+libmonothek_la_LIBADD = -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(LIBQRENCODE_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
 
 # monothek
 monothek_ui_SOURCES = $(monothek_ui_c_sources) $(monothek_uiheaders)
 
-monothek_ui_CFLAGS += $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
+monothek_ui_CFLAGS += $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
 monothek_ui_LDFLAGS += -pthread
-monothek_ui_LDADD = libmonothek.la -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
+monothek_ui_LDADD = libmonothek.la -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(LIBQRENCODE_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
 
 # libmonothek all files
 deprecated_libmonothek_h_sources =
@@ -77,6 +77,18 @@ libmonothek_c_sources = \
 	$(deprecated_libmonothek_c_sources) \
 	monothek/ui/monothek_application_context.c \
 	monothek/ui/monothek_window.c
+
+deprecated_libmonothek_lib_h_sources =
+
+libmonothek_lib_h_sources = \
+	$(deprecated_libmonothek_lib_h_sources) \
+	monothek/lib/monothek_qrcode.h
+
+deprecated_libmonothek_lib_c_sources =
+
+libmonothek_lib_c_sources = \
+	$(deprecated_libmonothek_lib_c_sources) \
+	monothek/lib/monothek_qrcode.c
 
 deprecated_libmonothek_object_h_sources =
 
