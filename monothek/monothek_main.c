@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -24,6 +24,8 @@
 #include <pango/pangocairo.h>
 
 #include <gtk/gtk.h>
+
+#include <stdlib.h>
 
 #define _GNU_SOURCE
 #include <locale.h>
@@ -83,7 +85,9 @@ monothek_setup(int argc, char **argv)
 
 int
 main(int argc, char **argv)
-{  
+{
+  putenv("TZ=UTC");
+  
   setlocale(LC_ALL, "");
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);

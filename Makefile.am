@@ -48,8 +48,8 @@ CLEANFILES = \
 # include
 # nobase_include_HEADERS += $(libmonothek_la_HEADERS_0)
 
-libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_lib_h_sources) $(libmonothek_object_h_sources) $(libmonothek_session_h_sources) $(libmonothek_audio_h_sources) $(libmonothek_recall_h_sources) $(libmonothek_audio_file_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
-libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_lib_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_audio_c_sources) $(libmonothek_recall_c_sources) $(libmonothek_audio_file_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
+libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_lib_h_sources) $(libmonothek_object_h_sources) $(libmonothek_session_h_sources) $(libmonothek_audio_h_sources) $(libmonothek_audio_task_h_sources) $(libmonothek_audio_thread_h_sources) $(libmonothek_recall_h_sources) $(libmonothek_audio_file_h_sources) $(libmonothek_model_h_sources) $(libmonothek_controller_h_sources) $(libmonothek_view_h_sources)
+libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_lib_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_audio_c_sources) $(libmonothek_audio_task_c_sources) $(libmonothek_audio_thread_c_sources) $(libmonothek_recall_c_sources) $(libmonothek_audio_file_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
 
 # library libmonothek
 libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
@@ -129,6 +129,30 @@ libmonothek_audio_c_sources = \
 	$(deprecated_libmonothek_audio_c_sources) \
 	monothek/audio/monothek_rack.c \
 	monothek/audio/monothek_recall_factory.c
+
+deprecated_libmonothek_audio_task_h_sources =
+
+libmonothek_audio_task_h_sources = \
+	$(deprecated_libmonothek_audio_task_h_sources) \
+	monothek/audio/task/monothek_export_output.h
+
+deprecated_libmonothek_audio_task_c_sources =
+
+libmonothek_audio_task_c_sources = \
+	$(deprecated_libmonothek_audio_task_c_sources) \
+	monothek/audio/task/monothek_export_output.c
+
+deprecated_libmonothek_audio_thread_h_sources =
+
+libmonothek_audio_thread_h_sources = \
+	$(deprecated_libmonothek_audio_thread_h_sources) \
+	monothek/audio/thread/monothek_export_thread.h
+
+deprecated_libmonothek_audio_thread_c_sources =
+
+libmonothek_audio_thread_c_sources = \
+	$(deprecated_libmonothek_audio_thread_c_sources) \
+	monothek/audio/thread/monothek_export_thread.c
 
 deprecated_libmonothek_recall_h_sources =
 
