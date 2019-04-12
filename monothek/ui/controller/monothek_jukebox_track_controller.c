@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -352,7 +352,7 @@ monothek_jukebox_track_controller_real_progress(MonothekJukeboxTrackController *
   session = monothek_session_manager_find_session(session_manager,
 						  MONOTHEK_SESSION_DEFAULT_SESSION);
 
-  /* set jukebox mode - test */
+  /* get jukebox mode */
   jukebox_mode = g_hash_table_lookup(session->value,
 				     "jukebox-mode");
 
@@ -445,6 +445,7 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
   MonothekSession *session;
   
   GValue *rack_value;
+  GValue *jukebox_mode;
 
   application_context = ags_application_context_get_instance();
 
@@ -464,6 +465,10 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
   }
   
   rack = g_value_get_object(rack_value);
+
+  /* get jukebox mode */
+  jukebox_mode = g_hash_table_lookup(session->value,
+				     "jukebox-mode");
 
   g_object_get(jukebox_track_controller,
 	       "model", &jukebox_track_model,
@@ -570,11 +575,14 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
     task = g_list_prepend(task,
 			  start_audio);
     
-    export_output = monothek_export_output_new(export_thread,
-					       output_soundcard,
-					       duration);
-    task = g_list_prepend(task,
-			  export_output);
+    if(!g_strcmp0("play",
+		  g_value_get_string(jukebox_mode))){
+      export_output = monothek_export_output_new(export_thread,
+						 output_soundcard,
+						 duration);
+      task = g_list_prepend(task,
+			    export_output);
+    }
     
     start_soundcard = ags_start_soundcard_new(application_context);
     task = g_list_prepend(task,
