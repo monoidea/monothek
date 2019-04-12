@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <drumkit>
+  <program>
+    <bank-name default="true">basic-001</bank-name>
+    <bank-name>basic-002</bank-name>
+    <bank-name>basic-003</bank-name>
+    <bank-name>basic-004</bank-name>
+  </program>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/sim_k02-0.wav</file>
     <label>Kick</label>
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>1000100010001000100010001000100010001000100010001000100010001000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>1000100010010010100010001001001010001000100100101000100010010010</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>1000100010001000100010001000100010001000100010001000100010001000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>1000100010010010100010001001001010001000100100101000100010010010</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/rhythm77_low_tom.wav</file>
@@ -13,6 +33,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000001000100010000000100010001000000010001000100000001000100010</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000001000100010000000100010001000000010001000100000001000100010</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/rhythm77_ch.wav</file>
@@ -20,6 +54,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0010100011001111001010001100111100101000110011110010100011001111</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0010100011001111001010001100111100101000110011110010100011001111</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/909sn.wav</file>
@@ -27,6 +75,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/909clap.wav</file>
@@ -34,6 +96,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0010001100010101001000110001010100100011000101010010001100010101</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/sim_bass_23_01.wav</file>
@@ -41,6 +117,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/808_xOver_2.wav</file>
@@ -48,6 +138,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/fx_10.wav</file>
@@ -55,6 +159,20 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0010001000110011001000100011001100100010001100110010001000110011</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+    </bank-list>
   </sample>
   <sample>
     <file>/home/joelkraehemann/monoidea/drumkits/techno/rhythm77_oh.wav</file>
@@ -62,5 +180,19 @@
     <control>
       <volume>0.25</volume>
     </control>
+    <bank-list>
+      <bank name="basic-001">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-002">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-003">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+      <bank name="basic-004">
+	<pattern>0000000000000000000000000000000000000000000000000000000000000000</pattern>
+      </bank>
+    </bank-list>
   </sample>
 </drumkit>

@@ -245,7 +245,7 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   gchar *house_filename;
   gchar *hiphop_filename;
   xmlChar *str;
-  
+
   guint i, j;
 
   diskjokey_sequencer_model->pad_active = (gboolean **) malloc(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT * sizeof(gboolean *));
@@ -292,6 +292,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   diskjokey_sequencer_model->techno_control = (GHashTable **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT) * sizeof(GHashTable *));
 
+  diskjokey_sequencer_model->techno_bank = (GHashTable **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT) * sizeof(GHashTable *));
+
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
     diskjokey_sequencer_model->techno_label[i] = NULL;
     diskjokey_sequencer_model->techno_sample[i] = NULL;
@@ -300,6 +302,11 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 									 g_string_equal,
 									 g_free,
 									 g_free);
+
+    diskjokey_sequencer_model->techno_bank[i] = g_hash_table_new_full(g_direct_hash,
+								      g_string_equal,
+								      g_free,
+								      g_free);
   }
   
   diskjokey_sequencer_model->techno_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
@@ -311,15 +318,63 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   root_node = xmlDocGetRootElement(doc);
 
+  diskjokey_sequencer_model->techno_bank_name = NULL;
+  diskjokey_sequencer_model->default_techno_bank_name = NULL;
+  
   sample_node = root_node->children;
   i = 0;
 
   while(sample_node != NULL){
     if(sample_node->type == XML_ELEMENT_NODE){
-      if(!xmlStrncmp("sample",
+      if(!xmlStrncmp("program",
 		     sample_node->name,
-		     5)){
-	current_node = sample_node->children;
+		     8)){
+ 	current_node = sample_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    if(!xmlStrncmp("bank-name",
+			   current_node->name,
+			   10)){
+	      gchar *is_default;
+
+	      guint bank_name_length;
+	      
+	      str = xmlNodeGetContent(current_node);
+
+	      is_default = xmlGetProp(current_node,
+				      "default");
+	      
+	      if(is_default != NULL &&
+		 !g_ascii_strncasecmp(is_default,
+				      "true",
+				      5)){
+		diskjokey_sequencer_model->default_techno_bank_name = g_strdup(str);
+	      }
+	      
+	      if(diskjokey_sequencer_model->techno_bank_name == NULL){
+		diskjokey_sequencer_model->techno_bank_name = (gchar **) malloc(2 * sizeof(gchar *));
+
+		diskjokey_sequencer_model->techno_bank_name[0] = g_strdup(str);
+		diskjokey_sequencer_model->techno_bank_name[1] = NULL;
+	      }else{
+		bank_name_length = g_strv_length(diskjokey_sequencer_model->techno_bank_name);
+		
+		diskjokey_sequencer_model->techno_bank_name = (gchar **) realloc(diskjokey_sequencer_model->techno_bank_name,
+										 (bank_name_length + 2) * sizeof(gchar *));
+
+		diskjokey_sequencer_model->techno_bank_name[bank_name_length] = g_strdup(str);
+		diskjokey_sequencer_model->techno_bank_name[bank_name_length + 1] = NULL;
+	      }
+	    }
+	  }
+	  
+	  current_node = current_node->next;
+	}
+      }else if(!xmlStrncmp("sample",
+			   sample_node->name,
+			   7)){
+ 	current_node = sample_node->children;
 
 	while(current_node != NULL){
 	  if(current_node->type == XML_ELEMENT_NODE){
@@ -353,6 +408,59 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 	      
 		control_node = control_node->next;
 	      }
+	    }else if(!xmlStrncmp("bank-list",
+				 current_node->name,
+				 10)){
+	      xmlNode *bank_node;
+
+	      bank_node = current_node->children;
+
+	      while(bank_node != NULL){
+		if(bank_node->type == XML_ELEMENT_NODE){
+		  if(!xmlStrncmp("bank",
+				 bank_node->name,
+				 5)){
+		    xmlNode *pattern_node;
+		    
+		    gchar *bank_name;
+
+		    bank_name = xmlGetProp(current_node,
+					   "name");
+
+		    pattern_node = current_node->children;
+		    
+		    while(pattern_node != NULL){
+		      if(pattern_node->type == XML_ELEMENT_NODE){
+			if(!xmlStrncmp("pattern",
+				       pattern_node->name,
+				       8)){
+			  guint64 *pattern;
+
+			  pattern = (guint64 *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  
+			  g_hash_table_insert(diskjokey_sequencer_model->techno_bank[i],
+					      g_strdup(bank_name),
+					      pattern);
+			  
+			  str = xmlNodeGetContent(pattern_node);
+			  
+			  for(i = 0; i < strlen(str) && i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; i++){
+			    if(str[i] == '1'){
+			      pattern[i / (8 * sizeof(guint64))] |= 1 << (i % (8 * sizeof(guint64)));
+			    }
+			  }
+			}
+		      }
+		
+		      pattern_node = pattern_node->next;
+		    }
+			  
+		  }
+		}
+		
+		bank_node = bank_node->next;
+	      }
 	    }
 	  }
 
@@ -377,6 +485,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   diskjokey_sequencer_model->house_control = (GHashTable **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT) * sizeof(GHashTable *));
 
+  diskjokey_sequencer_model->house_bank = (GHashTable **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT) * sizeof(GHashTable *));
+
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
     diskjokey_sequencer_model->house_label[i] = NULL;
     diskjokey_sequencer_model->house_sample[i] = NULL;
@@ -385,6 +495,11 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 									g_string_equal,
 									g_free,
 									g_free);
+
+    diskjokey_sequencer_model->house_bank[i] = g_hash_table_new_full(g_direct_hash,
+								     g_string_equal,
+								     g_free,
+								     g_free);
   }
   
   diskjokey_sequencer_model->house_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
@@ -396,14 +511,62 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   root_node = xmlDocGetRootElement(doc);
 
+  diskjokey_sequencer_model->house_bank_name = NULL;
+  diskjokey_sequencer_model->default_house_bank_name = NULL;
+
   sample_node = root_node->children;
   i = 0;
 
   while(sample_node != NULL){
     if(sample_node->type == XML_ELEMENT_NODE){
-      if(!xmlStrncmp("sample",
+      if(!xmlStrncmp("program",
 		     sample_node->name,
-		     5)){
+		     8)){
+ 	current_node = sample_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    if(!xmlStrncmp("bank-name",
+			   current_node->name,
+			   10)){
+	      gchar *is_default;
+
+	      guint bank_name_length;
+	      
+	      str = xmlNodeGetContent(current_node);
+
+	      is_default = xmlGetProp(current_node,
+				      "default");
+	      
+	      if(is_default != NULL &&
+		 !g_ascii_strncasecmp(is_default,
+				      "true",
+				      5)){
+		diskjokey_sequencer_model->default_house_bank_name = g_strdup(str);
+	      }
+	      
+	      if(diskjokey_sequencer_model->house_bank_name == NULL){
+		diskjokey_sequencer_model->house_bank_name = (gchar **) malloc(2 * sizeof(gchar *));
+
+		diskjokey_sequencer_model->house_bank_name[0] = g_strdup(str);
+		diskjokey_sequencer_model->house_bank_name[1] = NULL;
+	      }else{
+		bank_name_length = g_strv_length(diskjokey_sequencer_model->house_bank_name);
+		
+		diskjokey_sequencer_model->house_bank_name = (gchar **) realloc(diskjokey_sequencer_model->house_bank_name,
+										(bank_name_length + 2) * sizeof(gchar *));
+
+		diskjokey_sequencer_model->house_bank_name[bank_name_length] = g_strdup(str);
+		diskjokey_sequencer_model->house_bank_name[bank_name_length + 1] = NULL;
+	      }
+	    }
+	  }
+	  
+	  current_node = current_node->next;
+	}
+      }else if(!xmlStrncmp("sample",
+			   sample_node->name,
+			   7)){
 	current_node = sample_node->children;
 
 	while(current_node != NULL){
@@ -438,6 +601,59 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 	      
 		control_node = control_node->next;
 	      }
+	    }else if(!xmlStrncmp("bank-list",
+				 current_node->name,
+				 10)){
+	      xmlNode *bank_node;
+
+	      bank_node = current_node->children;
+
+	      while(bank_node != NULL){
+		if(bank_node->type == XML_ELEMENT_NODE){
+		  if(!xmlStrncmp("bank",
+				 bank_node->name,
+				 5)){
+		    xmlNode *pattern_node;
+		    
+		    gchar *bank_name;
+
+		    bank_name = xmlGetProp(current_node,
+					   "name");
+
+		    pattern_node = current_node->children;
+		    
+		    while(pattern_node != NULL){
+		      if(pattern_node->type == XML_ELEMENT_NODE){
+			if(!xmlStrncmp("pattern",
+				       pattern_node->name,
+				       8)){
+			  guint64 *pattern;
+
+			  pattern = (guint64 *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  
+			  g_hash_table_insert(diskjokey_sequencer_model->house_bank[i],
+					      g_strdup(bank_name),
+					      pattern);
+
+			  str = xmlNodeGetContent(pattern_node);
+			  
+			  for(i = 0; i < strlen(str) && i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; i++){
+			    if(str[i] == '1'){
+			      pattern[i / (8 * sizeof(guint64))] |= 1 << (i % (8 * sizeof(guint64)));
+			    }
+			  }
+			}
+		      }
+		
+		      pattern_node = pattern_node->next;
+		    }
+			  
+		  }
+		}
+		
+		bank_node = bank_node->next;
+	      }
 	    }
 	  }
 
@@ -461,6 +677,8 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
   diskjokey_sequencer_model->hiphop_sample = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
 
   diskjokey_sequencer_model->hiphop_control = (GHashTable **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT) * sizeof(GHashTable *));
+
+  diskjokey_sequencer_model->hiphop_bank = (GHashTable **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT) * sizeof(GHashTable *));
   
   for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
     diskjokey_sequencer_model->hiphop_label[i] = NULL;
@@ -470,6 +688,11 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 									 g_string_equal,
 									 g_free,
 									 g_free);
+
+    diskjokey_sequencer_model->hiphop_bank[i] = g_hash_table_new_full(g_direct_hash,
+								      g_string_equal,
+								      g_free,
+								      g_free);
   }
   
   diskjokey_sequencer_model->hiphop_label[MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT] = NULL;
@@ -481,14 +704,62 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   root_node = xmlDocGetRootElement(doc);
 
+  diskjokey_sequencer_model->hiphop_bank_name = NULL;
+  diskjokey_sequencer_model->default_hiphop_bank_name = NULL;
+
   sample_node = root_node->children;
   i = 0;
 
   while(sample_node != NULL){
     if(sample_node->type == XML_ELEMENT_NODE){
-      if(!xmlStrncmp("sample",
+      if(!xmlStrncmp("program",
 		     sample_node->name,
-		     5)){
+		     8)){
+ 	current_node = sample_node->children;
+
+	while(current_node != NULL){
+	  if(current_node->type == XML_ELEMENT_NODE){
+	    if(!xmlStrncmp("bank-name",
+			   current_node->name,
+			   10)){
+	      gchar *is_default;
+
+	      guint bank_name_length;
+	      
+	      str = xmlNodeGetContent(current_node);
+
+	      is_default = xmlGetProp(current_node,
+				      "default");
+	      
+	      if(is_default != NULL &&
+		 !g_ascii_strncasecmp(is_default,
+				      "true",
+				      5)){
+		diskjokey_sequencer_model->default_hiphop_bank_name = g_strdup(str);
+	      }
+	      
+	      if(diskjokey_sequencer_model->hiphop_bank_name == NULL){
+		diskjokey_sequencer_model->hiphop_bank_name = (gchar **) malloc(2 * sizeof(gchar *));
+
+		diskjokey_sequencer_model->hiphop_bank_name[0] = g_strdup(str);
+		diskjokey_sequencer_model->hiphop_bank_name[1] = NULL;
+	      }else{
+		bank_name_length = g_strv_length(diskjokey_sequencer_model->hiphop_bank_name);
+		
+		diskjokey_sequencer_model->hiphop_bank_name = (gchar **) realloc(diskjokey_sequencer_model->hiphop_bank_name,
+										 (bank_name_length + 2) * sizeof(gchar *));
+
+		diskjokey_sequencer_model->hiphop_bank_name[bank_name_length] = g_strdup(str);
+		diskjokey_sequencer_model->hiphop_bank_name[bank_name_length + 1] = NULL;
+	      }
+	    }
+	  }
+	  
+	  current_node = current_node->next;
+	}
+      }else if(!xmlStrncmp("sample",
+			   sample_node->name,
+			   7)){
 	current_node = sample_node->children;
 
 	while(current_node != NULL){
@@ -522,6 +793,59 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 		}
 	      
 		control_node = control_node->next;
+	      }
+	    }else if(!xmlStrncmp("bank-list",
+				 current_node->name,
+				 10)){
+	      xmlNode *bank_node;
+	      
+	      bank_node = current_node->children;
+
+	      while(bank_node != NULL){
+		if(bank_node->type == XML_ELEMENT_NODE){
+		  if(!xmlStrncmp("bank",
+				 bank_node->name,
+				 5)){
+		    xmlNode *pattern_node;
+		    
+		    gchar *bank_name;
+
+		    bank_name = xmlGetProp(current_node,
+					   "name");
+
+		    pattern_node = current_node->children;
+		    
+		    while(pattern_node != NULL){
+		      if(pattern_node->type == XML_ELEMENT_NODE){
+			if(!xmlStrncmp("pattern",
+				       pattern_node->name,
+				       8)){
+			  guint64 *pattern;
+
+			  pattern = (guint64 *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+
+			  g_hash_table_insert(diskjokey_sequencer_model->hiphop_bank[i],
+					      g_strdup(bank_name),
+					      pattern);
+			  
+			  str = xmlNodeGetContent(pattern_node);
+			  
+			  for(i = 0; i < strlen(str) && i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; i++){
+			    if(str[i] == '1'){
+			      pattern[i / (8 * sizeof(guint64))] |= 1 << (i % (8 * sizeof(guint64)));
+			    }
+			  }
+			}
+		      }
+		
+		      pattern_node = pattern_node->next;
+		    }
+			  
+		  }
+		}
+		
+		bank_node = bank_node->next;
 	      }
 	    }
 	  }

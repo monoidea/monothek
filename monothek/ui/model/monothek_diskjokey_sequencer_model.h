@@ -92,17 +92,29 @@ struct _MonothekDiskjokeySequencerModel
   gchar **techno_label;
   gchar **techno_sample;
 
+  gchar **techno_bank_name;
+  gchar *default_techno_bank_name;
+  
   GHashTable **techno_control;
+  GHashTable **techno_bank;
 
   gchar **house_label;
   gchar **house_sample;
 
+  gchar **house_bank_name;
+  gchar *default_house_bank_name;
+
   GHashTable **house_control;
+  GHashTable **house_bank;
 
   gchar **hiphop_label;
   gchar **hiphop_sample;
 
+  gchar **hiphop_bank_name;
+  gchar *default_hiphop_bank_name;
+
   GHashTable **hiphop_control;
+  GHashTable **hiphop_bank;
   
   struct timespec *duration;
 };
