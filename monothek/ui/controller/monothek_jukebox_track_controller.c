@@ -27,8 +27,13 @@
 
 #include <monothek/audio/monothek_rack.h>
 
+#include <monothek/audio/task/monothek_export_output.h>
+
+#include <monothek/audio/thread/monothek_export_thread.h>
+
 #include <monothek/audio/file/monothek_audio_file_manager.h>
 
+#include <monothek/ui/monothek_application_context.h>
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_jukebox_track_model.h>
@@ -429,6 +434,8 @@ void
 monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukebox_track_controller,
 					   gboolean do_run)
 {
+  MonothekJukeboxTrackModel *jukebox_track_model;
+
   MonothekRack *rack;
 
   AgsTaskThread *task_thread;
@@ -457,13 +464,24 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
   }
   
   rack = g_value_get_object(rack_value);
+
+  g_object_get(jukebox_track_controller,
+	       "model", &jukebox_track_model,
+	       NULL);
   
   if(do_run){
     MonothekAudioFileManager *audio_file_manager;
     AgsAudioFile *audio_file;
     
     AgsStartAudio *start_audio;
+    MonothekExportOutput *export_output;
     AgsStartSoundcard *start_soundcard;
+
+    MonothekExportThread *export_thread;
+
+    GObject *output_soundcard;
+
+    struct timespec *duration;
 
     GList *start_wave, *wave;
     GList *task;
@@ -476,6 +494,16 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 #endif
 
     GValue *filename_value;
+
+    g_object_get(jukebox_track_model,
+		 "duration", &duration,
+		 NULL);
+
+    export_thread = MONOTHEK_APPLICATION_CONTEXT(application_context)->default_export_thread;
+    
+    g_object_get(rack->player,
+		 "output-soundcard", &output_soundcard,
+		 NULL);
 
 #ifdef __APPLE__
     host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
@@ -541,7 +569,13 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 				      AGS_SOUND_SCOPE_WAVE);
     task = g_list_prepend(task,
 			  start_audio);
-
+    
+    export_output = monothek_export_output_new(export_thread,
+					       output_soundcard,
+					       duration);
+    task = g_list_prepend(task,
+			  export_output);
+    
     start_soundcard = ags_start_soundcard_new(application_context);
     task = g_list_prepend(task,
 			  start_soundcard);

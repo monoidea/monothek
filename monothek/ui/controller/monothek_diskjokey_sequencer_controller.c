@@ -27,6 +27,11 @@
 
 #include <monothek/audio/monothek_rack.h>
 
+#include <monothek/audio/task/monothek_export_output.h>
+
+#include <monothek/audio/thread/monothek_export_thread.h>
+
+#include <monothek/ui/monothek_application_context.h>
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
@@ -2562,7 +2567,7 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
   AgsApplicationContext *application_context;  
   MonothekSessionManager *session_manager;
   MonothekSession *session;
-
+  
   GValue *rack_value;
 
   application_context = ags_application_context_get_instance();
@@ -2585,9 +2590,22 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 
   if(do_run){
     AgsStartAudio *start_audio;
+    MonothekExportOutput *export_output;
     AgsStartSoundcard *start_soundcard;
 
+    MonothekExportThread *export_thread;
+
+    GObject *output_soundcard;
+
+    struct timespec duration;
+    
     GList *task;
+
+    export_thread = MONOTHEK_APPLICATION_CONTEXT(application_context)->default_export_thread;
+    
+    g_object_get(sequencer,
+		 "output-soundcard", &output_soundcard,
+		 NULL);
     
     /* start audio */
     task = NULL;
@@ -2596,7 +2614,16 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 				      AGS_SOUND_SCOPE_SEQUENCER);
     task = g_list_prepend(task,
 			  start_audio);
-
+    
+    duration.tv_sec = 600;
+    duration.tv_nsec = 0;
+    
+    export_output = monothek_export_output_new(export_thread,
+					       output_soundcard,
+					       &duration);
+    task = g_list_prepend(task,
+			  export_output);
+    
     start_soundcard = ags_start_soundcard_new(application_context);
     task = g_list_prepend(task,
 			  start_soundcard);

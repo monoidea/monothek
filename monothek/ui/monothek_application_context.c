@@ -28,6 +28,8 @@
 
 #include <monothek/audio/monothek_rack.h>
 
+#include <monothek/audio/thread/monothek_export_thread.h>
+
 #include <monothek/audio/file/monothek_audio_file_manager.h>
 
 #include <monothek/ui/model/monothek_jukebox_playlist_model.h>
@@ -1598,8 +1600,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 
     /* export thread */
     if(AGS_IS_DEVOUT(list->data)){
-      export_thread = (AgsThread *) ags_export_thread_new(list->data,
-							  NULL);
+      export_thread = (AgsThread *) monothek_export_thread_new(list->data,
+							       NULL);
       ags_thread_add_child_extended(AGS_THREAD(audio_loop),
 				    (AgsThread *) export_thread,
 				    TRUE, TRUE);
@@ -1896,7 +1898,8 @@ monothek_application_context_register_types(AgsApplicationContext *application_c
   /*  */
   ags_audio_loop_get_type();
   ags_soundcard_thread_get_type();
-  ags_export_thread_get_type();
+
+  monothek_export_thread_get_type();
 
   /*  */
   ags_audio_file_get_type();
