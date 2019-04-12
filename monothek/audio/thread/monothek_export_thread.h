@@ -38,7 +38,7 @@ typedef struct _MonothekExportThreadClass MonothekExportThreadClass;
 
 struct _MonothekExportThread
 {
-  AgsExportThreadClass export_thread;
+  AgsExportThread export_thread;
 
   struct timespec *start_time;
   struct timespec *duration;

@@ -1451,7 +1451,7 @@ void
 monothek_diskjokey_sequencer_controller_random_clicked_callback(MonothekActionBox *action_box,
 								MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  monothek_diskjokey_sequencer_controller_random(diskjokey_sequencer_controller);
 }
 
 void
@@ -2476,7 +2476,112 @@ monothek_diskjokey_sequencer_controller_clear(MonothekDiskjokeySequencerControll
 void
 monothek_diskjokey_sequencer_controller_real_random(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekRack *rack;
+  AgsAudio *sequencer;
+  AgsChannel *channel;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GHashTable **bank;
+  
+  gchar *bank_name;
+  
+  guint audio_channels;
+  guint x;
+  guint i, j;
+  
+  GValue *rack_value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* model */
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  /* get rack */
+  rack_value = g_hash_table_lookup(session->value,
+				   "rack");
+
+  rack = g_value_get_object(rack_value);
+
+  /* input */
+  sequencer = rack->sequencer;
+  g_object_get(sequencer,
+	       "audio-channels", &audio_channels,
+	       "input", &channel,
+	       NULL);
+
+  bank = NULL;
+  bank_name = NULL;
+  
+  if(model->current_genre == MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO){
+    bank = model->techno_bank;
+
+    if(model->techno_bank_name != NULL){
+      bank_name = model->techno_bank_name[random() % g_strv_length(model->techno_bank_name)];
+    }
+  }else if(model->current_genre == MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE){
+    bank = model->house_bank;
+
+    if(model->house_bank_name != NULL){
+      bank_name = model->house_bank_name[random() % g_strv_length(model->house_bank_name)];
+    }
+  }else if(model->current_genre == MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP){
+    bank = model->hiphop_bank;
+
+    if(model->hiphop_bank_name != NULL){
+      bank_name = model->hiphop_bank_name[random() % g_strv_length(model->hiphop_bank_name)];
+    }
+  }
+
+  g_message("%s", bank_name);
+  
+  if(bank_name != NULL){
+    for(i = 0; channel != NULL; i++){
+      GList *start_pattern;
+
+      guint *pattern_data;
+
+      g_object_get(channel,
+		   "pattern", &start_pattern,
+		   NULL);
+      
+      pattern_data = g_hash_table_lookup(bank[(guint) floor(i / audio_channels)],
+					 bank_name);
+
+      if(pattern_data != NULL){
+	g_message("pattern = %x", pattern_data[0]);
+
+	memcpy(AGS_PATTERN(start_pattern->data)->pattern[0][0], pattern_data, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
+      }
+
+      for(x = 0, j = 0; x < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; x++, j++){	
+	if(ags_pattern_get_bit(AGS_PATTERN(start_pattern->data), 0, 0, x)){
+	  monothek_diskjokey_sequencer_model_set_pad_active(model,
+							    j, (guint) floor(i / audio_channels),
+							    TRUE);
+	}
+      }
+
+      g_list_free(start_pattern);
+    
+      g_object_get(channel,
+		   "next", &channel,
+		   NULL);
+    }
+  }
+  
+  gtk_widget_queue_draw(view);
 }
 
 /**
@@ -2617,12 +2722,14 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
     
     duration.tv_sec = 600;
     duration.tv_nsec = 0;
-    
+
+#if 0    
     export_output = monothek_export_output_new(export_thread,
 					       output_soundcard,
 					       &duration);
     task = g_list_prepend(task,
-			  export_output);
+			  export_output);    
+#endif
     
     start_soundcard = ags_start_soundcard_new(application_context);
     task = g_list_prepend(task,

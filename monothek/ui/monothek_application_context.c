@@ -1600,8 +1600,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 
     /* export thread */
     if(AGS_IS_DEVOUT(list->data)){
-      export_thread = (AgsThread *) monothek_export_thread_new(list->data,
-							       NULL);
+      export_thread = (AgsThread *) ags_export_thread_new(list->data,
+							  NULL);
       ags_thread_add_child_extended(AGS_THREAD(audio_loop),
 				    (AgsThread *) export_thread,
 				    TRUE, TRUE);

@@ -226,7 +226,7 @@ monothek_export_output_launch(AgsTask *task)
 
   duration_sec = export_output->duration->tv_sec;
   
-  strftime(str_buffer, 256, "%Y-%j-%H-%M-%S", localtime(start_time.tv_sec));
+  strftime(str_buffer, 256, "%Y-%j-%H-%M-%S", localtime(&(start_time.tv_sec)));
   filename = g_strdup_printf("snd-%s-%06d-%06d.wav", str_buffer, start_time.tv_nsec / 1000, duration_sec);
 
   g_object_set(task,

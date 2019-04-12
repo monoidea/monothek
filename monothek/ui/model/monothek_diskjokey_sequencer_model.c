@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -299,12 +299,12 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->techno_sample[i] = NULL;
 
     diskjokey_sequencer_model->techno_control[i] = g_hash_table_new_full(g_direct_hash,
-									 g_string_equal,
+									 g_str_equal,
 									 g_free,
 									 g_free);
 
     diskjokey_sequencer_model->techno_bank[i] = g_hash_table_new_full(g_direct_hash,
-								      g_string_equal,
+								      g_str_equal,
 								      g_free,
 								      g_free);
   }
@@ -424,20 +424,20 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 		    
 		    gchar *bank_name;
 
-		    bank_name = xmlGetProp(current_node,
+		    bank_name = xmlGetProp(bank_node,
 					   "name");
 
-		    pattern_node = current_node->children;
+		    pattern_node = bank_node->children;
 		    
 		    while(pattern_node != NULL){
 		      if(pattern_node->type == XML_ELEMENT_NODE){
 			if(!xmlStrncmp("pattern",
 				       pattern_node->name,
 				       8)){
-			  guint64 *pattern;
+			  guint *pattern;
 
-			  pattern = (guint64 *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
-			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  pattern = (guint *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
+			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
 			  
 			  g_hash_table_insert(diskjokey_sequencer_model->techno_bank[i],
 					      g_strdup(bank_name),
@@ -445,17 +445,16 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 			  
 			  str = xmlNodeGetContent(pattern_node);
 			  
-			  for(i = 0; i < strlen(str) && i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; i++){
-			    if(str[i] == '1'){
-			      pattern[i / (8 * sizeof(guint64))] |= 1 << (i % (8 * sizeof(guint64)));
+			  for(j = 0; j < strlen(str) && j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+			    if(str[j] == '1'){
+			      pattern[(guint) floor(j / (8 * sizeof(guint)))] |= 1 << (j % (8 * sizeof(guint)));
 			    }
 			  }
 			}
 		      }
 		
 		      pattern_node = pattern_node->next;
-		    }
-			  
+		    }	  
 		  }
 		}
 		
@@ -492,12 +491,12 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->house_sample[i] = NULL;
 
     diskjokey_sequencer_model->house_control[i] = g_hash_table_new_full(g_direct_hash,
-									g_string_equal,
+									g_str_equal,
 									g_free,
 									g_free);
 
     diskjokey_sequencer_model->house_bank[i] = g_hash_table_new_full(g_direct_hash,
-								     g_string_equal,
+								     g_str_equal,
 								     g_free,
 								     g_free);
   }
@@ -606,7 +605,7 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 				 10)){
 	      xmlNode *bank_node;
 
-	      bank_node = current_node->children;
+	      bank_node = bank_node->children;
 
 	      while(bank_node != NULL){
 		if(bank_node->type == XML_ELEMENT_NODE){
@@ -617,7 +616,7 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 		    
 		    gchar *bank_name;
 
-		    bank_name = xmlGetProp(current_node,
+		    bank_name = xmlGetProp(bank_node,
 					   "name");
 
 		    pattern_node = current_node->children;
@@ -627,10 +626,10 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 			if(!xmlStrncmp("pattern",
 				       pattern_node->name,
 				       8)){
-			  guint64 *pattern;
+			  guint *pattern;
 
-			  pattern = (guint64 *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
-			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  pattern = (guint *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
+			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
 			  
 			  g_hash_table_insert(diskjokey_sequencer_model->house_bank[i],
 					      g_strdup(bank_name),
@@ -638,9 +637,9 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
 			  str = xmlNodeGetContent(pattern_node);
 			  
-			  for(i = 0; i < strlen(str) && i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; i++){
-			    if(str[i] == '1'){
-			      pattern[i / (8 * sizeof(guint64))] |= 1 << (i % (8 * sizeof(guint64)));
+			  for(j = 0; j < strlen(str) && j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+			    if(str[j] == '1'){
+			      pattern[(guint) floor(j / (8 * sizeof(guint)))] |= 1 << (j % (8 * sizeof(guint)));
 			    }
 			  }
 			}
@@ -685,12 +684,12 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->hiphop_sample[i] = NULL;
 
     diskjokey_sequencer_model->hiphop_control[i] = g_hash_table_new_full(g_direct_hash,
-									 g_string_equal,
+									 g_str_equal,
 									 g_free,
 									 g_free);
 
     diskjokey_sequencer_model->hiphop_bank[i] = g_hash_table_new_full(g_direct_hash,
-								      g_string_equal,
+								      g_str_equal,
 								      g_free,
 								      g_free);
   }
@@ -810,20 +809,20 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 		    
 		    gchar *bank_name;
 
-		    bank_name = xmlGetProp(current_node,
+		    bank_name = xmlGetProp(bank_node,
 					   "name");
 
-		    pattern_node = current_node->children;
+		    pattern_node = bank_node->children;
 		    
 		    while(pattern_node != NULL){
 		      if(pattern_node->type == XML_ELEMENT_NODE){
 			if(!xmlStrncmp("pattern",
 				       pattern_node->name,
 				       8)){
-			  guint64 *pattern;
+			  guint *pattern;
 
-			  pattern = (guint64 *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
-			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint64))) * sizeof(guint64));
+			  pattern = (guint *) malloc((guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
+			  memset(pattern, 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
 
 			  g_hash_table_insert(diskjokey_sequencer_model->hiphop_bank[i],
 					      g_strdup(bank_name),
@@ -831,9 +830,9 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 			  
 			  str = xmlNodeGetContent(pattern_node);
 			  
-			  for(i = 0; i < strlen(str) && i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; i++){
-			    if(str[i] == '1'){
-			      pattern[i / (8 * sizeof(guint64))] |= 1 << (i % (8 * sizeof(guint64)));
+			  for(j = 0; j < strlen(str) && j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+			    if(str[j] == '1'){
+			      pattern[(guint) floor(j / (8 * sizeof(guint)))] |= 1 << (j % (8 * sizeof(guint)));
 			    }
 			  }
 			}

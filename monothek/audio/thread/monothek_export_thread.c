@@ -277,7 +277,7 @@ monothek_export_thread_run(AgsThread *thread)
 
   pthread_mutex_t *application_mutex;
   pthread_mutex_t *mutex;
-  
+
   export_thread = MONOTHEK_EXPORT_THREAD(thread);
 
   if(AGS_EXPORT_THREAD(export_thread)->audio_file == NULL){
