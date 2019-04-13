@@ -46,6 +46,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <monothek/i18n.h>
 
@@ -2175,7 +2176,7 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	    GValue value = {0,};
 
 	    g_object_get(recall->data,
-			 "./volume[0]", &port,
+			 "volume", &port,
 			 NULL);
 
 	    g_value_init(&value, G_TYPE_FLOAT);
@@ -2253,7 +2254,7 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	    GValue value = {0,};
 
 	    g_object_get(recall->data,
-			 "./volume[0]", &port,
+			 "volume", &port,
 			 NULL);
 
 	    g_value_init(&value, G_TYPE_FLOAT);
@@ -2331,7 +2332,7 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	    GValue value = {0,};
 
 	    g_object_get(recall->data,
-			 "./volume[0]", &port,
+			 "volume", &port,
 			 NULL);
 
 	    g_value_init(&value, G_TYPE_FLOAT);
@@ -2544,35 +2545,51 @@ monothek_diskjokey_sequencer_controller_real_random(MonothekDiskjokeySequencerCo
     }
   }
 
-  g_message("%s", bank_name);
-  
   if(bank_name != NULL){
     for(i = 0; channel != NULL; i++){
       GList *start_pattern;
 
       guint *pattern_data;
 
+      guint pad;
+      gboolean success;
+      
       g_object_get(channel,
+		   "pad", &pad,
 		   "pattern", &start_pattern,
 		   NULL);
       
-      pattern_data = g_hash_table_lookup(bank[(guint) floor(i / audio_channels)],
-					 bank_name);
+      success = g_hash_table_lookup_extended(bank[pad],
+					     bank_name,
+					     NULL,
+					     &pattern_data);
 
-      if(pattern_data != NULL){
-	g_message("pattern = %x", pattern_data[0]);
+      if(success){
+	if(pattern_data != NULL){
+	  memcpy(AGS_PATTERN(start_pattern->data)->pattern[0][0], pattern_data, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
+	}
 
-	memcpy(AGS_PATTERN(start_pattern->data)->pattern[0][0], pattern_data, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
-      }
-
-      for(x = 0, j = 0; x < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; x++, j++){	
-	if(ags_pattern_get_bit(AGS_PATTERN(start_pattern->data), 0, 0, x)){
+	for(x = 0, j = 0; x < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; x++, j++){	
+	  if(ags_pattern_get_bit(AGS_PATTERN(start_pattern->data), 0, 0, x)){
+	    monothek_diskjokey_sequencer_model_set_pad_active(model,
+							      j, pad,
+							      TRUE);
+	  }else{
+	    monothek_diskjokey_sequencer_model_set_pad_active(model,
+							      j, pad,
+							      FALSE);
+	  }
+	}
+      }else{
+	memset(AGS_PATTERN(start_pattern->data)->pattern[0][0], 0, (guint) ceil(MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT / (8 * sizeof(guint))) * sizeof(guint));
+	
+	for(x = 0, j = 0; x < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; x++, j++){	
 	  monothek_diskjokey_sequencer_model_set_pad_active(model,
-							    j, (guint) floor(i / audio_channels),
-							    TRUE);
+							    j, pad,
+							    FALSE);
 	}
       }
-
+      
       g_list_free(start_pattern);
     
       g_object_get(channel,
@@ -2723,13 +2740,11 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
     duration.tv_sec = 600;
     duration.tv_nsec = 0;
 
-#if 0    
     export_output = monothek_export_output_new(export_thread,
 					       output_soundcard,
 					       &duration);
     task = g_list_prepend(task,
 			  export_output);    
-#endif
     
     start_soundcard = ags_start_soundcard_new(application_context);
     task = g_list_prepend(task,

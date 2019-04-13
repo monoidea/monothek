@@ -298,12 +298,12 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->techno_label[i] = NULL;
     diskjokey_sequencer_model->techno_sample[i] = NULL;
 
-    diskjokey_sequencer_model->techno_control[i] = g_hash_table_new_full(g_direct_hash,
+    diskjokey_sequencer_model->techno_control[i] = g_hash_table_new_full(g_str_hash,
 									 g_str_equal,
 									 g_free,
 									 g_free);
 
-    diskjokey_sequencer_model->techno_bank[i] = g_hash_table_new_full(g_direct_hash,
+    diskjokey_sequencer_model->techno_bank[i] = g_hash_table_new_full(g_str_hash,
 								      g_str_equal,
 								      g_free,
 								      g_free);
@@ -490,12 +490,12 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->house_label[i] = NULL;
     diskjokey_sequencer_model->house_sample[i] = NULL;
 
-    diskjokey_sequencer_model->house_control[i] = g_hash_table_new_full(g_direct_hash,
+    diskjokey_sequencer_model->house_control[i] = g_hash_table_new_full(g_str_hash,
 									g_str_equal,
 									g_free,
 									g_free);
 
-    diskjokey_sequencer_model->house_bank[i] = g_hash_table_new_full(g_direct_hash,
+    diskjokey_sequencer_model->house_bank[i] = g_hash_table_new_full(g_str_hash,
 								     g_str_equal,
 								     g_free,
 								     g_free);
@@ -683,12 +683,12 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
     diskjokey_sequencer_model->hiphop_label[i] = NULL;
     diskjokey_sequencer_model->hiphop_sample[i] = NULL;
 
-    diskjokey_sequencer_model->hiphop_control[i] = g_hash_table_new_full(g_direct_hash,
+    diskjokey_sequencer_model->hiphop_control[i] = g_hash_table_new_full(g_str_hash,
 									 g_str_equal,
 									 g_free,
 									 g_free);
 
-    diskjokey_sequencer_model->hiphop_bank[i] = g_hash_table_new_full(g_direct_hash,
+    diskjokey_sequencer_model->hiphop_bank[i] = g_hash_table_new_full(g_str_hash,
 								      g_str_equal,
 								      g_free,
 								      g_free);

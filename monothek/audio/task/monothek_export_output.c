@@ -21,6 +21,8 @@
 
 #include <monothek/audio/thread/monothek_export_thread.h>
 
+#include <stdlib.h>
+
 #include <sys/time.h>
 #include <time.h>
 
@@ -216,19 +218,20 @@ monothek_export_output_launch(AgsTask *task)
   gchar *filename;
   char str_buffer[256];
 
+  time_t start_time_sec;
   guint duration_sec;  
-
+  
   export_output = MONOTHEK_EXPORT_OUTPUT(task);
   
   export_thread = MONOTHEK_EXPORT_THREAD(AGS_EXPORT_OUTPUT(export_output)->export_thread);
 
-  clock_gettime(CLOCK_MONOTONIC, &start_time);
+  clock_gettime(CLOCK_REALTIME, &start_time);
 
+  start_time_sec = start_time.tv_sec;
   duration_sec = export_output->duration->tv_sec;
   
-  strftime(str_buffer, 256, "%Y-%j-%H-%M-%S", localtime(&(start_time.tv_sec)));
+  strftime(str_buffer, 256, "%Y-%j-%H-%M-%S", localtime(&start_time_sec));
   filename = g_strdup_printf("snd-%s-%06d-%06d.wav", str_buffer, start_time.tv_nsec / 1000, duration_sec);
-
   g_object_set(task,
 	       "filename", filename,
 	       NULL);

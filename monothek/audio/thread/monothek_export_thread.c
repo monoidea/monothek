@@ -19,6 +19,8 @@
 
 #include <monothek/audio/thread/monothek_export_thread.h>
 
+#include <stdlib.h>
+
 #include <sys/time.h>
 #include <time.h>
 
@@ -142,9 +144,9 @@ monothek_export_thread_init(MonothekExportThread *export_thread)
 
 void
 monothek_export_thread_set_property(GObject *gobject,
-			       guint prop_id,
-			       const GValue *value,
-			       GParamSpec *param_spec)
+				    guint prop_id,
+				    const GValue *value,
+				    GParamSpec *param_spec)
 {
   MonothekExportThread *export_thread;
 
@@ -196,9 +198,9 @@ monothek_export_thread_set_property(GObject *gobject,
 
 void
 monothek_export_thread_get_property(GObject *gobject,
-			       guint prop_id,
-			       GValue *value,
-			       GParamSpec *param_spec)
+				    guint prop_id,
+				    GValue *value,
+				    GParamSpec *param_spec)
 {
   MonothekExportThread *export_thread;
 
@@ -277,7 +279,7 @@ monothek_export_thread_run(AgsThread *thread)
 
   pthread_mutex_t *application_mutex;
   pthread_mutex_t *mutex;
-
+  
   export_thread = MONOTHEK_EXPORT_THREAD(thread);
 
   if(AGS_EXPORT_THREAD(export_thread)->audio_file == NULL){
