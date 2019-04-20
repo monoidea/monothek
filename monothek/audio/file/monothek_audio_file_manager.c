@@ -305,6 +305,9 @@ void
 monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_manager,
 					  GSList *filename)
 {
+  AgsMessageDelivery *message_delivery;
+  AgsMessageQueue *message_queue;
+
   if(!MONOTHEK_IS_AUDIO_FILE_MANAGER(audio_file_manager) ||
      filename == NULL){
     return;
@@ -340,6 +343,58 @@ monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_m
 					       audio_file);
     
     filename = filename->next;
+  }
+
+  /* emit message */
+  message_delivery = ags_message_delivery_get_instance();
+
+  message_queue = (AgsMessageQueue *) ags_message_delivery_find_namespace(message_delivery,
+									  "libmonothek");
+
+  if(message_queue != NULL){
+    AgsMessageEnvelope *message;
+
+    xmlDoc *doc;
+    xmlNode *root_node;
+
+    /* specify message body */
+    doc = xmlNewDoc("1.0");
+
+    root_node = xmlNewNode(NULL,
+			   "monothek-command");
+    xmlDocSetRootElement(doc, root_node);
+
+    xmlNewProp(root_node,
+	       "method",
+	       "MonothekAudioFileManager::load-playlist");
+
+    /* add message */
+    message = ags_message_envelope_alloc(audio_file_manager,
+					 NULL,
+					 doc);
+
+    /* set parameter */
+    message->n_params = 1;
+
+    message->parameter_name = (gchar **) malloc(2 * sizeof(gchar *));
+    message->value = g_new0(GValue,
+			    1);
+
+    /* audio channels */
+    message->parameter_name[0] = "filename";
+    
+    g_value_init(&(message->value[0]),
+		 G_TYPE_POINTER);
+    g_value_set_pointer(&(message->value[0]),
+			filename);
+
+    /* terminate string vector */
+    message->parameter_name[1] = NULL;
+    
+    /* add message */
+    ags_message_delivery_add_message(message_delivery,
+				     "libmonothek",
+				     message);
   }
 }
 

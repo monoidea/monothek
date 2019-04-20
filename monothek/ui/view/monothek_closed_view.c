@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -259,9 +259,9 @@ monothek_closed_view_draw(MonothekView *view)
   height = GTK_WIDGET(view)->allocation.height;
 
   cairo_set_source_rgb(cr,
-		       1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
-		       1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
-		       1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+		       1.0,
+		       1.0,
+		       1.0);
 
   {
     PangoLayout *layout;
@@ -270,16 +270,16 @@ monothek_closed_view_draw(MonothekView *view)
     PangoRectangle ink_rect;
     PangoRectangle logical_rect;
     
-    gchar *jukebox_font;
+    gchar *generic_font;
     
     static const guint font_size = 100;
 
-    jukebox_font = g_strdup_printf("%s Bold", view->font);
+    generic_font = g_strdup_printf("%s Bold", view->font);
 
     /* message */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "UNFORTUNATELY WE\nHAVE CLOSED", -1);
-    desc = pango_font_description_from_string(jukebox_font);
+    desc = pango_font_description_from_string(generic_font);
     pango_font_description_set_size(desc,
 				    80 * PANGO_SCALE);
     pango_layout_set_font_description(layout, desc);
@@ -300,13 +300,13 @@ monothek_closed_view_draw(MonothekView *view)
     g_object_unref(layout);
 
     /* free font string */
-    g_free(jukebox_font);
+    g_free(generic_font);
   }
   
   cairo_set_source_rgb(cr,
-		       1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
-		       1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
-		       1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+		       1.0,
+		       1.0,
+		       1.0);
 
   {
     PangoLayout *layout;
@@ -315,16 +315,16 @@ monothek_closed_view_draw(MonothekView *view)
     PangoRectangle ink_rect;
     PangoRectangle logical_rect;
     
-    gchar *diskjokey_font;
+    gchar *generic_font;
     
     static const guint font_size = 100;
 
-    diskjokey_font = g_strdup_printf("%s Bold", view->font);
+    generic_font = g_strdup_printf("%s Bold", view->font);
 
     /* notice */
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, "PLEASE COME BACK LATER", -1);
-    desc = pango_font_description_from_string(diskjokey_font);
+    desc = pango_font_description_from_string(generic_font);
     pango_font_description_set_size(desc,
 				    38 * PANGO_SCALE);
     pango_layout_set_font_description(layout, desc);
@@ -343,7 +343,7 @@ monothek_closed_view_draw(MonothekView *view)
     g_object_unref(layout);
 
     /* free font string */
-    g_free(diskjokey_font);
+    g_free(generic_font);
   }
 
   /* paint */

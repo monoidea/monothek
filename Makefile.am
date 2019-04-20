@@ -196,6 +196,7 @@ deprecated_libmonothek_model_h_sources =
 
 libmonothek_model_h_sources = \
 	$(deprecated_libmonothek_model_h_sources) \
+	monothek/ui/model/monothek_load_model.h \
 	monothek/ui/model/monothek_start_model.h \
 	monothek/ui/model/monothek_closed_model.h \
 	monothek/ui/model/monothek_outage_model.h \
@@ -215,6 +216,7 @@ deprecated_libmonothek_model_c_sources =
 
 libmonothek_model_c_sources = \
 	$(deprecated_libmonothek_model_c_sources) \
+	monothek/ui/model/monothek_load_model.c \
 	monothek/ui/model/monothek_start_model.c \
 	monothek/ui/model/monothek_closed_model.c \
 	monothek/ui/model/monothek_outage_model.c \
@@ -236,6 +238,7 @@ libmonothek_controller_h_sources = \
 	$(deprecated_libmonothek_controller_h_sources) \
 	monothek/ui/controller/monothek_action_box.h \
 	monothek/ui/controller/monothek_action_slider.h \
+	monothek/ui/controller/monothek_load_controller.h \
 	monothek/ui/controller/monothek_start_controller.h \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
@@ -256,6 +259,7 @@ libmonothek_controller_c_sources = \
 	$(deprecated_libmonothek_controller_c_sources) \
 	monothek/ui/controller/monothek_action_box.c \
 	monothek/ui/controller/monothek_action_slider.c \
+	monothek/ui/controller/monothek_load_controller.c \
 	monothek/ui/controller/monothek_start_controller.c \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
@@ -274,6 +278,7 @@ deprecated_libmonothek_view_h_sources =
 
 libmonothek_view_h_sources = \
 	$(deprecated_libmonothek_view_h_sources) \
+	monothek/ui/view/monothek_load_view.h \
 	monothek/ui/view/monothek_start_view.h \
 	monothek/ui/view/monothek_closed_view.h \
 	monothek/ui/view/monothek_outage_view.h \
@@ -294,6 +299,7 @@ deprecated_libmonothek_view_c_sources =
 
 libmonothek_view_c_sources = \
 	$(deprecated_libmonothek_view_c_sources) \
+	monothek/ui/view/monothek_load_view.c \
 	monothek/ui/view/monothek_start_view.c \
 	monothek/ui/view/monothek_closed_view.c \
 	monothek/ui/view/monothek_outage_view.c \

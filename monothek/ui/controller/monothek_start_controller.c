@@ -353,7 +353,50 @@ void
 monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *action_box,
 							  MonothekStartController *start_controller)
 {
-  monothek_start_controller_launch_jukebox(start_controller);
+  MonothekStartModel *model;
+
+  gchar *purchase_path;
+  gchar *purchase_filename;
+  gchar *product_name;
+  gchar *position_id;
+  gchar *purchase_id;
+  gchar *str;
+
+  gint exit_status;
+
+  gdouble invoice_amount;
+
+  GError *error;
+#if 0
+  g_object_get(start_controller,
+	       "model", &model,
+	       NULL);
+  
+  purchase_path = getenv("MONOTHEK_PURCHASE_PATH");
+
+  if(purchase_path == NULL){
+    purchase_path = MONOTHEK_START_MODEL_PURCHASE_PATH;
+  }
+  
+  purchase_filename = g_strdup_printf("%s/purchase-.xml ", purchase_path);
+
+  product_name = ;
+  
+  str = g_strdup_printf("prepare-purchase.pl %s %s %s %s %f", purchase_filename, product_name, position_id, recipe_id, invoice_amount);
+  
+  error = NULL;
+  g_spawn_command_line_sync(str,
+			    NULL,
+			    NULL,
+			    &exit_status,
+			    &error);
+
+  if(exit_status){
+#endif
+    monothek_start_controller_launch_jukebox(start_controller);
+#if 0
+  }
+#endif
 }
 
 void

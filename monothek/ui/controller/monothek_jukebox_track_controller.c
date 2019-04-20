@@ -722,7 +722,7 @@ monothek_jukebox_track_controller_completed(MonothekJukeboxTrackController *juke
 }
 
 /**
- * ags_line_indicator_increase_timeout:
+ * monothek_jukebox_track_controller_progress_increase_timeout:
  * @gobject: the gobject
  *
  * Queue draw widget

@@ -30,6 +30,7 @@
 #include <monothek/ui/monothek_application_context.h>
 
 #include <monothek/ui/controller/monothek_controller.h>
+#include <monothek/ui/controller/monothek_load_controller.h>
 #include <monothek/ui/controller/monothek_start_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
@@ -43,6 +44,7 @@
 #include <monothek/ui/controller/monothek_diskjokey_end_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_qrcode_controller.h>
 
+#include <monothek/ui/model/monothek_load_model.h>
 #include <monothek/ui/model/monothek_start_model.h>
 #include <monothek/ui/model/monothek_closed_model.h>
 #include <monothek/ui/model/monothek_outage_model.h>
@@ -58,6 +60,7 @@
 #include <monothek/ui/model/monothek_diskjokey_end_model.h>
 #include <monothek/ui/model/monothek_diskjokey_qrcode_model.h>
 
+#include <monothek/ui/view/monothek_load_view.h>
 #include <monothek/ui/view/monothek_start_view.h>
 #include <monothek/ui/view/monothek_closed_view.h>
 #include <monothek/ui/view/monothek_outage_view.h>
@@ -297,6 +300,31 @@ monothek_window_init(MonothekWindow *window)
 		    window->view);
 #endif
   
+  /* load view */
+  model = monothek_load_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
+  view = monothek_load_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  controller = monothek_load_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+
   /* start view */
   model = monothek_start_model_new();
   g_object_ref(model);

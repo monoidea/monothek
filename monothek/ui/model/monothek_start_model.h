@@ -32,6 +32,8 @@
 #define MONOTHEK_IS_START_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_START_MODEL))
 #define MONOTHEK_START_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_MODEL, MonothekStartModelClass))
 
+#define MONOTHEK_START_MODEL_PURCHASE_PATH "/home/monothek/purchase"
+
 typedef struct _MonothekStartModel MonothekStartModel;
 typedef struct _MonothekStartModelClass MonothekStartModelClass;
 
@@ -39,8 +41,10 @@ struct _MonothekStartModel
 {
   GObject gobject;
 
+  gdouble jukebox_price;
   gboolean jukebox_start_active;
   
+  gdouble diskjokey_price;
   gboolean diskjokey_start_active;
 };
 

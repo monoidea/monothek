@@ -190,6 +190,7 @@ am__objects_11 = $(am__objects_1) \
 am__objects_12 = $(am__objects_1) \
 	monothek/audio/file/libmonothek_la-monothek_audio_file_manager.lo
 am__objects_13 = $(am__objects_1) \
+	monothek/ui/model/libmonothek_la-monothek_load_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_start_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_closed_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_outage_model.lo \
@@ -207,6 +208,7 @@ am__objects_13 = $(am__objects_1) \
 am__objects_14 = $(am__objects_1) \
 	monothek/ui/controller/libmonothek_la-monothek_action_box.lo \
 	monothek/ui/controller/libmonothek_la-monothek_action_slider.lo \
+	monothek/ui/controller/libmonothek_la-monothek_load_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_start_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_payment_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo \
@@ -221,6 +223,7 @@ am__objects_14 = $(am__objects_1) \
 	monothek/ui/controller/libmonothek_la-monothek_diskjokey_qrcode_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_controller.lo
 am__objects_15 = $(am__objects_1) \
+	monothek/ui/view/libmonothek_la-monothek_load_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_start_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_closed_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_outage_view.lo \
@@ -310,6 +313,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_controller.Plo \
+	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo \
@@ -323,6 +327,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_model.Plo \
+	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_outage_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo \
@@ -337,6 +342,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_view.Plo \
+	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo
@@ -776,6 +782,7 @@ libmonothek_audio_file_c_sources = \
 deprecated_libmonothek_model_h_sources = 
 libmonothek_model_h_sources = \
 	$(deprecated_libmonothek_model_h_sources) \
+	monothek/ui/model/monothek_load_model.h \
 	monothek/ui/model/monothek_start_model.h \
 	monothek/ui/model/monothek_closed_model.h \
 	monothek/ui/model/monothek_outage_model.h \
@@ -794,6 +801,7 @@ libmonothek_model_h_sources = \
 deprecated_libmonothek_model_c_sources = 
 libmonothek_model_c_sources = \
 	$(deprecated_libmonothek_model_c_sources) \
+	monothek/ui/model/monothek_load_model.c \
 	monothek/ui/model/monothek_start_model.c \
 	monothek/ui/model/monothek_closed_model.c \
 	monothek/ui/model/monothek_outage_model.c \
@@ -814,6 +822,7 @@ libmonothek_controller_h_sources = \
 	$(deprecated_libmonothek_controller_h_sources) \
 	monothek/ui/controller/monothek_action_box.h \
 	monothek/ui/controller/monothek_action_slider.h \
+	monothek/ui/controller/monothek_load_controller.h \
 	monothek/ui/controller/monothek_start_controller.h \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
@@ -833,6 +842,7 @@ libmonothek_controller_c_sources = \
 	$(deprecated_libmonothek_controller_c_sources) \
 	monothek/ui/controller/monothek_action_box.c \
 	monothek/ui/controller/monothek_action_slider.c \
+	monothek/ui/controller/monothek_load_controller.c \
 	monothek/ui/controller/monothek_start_controller.c \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
@@ -850,6 +860,7 @@ libmonothek_controller_c_sources = \
 deprecated_libmonothek_view_h_sources = 
 libmonothek_view_h_sources = \
 	$(deprecated_libmonothek_view_h_sources) \
+	monothek/ui/view/monothek_load_view.h \
 	monothek/ui/view/monothek_start_view.h \
 	monothek/ui/view/monothek_closed_view.h \
 	monothek/ui/view/monothek_outage_view.h \
@@ -869,6 +880,7 @@ libmonothek_view_h_sources = \
 deprecated_libmonothek_view_c_sources = 
 libmonothek_view_c_sources = \
 	$(deprecated_libmonothek_view_c_sources) \
+	monothek/ui/view/monothek_load_view.c \
 	monothek/ui/view/monothek_start_view.c \
 	monothek/ui/view/monothek_closed_view.c \
 	monothek/ui/view/monothek_outage_view.c \
@@ -1146,6 +1158,9 @@ monothek/ui/model/$(am__dirstamp):
 monothek/ui/model/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) monothek/ui/model/$(DEPDIR)
 	@: > monothek/ui/model/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/model/libmonothek_la-monothek_load_model.lo:  \
+	monothek/ui/model/$(am__dirstamp) \
+	monothek/ui/model/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/model/libmonothek_la-monothek_start_model.lo:  \
 	monothek/ui/model/$(am__dirstamp) \
 	monothek/ui/model/$(DEPDIR)/$(am__dirstamp)
@@ -1200,6 +1215,9 @@ monothek/ui/controller/libmonothek_la-monothek_action_box.lo:  \
 monothek/ui/controller/libmonothek_la-monothek_action_slider.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/controller/libmonothek_la-monothek_load_controller.lo:  \
+	monothek/ui/controller/$(am__dirstamp) \
+	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/controller/libmonothek_la-monothek_start_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
@@ -1245,6 +1263,9 @@ monothek/ui/view/$(am__dirstamp):
 monothek/ui/view/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) monothek/ui/view/$(DEPDIR)
 	@: > monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/view/libmonothek_la-monothek_load_view.lo:  \
+	monothek/ui/view/$(am__dirstamp) \
+	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/view/libmonothek_la-monothek_start_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
@@ -1371,6 +1392,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_controller.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo@am__quote@ # am--include-marker
@@ -1384,6 +1406,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_model.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_outage_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo@am__quote@ # am--include-marker
@@ -1398,6 +1421,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_view.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo@am__quote@ # am--include-marker
@@ -1565,6 +1589,13 @@ monothek/audio/file/libmonothek_la-monothek_audio_file_manager.lo: monothek/audi
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/audio/file/libmonothek_la-monothek_audio_file_manager.lo `test -f 'monothek/audio/file/monothek_audio_file_manager.c' || echo '$(srcdir)/'`monothek/audio/file/monothek_audio_file_manager.c
 
+monothek/ui/model/libmonothek_la-monothek_load_model.lo: monothek/ui/model/monothek_load_model.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/model/libmonothek_la-monothek_load_model.lo -MD -MP -MF monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Tpo -c -o monothek/ui/model/libmonothek_la-monothek_load_model.lo `test -f 'monothek/ui/model/monothek_load_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_load_model.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Tpo monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/model/monothek_load_model.c' object='monothek/ui/model/libmonothek_la-monothek_load_model.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/model/libmonothek_la-monothek_load_model.lo `test -f 'monothek/ui/model/monothek_load_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_load_model.c
+
 monothek/ui/model/libmonothek_la-monothek_start_model.lo: monothek/ui/model/monothek_start_model.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/model/libmonothek_la-monothek_start_model.lo -MD -MP -MF monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Tpo -c -o monothek/ui/model/libmonothek_la-monothek_start_model.lo `test -f 'monothek/ui/model/monothek_start_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_start_model.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Tpo monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Plo
@@ -1677,6 +1708,13 @@ monothek/ui/controller/libmonothek_la-monothek_action_slider.lo: monothek/ui/con
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_action_slider.lo `test -f 'monothek/ui/controller/monothek_action_slider.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_action_slider.c
 
+monothek/ui/controller/libmonothek_la-monothek_load_controller.lo: monothek/ui/controller/monothek_load_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_load_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_load_controller.lo `test -f 'monothek/ui/controller/monothek_load_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_load_controller.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_load_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_load_controller.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_load_controller.lo `test -f 'monothek/ui/controller/monothek_load_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_load_controller.c
+
 monothek/ui/controller/libmonothek_la-monothek_start_controller.lo: monothek/ui/controller/monothek_start_controller.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_start_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_start_controller.lo `test -f 'monothek/ui/controller/monothek_start_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_start_controller.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo
@@ -1767,6 +1805,13 @@ monothek/ui/controller/libmonothek_la-monothek_controller.lo: monothek/ui/contro
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_controller.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_controller.lo `test -f 'monothek/ui/controller/monothek_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_controller.c
+
+monothek/ui/view/libmonothek_la-monothek_load_view.lo: monothek/ui/view/monothek_load_view.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_load_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_load_view.lo `test -f 'monothek/ui/view/monothek_load_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_load_view.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Tpo monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_load_view.c' object='monothek/ui/view/libmonothek_la-monothek_load_view.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_load_view.lo `test -f 'monothek/ui/view/monothek_load_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_load_view.c
 
 monothek/ui/view/libmonothek_la-monothek_start_view.lo: monothek/ui/view/monothek_start_view.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_start_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_start_view.lo `test -f 'monothek/ui/view/monothek_start_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_start_view.c
@@ -2312,6 +2357,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo
@@ -2325,6 +2371,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_model.Plo
+	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_outage_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo
@@ -2339,6 +2386,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_view.Plo
+	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo
@@ -2423,6 +2471,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_controller.Plo
+	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_load_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_start_controller.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_closed_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_diskjokey_end_model.Plo
@@ -2436,6 +2485,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_model.Plo
+	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_load_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_outage_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_start_model.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_closed_view.Plo
@@ -2450,6 +2500,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_track_view.Plo
+	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo

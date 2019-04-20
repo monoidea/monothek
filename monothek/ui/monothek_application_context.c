@@ -48,7 +48,7 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
-#include <monothek/ui/view/monothek_start_view.h>
+#include <monothek/ui/view/monothek_load_view.h>
 
 #include <sys/types.h>
 #include <pwd.h>
@@ -1306,7 +1306,7 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
 
   /* set initial view */
   monothek_window_change_view(window,
-			      MONOTHEK_TYPE_START_VIEW, G_TYPE_NONE);
+			      MONOTHEK_TYPE_LOAD_VIEW, G_TYPE_NONE);
   
   /* start gui thread */
   g_atomic_int_set(&(monothek_application_context->gui_ready),
@@ -1335,6 +1335,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   AgsMessageDelivery *message_delivery;
   AgsMessageQueue *message_queue;
   AgsMessageQueue *audio_message_queue;
+  AgsMessageQueue *monothek_message_queue;
   AgsThread *soundcard_thread;
   AgsThread *export_thread;
   AgsDestroyWorker *destroy_worker;
@@ -1398,6 +1399,11 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   /* message delivery */
   message_delivery = ags_message_delivery_get_instance();
 
+  message_queue = ags_message_queue_new("libmonothek");
+  ags_message_delivery_add_queue(message_delivery,
+				 message_queue);
+
+#if 0
   message_queue = ags_message_queue_new("libags");
   ags_message_delivery_add_queue(message_delivery,
 				 message_queue);
@@ -1405,7 +1411,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   audio_message_queue = ags_message_queue_new("libags-audio");
   ags_message_delivery_add_queue(message_delivery,
 				 audio_message_queue);
-
+#endif
+  
   /* AgsSoundcard */
   monothek_application_context->soundcard = NULL;
   soundcard = NULL;

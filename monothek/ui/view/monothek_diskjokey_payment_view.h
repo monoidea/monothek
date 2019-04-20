@@ -34,6 +34,9 @@
 #define MONOTHEK_IS_DISKJOKEY_PAYMENT_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW))
 #define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW, MonothekDiskjokeyPaymentViewClass))
 
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG "/usr/share/monothek/images/diskjokey-payment-cards.png"
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG "/usr/share/monothek/images/diskjokey-payment-nfc.png"
+
 typedef struct _MonothekDiskjokeyPaymentView MonothekDiskjokeyPaymentView;
 typedef struct _MonothekDiskjokeyPaymentViewClass MonothekDiskjokeyPaymentViewClass;
 
@@ -62,6 +65,9 @@ struct _MonothekDiskjokeyPaymentView
 
   gdouble arrow_top_width;
   gdouble arrow_top_height;
+
+  gchar *cards_png_filename;
+  gchar *nfc_png_filename;
 };
 
 struct _MonothekDiskjokeyPaymentViewClass
