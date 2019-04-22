@@ -142,6 +142,8 @@ monothek_jukebox_payment_view_connectable_interface_init(AgsConnectableInterface
 void
 monothek_jukebox_payment_view_init(MonothekJukeboxPaymentView *jukebox_payment_view)
 {
+  gchar *str;
+  
   jukebox_payment_view->pay_box_line_width = 5.0;
 
   jukebox_payment_view->pay_box_x0 = 840.0;
@@ -162,6 +164,30 @@ monothek_jukebox_payment_view_init(MonothekJukeboxPaymentView *jukebox_payment_v
   
   jukebox_payment_view->arrow_top_width = 480.0;
   jukebox_payment_view->arrow_top_height = 240.0;
+
+  /* images - cards */
+  jukebox_payment_view->cards_box_x0 = 100.0;
+  jukebox_payment_view->cards_box_y0 = jukebox_payment_view->pay_box_y0;
+  
+  str = getenv("MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG");
+
+  if(str != NULL){
+    jukebox_payment_view->cards_png_filename = g_strdup(str);
+  }else{
+    jukebox_payment_view->cards_png_filename = g_strdup(MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG);
+  }
+
+  /* images - nfc */
+  jukebox_payment_view->nfc_box_x0 = jukebox_payment_view->arrow_box_x0;
+  jukebox_payment_view->nfc_box_y0 = jukebox_payment_view->arrow_top_y0;
+
+  str = getenv("MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG");
+
+  if(str != NULL){
+    jukebox_payment_view->nfc_png_filename = g_strdup(str);
+  }else{
+    jukebox_payment_view->nfc_png_filename = g_strdup(MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG);
+  }
 }
 
 void
@@ -204,6 +230,9 @@ monothek_jukebox_payment_view_finalize(GObject *gobject)
   MonothekJukeboxPaymentView *jukebox_payment_view;
 
   jukebox_payment_view = (MonothekJukeboxPaymentView *) gobject;
+
+  g_free(jukebox_payment_view->cards_png_filename);
+  g_free(jukebox_payment_view->nfc_png_filename);
   
   /* call parent */
   G_OBJECT_CLASS(monothek_jukebox_payment_view_parent_class)->finalize(gobject);
@@ -371,6 +400,37 @@ monothek_jukebox_payment_view_draw(MonothekView *view)
   /* paint */
   cairo_pop_group_to_source(cr);
   cairo_paint(cr);
+
+  /* images */
+  if(jukebox_payment_view->cards_png_filename != NULL){
+    cairo_surface_t *surface;
+
+    surface = cairo_image_surface_create_from_png(jukebox_payment_view->cards_png_filename);
+    cairo_surface_reference(surface);
+    
+    cairo_set_source_surface(cr,
+			     surface,
+			     (double) jukebox_payment_view->cards_box_x0, (double) jukebox_payment_view->cards_box_y0);
+
+    cairo_paint(cr);
+
+    cairo_surface_destroy(surface);
+  }
+
+  if(jukebox_payment_view->nfc_png_filename != NULL){
+    cairo_surface_t *surface;
+
+    surface = cairo_image_surface_create_from_png(jukebox_payment_view->nfc_png_filename);
+    cairo_surface_reference(surface);
+    
+    cairo_set_source_surface(cr,
+			     surface,
+			     (double) jukebox_payment_view->nfc_box_x0, (double) jukebox_payment_view->nfc_box_y0);
+
+    cairo_paint(cr);
+
+    cairo_surface_destroy(surface);
+  }
 
   cairo_surface_mark_dirty(cairo_get_target(cr));
   cairo_destroy(cr);

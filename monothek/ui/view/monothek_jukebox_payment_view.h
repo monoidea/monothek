@@ -34,8 +34,13 @@
 #define MONOTHEK_IS_JUKEBOX_PAYMENT_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW))
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW, MonothekJukeboxPaymentViewClass))
 
+#if MONOTHEK_DEVEL_MODE
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG SRCDIR "/monothek.share/monothek/images/jukebox-payment-cards.png"
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG SRCDIR "/monothek.share/monothek/images/jukebox-payment-nfc.png"
+#else
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG "/usr/share/monothek/images/jukebox-payment-cards.png"
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG "/usr/share/monothek/images/jukebox-payment-nfc.png"
+#endif
 
 typedef struct _MonothekJukeboxPaymentView MonothekJukeboxPaymentView;
 typedef struct _MonothekJukeboxPaymentViewClass MonothekJukeboxPaymentViewClass;
@@ -66,7 +71,12 @@ struct _MonothekJukeboxPaymentView
   gdouble arrow_top_width;
   gdouble arrow_top_height;
 
+  gdouble cards_box_x0;
+  gdouble cards_box_y0;
   gchar *cards_png_filename;
+  
+  gdouble nfc_box_x0;
+  gdouble nfc_box_y0;
   gchar *nfc_png_filename;
 };
 

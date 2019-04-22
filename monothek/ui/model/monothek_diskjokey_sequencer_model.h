@@ -45,9 +45,15 @@
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_UPPER (5.0)
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT (0.0)
 
+#if MONOTHEK_DEVEL_MODE
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME SRCDIR "/monothek.share/monothek/drumkit/techno.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
+#else
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME "/usr/share/monothek/drumkit/techno.xml"
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME "/usr/share/monothek/drumkit/house.xml"
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME "/usr/share/monothek/drumkit/hip-hop.xml"
+#endif
 
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC (600)
 

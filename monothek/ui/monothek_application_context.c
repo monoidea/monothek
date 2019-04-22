@@ -49,6 +49,7 @@
 #endif
 
 #include <monothek/ui/view/monothek_load_view.h>
+#include <monothek/ui/view/monothek_start_view.h>
 
 #include <sys/types.h>
 #include <pwd.h>
@@ -1305,8 +1306,13 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
   gtk_widget_show_all(window);
 
   /* set initial view */
+#if 1
   monothek_window_change_view(window,
 			      MONOTHEK_TYPE_LOAD_VIEW, G_TYPE_NONE);
+#else
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_START_VIEW, G_TYPE_NONE);
+#endif
   
   /* start gui thread */
   g_atomic_int_set(&(monothek_application_context->gui_ready),
