@@ -26,6 +26,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/object/monothek_marshal.h>
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -278,7 +280,7 @@ monothek_view_class_init(MonothekViewClass *view)
 		 G_SIGNAL_RUN_LAST,
 		 G_STRUCT_OFFSET(MonothekViewClass, reset),
 		 NULL, NULL,
-		 g_cclosure_marshal_VOID__BOOLEAN_BOOLEAN,
+		 monothek_cclosure_marshal_VOID__BOOLEAN_BOOLEAN,
 		 G_TYPE_NONE, 2,
 		 G_TYPE_BOOLEAN,
 		 G_TYPE_BOOLEAN);
@@ -297,7 +299,7 @@ monothek_view_class_init(MonothekViewClass *view)
 		 G_SIGNAL_RUN_LAST,
 		 G_STRUCT_OFFSET(MonothekViewClass, clear),
 		 NULL, NULL,
-		 g_cclosure_marshal_VOID__BOOLEAN_BOOLEAN,
+		 monothek_cclosure_marshal_VOID__BOOLEAN_BOOLEAN,
 		 G_TYPE_NONE, 2,
 		 G_TYPE_BOOLEAN,
 		 G_TYPE_BOOLEAN);
@@ -842,6 +844,52 @@ monothek_view_draw(MonothekView *view)
   g_object_ref((GObject *) view);
   g_signal_emit(G_OBJECT(view),
 		view_signals[DRAW], 0);
+  g_object_unref((GObject *) view);
+}
+
+/**
+ * monothek_view_reset:
+ * @view: the #MonothekView
+ * @reset_defaults: 
+ * @reset_current:
+ * 
+ * Reset view.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_view_reset(MonothekView *view,
+		    gboolean reset_defaults, gboolean reset_current)
+{
+  g_return_if_fail(MONOTHEK_IS_VIEW(view));
+  
+  g_object_ref((GObject *) view);
+  g_signal_emit(G_OBJECT(view),
+		view_signals[RESET], 0,
+		reset_defaults, reset_current);
+  g_object_unref((GObject *) view);
+}
+
+/**
+ * monothek_view_clear:
+ * @view: the #MonothekView
+ * @clear_all: 
+ * @clear_hover: 
+ * 
+ * Clear view.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_view_clear(MonothekView *view,
+		    gboolean clear_all, gboolean clear_hover)
+{
+  g_return_if_fail(MONOTHEK_IS_VIEW(view));
+  
+  g_object_ref((GObject *) view);
+  g_signal_emit(G_OBJECT(view),
+		view_signals[CLEAR], 0,
+		clear_all, clear_hover);
   g_object_unref((GObject *) view);
 }
 

@@ -692,13 +692,8 @@ monothek_jukebox_track_controller_real_completed(MonothekJukeboxTrackController 
     g_value_set_uint(jukebox_test_count,
 		     test_count);
     
-    if(test_count < 3){
-      monothek_window_change_view(window,
- 				  MONOTHEK_TYPE_JUKEBOX_MODE_VIEW, G_TYPE_NONE);
-    }else{
-      monothek_window_change_view(window,
-				  MONOTHEK_TYPE_JUKEBOX_NO_TEST_VIEW, G_TYPE_NONE);
-    }
+    monothek_window_change_view(window,
+				MONOTHEK_TYPE_JUKEBOX_MODE_VIEW, G_TYPE_NONE);
   }
 }
 

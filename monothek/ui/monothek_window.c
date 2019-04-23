@@ -922,6 +922,9 @@ monothek_window_real_change_view(MonothekWindow *window,
 	if(controller != NULL){
 	  ags_connectable_disconnect(AGS_CONNECTABLE(controller->data));
 	}
+
+	monothek_view_reset(MONOTHEK_VIEW(list->data),
+			    TRUE, TRUE);
 	
 	ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 	gtk_widget_hide(list->data);
@@ -946,6 +949,8 @@ monothek_window_real_change_view(MonothekWindow *window,
 	gtk_widget_show(list->data);
 	gtk_widget_queue_draw(list->data);
 
+	monothek_view_reset(MONOTHEK_VIEW(list->data),
+			    FALSE, TRUE);
 	ags_connectable_connect(AGS_CONNECTABLE(list->data));
 	
 	controller = monothek_controller_find_view_type(window->controller,

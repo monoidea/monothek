@@ -27,6 +27,10 @@
 
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
 
+#include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
+
+#include <monothek/ui/monothek_window.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -155,7 +159,7 @@ monothek_jukebox_mode_view_connectable_interface_init(AgsConnectableInterface *c
 void
 monothek_jukebox_mode_view_init(MonothekJukeboxModeView *jukebox_mode_view)
 {
-  jukebox_mode_view->flags = 0;
+  jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
   
   /* test */
   jukebox_mode_view->test_box_line_width = 5.0;
@@ -238,15 +242,6 @@ monothek_jukebox_mode_view_connect(AgsConnectable *connectable)
 {
   MonothekJukeboxModeView *jukebox_mode_view;
 
-  MonothekJukeboxModeModel *jukebox_mode_model;
-
-  MonothekSessionManager *session_manager;
-  MonothekSession *session;
-
-  guint test_count;
-  
-  GValue *jukebox_test_count;
-
   jukebox_mode_view = MONOTHEK_JUKEBOX_MODE_VIEW(connectable);
 
   if((MONOTHEK_VIEW_CONNECTED & (MONOTHEK_VIEW(jukebox_mode_view)->flags)) != 0){
@@ -254,29 +249,6 @@ monothek_jukebox_mode_view_connect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_mode_view_parent_connectable_interface->connect(connectable);
-
-  /* find session */
-  session_manager = monothek_session_manager_get_instance();
-  session = monothek_session_manager_find_session(session_manager,
-						  MONOTHEK_SESSION_DEFAULT_SESSION);
-  
-  /* get jukebox song filename */
-  jukebox_test_count = g_hash_table_lookup(session->value,
-					   "jukebox-test-count");
-
-  test_count = 0;
-
-  if(jukebox_test_count != NULL){
-    test_count = g_value_get_uint(jukebox_test_count);
-  }
-  
-  g_object_get(jukebox_mode_view,
-	       "model", &jukebox_mode_model,
-	       NULL);
-
-  g_object_set(jukebox_mode_model,
-	       "attempts", test_count,
-	       NULL);
 }
 
 void
@@ -649,13 +621,28 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
 				 gboolean reset_defaults, gboolean reset_current)
 {
   MonothekWindow *window;
-
+  MonothekJukeboxModeView *jukebox_mode_view;
+  
   MonothekJukeboxModeController *jukebox_mode_controller;
   
   MonothekJukeboxModeModel *jukebox_mode_model;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
   GList *list;
 
+  guint test_count;
+  
+  GValue *jukebox_test_count;
+
+  jukebox_mode_view = MONOTHEK_JUKEBOX_MODE_VIEW(view);
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+  
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
   
@@ -670,7 +657,21 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
   if(list != NULL){
     jukebox_mode_controller = list->data;
   }
+
+  /* get test count */
+  jukebox_test_count = g_hash_table_lookup(session->value,
+					   "jukebox-test-count");
+
+  test_count = 0;
+
+  if(jukebox_test_count != NULL){
+    test_count = g_value_get_uint(jukebox_test_count);
+  }
   
+  g_object_set(jukebox_mode_model,
+	       "attempts", test_count,
+	       NULL);
+
   if(reset_current){
     g_free(jukebox_mode_view->current_test_message);
 
@@ -707,17 +708,21 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
 
       jukebox_mode_controller->jukebox_test->enabled = TRUE;
 
+      jukebox_mode_controller->jukebox_test->x0 = 520;
+
       /* play */
       jukebox_mode_view->play_box_x0 = 1000.0;
 
       jukebox_mode_controller->jukebox_play->enabled = TRUE;
+
+      jukebox_mode_controller->jukebox_play->x0 = 1000;
 
       /* cancel */
       jukebox_mode_controller->jukebox_cancel->enabled = FALSE;
 
       /* message */
       jukebox_mode_view->current_test_message = g_strdup_printf("YOU CAN TEST %d OUT OF 3\nTRACKS ANYMORE.",
-								3 - jukebox_mode_model->attempts);
+								jukebox_mode_model->attempts + 1);
     }
     break;
     case 2:
@@ -800,7 +805,11 @@ void
 monothek_jukebox_mode_view_clear(MonothekView *view,
 				 gboolean clear_all, gboolean clear_hover)
 {
+  MonothekJukeboxModeView *jukebox_mode_view;
+
   MonothekJukeboxModeModel *jukebox_mode_model;
+
+  jukebox_mode_view = MONOTHEK_JUKEBOX_MODE_VIEW(view);
 
   g_object_get(view,
 	       "model", &jukebox_mode_model,
