@@ -1306,7 +1306,7 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
   gtk_widget_show_all(window);
 
   /* set initial view */
-#if 1
+#if 0
   monothek_window_change_view(window,
 			      MONOTHEK_TYPE_LOAD_VIEW, G_TYPE_NONE);
 #else

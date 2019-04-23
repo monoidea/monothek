@@ -45,6 +45,7 @@ struct _MonothekActionBox
 
   guint button_mask;
 
+  gboolean enabled;
   gboolean is_active;
   
   gchar *action_identifier;

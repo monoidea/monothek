@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -48,6 +48,11 @@ void monothek_jukebox_mode_view_connect(AgsConnectable *connectable);
 void monothek_jukebox_mode_view_disconnect(AgsConnectable *connectable);
 
 void monothek_jukebox_mode_view_draw(MonothekView *view);
+
+void monothek_jukebox_mode_view_reset(MonothekView *view,
+				      gboolean reset_defaults, gboolean reset_current);
+void monothek_jukebox_mode_view_clear(MonothekView *view,
+				      gboolean clear_all, gboolean clear_hover);
 
 /**
  * SECTION:monothek_jukebox_mode_view
@@ -131,6 +136,9 @@ monothek_jukebox_mode_view_class_init(MonothekJukeboxModeViewClass *jukebox_mode
   view = (MonothekViewClass *) jukebox_mode_view;
 
   view->draw = monothek_jukebox_mode_view_draw;
+
+  view->reset = monothek_jukebox_mode_view_reset;
+  view->clear = monothek_jukebox_mode_view_clear;
 }
 
 void
@@ -146,11 +154,13 @@ monothek_jukebox_mode_view_connectable_interface_init(AgsConnectableInterface *c
 
 void
 monothek_jukebox_mode_view_init(MonothekJukeboxModeView *jukebox_mode_view)
-{  
+{
+  jukebox_mode_view->flags = 0;
+  
   /* test */
   jukebox_mode_view->test_box_line_width = 5.0;
 
-  jukebox_mode_view->test_box_x0 = 280.0;
+  jukebox_mode_view->test_box_x0 = 740.0;
   jukebox_mode_view->test_box_y0 = 580.0;
 
   jukebox_mode_view->test_box_width = 400.0;
@@ -159,7 +169,7 @@ monothek_jukebox_mode_view_init(MonothekJukeboxModeView *jukebox_mode_view)
   /* play */
   jukebox_mode_view->play_box_line_width = 5.0;
 
-  jukebox_mode_view->play_box_x0 = 760.0;
+  jukebox_mode_view->play_box_x0 = 1000.0;
   jukebox_mode_view->play_box_y0 = 580.0;
 
   jukebox_mode_view->play_box_width = 400.0;
@@ -168,11 +178,14 @@ monothek_jukebox_mode_view_init(MonothekJukeboxModeView *jukebox_mode_view)
   /* cancel */
   jukebox_mode_view->cancel_box_line_width = 5.0;
 
-  jukebox_mode_view->cancel_box_x0 = 1240.0;
+  jukebox_mode_view->cancel_box_x0 = 1000.0;
   jukebox_mode_view->cancel_box_y0 = 580.0;
 
   jukebox_mode_view->cancel_box_width = 400.0;
   jukebox_mode_view->cancel_box_height = 140.0;
+
+  /* messages */
+  jukebox_mode_view->current_test_message = g_strdup("YOU CAN TEST 3 OUT\nOF 3 TRACKS.");
 }
 
 void
@@ -343,7 +356,7 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 
     /* message */
     layout = pango_cairo_create_layout(cr);
-    pango_layout_set_text(layout, "YOU CAN TEST 3 OUT\nOF 3 TRACKS", -1);
+    pango_layout_set_text(layout, jukebox_mode_view->current_test_message, -1);
     desc = pango_font_description_from_string(jukebox_font);
     pango_font_description_set_size(desc,
 				    38 * PANGO_SCALE);
@@ -365,7 +378,9 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
     g_object_unref(layout);
   }
   
-  {
+  if((MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS & (jukebox_mode_view->flags)) != 0 ||
+     (MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS & (jukebox_mode_view->flags)) != 0 ||
+     (MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST & (jukebox_mode_view->flags)) != 0){
     PangoLayout *layout, *attempts_layout;
     PangoFontDescription *desc;
 
@@ -407,7 +422,7 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 
     /* test - attempts */
     if(jukebox_mode_model != NULL){
-      attempts = g_strdup_printf("%d/%d", jukebox_mode_model->attempts, jukebox_mode_model->max_attempts);
+      attempts = g_strdup_printf("%d/%d", jukebox_mode_model->attempts + 1, jukebox_mode_model->max_attempts);
     }else{
       attempts = g_strdup("0/0");
     }
@@ -467,7 +482,9 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
     g_free(jukebox_font);
   }
 
-  {
+  if((MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS & (jukebox_mode_view->flags)) != 0 ||
+     (MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST & (jukebox_mode_view->flags)) != 0 ||
+     (MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST & (jukebox_mode_view->flags)) != 0){
     PangoLayout *layout;
     PangoFontDescription *desc;
 
@@ -541,7 +558,7 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
     g_free(jukebox_font);
   }
 
-  {
+  if((MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST & (jukebox_mode_view->flags)) != 0){
     PangoLayout *layout;
     PangoFontDescription *desc;
 
@@ -625,6 +642,179 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+}
+
+void
+monothek_jukebox_mode_view_reset(MonothekView *view,
+				 gboolean reset_defaults, gboolean reset_current)
+{
+  MonothekWindow *window;
+
+  MonothekJukeboxModeController *jukebox_mode_controller;
+  
+  MonothekJukeboxModeModel *jukebox_mode_model;
+
+  GList *list;
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+  
+  g_object_get(view,
+	       "model", &jukebox_mode_model,
+	       NULL);
+
+  jukebox_mode_controller = NULL;
+  list = monothek_controller_find_view_type(window->controller,
+					    MONOTHEK_TYPE_JUKEBOX_MODE_VIEW);
+
+  if(list != NULL){
+    jukebox_mode_controller = list->data;
+  }
+  
+  if(reset_current){
+    g_free(jukebox_mode_view->current_test_message);
+
+    jukebox_mode_view->current_test_message  = NULL;
+    
+    switch(jukebox_mode_model->attempts){
+    case 0:
+    {
+      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+      
+      /* test */
+      jukebox_mode_view->test_box_x0 = 740.0;
+
+      jukebox_mode_controller->jukebox_test->enabled = TRUE;
+
+      jukebox_mode_controller->jukebox_test->x0 = 740;
+
+      /* play */
+      jukebox_mode_controller->jukebox_play->enabled = FALSE;
+
+      /* cancel */
+      jukebox_mode_controller->jukebox_cancel->enabled = FALSE;
+      
+      /* message */
+      jukebox_mode_view->current_test_message = g_strdup("YOU CAN TEST 3 OUT\nOF 3 TRACKS.");
+    }
+    break;
+    case 1:
+    {
+      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS;
+
+      /* test */
+      jukebox_mode_view->test_box_x0 = 520.0;
+
+      jukebox_mode_controller->jukebox_test->enabled = TRUE;
+
+      /* play */
+      jukebox_mode_view->play_box_x0 = 1000.0;
+
+      jukebox_mode_controller->jukebox_play->enabled = TRUE;
+
+      /* cancel */
+      jukebox_mode_controller->jukebox_cancel->enabled = FALSE;
+
+      /* message */
+      jukebox_mode_view->current_test_message = g_strdup_printf("YOU CAN TEST %d OUT OF 3\nTRACKS ANYMORE.",
+								3 - jukebox_mode_model->attempts);
+    }
+    break;
+    case 2:
+    {
+      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST;
+
+      /* test */
+      jukebox_mode_view->test_box_x0 = 520.0;
+
+      jukebox_mode_controller->jukebox_test->enabled = TRUE;
+
+      jukebox_mode_controller->jukebox_test->x0 = 520;
+
+      /* play */
+      jukebox_mode_view->play_box_x0 = 1000.0;
+
+      jukebox_mode_controller->jukebox_play->enabled = TRUE;
+
+      jukebox_mode_controller->jukebox_play->x0 = 1000;
+
+      /* cancel */
+      jukebox_mode_controller->jukebox_cancel->enabled = FALSE;
+
+      /* message */
+      jukebox_mode_view->current_test_message = g_strdup("YOU CAN TEST ONLY ONE\nMORE TRACK.");
+    }
+    break;
+    case 3:
+    {
+      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST;
+
+      /* test */
+      jukebox_mode_controller->jukebox_test->enabled = FALSE;
+
+      /* play */
+      jukebox_mode_view->play_box_x0 = 520.0;
+
+      jukebox_mode_controller->jukebox_play->enabled = TRUE;
+
+      jukebox_mode_controller->jukebox_play->x0 = 520;
+
+      /* cancel */
+      jukebox_mode_view->cancel_box_x0 = 1000.0;
+
+      jukebox_mode_controller->jukebox_cancel->enabled = TRUE;
+
+      jukebox_mode_controller->jukebox_cancel->x0 = 1000;
+
+      /* message */
+      jukebox_mode_view->current_test_message = g_strdup("YOU CAN'T TEST ANYMORE. DO\nYOU WANT TO PLAY THIS TRACK?");
+    }
+    break;
+    }
+  }
+  
+  if(reset_defaults){
+    jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+      
+    /* test */
+    jukebox_mode_view->test_box_x0 = 740.0;
+
+    jukebox_mode_controller->jukebox_test->enabled = TRUE;
+
+    jukebox_mode_controller->jukebox_test->x0 = 740;
+
+    /* play */
+    jukebox_mode_controller->jukebox_play->enabled = FALSE;
+
+    /* cancel */
+    jukebox_mode_controller->jukebox_cancel->enabled = FALSE;
+
+    /* message */
+    g_free(jukebox_mode_view->current_test_message);
+
+    jukebox_mode_view->current_test_message = g_strdup("YOU CAN TEST 3 OUT\nOF 3 TRACKS.");
+  }
+}
+
+void
+monothek_jukebox_mode_view_clear(MonothekView *view,
+				 gboolean clear_all, gboolean clear_hover)
+{
+  MonothekJukeboxModeModel *jukebox_mode_model;
+
+  g_object_get(view,
+	       "model", &jukebox_mode_model,
+	       NULL);
+
+  if(clear_all || clear_hover){
+    jukebox_mode_model->jukebox_test_active = FALSE;
+    jukebox_mode_model->jukebox_play_active = FALSE;
+    jukebox_mode_model->jukebox_cancel_active = FALSE;
+  }
+  
+  if(clear_all){
+    jukebox_mode_model->attempts = 0;
+  }
 }
 
 /**

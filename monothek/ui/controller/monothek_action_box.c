@@ -336,6 +336,7 @@ monothek_action_box_init(MonothekActionBox *action_box)
 {
   action_box->button_mask = 0;
 
+  action_box->enabled = TRUE;
   action_box->is_active = FALSE;
   
   action_box->action_identifier = NULL;

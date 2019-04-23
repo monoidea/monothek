@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -40,10 +40,19 @@
 typedef struct _MonothekJukeboxModeView MonothekJukeboxModeView;
 typedef struct _MonothekJukeboxModeViewClass MonothekJukeboxModeViewClass;
 
+typedef enum{
+  MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS                = 1,
+  MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS               = 1 <<  1,
+  MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST                 = 1 <<  2,
+  MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST                  = 1 <<  3,
+}MonothekJukeboxModeViewFlags;
+
 struct _MonothekJukeboxModeView
 {
   MonothekView monothek_view;
 
+  guint flags;
+  
   //test  
   gdouble test_box_line_width;
 
@@ -70,6 +79,8 @@ struct _MonothekJukeboxModeView
 
   gdouble cancel_box_width;
   gdouble cancel_box_height;
+
+  gchar *current_test_message;
 };
 
 struct _MonothekJukeboxModeViewClass

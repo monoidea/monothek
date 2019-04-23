@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -82,6 +82,8 @@ void monothek_view_real_draw(MonothekView *view);
 
 enum{
   DRAW,
+  RESET,
+  CLEAR,
   LAST_SIGNAL,
 };
 
@@ -240,6 +242,9 @@ monothek_view_class_init(MonothekViewClass *view)
   
   /* MonothekViewClass */
   view->draw = monothek_view_real_draw;
+
+  view->reset = NULL;
+  view->clear = NULL;
   
   /* signals */
   /**
@@ -258,6 +263,44 @@ monothek_view_class_init(MonothekViewClass *view)
 		 NULL, NULL,
 		 g_cclosure_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekView::reset:
+   * @view: the #MonothekView
+   *
+   * The ::reset signal notifies about key pressed.
+   *
+   * Since: 1.0.0
+   */
+  view_signals[RESET] =
+    g_signal_new("reset",
+		 G_TYPE_FROM_CLASS(view),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekViewClass, reset),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__BOOLEAN_BOOLEAN,
+		 G_TYPE_NONE, 2,
+		 G_TYPE_BOOLEAN,
+		 G_TYPE_BOOLEAN);
+
+  /**
+   * MonothekView::clear:
+   * @view: the #MonothekView
+   *
+   * The ::clear signal notifies about key pressed.
+   *
+   * Since: 1.0.0
+   */
+  view_signals[CLEAR] =
+    g_signal_new("clear",
+		 G_TYPE_FROM_CLASS(view),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekViewClass, clear),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__BOOLEAN_BOOLEAN,
+		 G_TYPE_NONE, 2,
+		 G_TYPE_BOOLEAN,
+		 G_TYPE_BOOLEAN);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -497,6 +497,12 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
     guint x0, y0;
     guint width, height;
 
+    if(!MONOTHEK_ACTION_BOX(list->data)->enabled){
+      list = list->next;
+
+      continue;
+    }
+    
     g_object_get(G_OBJECT(list->data),
 		 "x0", &x0,
 		 "y0", &y0,
@@ -542,6 +548,12 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
   while(list != NULL){
     guint x0, y0;
     guint width, height;
+
+    if(!MONOTHEK_ACTION_BOX(list->data)->enabled){
+      list = list->next;
+
+      continue;
+    }
 
     g_object_get(G_OBJECT(list->data),
 		 "x0", &x0,
@@ -631,6 +643,12 @@ monothek_controller_button_release_event_callback(GtkWidget *widget,
   while(list != NULL){
     guint x0, y0;
     guint width, height;
+
+    if(!MONOTHEK_ACTION_BOX(list->data)->enabled){
+      list = list->next;
+
+      continue;
+    }
 
     g_object_get(G_OBJECT(list->data),
 		 "x0", &x0,

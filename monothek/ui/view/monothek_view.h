@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -70,6 +70,11 @@ struct _MonothekViewClass
   GtkWidgetClass widget;
 
   void (*draw)(MonothekView *view);
+
+  void (*reset)(MonothekView *view,
+		gboolean reset_defaults, gboolean reset_current);
+  void (*clear)(MonothekView *view,
+		gboolean clear_all, gboolean clear_hover);
 };
 
 GType monothek_view_get_type(void);
@@ -79,6 +84,11 @@ void monothek_view_set_flags(MonothekView *view, guint flags);
 void monothek_view_unset_flags(MonothekView *view, guint flags);
 
 void monothek_view_draw(MonothekView *view);
+
+void monothek_view_reset(MonothekView *view,
+			 gboolean reset_defaults, gboolean reset_current);
+void monothek_view_clear(MonothekView *view,
+			 gboolean clear_all, gboolean clear_hover);
 
 MonothekView* monothek_view_new();
 

@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -217,10 +217,11 @@ monothek_jukebox_mode_controller_init(MonothekJukeboxModeController *jukebox_mod
 {
   MonothekActionBox *action_box;
 
+  /* test */
   jukebox_mode_controller->jukebox_test = 
     action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
 						    "action-identifier", "jukebox-test",
-						    "x0", 280,
+						    "x0", 740,
 						    "y0", 580,
 						    "width", 400,
 						    "height", 140,
@@ -228,10 +229,11 @@ monothek_jukebox_mode_controller_init(MonothekJukeboxModeController *jukebox_mod
   monothek_controller_add_action_box(jukebox_mode_controller,
 				     action_box);
 
+  /* play */
   jukebox_mode_controller->jukebox_play = 
     action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
 						    "action-identifier", "jukebox-play",
-						    "x0", 760,
+						    "x0", 1000,
 						    "y0", 580,
 						    "width", 400,
 						    "height", 140,
@@ -239,16 +241,21 @@ monothek_jukebox_mode_controller_init(MonothekJukeboxModeController *jukebox_mod
   monothek_controller_add_action_box(jukebox_mode_controller,
 				     action_box);
 
+  jukebox_mode_controller->jukebox_play->enabled = FALSE;
+
+  /* cancel */
   jukebox_mode_controller->jukebox_cancel = 
     action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
 						    "action-identifier", "jukebox-cancel",
-						    "x0", 1240,
+						    "x0", 1000,
 						    "y0", 580,
 						    "width", 400,
 						    "height", 140,
 						    NULL);
   monothek_controller_add_action_box(jukebox_mode_controller,
 				     action_box);
+
+  jukebox_mode_controller->jukebox_play->enabled = FALSE;
 }
 
 void
