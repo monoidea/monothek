@@ -595,7 +595,7 @@ monothek_jukebox_mode_controller_real_play(MonothekJukeboxModeController *jukebo
 				   MONOTHEK_TYPE_WINDOW);
 
   monothek_window_change_view(window,
-			      MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, G_TYPE_NONE);
+			      MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, G_TYPE_NONE);
 }
 
 /**
@@ -625,6 +625,33 @@ monothek_jukebox_mode_controller_real_cancel(MonothekJukeboxModeController *juke
 
   MonothekJukeboxModeModel *model;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *jukebox_mode;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set jukebox mode - play */
+  jukebox_mode = g_hash_table_lookup(session->value,
+				     "jukebox-mode");
+
+  if(jukebox_mode == NULL){
+    jukebox_mode = g_new0(GValue,
+			  1);
+    g_value_init(jukebox_mode,
+		 G_TYPE_STRING);
+
+    g_hash_table_insert(session->value,
+			"jukebox-mode", jukebox_mode);
+  }
+
+  g_value_set_string(jukebox_mode,
+		     "play");
+  
   /* change view */
   g_object_get(jukebox_mode_controller,
 	       "view", &view,
@@ -634,10 +661,8 @@ monothek_jukebox_mode_controller_real_cancel(MonothekJukeboxModeController *juke
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
 
-  if(model->attempts > 0){
-    monothek_window_change_view(window,
-				MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, G_TYPE_NONE);
-  }
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, G_TYPE_NONE);
 }
 
 /**

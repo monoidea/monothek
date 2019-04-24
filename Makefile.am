@@ -1,4 +1,4 @@
-# Copyright (C) 2018 Jo\u00EBl Kr\u00E4hemann
+# Copyright (C) 2018-2019 Jo\u00EBl Kr\u00E4hemann
 # 
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
@@ -206,6 +206,7 @@ libmonothek_model_h_sources = \
 	monothek/ui/model/monothek_jukebox_no_test_model.h \
 	monothek/ui/model/monothek_jukebox_playlist_model.h \
 	monothek/ui/model/monothek_jukebox_track_model.h \
+	monothek/ui/model/monothek_jukebox_info_model.h \
 	monothek/ui/model/monothek_jukebox_end_model.h \
 	monothek/ui/model/monothek_jukebox_qrcode_model.h \
 	monothek/ui/model/monothek_diskjokey_sequencer_model.h \
@@ -226,6 +227,7 @@ libmonothek_model_c_sources = \
 	monothek/ui/model/monothek_jukebox_no_test_model.c \
 	monothek/ui/model/monothek_jukebox_playlist_model.c \
 	monothek/ui/model/monothek_jukebox_track_model.c \
+	monothek/ui/model/monothek_jukebox_info_model.c \
 	monothek/ui/model/monothek_jukebox_end_model.c \
 	monothek/ui/model/monothek_jukebox_qrcode_model.c \
 	monothek/ui/model/monothek_diskjokey_sequencer_model.c \
@@ -246,6 +248,7 @@ libmonothek_controller_h_sources = \
 	monothek/ui/controller/monothek_jukebox_no_test_controller.h \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.h \
 	monothek/ui/controller/monothek_jukebox_track_controller.h \
+	monothek/ui/controller/monothek_jukebox_info_controller.h \
 	monothek/ui/controller/monothek_jukebox_end_controller.h \
 	monothek/ui/controller/monothek_jukebox_qrcode_controller.h \
 	monothek/ui/controller/monothek_diskjokey_sequencer_controller.h \
@@ -267,6 +270,7 @@ libmonothek_controller_c_sources = \
 	monothek/ui/controller/monothek_jukebox_no_test_controller.c \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.c \
 	monothek/ui/controller/monothek_jukebox_track_controller.c \
+	monothek/ui/controller/monothek_jukebox_info_controller.c \
 	monothek/ui/controller/monothek_jukebox_end_controller.c \
 	monothek/ui/controller/monothek_jukebox_qrcode_controller.c \
 	monothek/ui/controller/monothek_diskjokey_sequencer_controller.c \
@@ -288,6 +292,7 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_jukebox_no_test_view.h \
 	monothek/ui/view/monothek_jukebox_playlist_view.h \
 	monothek/ui/view/monothek_jukebox_track_view.h \
+	monothek/ui/view/monothek_jukebox_info_view.h \
 	monothek/ui/view/monothek_jukebox_end_view.h \
 	monothek/ui/view/monothek_jukebox_qrcode_view.h \
 	monothek/ui/view/monothek_diskjokey_sequencer_view.h \
@@ -309,6 +314,7 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_jukebox_no_test_view.c \
 	monothek/ui/view/monothek_jukebox_playlist_view.c \
 	monothek/ui/view/monothek_jukebox_track_view.c \
+	monothek/ui/view/monothek_jukebox_info_view.c \
 	monothek/ui/view/monothek_jukebox_end_view.c \
 	monothek/ui/view/monothek_jukebox_qrcode_view.c \
 	monothek/ui/view/monothek_diskjokey_sequencer_view.c \
