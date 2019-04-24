@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -32,7 +32,11 @@
 #define MONOTHEK_IS_START_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_START_MODEL))
 #define MONOTHEK_START_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_MODEL, MonothekStartModelClass))
 
+#ifdef MONOTHEK_DEVEL_MODE
+#define MONOTHEK_START_MODEL_PURCHASE_PATH SRCDIR "/monothek.home/purchase"
+#else
 #define MONOTHEK_START_MODEL_PURCHASE_PATH "/home/monothek/purchase"
+#endif
 
 typedef struct _MonothekStartModel MonothekStartModel;
 typedef struct _MonothekStartModelClass MonothekStartModelClass;
@@ -41,6 +45,8 @@ struct _MonothekStartModel
 {
   GObject gobject;
 
+  guint nth_position;
+  
   gdouble jukebox_price;
   gboolean jukebox_start_active;
   

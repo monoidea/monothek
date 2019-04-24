@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -362,11 +362,12 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
   gchar *purchase_id;
   gchar *str;
 
+  gdouble invoice_amount;
+  guint nth_position;
   gint exit_status;
 
-  gdouble invoice_amount;
-
   GError *error;
+
 #if 0
   g_object_get(start_controller,
 	       "model", &model,
@@ -377,10 +378,17 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
   if(purchase_path == NULL){
     purchase_path = MONOTHEK_START_MODEL_PURCHASE_PATH;
   }
-  
-  purchase_filename = g_strdup_printf("%s/purchase-.xml ", purchase_path);
 
-  product_name = ;
+  nth_position = model->nth_position;
+  
+  product_name = g_strdup("jukebox");
+
+  position_id = g_strdup_printf("MJUK%06d", nth_position);
+  recipe_id = g_uuid_string_random();
+  
+  purchase_filename = g_strdup_printf("%s/purchase-%s.xml ", purchase_path, recipe_id);
+
+  invoice_amount = model->jukebox_price;
   
   str = g_strdup_printf("prepare-purchase.pl %s %s %s %s %f", purchase_filename, product_name, position_id, recipe_id, invoice_amount);
   
@@ -441,7 +449,58 @@ void
 monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *action_box,
 							    MonothekStartController *start_controller)
 {
-  monothek_start_controller_launch_diskjokey(start_controller);
+  MonothekStartModel *model;
+
+  gchar *purchase_path;
+  gchar *purchase_filename;
+  gchar *product_name;
+  gchar *position_id;
+  gchar *purchase_id;
+  gchar *str;
+
+  gdouble invoice_amount;
+  guint nth_position;
+  gint exit_status;
+
+  GError *error;
+
+#if 0
+  g_object_get(start_controller,
+	       "model", &model,
+	       NULL);
+  
+  purchase_path = getenv("MONOTHEK_PURCHASE_PATH");
+
+  if(purchase_path == NULL){
+    purchase_path = MONOTHEK_START_MODEL_PURCHASE_PATH;
+  }
+
+  nth_position = model->nth_position;
+  
+  product_name = g_strdup("diskjokey");
+
+  position_id = g_strdup_printf("MDIS%06d", nth_position);
+  recipe_id = g_uuid_string_random();
+  
+  purchase_filename = g_strdup_printf("%s/purchase-%s.xml ", purchase_path, recipe_id);
+
+  invoice_amount = model->diskjokey_price;
+  
+  str = g_strdup_printf("prepare-purchase.pl %s %s %s %s %f", purchase_filename, product_name, position_id, recipe_id, invoice_amount);
+  
+  error = NULL;
+  g_spawn_command_line_sync(str,
+			    NULL,
+			    NULL,
+			    &exit_status,
+			    &error);
+
+  if(exit_status){
+#endif
+    monothek_start_controller_launch_diskjokey(start_controller);
+#if 0
+  }
+#endif
 }
 
 void

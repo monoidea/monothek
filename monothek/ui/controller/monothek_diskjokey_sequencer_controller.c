@@ -165,19 +165,19 @@ void monothek_diskjokey_sequencer_controller_real_completed(MonothekDiskjokeySeq
  */
 
 enum{
-     TOGGLE_PAD,
-     SWITCH_PAGE,
-     SELECT_BANK,
-     CHANGE_BPM,
-     CHANGE_SWING,
-     CHANGE_DURATION,
-     LOAD_DRUM_KIT,
-     CLEAR,
-     RANDOM,
-     PROGRESS,
-     RUN,
-     COMPLETED,
-     LAST_SIGNAL,
+  TOGGLE_PAD,
+  SWITCH_PAGE,
+  SELECT_BANK,
+  CHANGE_BPM,
+  CHANGE_SWING,
+  CHANGE_DURATION,
+  LOAD_DRUM_KIT,
+  CLEAR,
+  RANDOM,
+  PROGRESS,
+  RUN,
+  COMPLETED,
+  LAST_SIGNAL,
 };
 
 static gpointer monothek_diskjokey_sequencer_controller_parent_class = NULL;
@@ -197,21 +197,21 @@ monothek_diskjokey_sequencer_controller_get_type()
     GType monothek_type_diskjokey_sequencer_controller = 0;
 
     static const GTypeInfo monothek_diskjokey_sequencer_controller_info = {
-									   sizeof (MonothekDiskjokeySequencerControllerClass),
-									   NULL, /* base_init */
-									   NULL, /* base_finalize */
-									   (GClassInitFunc) monothek_diskjokey_sequencer_controller_class_init,
-									   NULL, /* class_finalize */
-									   NULL, /* class_data */
-									   sizeof (MonothekDiskjokeySequencerController),
-									   0,    /* n_preallocs */
-									   (GInstanceInitFunc) monothek_diskjokey_sequencer_controller_init,
+      sizeof (MonothekDiskjokeySequencerControllerClass),
+      NULL, /* base_init */
+      NULL, /* base_finalize */
+      (GClassInitFunc) monothek_diskjokey_sequencer_controller_class_init,
+      NULL, /* class_finalize */
+      NULL, /* class_data */
+      sizeof (MonothekDiskjokeySequencerController),
+      0,    /* n_preallocs */
+      (GInstanceInitFunc) monothek_diskjokey_sequencer_controller_init,
     };
 
     static const GInterfaceInfo monothek_connectable_interface_info = {
-								       (GInterfaceInitFunc) monothek_diskjokey_sequencer_controller_connectable_interface_init,
-								       NULL, /* interface_finalize */
-								       NULL, /* interface_data */
+      (GInterfaceInitFunc) monothek_diskjokey_sequencer_controller_connectable_interface_init,
+      NULL, /* interface_finalize */
+      NULL, /* interface_data */
     };
 
     monothek_type_diskjokey_sequencer_controller = g_type_register_static(MONOTHEK_TYPE_CONTROLLER,
@@ -690,8 +690,8 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
   /* position timeout */
   if(monothek_diskjokey_sequencer_controller_position == NULL){
     monothek_diskjokey_sequencer_controller_position = g_hash_table_new_full(g_direct_hash, g_direct_equal,
-                                                     NULL,
-                                                     NULL);
+									     NULL,
+									     NULL);
   }
 
   g_hash_table_insert(monothek_diskjokey_sequencer_controller_position,
@@ -3039,7 +3039,7 @@ monothek_diskjokey_sequencer_controller_new()
   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
 
   diskjokey_sequencer_controller = (MonothekDiskjokeySequencerController *) g_object_new(MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER,
-										     NULL);
+											 NULL);
   
   return(diskjokey_sequencer_controller);
 }

@@ -22,6 +22,10 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/audio/recall/monothek_delay_audio.h>
+#include <monothek/audio/recall/monothek_delay_audio_run.h>
+#include <monothek/audio/recall/monothek_delay_channel.h>
+#include <monothek/audio/recall/monothek_delay_channel_run.h>
 #include <monothek/audio/recall/monothek_copy_pattern_audio.h>
 #include <monothek/audio/recall/monothek_copy_pattern_audio_run.h>
 #include <monothek/audio/recall/monothek_copy_pattern_channel.h>
@@ -39,6 +43,12 @@ void monothek_recall_factory_class_init(MonothekRecallFactoryClass *recall_facto
 void monothek_recall_factory_init(MonothekRecallFactory *recall_factory);
 void monothek_recall_factory_finalize(GObject *gobject);
 
+GList* monothek_recall_factory_create_delay(AgsAudio *audio,
+					    AgsRecallContainer *play_container, AgsRecallContainer *recall_container,
+					    gchar *plugin_name,
+					    guint start_audio_channel, guint stop_audio_channel,
+					    guint start_pad, guint stop_pad,
+					    guint create_flags, guint recall_flags);
 GList* monothek_recall_factory_create_copy_pattern(AgsAudio *audio,
 						   AgsRecallContainer *play_container, AgsRecallContainer *recall_container,
 						   gchar *plugin_name,
@@ -127,6 +137,177 @@ monothek_recall_factory_finalize(GObject *gobject)
 
   /* call parent */
   G_OBJECT_CLASS(monothek_recall_factory_parent_class)->finalize(gobject);
+}
+
+GList*
+monothek_recall_factory_create_delay(AgsAudio *audio,
+				     AgsRecallContainer *play_container, AgsRecallContainer *recall_container,
+				     gchar *plugin_name,
+				     guint start_audio_channel, guint stop_audio_channel,
+				     guint start_pad, guint stop_pad,
+				     guint create_flags, guint recall_flags)
+{
+  MonothekDelayAudio *delay_audio;
+  MonothekDelayAudioRun *delay_audio_run;
+  AgsPort *port;
+
+  GObject *output_soundcard;
+  
+  GList *list_start, *list;
+  GList *recall;
+
+  guint i, j;
+
+  pthread_mutex_t *audio_mutex;
+
+  if(!AGS_IS_AUDIO(audio)){
+    return(NULL);
+  }
+
+  /* get audio mutex */
+  pthread_mutex_lock(ags_audio_get_class_mutex());
+
+  audio_mutex = audio->obj_mutex;
+  
+  pthread_mutex_unlock(ags_audio_get_class_mutex());
+
+  /* get some fields */
+  pthread_mutex_lock(audio_mutex);
+
+  output_soundcard = audio->output_soundcard;
+  
+  pthread_mutex_unlock(audio_mutex);
+
+  /* list */
+  recall = NULL;
+
+  /* play */
+  if((AGS_RECALL_FACTORY_PLAY & (create_flags)) != 0){
+    if(play_container == NULL){
+      play_container = ags_recall_container_new();
+    }
+
+    play_container->flags |= AGS_RECALL_CONTAINER_PLAY;
+    ags_audio_add_recall_container(audio, (GObject *) play_container);
+
+    delay_audio = (MonothekDelayAudio *) g_object_new(MONOTHEK_TYPE_DELAY_AUDIO,
+						      "output-soundcard", output_soundcard,
+						      "audio", audio,
+						      "recall-container", play_container,
+						      NULL);
+    ags_recall_set_flags((AgsRecall *) delay_audio,
+			 (AGS_RECALL_TEMPLATE));
+    ags_recall_set_ability_flags((AgsRecall *) delay_audio,
+				 (AGS_SOUND_ABILITY_PLAYBACK |
+				  AGS_SOUND_ABILITY_NOTATION |
+				  AGS_SOUND_ABILITY_SEQUENCER |
+				  AGS_SOUND_ABILITY_MIDI |
+				  AGS_SOUND_ABILITY_WAVE));
+    ags_recall_set_behaviour_flags((AgsRecall *) delay_audio,
+				   (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
+
+    ags_audio_add_recall(audio, (GObject *) delay_audio, TRUE);
+    recall = g_list_prepend(recall,
+			    delay_audio);
+
+    g_object_set(play_container,
+		 "recall-audio", delay_audio,
+		 NULL);
+    ags_connectable_connect(AGS_CONNECTABLE(delay_audio));
+
+    delay_audio_run = (MonothekDelayAudioRun *) g_object_new(MONOTHEK_TYPE_DELAY_AUDIO_RUN,
+							     "output-soundcard", output_soundcard,
+							     "recall-audio", delay_audio,
+							     "recall-container", play_container,
+							     NULL);
+    ags_recall_set_flags((AgsRecall *) delay_audio_run,
+			 (AGS_RECALL_TEMPLATE));
+    ags_recall_set_ability_flags((AgsRecall *) delay_audio_run,
+				 (AGS_SOUND_ABILITY_PLAYBACK |
+				  AGS_SOUND_ABILITY_NOTATION |
+				  AGS_SOUND_ABILITY_SEQUENCER |
+				  AGS_SOUND_ABILITY_MIDI |
+				  AGS_SOUND_ABILITY_WAVE));
+    ags_recall_set_behaviour_flags((AgsRecall *) delay_audio_run,
+				   (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
+
+    ags_audio_add_recall(audio, (GObject *) delay_audio_run, TRUE);
+    recall = g_list_prepend(recall,
+			    delay_audio_run);
+
+    g_object_set(play_container,
+		 "recall-audio-run", delay_audio_run,
+		 NULL);
+    ags_connectable_connect(AGS_CONNECTABLE(delay_audio_run));
+  }
+
+  /* recall */
+  if((AGS_RECALL_FACTORY_RECALL & (create_flags)) != 0){
+    if(recall_container == NULL){
+      recall_container = ags_recall_container_new();
+    }
+
+    ags_audio_add_recall_container(audio, (GObject *) recall_container);
+
+    delay_audio = (MonothekDelayAudio *) g_object_new(MONOTHEK_TYPE_DELAY_AUDIO,
+						      "output-soundcard", output_soundcard,
+						      "audio", audio,
+						      "recall-container", recall_container,
+						      NULL);
+    ags_recall_set_flags((AgsRecall *) delay_audio,
+			 (AGS_RECALL_TEMPLATE));
+    ags_recall_set_ability_flags((AgsRecall *) delay_audio,
+				 (AGS_SOUND_ABILITY_PLAYBACK |
+				  AGS_SOUND_ABILITY_NOTATION |
+				  AGS_SOUND_ABILITY_SEQUENCER |
+				  AGS_SOUND_ABILITY_MIDI |
+				  AGS_SOUND_ABILITY_WAVE));
+    ags_recall_set_behaviour_flags((AgsRecall *) delay_audio,
+				   (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
+
+    ags_audio_add_recall(audio, (GObject *) delay_audio, FALSE);
+    recall = g_list_prepend(recall,
+			    delay_audio);
+
+    g_object_set(recall_container,
+		 "recall-audio", delay_audio,
+		 NULL);
+    ags_connectable_connect(AGS_CONNECTABLE(delay_audio));
+
+    delay_audio_run = (MonothekDelayAudioRun *) g_object_new(MONOTHEK_TYPE_DELAY_AUDIO_RUN,
+							     "output-soundcard", output_soundcard,
+							     "recall-audio", delay_audio,
+							     "recall-container", recall_container,
+							     //TODO:JK: add missing dependency "delay-audio"
+							     NULL);
+    ags_recall_set_flags((AgsRecall *) delay_audio_run,
+			 (AGS_RECALL_TEMPLATE));
+    ags_recall_set_ability_flags((AgsRecall *) delay_audio_run,
+				 (AGS_SOUND_ABILITY_PLAYBACK |
+				  AGS_SOUND_ABILITY_NOTATION |
+				  AGS_SOUND_ABILITY_SEQUENCER |
+				  AGS_SOUND_ABILITY_MIDI |
+				  AGS_SOUND_ABILITY_WAVE));
+    ags_recall_set_behaviour_flags((AgsRecall *) delay_audio_run,
+				   (((AGS_RECALL_FACTORY_OUTPUT & create_flags) != 0) ? AGS_SOUND_BEHAVIOUR_CHAINED_TO_OUTPUT: AGS_SOUND_BEHAVIOUR_CHAINED_TO_INPUT));
+
+    ags_audio_add_recall(audio, (GObject *) delay_audio_run, FALSE);
+    recall = g_list_prepend(recall,
+			    delay_audio_run);
+
+    g_object_set(recall_container,
+		 "recall-audio-run", delay_audio_run,
+		 NULL);
+    ags_connectable_connect(AGS_CONNECTABLE(delay_audio_run));
+  }
+
+  /* return instantiated recall */
+  recall = g_list_reverse(recall);
+  g_list_foreach(recall,
+		 (GFunc) g_object_ref,
+		 NULL);
+
+  return(recall);
 }
 
 GList*
@@ -1037,8 +1218,17 @@ monothek_recall_factory_create(AgsAudio *audio,
 #endif
 
   if(!strncmp(plugin_name,
-	      "monothek-copy-pattern",
-	      22)){
+	      "monothek-delay",
+	      15)){
+    recall = monothek_recall_factory_create_delay(audio,
+						  play_container, recall_container,
+						  plugin_name,
+						  start_audio_channel, stop_audio_channel,
+						  start_pad, stop_pad,
+						  create_flags, recall_flags);
+  }else if(!strncmp(plugin_name,
+		    "monothek-copy-pattern",
+		    22)){
     recall = monothek_recall_factory_create_copy_pattern(audio,
 							 play_container, recall_container,
 							 plugin_name,

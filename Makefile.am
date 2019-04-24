@@ -158,6 +158,8 @@ deprecated_libmonothek_recall_h_sources =
 
 libmonothek_recall_h_sources = \
 	$(deprecated_libmonothek_recall_h_sources) \
+	monothek/audio/recall/monothek_delay_audio.h \
+	monothek/audio/recall/monothek_delay_audio_run.h \
 	monothek/audio/recall/monothek_copy_pattern_audio.h \
 	monothek/audio/recall/monothek_copy_pattern_audio_run.h \
 	monothek/audio/recall/monothek_copy_pattern_channel.h \
@@ -171,6 +173,8 @@ deprecated_libmonothek_recall_c_sources =
 
 libmonothek_recall_c_sources = \
 	$(deprecated_libmonothek_recall_c_sources) \
+	monothek/audio/recall/monothek_delay_audio.c \
+	monothek/audio/recall/monothek_delay_audio_run.c \
 	monothek/audio/recall/monothek_copy_pattern_audio.c \
 	monothek/audio/recall/monothek_copy_pattern_audio_run.c \
 	monothek/audio/recall/monothek_copy_pattern_channel.c \

@@ -33,6 +33,12 @@
 #define MONOTHEK_IS_EXPORT_OUTPUT_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_EXPORT_OUTPUT))
 #define MONOTHEK_EXPORT_OUTPUT_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_EXPORT_OUTPUT, MonothekExportOutputClass))
 
+#if MONOTHEK_DEVEL_MODE
+#define MONOTHEK_EXPORT_PATH SRCDIR "/monothek.home/export"
+#else
+#define MONOTHEK_EXPORT_PATH "/home/monothek/export"
+#endif
+
 typedef struct _MonothekExportOutput MonothekExportOutput;
 typedef struct _MonothekExportOutputClass MonothekExportOutputClass;
 

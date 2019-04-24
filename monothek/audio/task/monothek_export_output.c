@@ -229,9 +229,15 @@ monothek_export_output_launch(AgsTask *task)
 
   start_time_sec = start_time.tv_sec;
   duration_sec = export_output->duration->tv_sec;
+
+  export_path = getenv("MONOTHEK_EXPORT_PATH");
+
+  if(export_path == NULL){
+    export_path = MONOTHEK_EXPORT_PATH;
+  }
   
   strftime(str_buffer, 256, "%Y-%j-%H-%M-%S", localtime(&start_time_sec));
-  filename = g_strdup_printf("snd-%s-%06d-%06d.wav", str_buffer, start_time.tv_nsec / 1000, duration_sec);
+  filename = g_strdup_printf("%s/snd-%s-%06d-%06d.wav", export_path, str_buffer, start_time.tv_nsec / 1000, duration_sec);
   g_object_set(task,
 	       "filename", filename,
 	       NULL);

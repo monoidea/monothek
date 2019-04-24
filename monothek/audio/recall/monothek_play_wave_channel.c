@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -88,7 +88,6 @@ void
 monothek_play_wave_channel_class_init(MonothekPlayWaveChannelClass *play_wave_channel)
 {
   GObjectClass *gobject;
-  GtkWidgetClass *widget;
 
   GParamSpec *param_spec;
 
@@ -104,7 +103,7 @@ monothek_play_wave_channel_class_init(MonothekPlayWaveChannelClass *play_wave_ch
 
   /* properties */
 
-  /* MonothekModel */
+  /* AgsRecallClass */
 }
 
 void

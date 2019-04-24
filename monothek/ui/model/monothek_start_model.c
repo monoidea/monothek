@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -50,6 +50,7 @@ void monothek_start_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_NTH_POSITION,
   PROP_JUKEBOX_START_ACTIVE,
   PROP_DISKJOKEY_START_ACTIVE,
 };
@@ -106,6 +107,24 @@ monothek_start_model_class_init(MonothekStartModelClass *start_model)
 
   /* properties */
   /**
+   * MonothekStartModel:nth-position:
+   *
+   * The nth position.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_uint("nth-position",
+				 i18n_pspec("nth position"),
+				 i18n_pspec("nth position"),
+				 0,
+				 G_MAXUINT32,
+				 0,
+				 G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_NTH_POSITION,
+				  param_spec);
+
+  /**
    * MonothekStartModel:jukebox-start-active:
    *
    * If jukebox start is active.
@@ -143,6 +162,8 @@ monothek_start_model_class_init(MonothekStartModelClass *start_model)
 void
 monothek_start_model_init(MonothekStartModel *start_model)
 {
+  start_model->nth_position = 0;
+
   start_model->jukebox_start_active = FALSE;
 
   start_model->diskjokey_start_active = FALSE;
@@ -159,6 +180,11 @@ monothek_start_model_set_property(GObject *gobject,
   start_model = MONOTHEK_START_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_NTH_POSITION:
+    {
+      start_model->nth_position = g_value_get_uint(value);
+    }
+    break;
   case PROP_JUKEBOX_START_ACTIVE:
     {
       start_model->jukebox_start_active = g_value_get_boolean(value);
@@ -186,6 +212,12 @@ monothek_start_model_get_property(GObject *gobject,
   start_model = MONOTHEK_START_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_NTH_POSITION:
+    {
+      g_value_set_uint(value,
+		       start_model->nth_position);
+    }
+    break;
   case PROP_JUKEBOX_START_ACTIVE:
     {
       g_value_set_boolean(value,
