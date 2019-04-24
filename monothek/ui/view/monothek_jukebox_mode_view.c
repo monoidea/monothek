@@ -394,7 +394,7 @@ monothek_jukebox_mode_view_draw(MonothekView *view)
 
     /* test - attempts */
     if(jukebox_mode_model != NULL){
-      attempts = g_strdup_printf("%d/%d", jukebox_mode_model->attempts + 1, jukebox_mode_model->max_attempts);
+      attempts = g_strdup_printf("%d/%d", jukebox_mode_model->max_attempts - jukebox_mode_model->attempts, jukebox_mode_model->max_attempts);
     }else{
       attempts = g_strdup("0/0");
     }

@@ -328,15 +328,51 @@ monothek_jukebox_track_controller_connectable_interface_init(AgsConnectableInter
 
 void
 monothek_jukebox_track_controller_init(MonothekJukeboxTrackController *jukebox_track_controller)
-{
+{  
+  MonothekActionBox *action_box;
 
-  
   if(monothek_jukebox_track_controller_progress_increase == NULL){
     monothek_jukebox_track_controller_progress_increase = g_hash_table_new_full(g_direct_hash, g_direct_equal,
 										NULL,
 										NULL);
   }
 
+  /* test */
+  jukebox_track_controller->jukebox_test = 
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "jukebox-test",
+						    "x0", 700,
+						    "y0", 840,
+						    "width", 520,
+						    "height", 140,
+						    NULL);
+  monothek_controller_add_action_box(jukebox_track_controller,
+				     action_box);
+
+  /* play */
+  jukebox_track_controller->jukebox_play = 
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "jukebox-play",
+						    "x0", 120,
+						    "y0", 840,
+						    "width", 520,
+						    "height", 140,
+						    NULL);
+  monothek_controller_add_action_box(jukebox_track_controller,
+				     action_box);
+
+  /* back */
+  jukebox_track_controller->jukebox_back = 
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "jukebox-back",
+						    "x0", 1280,
+						    "y0", 840,
+						    "width", 520,
+						    "height", 140,
+						    NULL);
+  monothek_controller_add_action_box(jukebox_track_controller,
+				     action_box);
+  
   jukebox_track_controller->start_time = (struct timespec *) malloc(sizeof(struct timespec));
   jukebox_track_controller->start_time->tv_sec = 0;
   jukebox_track_controller->start_time->tv_nsec = 0;
@@ -466,10 +502,6 @@ monothek_jukebox_track_controller_reset(MonothekController *controller)
 
   jukebox_track_controller->timer->tv_sec = 0;
   jukebox_track_controller->timer->tv_nsec = 0;
-
-  /* start playback */
-  monothek_jukebox_track_controller_run(controller,
-					TRUE);
 }
 
 void
@@ -653,6 +685,10 @@ monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *juke
       
   monothek_window_change_view(window,
 			      MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, G_TYPE_NONE);
+
+  /* start playback */
+  monothek_jukebox_track_controller_run(jukebox_track_controller,
+					TRUE);
 }
 
 /**
@@ -720,6 +756,10 @@ monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *juke
 
   monothek_window_change_view(window,
 			      MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, G_TYPE_NONE);
+
+  /* start playback */
+  monothek_jukebox_track_controller_run(jukebox_track_controller,
+					TRUE);
 }
 
 /**

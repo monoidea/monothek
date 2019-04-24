@@ -181,7 +181,7 @@ monothek_jukebox_track_view_init(MonothekJukeboxTrackView *jukebox_track_view)
   jukebox_track_view->progress_box_line_width = 5.0;
 
   jukebox_track_view->progress_box_x0 = 440.0;
-  jukebox_track_view->progress_box_y0 = 680.0;
+  jukebox_track_view->progress_box_y0 = 900.0;
 
   jukebox_track_view->progress_box_width = 1040.0;
   jukebox_track_view->progress_box_height = 20.0;
@@ -441,7 +441,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
       /* test - attempts */
       if(jukebox_track_model != NULL){
-	attempts = g_strdup_printf("%d/%d", jukebox_track_model->attempts + 1, jukebox_track_model->max_attempts);
+	attempts = g_strdup_printf("%d/%d", jukebox_track_model->max_attempts - jukebox_track_model->attempts, jukebox_track_model->max_attempts);
       }else{
 	attempts = g_strdup("0/0");
       }
@@ -467,7 +467,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
     
       /* test - label */    
       layout = pango_cairo_create_layout(cr);
-      pango_layout_set_text(layout, "TEST", -1);
+      pango_layout_set_text(layout, "TEST IT", -1);
       desc = pango_font_description_from_string(jukebox_font);
       pango_font_description_set_size(desc,
 				      38 * PANGO_SCALE);
@@ -482,7 +482,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
       cairo_move_to(cr,
 		    (double) jukebox_track_view->test_box_x0 + ((jukebox_track_view->test_box_width / 2.0) - (logical_rect.width / 2.0)),
-		    (double) 630.0);
+		    (double) 880.0);
 
       pango_cairo_update_layout(cr, layout);
       pango_cairo_show_layout(cr, layout);
@@ -542,7 +542,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
       /* play */
       layout = pango_cairo_create_layout(cr);
-      pango_layout_set_text(layout, "PLAY", -1);
+      pango_layout_set_text(layout, "PLAY THIS ONE", -1);
       desc = pango_font_description_from_string(jukebox_font);
       pango_font_description_set_size(desc,
 				      38 * PANGO_SCALE);
@@ -556,7 +556,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 				     &logical_rect);
       cairo_move_to(cr,
 		    (double) jukebox_track_view->play_box_x0 + ((jukebox_track_view->play_box_width / 2.0) - (logical_rect.width / 2.0)),
-		    (double) 630.0);
+		    (double) 880.0);
 
       pango_cairo_update_layout(cr, layout);
       pango_cairo_show_layout(cr, layout);
@@ -616,7 +616,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 
       /* back */
       layout = pango_cairo_create_layout(cr);
-      pango_layout_set_text(layout, "BACK", -1);
+      pango_layout_set_text(layout, "GO BACK", -1);
       desc = pango_font_description_from_string(jukebox_font);
       pango_font_description_set_size(desc,
 				      38 * PANGO_SCALE);
@@ -630,7 +630,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 				     &logical_rect);
       cairo_move_to(cr,
 		    (double) jukebox_track_view->back_box_x0 + ((jukebox_track_view->back_box_width / 2.0) - (logical_rect.width / 2.0)),
-		    (double) 630.0);
+		    (double) 880.0);
 
       pango_cairo_update_layout(cr, layout);
       pango_cairo_show_layout(cr, layout);
@@ -693,7 +693,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 				     &logical_rect);
       cairo_move_to(cr,
 		    (double) 340.0,
-		    (double) 680.0);
+		    (double) 900.0);
 
       pango_cairo_update_layout(cr, layout);
       pango_cairo_show_layout(cr, layout);
@@ -732,7 +732,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 				     &logical_rect);
       cairo_move_to(cr,
 		    (double) 1500.0,
-		    (double) 680.0);
+		    (double) 900.0);
 
       pango_cairo_update_layout(cr, layout);
       pango_cairo_show_layout(cr, layout);
@@ -781,7 +781,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 				   &logical_rect);
     cairo_move_to(cr,
 		  (double) ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 780.0);
+		  (double) 652.9);
 
     pango_cairo_update_layout(cr, layout);
     pango_cairo_show_layout(cr, layout);
@@ -814,7 +814,7 @@ monothek_jukebox_track_view_draw(MonothekView *view)
 				   &logical_rect);
     cairo_move_to(cr,
 		  (double) ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
-		  (double) 880.0);
+		  (double) 752.9);
 
     pango_cairo_update_layout(cr, layout);
     pango_cairo_show_layout(cr, layout);
