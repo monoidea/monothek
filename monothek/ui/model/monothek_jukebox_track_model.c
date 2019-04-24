@@ -61,6 +61,11 @@ void monothek_jukebox_track_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_ATTEMPTS,
+  PROP_MAX_ATTEMPTS,
+  PROP_JUKEBOX_TEST_ACTIVE,
+  PROP_JUKEBOX_PLAY_ACTIVE,
+  PROP_JUKEBOX_BACK_ACTIVE,
   PROP_SONG_FILENAME,
   PROP_TEST_MODE,
   PROP_COVER_FILENAME,
@@ -121,6 +126,90 @@ monothek_jukebox_track_model_class_init(MonothekJukeboxTrackModelClass *jukebox_
   gobject->finalize = monothek_jukebox_track_model_finalize;
 
   /* properties */
+  /**
+   * MonothekJukeboxTrackModel:attempts:
+   *
+   * The number of jukebox test attempts.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_uint("attempts",
+				 i18n_pspec("test attempts"),
+				 i18n_pspec("Test attempts count"),
+				 0,
+				 G_MAXUINT32,
+				 0,
+				 G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_ATTEMPTS,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxTrackModel:max-attempts:
+   *
+   * The number of jukebox max test attempts.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_uint("max-attempts",
+				 i18n_pspec("maximum attempts"),
+				 i18n_pspec("Test maximum attempts count"),
+				 0,
+				 G_MAXUINT32,
+				 MONOTHEK_JUKEBOX_TRACK_MODEL_DEFAULT_MAX_ATTEMPTS,
+				 G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_MAX_ATTEMPTS,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxTrackModel:jukebox-test-active:
+   *
+   * If jukebox test is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-test-active",
+				    i18n_pspec("jukebox test active"),
+				    i18n_pspec("If jukebox test is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_TEST_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxTrackModel:jukebox-play-active:
+   *
+   * If jukebox play is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-play-active",
+				    i18n_pspec("jukebox play active"),
+				    i18n_pspec("If jukebox play is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_PLAY_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxTrackModel:jukebox-back-active:
+   *
+   * If jukebox back is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("jukebox-back-active",
+				    i18n_pspec("jukebox back active"),
+				    i18n_pspec("If jukebox back is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_JUKEBOX_BACK_ACTIVE,
+				  param_spec);
+
   /**
    * MonothekJukeboxTrackModel:song-filename:
    *
@@ -238,6 +327,13 @@ monothek_jukebox_track_model_class_init(MonothekJukeboxTrackModelClass *jukebox_
 void
 monothek_jukebox_track_model_init(MonothekJukeboxTrackModel *jukebox_track_model)
 {
+  jukebox_track_model->attempts = 0;
+  jukebox_track_model->max_attempts = MONOTHEK_JUKEBOX_TRACK_MODEL_DEFAULT_MAX_ATTEMPTS;
+
+  jukebox_track_model->jukebox_test_active = FALSE;
+  jukebox_track_model->jukebox_play_active = FALSE;
+  jukebox_track_model->jukebox_back_active = FALSE;
+
   jukebox_track_model->song_filename = NULL;
   
   jukebox_track_model->test_mode = FALSE;
@@ -265,6 +361,31 @@ monothek_jukebox_track_model_set_property(GObject *gobject,
   jukebox_track_model = MONOTHEK_JUKEBOX_TRACK_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_ATTEMPTS:
+    {
+      jukebox_track_model->attempts = g_value_get_uint(value);
+    }
+    break;
+  case PROP_MAX_ATTEMPTS:
+    {
+      jukebox_track_model->max_attempts = g_value_get_uint(value);
+    }
+    break;
+  case PROP_JUKEBOX_TEST_ACTIVE:
+    {
+      jukebox_track_model->jukebox_test_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_JUKEBOX_PLAY_ACTIVE:
+    {
+      jukebox_track_model->jukebox_play_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_JUKEBOX_BACK_ACTIVE:
+    {
+      jukebox_track_model->jukebox_back_active = g_value_get_boolean(value);
+    }
+    break;
   case PROP_SONG_FILENAME:
     {
       gchar *song_filename;
@@ -376,6 +497,36 @@ monothek_jukebox_track_model_get_property(GObject *gobject,
   jukebox_track_model = MONOTHEK_JUKEBOX_TRACK_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_ATTEMPTS:
+    {
+      g_value_set_uint(value,
+		       jukebox_track_model->attempts);
+    }
+    break;
+  case PROP_MAX_ATTEMPTS:
+    {
+      g_value_set_uint(value,
+		       jukebox_track_model->max_attempts);
+    }
+    break;
+  case PROP_JUKEBOX_TEST_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_track_model->jukebox_test_active);
+    }
+    break;
+  case PROP_JUKEBOX_PLAY_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_track_model->jukebox_play_active);
+    }
+    break;
+  case PROP_JUKEBOX_BACK_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_track_model->jukebox_back_active);
+    }
+    break;
   case PROP_SONG_FILENAME:
     {
       g_value_set_string(value, jukebox_track_model->song_filename);

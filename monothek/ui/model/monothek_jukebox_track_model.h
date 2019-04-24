@@ -34,12 +34,21 @@
 #define MONOTHEK_IS_JUKEBOX_TRACK_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL))
 #define MONOTHEK_JUKEBOX_TRACK_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL, MonothekJukeboxTrackModelClass))
 
+#define MONOTHEK_JUKEBOX_TRACK_MODEL_DEFAULT_MAX_ATTEMPTS (3)
+
 typedef struct _MonothekJukeboxTrackModel MonothekJukeboxTrackModel;
 typedef struct _MonothekJukeboxTrackModelClass MonothekJukeboxTrackModelClass;
 
 struct _MonothekJukeboxTrackModel
 {
   GObject gobject;
+
+  guint attempts;
+  guint max_attempts;
+
+  gboolean jukebox_test_active;
+  gboolean jukebox_play_active;
+  gboolean jukebox_back_active;
 
   gchar *song_filename;
   gboolean test_mode;

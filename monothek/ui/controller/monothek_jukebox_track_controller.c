@@ -42,6 +42,7 @@
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
 #include <monothek/ui/view/monothek_jukebox_no_test_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
+#include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 
 #ifdef __APPLE__
 #include <mach/clock.h>
@@ -62,6 +63,31 @@ void monothek_jukebox_track_controller_disconnect(AgsConnectable *connectable);
 
 void monothek_jukebox_track_controller_reset(MonothekController *controller);
 
+void monothek_jukebox_track_controller_jukebox_test_enter_callback(MonothekActionBox *action_box,
+								  MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_jukebox_test_leave_callback(MonothekActionBox *action_box,
+								  MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_jukebox_test_clicked_callback(MonothekActionBox *action_box,
+								    MonothekJukeboxTrackController *jukebox_track_controller);
+
+void monothek_jukebox_track_controller_jukebox_play_enter_callback(MonothekActionBox *action_box,
+								  MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_jukebox_play_leave_callback(MonothekActionBox *action_box,
+								  MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_jukebox_play_clicked_callback(MonothekActionBox *action_box,
+								    MonothekJukeboxTrackController *jukebox_track_controller);
+
+void monothek_jukebox_track_controller_jukebox_back_enter_callback(MonothekActionBox *action_box,
+								  MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_jukebox_back_leave_callback(MonothekActionBox *action_box,
+								  MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_jukebox_back_clicked_callback(MonothekActionBox *action_box,
+								    MonothekJukeboxTrackController *jukebox_track_controller);
+
+void monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_real_back(MonothekJukeboxTrackController *jukebox_track_controller);
+
 void monothek_jukebox_track_controller_real_progress(MonothekJukeboxTrackController *jukebox_track_controller,
 						     gdouble value);
 void monothek_jukebox_track_controller_real_test_time_expired(MonothekJukeboxTrackController *jukebox_track_controller);
@@ -80,6 +106,9 @@ void monothek_jukebox_track_controller_real_completed(MonothekJukeboxTrackContro
  */
 
 enum{
+  TEST,
+  PLAY,
+  BACK,
   PROGRESS,
   TEST_TIME_EXPIRED,
   RUN,
@@ -154,12 +183,67 @@ monothek_jukebox_track_controller_class_init(MonothekJukeboxTrackControllerClass
   controller->reset = monothek_jukebox_track_controller_reset;
 
   /* MonothekJukeboxTrackController */
+  jukebox_track_controller->test = monothek_jukebox_track_controller_real_test;
+  jukebox_track_controller->play = monothek_jukebox_track_controller_real_play;
+  jukebox_track_controller->back = monothek_jukebox_track_controller_real_back;
+
   jukebox_track_controller->progress = monothek_jukebox_track_controller_real_progress;
   jukebox_track_controller->test_time_expired = monothek_jukebox_track_controller_real_test_time_expired;
   jukebox_track_controller->run = monothek_jukebox_track_controller_real_run;
   jukebox_track_controller->completed = monothek_jukebox_track_controller_real_completed;
 
   /* signals */
+  /**
+   * MonothekJukeboxTrackController::test:
+   * @jukebox_track_controller: the #MonothekJukeboxTrackController
+   *
+   * The ::test signal notifies about action box event.
+   *
+   * Since: 1.0.0
+   */
+  jukebox_track_controller_signals[TEST] =
+    g_signal_new("test",
+		 G_TYPE_FROM_CLASS(jukebox_track_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekJukeboxTrackControllerClass, test),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekJukeboxTrackController::play:
+   * @jukebox_track_controller: the #MonothekJukeboxTrackController
+   *
+   * The ::play signal notifies about action box event.
+   *
+   * Since: 1.0.0
+   */
+  jukebox_track_controller_signals[PLAY] =
+    g_signal_new("play",
+		 G_TYPE_FROM_CLASS(jukebox_track_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekJukeboxTrackControllerClass, play),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekJukeboxTrackController::back:
+   * @jukebox_track_controller: the #MonothekJukeboxTrackController
+   *
+   * The ::back signal notifies about action box event.
+   *
+   * Since: 1.0.0
+   */
+  jukebox_track_controller_signals[BACK] =
+    g_signal_new("back",
+		 G_TYPE_FROM_CLASS(jukebox_track_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekJukeboxTrackControllerClass, back),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
   /**
    * MonothekJukeboxTrackController::progress:
    * @jukebox_track_controller: the #MonothekJukeboxTrackController
@@ -245,6 +329,8 @@ monothek_jukebox_track_controller_connectable_interface_init(AgsConnectableInter
 void
 monothek_jukebox_track_controller_init(MonothekJukeboxTrackController *jukebox_track_controller)
 {
+
+  
   if(monothek_jukebox_track_controller_progress_increase == NULL){
     monothek_jukebox_track_controller_progress_increase = g_hash_table_new_full(g_direct_hash, g_direct_equal,
 										NULL,
@@ -295,6 +381,27 @@ monothek_jukebox_track_controller_connect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_track_controller_parent_connectable_interface->connect(connectable);
+
+  g_signal_connect(jukebox_track_controller->jukebox_test, "enter",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_test_enter_callback), jukebox_track_controller);
+  g_signal_connect(jukebox_track_controller->jukebox_test, "leave",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_test_leave_callback), jukebox_track_controller);
+  g_signal_connect(jukebox_track_controller->jukebox_test, "clicked",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_test_clicked_callback), jukebox_track_controller);
+
+  g_signal_connect(jukebox_track_controller->jukebox_play, "enter",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_play_enter_callback), jukebox_track_controller);
+  g_signal_connect(jukebox_track_controller->jukebox_play, "leave",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_play_leave_callback), jukebox_track_controller);
+  g_signal_connect(jukebox_track_controller->jukebox_play, "clicked",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_play_clicked_callback), jukebox_track_controller);
+
+  g_signal_connect(jukebox_track_controller->jukebox_back, "enter",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_back_enter_callback), jukebox_track_controller);
+  g_signal_connect(jukebox_track_controller->jukebox_back, "leave",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_back_leave_callback), jukebox_track_controller);
+  g_signal_connect(jukebox_track_controller->jukebox_back, "clicked",
+		   G_CALLBACK(monothek_jukebox_track_controller_jukebox_back_clicked_callback), jukebox_track_controller);
 }
 
 void
@@ -309,6 +416,42 @@ monothek_jukebox_track_controller_disconnect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_track_controller_parent_connectable_interface->disconnect(connectable);
+
+  g_object_disconnect(jukebox_track_controller->jukebox_test,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_test_enter_callback),
+		      jukebox_track_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_test_leave_callback),
+		      jukebox_track_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_test_clicked_callback),
+		      jukebox_track_controller,
+		      NULL);
+
+  g_object_disconnect(jukebox_track_controller->jukebox_play,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_play_enter_callback),
+		      jukebox_track_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_play_leave_callback),
+		      jukebox_track_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_play_clicked_callback),
+		      jukebox_track_controller,
+		      NULL);
+
+  g_object_disconnect(jukebox_track_controller->jukebox_back,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_back_enter_callback),
+		      jukebox_track_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_back_leave_callback),
+		      jukebox_track_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_jukebox_track_controller_jukebox_back_clicked_callback),
+		      jukebox_track_controller,
+		      NULL);
 }
 
 void
@@ -328,6 +471,313 @@ monothek_jukebox_track_controller_reset(MonothekController *controller)
   monothek_jukebox_track_controller_run(controller,
 					TRUE);
 }
+
+void
+monothek_jukebox_track_controller_jukebox_test_enter_callback(MonothekActionBox *action_box,
+							     MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekJukeboxTrackView *view;
+  
+  MonothekJukeboxTrackModel *model;
+  
+  g_object_get(jukebox_track_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-test-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_test_leave_callback(MonothekActionBox *action_box,
+							     MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekJukeboxTrackView *view;
+  
+  MonothekJukeboxTrackModel *model;
+
+  g_object_get(jukebox_track_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-test-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_test_clicked_callback(MonothekActionBox *action_box,
+							       MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  monothek_jukebox_track_controller_test(jukebox_track_controller);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_play_enter_callback(MonothekActionBox *action_box,
+							     MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekJukeboxTrackView *view;
+  
+  MonothekJukeboxTrackModel *model;
+  
+  g_object_get(jukebox_track_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-play-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_play_leave_callback(MonothekActionBox *action_box,
+							     MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekJukeboxTrackView *view;
+  
+  MonothekJukeboxTrackModel *model;
+
+  g_object_get(jukebox_track_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-play-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_play_clicked_callback(MonothekActionBox *action_box,
+							       MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  monothek_jukebox_track_controller_play(jukebox_track_controller);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_back_enter_callback(MonothekActionBox *action_box,
+							     MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekJukeboxTrackView *view;
+  
+  MonothekJukeboxTrackModel *model;
+  
+  g_object_get(jukebox_track_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-back-active", TRUE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_back_leave_callback(MonothekActionBox *action_box,
+							     MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekJukeboxTrackView *view;
+  
+  MonothekJukeboxTrackModel *model;
+
+  g_object_get(jukebox_track_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "jukebox-back-active", FALSE,
+	       NULL);
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_track_controller_jukebox_back_clicked_callback(MonothekActionBox *action_box,
+							       MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  monothek_jukebox_track_controller_back(jukebox_track_controller);
+}
+
+void
+monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekWindow *window;
+  MonothekJukeboxModeView *view;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *jukebox_mode;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set jukebox mode - test */
+  jukebox_mode = g_hash_table_lookup(session->value,
+				     "jukebox-mode");
+
+  if(jukebox_mode == NULL){
+    jukebox_mode = g_new0(GValue,
+			  1);
+    g_value_init(jukebox_mode,
+		 G_TYPE_STRING);
+
+    g_hash_table_insert(session->value,
+			"jukebox-mode", jukebox_mode);
+  }
+
+  g_value_set_string(jukebox_mode,
+		     "test");
+
+  /* change view */
+  g_object_get(jukebox_track_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  view->flags |= MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS;    
+  view->flags &= (~(MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS));
+      
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_jukebox_track_controller_test:
+ * @jukebox_track_controller: the #MonothekJukeboxTrackController
+ * 
+ * Test track.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_jukebox_track_controller_test(MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER(jukebox_track_controller));
+  
+  g_object_ref((GObject *) jukebox_track_controller);
+  g_signal_emit(G_OBJECT(jukebox_track_controller),
+		jukebox_track_controller_signals[TEST], 0);
+  g_object_unref((GObject *) jukebox_track_controller);
+}
+
+void
+monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekWindow *window;
+  MonothekJukeboxModeView *view;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *jukebox_mode;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set jukebox mode - play */
+  jukebox_mode = g_hash_table_lookup(session->value,
+				     "jukebox-mode");
+
+  if(jukebox_mode == NULL){
+    jukebox_mode = g_new0(GValue,
+			  1);
+    g_value_init(jukebox_mode,
+		 G_TYPE_STRING);
+
+    g_hash_table_insert(session->value,
+			"jukebox-mode", jukebox_mode);
+  }
+
+  g_value_set_string(jukebox_mode,
+		     "play");
+
+  /* change view */
+  g_object_get(jukebox_track_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  view->flags |= MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS;    
+  view->flags &= (~(MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS));
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_jukebox_track_controller_play:
+ * @jukebox_track_controller: the #MonothekJukeboxTrackController
+ * 
+ * Play track.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_jukebox_track_controller_play(MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER(jukebox_track_controller));
+  
+  g_object_ref((GObject *) jukebox_track_controller);
+  g_signal_emit(G_OBJECT(jukebox_track_controller),
+		jukebox_track_controller_signals[PLAY], 0);
+  g_object_unref((GObject *) jukebox_track_controller);
+}
+
+void
+monothek_jukebox_track_controller_real_back(MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  MonothekWindow *window;
+  MonothekJukeboxModeView *view;
+
+  /* change view */
+  g_object_get(jukebox_track_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_jukebox_track_controller_back:
+ * @jukebox_track_controller: the #MonothekJukeboxTrackController
+ * 
+ * Back track.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_jukebox_track_controller_back(MonothekJukeboxTrackController *jukebox_track_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER(jukebox_track_controller));
+  
+  g_object_ref((GObject *) jukebox_track_controller);
+  g_signal_emit(G_OBJECT(jukebox_track_controller),
+		jukebox_track_controller_signals[BACK], 0);
+  g_object_unref((GObject *) jukebox_track_controller);
+}
+
 
 void
 monothek_jukebox_track_controller_real_progress(MonothekJukeboxTrackController *jukebox_track_controller,
@@ -649,6 +1099,9 @@ monothek_jukebox_track_controller_real_completed(MonothekJukeboxTrackController 
   g_object_get(jukebox_track_controller,
 	       "view", &view,
 	       NULL);
+
+  view->flags |= MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS;    
+  view->flags &= (~MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS);
 
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);

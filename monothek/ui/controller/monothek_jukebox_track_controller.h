@@ -45,6 +45,10 @@ struct _MonothekJukeboxTrackController
 {
   MonothekController controller;
 
+  MonothekActionBox *jukebox_play;
+  MonothekActionBox *jukebox_test;
+  MonothekActionBox *jukebox_back;
+
   struct timespec *start_time;
   struct timespec *timer;
 };
@@ -52,6 +56,10 @@ struct _MonothekJukeboxTrackController
 struct _MonothekJukeboxTrackControllerClass
 {
   MonothekControllerClass controller;
+
+  void (*test)(MonothekJukeboxTrackController *jukebox_track_controller);
+  void (*play)(MonothekJukeboxTrackController *jukebox_track_controller);
+  void (*back)(MonothekJukeboxTrackController *jukebox_track_controller);
 
   void (*progress)(MonothekJukeboxTrackController *jukebox_track_controller,
 		   gdouble value);
@@ -65,6 +73,10 @@ struct _MonothekJukeboxTrackControllerClass
 };
 
 GType monothek_jukebox_track_controller_get_type(void);
+
+void monothek_jukebox_track_controller_test(MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_play(MonothekJukeboxTrackController *jukebox_track_controller);
+void monothek_jukebox_track_controller_back(MonothekJukeboxTrackController *jukebox_track_controller);
 
 void monothek_jukebox_track_controller_progress(MonothekJukeboxTrackController *jukebox_track_controller,
 						gdouble value);

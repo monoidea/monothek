@@ -34,13 +34,24 @@
 #define MONOTHEK_IS_JUKEBOX_TRACK_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW))
 #define MONOTHEK_JUKEBOX_TRACK_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, MonothekJukeboxTrackViewClass))
 
+#define MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_TOP (12.9)
+#define MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_LEFT (20.0)
+
 typedef struct _MonothekJukeboxTrackView MonothekJukeboxTrackView;
 typedef struct _MonothekJukeboxTrackViewClass MonothekJukeboxTrackViewClass;
+
+typedef enum{
+  MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS            = 1,
+  MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_NO_TEST_CONTROL     = 1 <<  1,
+  MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS           = 1 <<  2,
+}MonothekJukeboxTrackViewFlags;
 
 struct _MonothekJukeboxTrackView
 {
   MonothekView monothek_view;
 
+  guint flags;
+  
   //cover
   cairo_surface_t *cover_surface;
   
@@ -62,6 +73,33 @@ struct _MonothekJukeboxTrackView
 
   gdouble progress_box_width;
   gdouble progress_box_height;
+
+  // play
+  gdouble play_box_line_width;
+
+  gdouble play_box_x0;
+  gdouble play_box_y0;
+
+  gdouble play_box_width;
+  gdouble play_box_height;
+
+  // test
+  gdouble test_box_line_width;
+
+  gdouble test_box_x0;
+  gdouble test_box_y0;
+
+  gdouble test_box_width;
+  gdouble test_box_height;
+
+  // back
+  gdouble back_box_line_width;
+
+  gdouble back_box_x0;
+  gdouble back_box_y0;
+
+  gdouble back_box_width;
+  gdouble back_box_height;
 };
 
 struct _MonothekJukeboxTrackViewClass

@@ -680,7 +680,11 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
     switch(jukebox_mode_model->attempts){
     case 0:
     {
-      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+      jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+
+      jukebox_mode_view->flags &= (~(MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST));
       
       /* test */
       jukebox_mode_view->test_box_x0 = 740.0;
@@ -701,7 +705,11 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
     break;
     case 1:
     {
-      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS;
+      jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS;
+
+      jukebox_mode_view->flags &= (~(MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST));
 
       /* test */
       jukebox_mode_view->test_box_x0 = 520.0;
@@ -727,7 +735,11 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
     break;
     case 2:
     {
-      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST;
+      jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST;
+
+      jukebox_mode_view->flags &= (~(MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST));
 
       /* test */
       jukebox_mode_view->test_box_x0 = 520.0;
@@ -752,7 +764,11 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
     break;
     case 3:
     {
-      jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST;
+      jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST;
+
+      jukebox_mode_view->flags &= (~(MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS |
+				     MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST));
 
       /* test */
       jukebox_mode_controller->jukebox_test->enabled = FALSE;
@@ -779,7 +795,11 @@ monothek_jukebox_mode_view_reset(MonothekView *view,
   }
   
   if(reset_defaults){
-    jukebox_mode_view->flags = MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+    jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+
+    jukebox_mode_view->flags &= (~(MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS |
+				   MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST |
+				   MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST));
       
     /* test */
     jukebox_mode_view->test_box_x0 = 740.0;
