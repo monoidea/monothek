@@ -215,6 +215,7 @@ monothek_export_output_launch(AgsTask *task)
 
   struct timespec start_time;
 
+  gchar *export_path;
   gchar *filename;
   char str_buffer[256];
 

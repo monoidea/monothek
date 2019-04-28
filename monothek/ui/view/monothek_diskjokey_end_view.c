@@ -510,7 +510,7 @@ monothek_diskjokey_end_view_clear(MonothekView *view,
 	       "model", &diskjokey_end_model,
 	       NULL);
 
-  if(clear_hover){
+  if(clear_all || clear_hover){
     diskjokey_end_model->diskjokey_restart_active = FALSE;
     diskjokey_end_model->diskjokey_quit_and_save_active = FALSE;
   }

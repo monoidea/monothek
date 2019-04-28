@@ -24,8 +24,6 @@
 
 #include <monothek/audio/recall/monothek_delay_audio.h>
 #include <monothek/audio/recall/monothek_delay_audio_run.h>
-#include <monothek/audio/recall/monothek_delay_channel.h>
-#include <monothek/audio/recall/monothek_delay_channel_run.h>
 #include <monothek/audio/recall/monothek_copy_pattern_audio.h>
 #include <monothek/audio/recall/monothek_copy_pattern_audio_run.h>
 #include <monothek/audio/recall/monothek_copy_pattern_channel.h>

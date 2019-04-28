@@ -24,6 +24,8 @@
 
 #include <stdlib.h>
 
+#include <monothek/ui/model/monothek_diskjokey_qrcode_model.h>
+
 #include <monothek/i18n.h>
 
 void monothek_diskjokey_qrcode_view_class_init(MonothekDiskjokeyQrcodeViewClass *diskjokey_qrcode_view);
@@ -455,7 +457,7 @@ monothek_diskjokey_qrcode_view_clear(MonothekView *view,
 	       "model", &diskjokey_qrcode_model,
 	       NULL);
 
-  if(clear_hover){
+  if(clear_all || clear_hover){
     diskjokey_qrcode_model->quit_active = FALSE;
   }
   

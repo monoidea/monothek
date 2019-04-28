@@ -49,8 +49,10 @@ void monothek_diskjokey_sequencer_view_progress_callback(GtkAdjustment *adjustme
 
 void monothek_diskjokey_sequencer_view_draw(MonothekView *view);
 
-void monothek_diskjokey_sequencer_view_reset(MonothekView *view);
-void monothek_diskjokey_sequencer_view_clear(MonothekView *view);
+void monothek_diskjokey_sequencer_view_reset(MonothekView *view,
+					     gboolean reset_defaults, gboolean reset_current);
+void monothek_diskjokey_sequencer_view_clear(MonothekView *view,
+					     gboolean clear_all, gboolean clear_hover);
 
 /**
  * SECTION:monothek_diskjokey_sequencer_view
@@ -1600,7 +1602,7 @@ monothek_diskjokey_sequencer_view_clear(MonothekView *view,
 	       "model", &diskjokey_sequencer_model,
 	       NULL);
   
-  if(clear_hover){
+  if(clear_all || clear_hover){
     if(diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO){
       diskjokey_sequencer_model->techno_active = FALSE;
     }

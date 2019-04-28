@@ -18,6 +18,7 @@
  */
 
 #include <monothek/audio/recall/monothek_delay_audio_run.h>
+#include <monothek/audio/recall/monothek_delay_audio.h>
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
@@ -109,7 +110,7 @@ monothek_delay_audio_run_class_init(MonothekDelayAudioRunClass *delay_audio_run)
   /* AgsRecallClass */
   recall = (AgsRecallClass *) delay_audio_run;
   
-  recall->run_pre = ags_delay_audio_run_run_pre;
+  recall->run_pre = monothek_delay_audio_run_run_pre;
 }
 
 void

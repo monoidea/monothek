@@ -634,7 +634,7 @@ monothek_start_view_clear(MonothekView *view,
 	       "model", &start_model,
 	       NULL);
 
-  if(clear_hover){
+  if(clear_all || clear_hover){
     start_model->jukebox_start_active = FALSE;
     start_model->diskjokey_start_active = FALSE;
   }

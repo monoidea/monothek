@@ -160,7 +160,7 @@ monothek_delay_audio_init(MonothekDelayAudio *delay_audio)
 
   /* concat port */
   AGS_RECALL(delay_audio)->port = g_list_concat(AGS_RECALL(delay_audio)->port,
-						port)
+						port);
 }
 
 void

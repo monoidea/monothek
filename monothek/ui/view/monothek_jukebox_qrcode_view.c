@@ -24,6 +24,8 @@
 
 #include <stdlib.h>
 
+#include <monothek/ui/model/monothek_jukebox_qrcode_model.h>
+
 #include <monothek/i18n.h>
 
 void monothek_jukebox_qrcode_view_class_init(MonothekJukeboxQrcodeViewClass *jukebox_qrcode_view);
@@ -44,8 +46,10 @@ void monothek_jukebox_qrcode_view_disconnect(AgsConnectable *connectable);
 
 void monothek_jukebox_qrcode_view_draw(MonothekView *view);
 
-void monothek_jukebox_qrcode_view_reset(MonothekView *view);
-void monothek_jukebox_qrcode_view_clear(MonothekView *view);
+void monothek_jukebox_qrcode_view_reset(MonothekView *view,
+					gboolean reset_defaults, gboolean reset_current);
+void monothek_jukebox_qrcode_view_clear(MonothekView *view,
+					gboolean clear_all, gboolean clear_hover);
 
 /**
  * SECTION:monothek_jukebox_qrcode_view

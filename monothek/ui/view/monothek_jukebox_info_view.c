@@ -25,6 +25,8 @@
 #include <monothek/session/monothek_session_manager.h>
 #include <monothek/session/monothek_session.h>
 
+#include <monothek/ui/model/monothek_jukebox_info_model.h>
+
 void monothek_jukebox_info_view_class_init(MonothekJukeboxInfoViewClass *jukebox_info_view);
 void monothek_jukebox_info_view_connectable_interface_init(AgsConnectableInterface *connectable);
 void monothek_jukebox_info_view_init(MonothekJukeboxInfoView *jukebox_info_view);
@@ -43,8 +45,10 @@ void monothek_jukebox_info_view_disconnect(AgsConnectable *connectable);
 
 void monothek_jukebox_info_view_draw(MonothekView *view);
 
-void monothek_jukebox_info_view_reset(MonothekView *view);
-void monothek_jukebox_info_view_clear(MonothekView *view);
+void monothek_jukebox_info_view_reset(MonothekView *view,
+				      gboolean reset_defaults, gboolean reset_current);
+void monothek_jukebox_info_view_clear(MonothekView *view,
+				      gboolean clear_all, gboolean clear_hover);
 
 /**
  * SECTION:monothek_jukebox_info_view
@@ -269,7 +273,7 @@ monothek_jukebox_info_view_clear(MonothekView *view,
 	       "model", &jukebox_info_model,
 	       NULL);
 
-  if(clear_hover){
+  if(clear_all || clear_hover){
     jukebox_info_model->jukebox_ok_active = FALSE;
   }
   

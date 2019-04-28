@@ -510,7 +510,7 @@ monothek_jukebox_end_view_clear(MonothekView *view,
 	       "model", &jukebox_end_model,
 	       NULL);
 
-  if(clear_hover){
+  if(clear_all || clear_hover){
     jukebox_end_model->jukebox_restart_active = FALSE;
     jukebox_end_model->jukebox_quit_and_save_active = FALSE;
   }
