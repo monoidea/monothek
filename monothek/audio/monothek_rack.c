@@ -22,6 +22,8 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/audio/recall/monothek_delay_audio.h>
+#include <monothek/audio/recall/monothek_delay_audio_run.h>
 #include <monothek/audio/recall/monothek_copy_pattern_audio.h>
 #include <monothek/audio/recall/monothek_copy_pattern_audio_run.h>
 #include <monothek/audio/recall/monothek_copy_pattern_channel.h>
@@ -840,16 +842,16 @@ monothek_rack_create_sequencer(MonothekRack *rack)
 		     AGS_TYPE_OUTPUT,
 		     1, 0);
 
-  /* ags-delay */
-  ags_recall_factory_create(audio,
-			    NULL, NULL,
-			    "ags-delay",
-			    0, audio_channels,
-			    0, 1,
-			    (AGS_RECALL_FACTORY_OUTPUT |
-			     AGS_RECALL_FACTORY_ADD |
-			     AGS_RECALL_FACTORY_PLAY),
-			    0);
+  /* monothek-delay */
+  monothek_recall_factory_create(audio,
+				 NULL, NULL,
+				 "monothek-delay",
+				 0, audio_channels,
+				 0, 1,
+				 (AGS_RECALL_FACTORY_OUTPUT |
+				  AGS_RECALL_FACTORY_ADD |
+				  AGS_RECALL_FACTORY_PLAY),
+				 0);
 
   g_object_get(audio,
 	       "play", &start_play,

@@ -35,7 +35,6 @@
 #include <monothek/ui/controller/monothek_jukebox_payment_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_payment_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
-#include <monothek/ui/controller/monothek_jukebox_no_test_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_playlist_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_track_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_end_controller.h>
@@ -51,7 +50,6 @@
 #include <monothek/ui/model/monothek_jukebox_payment_model.h>
 #include <monothek/ui/model/monothek_diskjokey_payment_model.h>
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
-#include <monothek/ui/model/monothek_jukebox_no_test_model.h>
 #include <monothek/ui/model/monothek_jukebox_playlist_model.h>
 #include <monothek/ui/model/monothek_jukebox_track_model.h>
 #include <monothek/ui/model/monothek_jukebox_end_model.h>
@@ -67,7 +65,6 @@
 #include <monothek/ui/view/monothek_jukebox_payment_view.h>
 #include <monothek/ui/view/monothek_diskjokey_payment_view.h>
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
-#include <monothek/ui/view/monothek_jukebox_no_test_view.h>
 #include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
@@ -454,13 +451,6 @@ monothek_window_init(MonothekWindow *window)
 	       "view", view,
 	       "model", model,
 	       NULL);
-
-  /* jukebox no test view */
-  view = monothek_jukebox_no_test_view_new();
-  gtk_box_pack_start(window->view,
-		     view,
-		     FALSE, FALSE,
-		     0);
 
   /* jukebox playlist view */
   model = monothek_jukebox_playlist_model_new();
@@ -958,7 +948,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 
 	if(controller != NULL){
 	  ags_connectable_connect(AGS_CONNECTABLE(controller->data));
-	  monothek_controller_reset(controller->data);
+//	  monothek_controller_reset(controller->data);
 	}
 	
 	break;

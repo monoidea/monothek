@@ -43,6 +43,9 @@ void monothek_jukebox_info_view_disconnect(AgsConnectable *connectable);
 
 void monothek_jukebox_info_view_draw(MonothekView *view);
 
+void monothek_jukebox_info_view_reset(MonothekView *view);
+void monothek_jukebox_info_view_clear(MonothekView *view);
+
 /**
  * SECTION:monothek_jukebox_info_view
  * @short_description: The jukebox_info view object.
@@ -125,6 +128,9 @@ monothek_jukebox_info_view_class_init(MonothekJukeboxInfoViewClass *jukebox_info
   view = (MonothekViewClass *) jukebox_info_view;
 
   view->draw = monothek_jukebox_info_view_draw;
+
+  view->reset = monothek_jukebox_info_view_reset;
+  view->clear = monothek_jukebox_info_view_clear;
 }
 
 void
@@ -244,6 +250,30 @@ monothek_jukebox_info_view_draw(MonothekView *view)
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+}
+
+void
+monothek_jukebox_info_view_reset(MonothekView *view,
+				 gboolean reset_defaults, gboolean reset_current)
+{
+  //TODO:JK: implement me
+}
+  
+void
+monothek_jukebox_info_view_clear(MonothekView *view,
+				 gboolean clear_all, gboolean clear_hover)
+{
+  MonothekJukeboxInfoModel *jukebox_info_model;
+
+  g_object_get(view,
+	       "model", &jukebox_info_model,
+	       NULL);
+
+  if(clear_hover){
+    jukebox_info_model->jukebox_ok_active = FALSE;
+  }
+  
+  //TODO:JK: implement me
 }
 
 /**

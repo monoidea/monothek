@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -45,6 +45,11 @@ void monothek_jukebox_end_view_connect(AgsConnectable *connectable);
 void monothek_jukebox_end_view_disconnect(AgsConnectable *connectable);
 
 void monothek_jukebox_end_view_draw(MonothekView *view);
+
+void monothek_jukebox_end_view_reset(MonothekView *view,
+				     gboolean reset_defaults, gboolean reset_current);
+void monothek_jukebox_end_view_clear(MonothekView *view,
+				     gboolean clear_all, gboolean clear_hover);
 
 /**
  * SECTION:monothek_jukebox_end_view
@@ -128,6 +133,9 @@ monothek_jukebox_end_view_class_init(MonothekJukeboxEndViewClass *jukebox_end_vi
   view = (MonothekViewClass *) jukebox_end_view;
 
   view->draw = monothek_jukebox_end_view_draw;
+
+  view->reset = monothek_jukebox_end_view_reset;
+  view->clear = monothek_jukebox_end_view_clear;
 }
 
 void
@@ -483,6 +491,31 @@ monothek_jukebox_end_view_draw(MonothekView *view)
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+}
+
+void
+monothek_jukebox_end_view_reset(MonothekView *view,
+				gboolean reset_defaults, gboolean reset_current)
+{
+  //TODO:JK: implement me
+}
+  
+void
+monothek_jukebox_end_view_clear(MonothekView *view,
+				gboolean clear_all, gboolean clear_hover)
+{
+  MonothekJukeboxEndModel *jukebox_end_model;
+
+  g_object_get(view,
+	       "model", &jukebox_end_model,
+	       NULL);
+
+  if(clear_hover){
+    jukebox_end_model->jukebox_restart_active = FALSE;
+    jukebox_end_model->jukebox_quit_and_save_active = FALSE;
+  }
+  
+  //TODO:JK: implement me
 }
 
 /**

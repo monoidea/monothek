@@ -179,6 +179,8 @@ am__objects_9 = $(am__objects_1) \
 am__objects_10 = $(am__objects_1) \
 	monothek/audio/thread/libmonothek_la-monothek_export_thread.lo
 am__objects_11 = $(am__objects_1) \
+	monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo \
+	monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo \
 	monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio.lo \
 	monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio_run.lo \
 	monothek/audio/recall/libmonothek_la-monothek_copy_pattern_channel.lo \
@@ -197,7 +199,6 @@ am__objects_13 = $(am__objects_1) \
 	monothek/ui/model/libmonothek_la-monothek_jukebox_payment_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_diskjokey_payment_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_jukebox_mode_model.lo \
-	monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_jukebox_playlist_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_jukebox_track_model.lo \
 	monothek/ui/model/libmonothek_la-monothek_jukebox_info_model.lo \
@@ -214,7 +215,6 @@ am__objects_14 = $(am__objects_1) \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_payment_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo \
-	monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_track_controller.lo \
 	monothek/ui/controller/libmonothek_la-monothek_jukebox_info_controller.lo \
@@ -232,7 +232,6 @@ am__objects_15 = $(am__objects_1) \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_diskjokey_payment_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo \
-	monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_playlist_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_track_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_info_view.lo \
@@ -290,6 +289,8 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio_run.Plo \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel.Plo \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel_run.Plo \
+	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Plo \
+	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Plo \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio.Plo \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio_run.Plo \
 	monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_channel.Plo \
@@ -312,7 +313,6 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo \
-	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo \
 	monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo \
@@ -327,7 +327,6 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_model.Plo \
-	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo \
 	monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo \
@@ -343,7 +342,6 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo \
-	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo \
@@ -418,8 +416,8 @@ CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
 	$(top_srcdir)/monothek/config.h.in ABOUT-NLS AUTHORS COPYING \
-	ChangeLog README compile config.guess config.rpath config.sub \
-	depcomp install-sh ltmain.sh missing
+	ChangeLog README TODO compile config.guess config.rpath \
+	config.sub depcomp install-sh ltmain.sh missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -754,6 +752,8 @@ libmonothek_audio_thread_c_sources = \
 deprecated_libmonothek_recall_h_sources = 
 libmonothek_recall_h_sources = \
 	$(deprecated_libmonothek_recall_h_sources) \
+	monothek/audio/recall/monothek_delay_audio.h \
+	monothek/audio/recall/monothek_delay_audio_run.h \
 	monothek/audio/recall/monothek_copy_pattern_audio.h \
 	monothek/audio/recall/monothek_copy_pattern_audio_run.h \
 	monothek/audio/recall/monothek_copy_pattern_channel.h \
@@ -766,6 +766,8 @@ libmonothek_recall_h_sources = \
 deprecated_libmonothek_recall_c_sources = 
 libmonothek_recall_c_sources = \
 	$(deprecated_libmonothek_recall_c_sources) \
+	monothek/audio/recall/monothek_delay_audio.c \
+	monothek/audio/recall/monothek_delay_audio_run.c \
 	monothek/audio/recall/monothek_copy_pattern_audio.c \
 	monothek/audio/recall/monothek_copy_pattern_audio_run.c \
 	monothek/audio/recall/monothek_copy_pattern_channel.c \
@@ -795,7 +797,6 @@ libmonothek_model_h_sources = \
 	monothek/ui/model/monothek_jukebox_payment_model.h \
 	monothek/ui/model/monothek_diskjokey_payment_model.h \
 	monothek/ui/model/monothek_jukebox_mode_model.h \
-	monothek/ui/model/monothek_jukebox_no_test_model.h \
 	monothek/ui/model/monothek_jukebox_playlist_model.h \
 	monothek/ui/model/monothek_jukebox_track_model.h \
 	monothek/ui/model/monothek_jukebox_info_model.h \
@@ -815,7 +816,6 @@ libmonothek_model_c_sources = \
 	monothek/ui/model/monothek_jukebox_payment_model.c \
 	monothek/ui/model/monothek_diskjokey_payment_model.c \
 	monothek/ui/model/monothek_jukebox_mode_model.c \
-	monothek/ui/model/monothek_jukebox_no_test_model.c \
 	monothek/ui/model/monothek_jukebox_playlist_model.c \
 	monothek/ui/model/monothek_jukebox_track_model.c \
 	monothek/ui/model/monothek_jukebox_info_model.c \
@@ -835,7 +835,6 @@ libmonothek_controller_h_sources = \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
 	monothek/ui/controller/monothek_jukebox_mode_controller.h \
-	monothek/ui/controller/monothek_jukebox_no_test_controller.h \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.h \
 	monothek/ui/controller/monothek_jukebox_track_controller.h \
 	monothek/ui/controller/monothek_jukebox_info_controller.h \
@@ -856,7 +855,6 @@ libmonothek_controller_c_sources = \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
 	monothek/ui/controller/monothek_jukebox_mode_controller.c \
-	monothek/ui/controller/monothek_jukebox_no_test_controller.c \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.c \
 	monothek/ui/controller/monothek_jukebox_track_controller.c \
 	monothek/ui/controller/monothek_jukebox_info_controller.c \
@@ -877,7 +875,6 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.h \
 	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_jukebox_mode_view.h \
-	monothek/ui/view/monothek_jukebox_no_test_view.h \
 	monothek/ui/view/monothek_jukebox_playlist_view.h \
 	monothek/ui/view/monothek_jukebox_track_view.h \
 	monothek/ui/view/monothek_jukebox_info_view.h \
@@ -898,7 +895,6 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.c \
 	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_jukebox_mode_view.c \
-	monothek/ui/view/monothek_jukebox_no_test_view.c \
 	monothek/ui/view/monothek_jukebox_playlist_view.c \
 	monothek/ui/view/monothek_jukebox_track_view.c \
 	monothek/ui/view/monothek_jukebox_info_view.c \
@@ -1131,6 +1127,12 @@ monothek/audio/recall/$(am__dirstamp):
 monothek/audio/recall/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) monothek/audio/recall/$(DEPDIR)
 	@: > monothek/audio/recall/$(DEPDIR)/$(am__dirstamp)
+monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo:  \
+	monothek/audio/recall/$(am__dirstamp) \
+	monothek/audio/recall/$(DEPDIR)/$(am__dirstamp)
+monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo:  \
+	monothek/audio/recall/$(am__dirstamp) \
+	monothek/audio/recall/$(DEPDIR)/$(am__dirstamp)
 monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio.lo:  \
 	monothek/audio/recall/$(am__dirstamp) \
 	monothek/audio/recall/$(DEPDIR)/$(am__dirstamp)
@@ -1191,9 +1193,6 @@ monothek/ui/model/libmonothek_la-monothek_diskjokey_payment_model.lo:  \
 monothek/ui/model/libmonothek_la-monothek_jukebox_mode_model.lo:  \
 	monothek/ui/model/$(am__dirstamp) \
 	monothek/ui/model/$(DEPDIR)/$(am__dirstamp)
-monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo:  \
-	monothek/ui/model/$(am__dirstamp) \
-	monothek/ui/model/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/model/libmonothek_la-monothek_jukebox_playlist_model.lo:  \
 	monothek/ui/model/$(am__dirstamp) \
 	monothek/ui/model/$(DEPDIR)/$(am__dirstamp)
@@ -1243,9 +1242,6 @@ monothek/ui/controller/libmonothek_la-monothek_diskjokey_payment_controller.lo: 
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo:  \
-	monothek/ui/controller/$(am__dirstamp) \
-	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
-monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo:  \
 	monothek/ui/controller/$(am__dirstamp) \
 	monothek/ui/controller/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo:  \
@@ -1300,9 +1296,6 @@ monothek/ui/view/libmonothek_la-monothek_diskjokey_payment_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo:  \
-	monothek/ui/view/$(am__dirstamp) \
-	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
-monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/view/libmonothek_la-monothek_jukebox_playlist_view.lo:  \
@@ -1387,6 +1380,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio_run.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel_run.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio_run.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_channel.Plo@am__quote@ # am--include-marker
@@ -1409,7 +1404,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo@am__quote@ # am--include-marker
@@ -1424,7 +1418,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_model.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo@am__quote@ # am--include-marker
@@ -1440,7 +1433,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo@am__quote@ # am--include-marker
@@ -1549,6 +1541,20 @@ monothek/audio/thread/libmonothek_la-monothek_export_thread.lo: monothek/audio/t
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/audio/thread/monothek_export_thread.c' object='monothek/audio/thread/libmonothek_la-monothek_export_thread.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/audio/thread/libmonothek_la-monothek_export_thread.lo `test -f 'monothek/audio/thread/monothek_export_thread.c' || echo '$(srcdir)/'`monothek/audio/thread/monothek_export_thread.c
+
+monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo: monothek/audio/recall/monothek_delay_audio.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo -MD -MP -MF monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Tpo -c -o monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo `test -f 'monothek/audio/recall/monothek_delay_audio.c' || echo '$(srcdir)/'`monothek/audio/recall/monothek_delay_audio.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Tpo monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/audio/recall/monothek_delay_audio.c' object='monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/audio/recall/libmonothek_la-monothek_delay_audio.lo `test -f 'monothek/audio/recall/monothek_delay_audio.c' || echo '$(srcdir)/'`monothek/audio/recall/monothek_delay_audio.c
+
+monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo: monothek/audio/recall/monothek_delay_audio_run.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo -MD -MP -MF monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Tpo -c -o monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo `test -f 'monothek/audio/recall/monothek_delay_audio_run.c' || echo '$(srcdir)/'`monothek/audio/recall/monothek_delay_audio_run.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Tpo monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/audio/recall/monothek_delay_audio_run.c' object='monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/audio/recall/libmonothek_la-monothek_delay_audio_run.lo `test -f 'monothek/audio/recall/monothek_delay_audio_run.c' || echo '$(srcdir)/'`monothek/audio/recall/monothek_delay_audio_run.c
 
 monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio.lo: monothek/audio/recall/monothek_copy_pattern_audio.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio.lo -MD -MP -MF monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio.Tpo -c -o monothek/audio/recall/libmonothek_la-monothek_copy_pattern_audio.lo `test -f 'monothek/audio/recall/monothek_copy_pattern_audio.c' || echo '$(srcdir)/'`monothek/audio/recall/monothek_copy_pattern_audio.c
@@ -1662,13 +1668,6 @@ monothek/ui/model/libmonothek_la-monothek_jukebox_mode_model.lo: monothek/ui/mod
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/model/libmonothek_la-monothek_jukebox_mode_model.lo `test -f 'monothek/ui/model/monothek_jukebox_mode_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_jukebox_mode_model.c
 
-monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo: monothek/ui/model/monothek_jukebox_no_test_model.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo -MD -MP -MF monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Tpo -c -o monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo `test -f 'monothek/ui/model/monothek_jukebox_no_test_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_jukebox_no_test_model.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Tpo monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/model/monothek_jukebox_no_test_model.c' object='monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/model/libmonothek_la-monothek_jukebox_no_test_model.lo `test -f 'monothek/ui/model/monothek_jukebox_no_test_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_jukebox_no_test_model.c
-
 monothek/ui/model/libmonothek_la-monothek_jukebox_playlist_model.lo: monothek/ui/model/monothek_jukebox_playlist_model.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/model/libmonothek_la-monothek_jukebox_playlist_model.lo -MD -MP -MF monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Tpo -c -o monothek/ui/model/libmonothek_la-monothek_jukebox_playlist_model.lo `test -f 'monothek/ui/model/monothek_jukebox_playlist_model.c' || echo '$(srcdir)/'`monothek/ui/model/monothek_jukebox_playlist_model.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Tpo monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo
@@ -1773,13 +1772,6 @@ monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo: monot
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_jukebox_mode_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_mode_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_mode_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_mode_controller.c
-
-monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo: monothek/ui/controller/monothek_jukebox_no_test_controller.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_no_test_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_no_test_controller.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Tpo monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/controller/monothek_jukebox_no_test_controller.c' object='monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_no_test_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_no_test_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_no_test_controller.c
 
 monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo: monothek/ui/controller/monothek_jukebox_playlist_controller.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo -MD -MP -MF monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Tpo -c -o monothek/ui/controller/libmonothek_la-monothek_jukebox_playlist_controller.lo `test -f 'monothek/ui/controller/monothek_jukebox_playlist_controller.c' || echo '$(srcdir)/'`monothek/ui/controller/monothek_jukebox_playlist_controller.c
@@ -1892,13 +1884,6 @@ monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo: monothek/ui/view/
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_jukebox_mode_view.c' object='monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo `test -f 'monothek/ui/view/monothek_jukebox_mode_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_mode_view.c
-
-monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo: monothek/ui/view/monothek_jukebox_no_test_view.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo `test -f 'monothek/ui/view/monothek_jukebox_no_test_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_no_test_view.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Tpo monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_jukebox_no_test_view.c' object='monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_no_test_view.lo `test -f 'monothek/ui/view/monothek_jukebox_no_test_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_no_test_view.c
 
 monothek/ui/view/libmonothek_la-monothek_jukebox_playlist_view.lo: monothek/ui/view/monothek_jukebox_playlist_view.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_jukebox_playlist_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_playlist_view.lo `test -f 'monothek/ui/view/monothek_jukebox_playlist_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_playlist_view.c
@@ -2376,6 +2361,8 @@ distclean: distclean-recursive
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio_run.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel_run.Plo
+	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Plo
+	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio_run.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_channel.Plo
@@ -2398,7 +2385,6 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo
-	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo
@@ -2413,7 +2399,6 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_model.Plo
-	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo
@@ -2429,7 +2414,6 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo
-	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo
@@ -2493,6 +2477,8 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_audio_run.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_copy_pattern_channel_run.Plo
+	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio.Plo
+	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_delay_audio_run.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_audio_run.Plo
 	-rm -f monothek/audio/recall/$(DEPDIR)/libmonothek_la-monothek_play_wave_channel.Plo
@@ -2515,7 +2501,6 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_controller.Plo
-	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_controller.Plo
 	-rm -f monothek/ui/controller/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_controller.Plo
@@ -2530,7 +2515,6 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_model.Plo
-	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_model.Plo
 	-rm -f monothek/ui/model/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_model.Plo
@@ -2546,7 +2530,6 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_end_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_info_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_mode_view.Plo
-	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_no_test_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_playlist_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_qrcode_view.Plo

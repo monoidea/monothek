@@ -34,6 +34,8 @@
 #define MONOTHEK_IS_JUKEBOX_INFO_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL))
 #define MONOTHEK_JUKEBOX_INFO_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL, MonothekJukeboxInfoModelClass))
 
+#define MONOTHEK_JUKEBOX_INFO_MODEL_DEFAULT_DURATION_SEC (120)
+
 typedef struct _MonothekJukeboxInfoModel MonothekJukeboxInfoModel;
 typedef struct _MonothekJukeboxInfoModelClass MonothekJukeboxInfoModelClass;
 
@@ -48,6 +50,8 @@ struct _MonothekJukeboxInfoModel
   gchar *artist;
 
   gboolean jukebox_ok_active;
+  
+  struct timespec *duration;
 };
 
 struct _MonothekJukeboxInfoModelClass

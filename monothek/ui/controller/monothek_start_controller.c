@@ -307,8 +307,9 @@ monothek_start_controller_reset(MonothekController *controller)
 	       "model", &model,
 	       NULL);
 
-  model->jukebox_start_active = FALSE;
-  model->diskjokey_start_active = FALSE;
+  g_free(model->purchase_filename);
+
+  model->purchase_filename = NULL;
 }
 
 void
@@ -385,7 +386,7 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
 
   position_id = g_strdup_printf("MJUK%06d", nth_position);
   recipe_id = g_uuid_string_random();
-  
+
   purchase_filename = g_strdup_printf("%s/purchase-%s.xml ", purchase_path, recipe_id);
 
   invoice_amount = model->jukebox_price;

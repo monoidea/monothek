@@ -188,9 +188,9 @@ monothek_delay_audio_run_run_pre(AgsRecall *recall)
 	       "recall-audio", &delay_audio,
 	       NULL);
 
-  /* get sequencer enabled */
+  /* get sequencer paused */
   g_object_get(delay_audio,
-	       "sequencer-enabled", &port,
+	       "sequencer-paused", &port,
 	       NULL);
 
   g_value_init(&value, G_TYPE_BOOLEAN);
@@ -198,7 +198,7 @@ monothek_delay_audio_run_run_pre(AgsRecall *recall)
   ags_port_safe_read(port, &value);
   
   /* call parent */
-  if(g_value_get_boolean(&value)){
+  if(!g_value_get_boolean(&value)){
     parent_class_run_pre(recall);
   }
 }

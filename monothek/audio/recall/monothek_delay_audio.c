@@ -51,14 +51,14 @@ void monothek_delay_audio_finalize(GObject *gobject);
 
 enum{
   PROP_0,
-  PROP_SEQUENCER_ENABLED,
+  PROP_SEQUENCER_PAUSED,
 };
 
 static gpointer monothek_delay_audio_parent_class = NULL;
 
 static const gchar *monothek_delay_audio_plugin_name = "monothek-delay";
 static const gchar *monothek_delay_audio_specifier[] = {
-  "./sequencer_enabled[0]",
+  "./sequencer_paused[0]",
 };
 
 static const gchar *monothek_delay_audio_control_port[] = {
@@ -115,19 +115,19 @@ monothek_delay_audio_class_init(MonothekDelayAudioClass *delay_audio)
 
   /* properties */
   /**
-   * MonothekDelayAudio:sequencer-enabled:
+   * MonothekDelayAudio:sequencer-paused:
    *
    * The beats per minute.
    * 
    * Since: 1.0.0
    */
-  param_spec = g_param_spec_object("sequencer-enabled",
-				   i18n_pspec("sequencer enabled"),
-				   i18n_pspec("If sequencer is enabled"),
+  param_spec = g_param_spec_object("sequencer-paused",
+				   i18n_pspec("sequencer paused"),
+				   i18n_pspec("If sequencer is paused"),
 				   AGS_TYPE_PORT,
 				   G_PARAM_READABLE | G_PARAM_WRITABLE);
   g_object_class_install_property(gobject,
-				  PROP_SEQUENCER_ENABLED,
+				  PROP_SEQUENCER_PAUSED,
 				  param_spec);
 
   /* recall */
@@ -140,23 +140,23 @@ monothek_delay_audio_init(MonothekDelayAudio *delay_audio)
 
   port = NULL;
 
-  /* sequencer_enabled */
-  delay_audio->sequencer_enabled = g_object_new(AGS_TYPE_PORT,
-				  "plugin-name", monothek_delay_audio_plugin_name,
-				  "specifier", monothek_delay_audio_specifier[0],
-				  "control-port", monothek_delay_audio_control_port[0],
-				  "port-value-is-pointer", FALSE,
-				  "port-value-type", G_TYPE_BOOLEAN,
-				  "port-value-size", sizeof(gboolean),
-				  "port-value-length", 1,
-				  NULL);
-  g_object_ref(delay_audio->sequencer_enabled);
+  /* sequencer_paused */
+  delay_audio->sequencer_paused = g_object_new(AGS_TYPE_PORT,
+					       "plugin-name", monothek_delay_audio_plugin_name,
+					       "specifier", monothek_delay_audio_specifier[0],
+					       "control-port", monothek_delay_audio_control_port[0],
+					       "port-value-is-pointer", FALSE,
+					       "port-value-type", G_TYPE_BOOLEAN,
+					       "port-value-size", sizeof(gboolean),
+					       "port-value-length", 1,
+					       NULL);
+  g_object_ref(delay_audio->sequencer_paused);
   
-  delay_audio->sequencer_enabled->port_value.ags_port_boolean = TRUE;
+  delay_audio->sequencer_paused->port_value.ags_port_boolean = FALSE;
 
   /* add port */
-  port = g_list_prepend(port, delay_audio->sequencer_enabled);
-  g_object_ref(delay_audio->sequencer_enabled);
+  port = g_list_prepend(port, delay_audio->sequencer_paused);
+  g_object_ref(delay_audio->sequencer_paused);
 
   /* concat port */
   AGS_RECALL(delay_audio)->port = g_list_concat(AGS_RECALL(delay_audio)->port,
@@ -183,7 +183,7 @@ monothek_delay_audio_set_property(GObject *gobject,
   pthread_mutex_unlock(ags_recall_get_class_mutex());
 
   switch(prop_id){
-  case PROP_SEQUENCER_ENABLED:
+  case PROP_SEQUENCER_PAUSED:
     {
       AgsPort *port;
 
@@ -191,21 +191,21 @@ monothek_delay_audio_set_property(GObject *gobject,
 
       pthread_mutex_lock(recall_mutex);
 
-      if(port == delay_audio->sequencer_enabled){
+      if(port == delay_audio->sequencer_paused){
 	pthread_mutex_unlock(recall_mutex);
 
 	return;
       }
 
-      if(delay_audio->sequencer_enabled != NULL){
-	g_object_unref(G_OBJECT(delay_audio->sequencer_enabled));
+      if(delay_audio->sequencer_paused != NULL){
+	g_object_unref(G_OBJECT(delay_audio->sequencer_paused));
       }
       
       if(port != NULL){
 	g_object_ref(G_OBJECT(port));
       }
 
-      delay_audio->sequencer_enabled = port;
+      delay_audio->sequencer_paused = port;
 
       pthread_mutex_unlock(recall_mutex);
     }
@@ -236,11 +236,11 @@ monothek_delay_audio_get_property(GObject *gobject,
   pthread_mutex_unlock(ags_recall_get_class_mutex());
 
   switch(prop_id){
-  case PROP_SEQUENCER_ENABLED:
+  case PROP_SEQUENCER_PAUSED:
     {
       pthread_mutex_lock(recall_mutex);
 
-      g_value_set_object(value, delay_audio->sequencer_enabled);
+      g_value_set_object(value, delay_audio->sequencer_paused);
 
       pthread_mutex_unlock(recall_mutex);
     }
@@ -258,11 +258,11 @@ monothek_delay_audio_dispose(GObject *gobject)
 
   delay_audio = (MonothekDelayAudio *) gobject;
 
-  /* sequencer enabled */
-  if(delay_audio->sequencer_enabled != NULL){
-    g_object_unref(G_OBJECT(delay_audio->sequencer_enabled));
+  /* sequencer paused */
+  if(delay_audio->sequencer_paused != NULL){
+    g_object_unref(G_OBJECT(delay_audio->sequencer_paused));
 
-    delay_audio->sequencer_enabled = NULL;
+    delay_audio->sequencer_paused = NULL;
   }
 
   /* call parent */
@@ -276,9 +276,9 @@ monothek_delay_audio_finalize(GObject *gobject)
 
   delay_audio = (MonothekDelayAudio *) gobject;
 
-  /* sequencer enabled */
-  if(delay_audio->sequencer_enabled != NULL){
-    g_object_unref(G_OBJECT(delay_audio->sequencer_enabled));
+  /* sequencer paused */
+  if(delay_audio->sequencer_paused != NULL){
+    g_object_unref(G_OBJECT(delay_audio->sequencer_paused));
   }
 
   /* call parent */

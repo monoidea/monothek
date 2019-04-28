@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -32,12 +32,18 @@
 #define MONOTHEK_IS_DISKJOKEY_QRCODE_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL))
 #define MONOTHEK_DISKJOKEY_QRCODE_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL, MonothekDiskjokeyQrcodeModelClass))
 
+#define MONOTHEK_DISKJOKEY_QRCODE_MODEL_DEFAULT_DURATION_SEC (120)
+
 typedef struct _MonothekDiskjokeyQrcodeModel MonothekDiskjokeyQrcodeModel;
 typedef struct _MonothekDiskjokeyQrcodeModelClass MonothekDiskjokeyQrcodeModelClass;
 
 struct _MonothekDiskjokeyQrcodeModel
 {
   GObject gobject;
+
+  gboolean quit_active;
+  
+  struct timespec *duration;
 };
 
 struct _MonothekDiskjokeyQrcodeModelClass

@@ -43,7 +43,7 @@ struct _MonothekDelayAudio
 {
   AgsDelayAudio delay_audio;
 
-  AgsPort *sequencer_enabled;
+  AgsPort *sequencer_paused;
 };
 
 struct _MonothekDelayAudioClass

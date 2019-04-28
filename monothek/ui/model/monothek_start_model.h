@@ -38,6 +38,9 @@
 #define MONOTHEK_START_MODEL_PURCHASE_PATH "/home/monothek/purchase"
 #endif
 
+#define MONOTHEK_START_MODEL_DEFAULT_JUKEBOX_PRICE (5.0)
+#define MONOTHEK_START_MODEL_DEFAULT_DISKJOKEY_PRICE (5.0)
+
 typedef struct _MonothekStartModel MonothekStartModel;
 typedef struct _MonothekStartModelClass MonothekStartModelClass;
 
@@ -52,6 +55,8 @@ struct _MonothekStartModel
   
   gdouble diskjokey_price;
   gboolean diskjokey_start_active;
+
+  gchar *purchase_filename;
 };
 
 struct _MonothekStartModelClass

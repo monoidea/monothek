@@ -53,6 +53,7 @@ enum{
   PROP_NTH_POSITION,
   PROP_JUKEBOX_START_ACTIVE,
   PROP_DISKJOKEY_START_ACTIVE,
+  PROP_PURCHASE_FILENAME,
 };
 
 static gpointer monothek_start_model_parent_class = NULL;
@@ -156,6 +157,22 @@ monothek_start_model_class_init(MonothekStartModelClass *start_model)
 				  PROP_DISKJOKEY_START_ACTIVE,
 				  param_spec);
 
+  /**
+   * MonothekStartModel:purchase-filename:
+   *
+   * The purchase filename.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_string("purchase-filename",
+				   i18n_pspec("purchase filename"),
+				   i18n_pspec("purchase filename"),
+				   NULL,
+				   G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_PURCHASE_FILENAME,
+				  param_spec);
+  
   /* MonothekModel */
 }
 
@@ -164,9 +181,13 @@ monothek_start_model_init(MonothekStartModel *start_model)
 {
   start_model->nth_position = 0;
 
+  start_model->jukebox_price = MONOTHEK_START_MODEL_DEFAULT_JUKEBOX_PRICE;
   start_model->jukebox_start_active = FALSE;
 
+  start_model->diskjokey_price = MONOTHEK_START_MODEL_DEFAULT_DISKJOKEY_PRICE;
   start_model->diskjokey_start_active = FALSE;
+
+  start_model->purchase_filename = NULL;
 }
 
 void
@@ -193,6 +214,11 @@ monothek_start_model_set_property(GObject *gobject,
   case PROP_DISKJOKEY_START_ACTIVE:
     {
       start_model->diskjokey_start_active = g_value_get_boolean(value);
+    }
+    break;
+  case PROP_PURCHASE_FILENAME:
+    {
+      start_model->purchase_filename = g_value_get_string(value);
     }
     break;
   default:
@@ -230,6 +256,12 @@ monothek_start_model_get_property(GObject *gobject,
 			  start_model->diskjokey_start_active);
     }
     break;
+  case PROP_PURCHASE_FILENAME:
+    {
+      g_value_set_string(value,
+			 start_model->purchase_filename);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -242,6 +274,8 @@ monothek_start_model_finalize(GObject *gobject)
   MonothekStartModel *start_model;
 
   start_model = (MonothekStartModel *) gobject;
+
+  g_free(start_model->purchase_filename);
   
   /* call parent */
   G_OBJECT_CLASS(monothek_start_model_parent_class)->finalize(gobject);

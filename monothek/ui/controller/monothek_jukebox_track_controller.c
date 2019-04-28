@@ -40,7 +40,6 @@
 
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
-#include <monothek/ui/view/monothek_jukebox_no_test_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
 #include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 

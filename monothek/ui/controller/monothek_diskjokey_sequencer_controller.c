@@ -974,6 +974,8 @@ monothek_diskjokey_sequencer_controller_reset(MonothekController *controller)
 	       "model", &model,
 	       NULL);
 
+  monothek_diskjokey_sequencer_controller_clear(diskjokey_sequencer_controller);
+
   model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
 
   model->techno_active = TRUE;

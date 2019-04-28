@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -48,6 +48,9 @@ void monothek_diskjokey_sequencer_view_progress_callback(GtkAdjustment *adjustme
 							 MonothekDiskjokeySequencerView *diskjokey_sequencer_view);
 
 void monothek_diskjokey_sequencer_view_draw(MonothekView *view);
+
+void monothek_diskjokey_sequencer_view_reset(MonothekView *view);
+void monothek_diskjokey_sequencer_view_clear(MonothekView *view);
 
 /**
  * SECTION:monothek_diskjokey_sequencer_view
@@ -131,6 +134,9 @@ monothek_diskjokey_sequencer_view_class_init(MonothekDiskjokeySequencerViewClass
   view = (MonothekViewClass *) diskjokey_sequencer_view;
 
   view->draw = monothek_diskjokey_sequencer_view_draw;
+
+  view->reset = monothek_diskjokey_sequencer_view_reset;
+  view->clear = monothek_diskjokey_sequencer_view_clear;
 }
 
 void
@@ -1575,6 +1581,67 @@ monothek_diskjokey_sequencer_view_draw(MonothekView *view)
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+}
+
+void
+monothek_diskjokey_sequencer_view_reset(MonothekView *view,
+					gboolean reset_defaults, gboolean reset_current)
+{
+  //TODO:JK: implement me
+}
+  
+void
+monothek_diskjokey_sequencer_view_clear(MonothekView *view,
+					gboolean clear_all, gboolean clear_hover)
+{
+  MonothekDiskjokeySequencerModel *diskjokey_sequencer_model;
+
+  g_object_get(view,
+	       "model", &diskjokey_sequencer_model,
+	       NULL);
+  
+  if(clear_hover){
+    if(diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO){
+      diskjokey_sequencer_model->techno_active = FALSE;
+    }
+
+    if(diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE){
+      diskjokey_sequencer_model->house_active = FALSE;
+    }
+
+    if(diskjokey_sequencer_model->current_genre != MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP){
+      diskjokey_sequencer_model->hiphop_active = FALSE;
+    }
+    
+    diskjokey_sequencer_model->random_active = FALSE;
+    diskjokey_sequencer_model->clear_active = FALSE;
+
+    if(diskjokey_sequencer_model->current_tab != 0){
+      diskjokey_sequencer_model->tab_active[0] = FALSE;
+    }
+
+    if(diskjokey_sequencer_model->current_tab != 1){
+      diskjokey_sequencer_model->tab_active[1] = FALSE;
+    }
+
+    if(diskjokey_sequencer_model->current_tab != 2){
+      diskjokey_sequencer_model->tab_active[2] = FALSE;
+    }
+
+    if(diskjokey_sequencer_model->current_tab != 3){
+      diskjokey_sequencer_model->tab_active[3] = FALSE;
+    }
+  }
+  
+  if(clear_all){
+    guint i, j;
+
+    for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+      for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+	diskjokey_sequencer_model->pad_active[i][j] = FALSE;
+      }
+    }
+  }
 }
 
 /**

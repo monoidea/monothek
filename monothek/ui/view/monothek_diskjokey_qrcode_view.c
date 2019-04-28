@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -43,6 +43,11 @@ void monothek_diskjokey_qrcode_view_connect(AgsConnectable *connectable);
 void monothek_diskjokey_qrcode_view_disconnect(AgsConnectable *connectable);
 
 void monothek_diskjokey_qrcode_view_draw(MonothekView *view);
+
+void monothek_diskjokey_qrcode_view_reset(MonothekView *view,
+					  gboolean reset_defaults, gboolean reset_current);
+void monothek_diskjokey_qrcode_view_clear(MonothekView *view,
+					  gboolean clear_all, gboolean clear_hover);
 
 /**
  * SECTION:monothek_diskjokey_qrcode_view
@@ -126,6 +131,9 @@ monothek_diskjokey_qrcode_view_class_init(MonothekDiskjokeyQrcodeViewClass *disk
   view = (MonothekViewClass *) diskjokey_qrcode_view;
 
   view->draw = monothek_diskjokey_qrcode_view_draw;
+
+  view->reset = monothek_diskjokey_qrcode_view_reset;
+  view->clear = monothek_diskjokey_qrcode_view_clear;
 }
 
 void
@@ -428,6 +436,30 @@ monothek_diskjokey_qrcode_view_draw(MonothekView *view)
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+}
+
+void
+monothek_diskjokey_qrcode_view_reset(MonothekView *view,
+				     gboolean reset_defaults, gboolean reset_current)
+{
+  //TODO:JK: implement me
+}
+  
+void
+monothek_diskjokey_qrcode_view_clear(MonothekView *view,
+				     gboolean clear_all, gboolean clear_hover)
+{
+  MonothekDiskjokeyQrcodeModel *diskjokey_qrcode_model;
+
+  g_object_get(view,
+	       "model", &diskjokey_qrcode_model,
+	       NULL);
+
+  if(clear_hover){
+    diskjokey_qrcode_model->quit_active = FALSE;
+  }
+  
+  //TODO:JK: implement me
 }
 
 /**

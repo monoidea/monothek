@@ -207,7 +207,6 @@ libmonothek_model_h_sources = \
 	monothek/ui/model/monothek_jukebox_payment_model.h \
 	monothek/ui/model/monothek_diskjokey_payment_model.h \
 	monothek/ui/model/monothek_jukebox_mode_model.h \
-	monothek/ui/model/monothek_jukebox_no_test_model.h \
 	monothek/ui/model/monothek_jukebox_playlist_model.h \
 	monothek/ui/model/monothek_jukebox_track_model.h \
 	monothek/ui/model/monothek_jukebox_info_model.h \
@@ -228,7 +227,6 @@ libmonothek_model_c_sources = \
 	monothek/ui/model/monothek_jukebox_payment_model.c \
 	monothek/ui/model/monothek_diskjokey_payment_model.c \
 	monothek/ui/model/monothek_jukebox_mode_model.c \
-	monothek/ui/model/monothek_jukebox_no_test_model.c \
 	monothek/ui/model/monothek_jukebox_playlist_model.c \
 	monothek/ui/model/monothek_jukebox_track_model.c \
 	monothek/ui/model/monothek_jukebox_info_model.c \
@@ -249,7 +247,6 @@ libmonothek_controller_h_sources = \
 	monothek/ui/controller/monothek_jukebox_payment_controller.h \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.h \
 	monothek/ui/controller/monothek_jukebox_mode_controller.h \
-	monothek/ui/controller/monothek_jukebox_no_test_controller.h \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.h \
 	monothek/ui/controller/monothek_jukebox_track_controller.h \
 	monothek/ui/controller/monothek_jukebox_info_controller.h \
@@ -271,7 +268,6 @@ libmonothek_controller_c_sources = \
 	monothek/ui/controller/monothek_jukebox_payment_controller.c \
 	monothek/ui/controller/monothek_diskjokey_payment_controller.c \
 	monothek/ui/controller/monothek_jukebox_mode_controller.c \
-	monothek/ui/controller/monothek_jukebox_no_test_controller.c \
 	monothek/ui/controller/monothek_jukebox_playlist_controller.c \
 	monothek/ui/controller/monothek_jukebox_track_controller.c \
 	monothek/ui/controller/monothek_jukebox_info_controller.c \
@@ -293,7 +289,6 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.h \
 	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_jukebox_mode_view.h \
-	monothek/ui/view/monothek_jukebox_no_test_view.h \
 	monothek/ui/view/monothek_jukebox_playlist_view.h \
 	monothek/ui/view/monothek_jukebox_track_view.h \
 	monothek/ui/view/monothek_jukebox_info_view.h \
@@ -315,7 +310,6 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_jukebox_payment_view.c \
 	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_jukebox_mode_view.c \
-	monothek/ui/view/monothek_jukebox_no_test_view.c \
 	monothek/ui/view/monothek_jukebox_playlist_view.c \
 	monothek/ui/view/monothek_jukebox_track_view.c \
 	monothek/ui/view/monothek_jukebox_info_view.c \
