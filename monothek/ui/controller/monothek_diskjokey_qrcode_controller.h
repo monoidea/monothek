@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -40,6 +40,11 @@ typedef struct _MonothekDiskjokeyQrcodeControllerClass MonothekDiskjokeyQrcodeCo
 struct _MonothekDiskjokeyQrcodeController
 {
   MonothekController controller;
+
+  MonothekActionBox *quit;
+
+  struct timespec *start_time;
+  struct timespec *timer;
 };
 
 struct _MonothekDiskjokeyQrcodeControllerClass
@@ -47,11 +52,15 @@ struct _MonothekDiskjokeyQrcodeControllerClass
   MonothekControllerClass controller;
 
   void (*timeout)(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
+
+  void (*quit)(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
 };
 
 GType monothek_diskjokey_qrcode_controller_get_type(void);
 
 void monothek_diskjokey_qrcode_controller_timeout(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
+
+void monothek_diskjokey_qrcode_controller_quit(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
 
 MonothekDiskjokeyQrcodeController* monothek_diskjokey_qrcode_controller_new();
 

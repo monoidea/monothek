@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -40,6 +40,11 @@ typedef struct _MonothekJukeboxQrcodeControllerClass MonothekJukeboxQrcodeContro
 struct _MonothekJukeboxQrcodeController
 {
   MonothekController controller;
+
+  MonothekActionBox *quit;
+
+  struct timespec *start_time;
+  struct timespec *timer;
 };
 
 struct _MonothekJukeboxQrcodeControllerClass
@@ -47,11 +52,15 @@ struct _MonothekJukeboxQrcodeControllerClass
   MonothekControllerClass controller;
 
   void (*timeout)(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+
+  void (*quit)(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 };
 
 GType monothek_jukebox_qrcode_controller_get_type(void);
 
 void monothek_jukebox_qrcode_controller_timeout(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+
+void monothek_jukebox_qrcode_controller_quit(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 
 MonothekJukeboxQrcodeController* monothek_jukebox_qrcode_controller_new();
 

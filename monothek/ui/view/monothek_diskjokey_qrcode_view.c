@@ -247,6 +247,8 @@ void
 monothek_diskjokey_qrcode_view_draw(MonothekView *view)
 {
   MonothekDiskjokeyQrcodeView *diskjokey_qrcode_view;
+
+  MonothekDiskjokeyQrcodeModel *diskjokey_qrcode_model;
   
   cairo_t *cr;
 
@@ -266,6 +268,10 @@ monothek_diskjokey_qrcode_view_draw(MonothekView *view)
   if(cr == NULL){
     return;
   }
+
+  g_object_get(view,
+	       "model", &diskjokey_qrcode_model,
+	       NULL);
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
@@ -373,6 +379,33 @@ monothek_diskjokey_qrcode_view_draw(MonothekView *view)
 
     diskjokey_font = g_strdup_printf("%s Bold", view->font);
 
+    if(diskjokey_qrcode_model != NULL &&
+       diskjokey_qrcode_model->quit_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+    }
+
+    /* diskjokey - quit box */
+    cairo_set_line_width(cr,
+			 diskjokey_qrcode_view->quit_box_line_width);
+    cairo_rectangle(cr,
+		    (double) diskjokey_qrcode_view->quit_box_x0, (double) diskjokey_qrcode_view->quit_box_y0,
+		    (double) diskjokey_qrcode_view->quit_box_width, (double) diskjokey_qrcode_view->quit_box_height);
+
+    if(diskjokey_qrcode_model != NULL &&
+       diskjokey_qrcode_model->quit_active){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
+
     /* counter */
     counter = g_strdup_printf("2:00");
     
@@ -418,14 +451,6 @@ monothek_diskjokey_qrcode_view_draw(MonothekView *view)
     pango_cairo_show_layout(cr, layout);
 
     g_object_unref(layout);
-
-    /* diskjokey - quit box */
-    cairo_set_line_width(cr,
-			 diskjokey_qrcode_view->quit_box_line_width);
-    cairo_rectangle(cr,
-		    (double) diskjokey_qrcode_view->quit_box_x0, (double) diskjokey_qrcode_view->quit_box_y0,
-		    (double) diskjokey_qrcode_view->quit_box_width, (double) diskjokey_qrcode_view->quit_box_height);
-    cairo_stroke(cr);
   }
   
   /* paint */

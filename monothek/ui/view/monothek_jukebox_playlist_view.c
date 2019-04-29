@@ -436,7 +436,7 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
       cairo_fill(cr);
       
       cairo_set_source_rgb(cr,
-			   0.,
+			   0.0,
 			   0.0,
 			   0.0);
     }else{

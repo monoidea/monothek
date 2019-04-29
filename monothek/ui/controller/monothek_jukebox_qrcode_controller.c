@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -44,7 +44,15 @@ void monothek_jukebox_qrcode_controller_finalize(GObject *gobject);
 void monothek_jukebox_qrcode_controller_connect(AgsConnectable *connectable);
 void monothek_jukebox_qrcode_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_qrcode_controller_quit_enter_callback(MonothekActionBox *action_box,
+							    MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+void monothek_jukebox_qrcode_controller_quit_leave_callback(MonothekActionBox *action_box,
+							    MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+void monothek_jukebox_qrcode_controller_quit_clicked_callback(MonothekActionBox *action_box,
+							      MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+
 void monothek_jukebox_qrcode_controller_real_timeout(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+void monothek_jukebox_qrcode_controller_real_quit(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 
 /**
  * SECTION:monothek_jukebox_qrcode_controller
@@ -58,6 +66,7 @@ void monothek_jukebox_qrcode_controller_real_timeout(MonothekJukeboxQrcodeContro
 
 enum{
   TIMEOUT,
+  QUIT,
   LAST_SIGNAL,
 };
 
@@ -122,6 +131,8 @@ monothek_jukebox_qrcode_controller_class_init(MonothekJukeboxQrcodeControllerCla
   /* MonothekJukeboxQrcodeController */
   jukebox_qrcode_controller->timeout = monothek_jukebox_qrcode_controller_real_timeout;
 
+  jukebox_qrcode_controller->quit = monothek_jukebox_qrcode_controller_real_quit;
+
   /* signals */
   /**
    * MonothekJukeboxQrcodeController::timeout:
@@ -139,6 +150,23 @@ monothek_jukebox_qrcode_controller_class_init(MonothekJukeboxQrcodeControllerCla
 		 NULL, NULL,
 		 g_cclosure_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekJukeboxQrcodeController::quit:
+   * @jukebox_qrcode_controller: the #MonothekJukeboxQrcodeController
+   *
+   * The ::quit signal notifies about action box event.
+   *
+   * Since: 1.0.0
+   */
+  jukebox_qrcode_controller_signals[QUIT] =
+    g_signal_new("quit",
+		 G_TYPE_FROM_CLASS(jukebox_qrcode_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekJukeboxQrcodeControllerClass, quit),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
 }
 
 void
@@ -153,6 +181,18 @@ monothek_jukebox_qrcode_controller_connectable_interface_init(AgsConnectableInte
 void
 monothek_jukebox_qrcode_controller_init(MonothekJukeboxQrcodeController *jukebox_qrcode_controller)
 {
+  MonothekActionBox *action_box;
+
+  jukebox_qrcode_controller->quit =
+    action_box = g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+			      "action-identifier", "quit",
+			      "x0", 800,
+			      "y0", 840,
+			      "width", 320,
+			      "height", 140,
+			      NULL);
+  monothek_controller_add_action_box(jukebox_qrcode_controller,
+				     action_box);
 }
 
 void
@@ -178,6 +218,13 @@ monothek_jukebox_qrcode_controller_connect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_qrcode_controller_parent_connectable_interface->connect(connectable);
+
+  g_signal_connect(jukebox_qrcode_controller->quit, "enter",
+		   G_CALLBACK(monothek_jukebox_qrcode_controller_quit_enter_callback), jukebox_qrcode_controller);
+  g_signal_connect(jukebox_qrcode_controller->quit, "leave",
+		   G_CALLBACK(monothek_jukebox_qrcode_controller_quit_leave_callback), jukebox_qrcode_controller);
+  g_signal_connect(jukebox_qrcode_controller->quit, "clicked",
+		   G_CALLBACK(monothek_jukebox_qrcode_controller_quit_clicked_callback), jukebox_qrcode_controller);
 }
 
 void
@@ -192,6 +239,61 @@ monothek_jukebox_qrcode_controller_disconnect(AgsConnectable *connectable)
   }
 
   monothek_jukebox_qrcode_controller_parent_connectable_interface->disconnect(connectable);
+
+  g_object_disconnect(jukebox_qrcode_controller->quit,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_jukebox_qrcode_controller_quit_enter_callback),
+		      jukebox_qrcode_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_jukebox_qrcode_controller_quit_leave_callback),
+		      jukebox_qrcode_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_jukebox_qrcode_controller_quit_clicked_callback),
+		      jukebox_qrcode_controller,
+		      NULL);
+}
+
+void
+monothek_jukebox_qrcode_controller_quit_enter_callback(MonothekActionBox *action_box,
+						       MonothekJukeboxQrcodeController *jukebox_qrcode_controller)
+{
+  MonothekJukeboxQrcodeView *view;
+  
+  MonothekJukeboxQrcodeModel *model;
+  
+  g_object_get(jukebox_qrcode_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  model->quit_active = TRUE;
+
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_qrcode_controller_quit_leave_callback(MonothekActionBox *action_box,
+						       MonothekJukeboxQrcodeController *jukebox_qrcode_controller)
+{
+  MonothekJukeboxQrcodeView *view;
+  
+  MonothekJukeboxQrcodeModel *model;
+  
+  g_object_get(jukebox_qrcode_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  model->quit_active = FALSE;
+
+  gtk_widget_queue_draw(view);
+}
+
+void
+monothek_jukebox_qrcode_controller_quit_clicked_callback(MonothekActionBox *action_box,
+							 MonothekJukeboxQrcodeController *jukebox_qrcode_controller)
+{
+  monothek_jukebox_qrcode_controller_quit(jukebox_qrcode_controller);
 }
 
 void
@@ -228,6 +330,43 @@ monothek_jukebox_qrcode_controller_timeout(MonothekJukeboxQrcodeController *juke
   g_object_ref((GObject *) jukebox_qrcode_controller);
   g_signal_emit(G_OBJECT(jukebox_qrcode_controller),
 		jukebox_qrcode_controller_signals[TIMEOUT], 0);
+  g_object_unref((GObject *) jukebox_qrcode_controller);
+}
+
+void
+monothek_jukebox_qrcode_controller_real_quit(MonothekJukeboxQrcodeController *jukebox_qrcode_controller)
+{
+  MonothekWindow *window;
+  MonothekJukeboxQrcodeView *view;
+  
+  /* change view */
+  g_object_get(jukebox_qrcode_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_START_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_jukebox_qrcode_controller_quit:
+ * @jukebox_qrcode_controller: the #MonothekJukeboxQrcodeController
+ * 
+ * Quit qrcode.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_jukebox_qrcode_controller_quit(MonothekJukeboxQrcodeController *jukebox_qrcode_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_JUKEBOX_QRCODE_CONTROLLER(jukebox_qrcode_controller));
+  
+  g_object_ref((GObject *) jukebox_qrcode_controller);
+  g_signal_emit(G_OBJECT(jukebox_qrcode_controller),
+		jukebox_qrcode_controller_signals[QUIT], 0);
   g_object_unref((GObject *) jukebox_qrcode_controller);
 }
 

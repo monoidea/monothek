@@ -248,6 +248,8 @@ monothek_jukebox_qrcode_view_draw(MonothekView *view)
 {
   MonothekJukeboxQrcodeView *jukebox_qrcode_view;
   
+  MonothekJukeboxQrcodeModel *jukebox_qrcode_model;
+
   cairo_t *cr;
 
   guint width, height;
@@ -266,6 +268,10 @@ monothek_jukebox_qrcode_view_draw(MonothekView *view)
   if(cr == NULL){
     return;
   }
+
+  g_object_get(view,
+	       "model", &jukebox_qrcode_model,
+	       NULL);
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
@@ -373,6 +379,33 @@ monothek_jukebox_qrcode_view_draw(MonothekView *view)
 
     jukebox_font = g_strdup_printf("%s Bold", view->font);
 
+    if(jukebox_qrcode_model != NULL &&
+       jukebox_qrcode_model->quit_active){
+      cairo_set_source_rgb(cr,
+			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+    }
+
+    /* jukebox - quit box */
+    cairo_set_line_width(cr,
+			 jukebox_qrcode_view->quit_box_line_width);
+    cairo_rectangle(cr,
+		    (double) jukebox_qrcode_view->quit_box_x0, (double) jukebox_qrcode_view->quit_box_y0,
+		    (double) jukebox_qrcode_view->quit_box_width, (double) jukebox_qrcode_view->quit_box_height);
+
+    if(jukebox_qrcode_model != NULL &&
+       jukebox_qrcode_model->quit_active){
+      cairo_fill(cr);
+      
+      cairo_set_source_rgb(cr,
+			   0.0,
+			   0.0,
+			   0.0);
+    }else{
+      cairo_stroke(cr);
+    }
+
     /* counter */
     counter = g_strdup_printf("2:00");
     
@@ -418,14 +451,6 @@ monothek_jukebox_qrcode_view_draw(MonothekView *view)
     pango_cairo_show_layout(cr, layout);
 
     g_object_unref(layout);
-
-    /* jukebox - quit box */
-    cairo_set_line_width(cr,
-			 jukebox_qrcode_view->quit_box_line_width);
-    cairo_rectangle(cr,
-		    (double) jukebox_qrcode_view->quit_box_x0, (double) jukebox_qrcode_view->quit_box_y0,
-		    (double) jukebox_qrcode_view->quit_box_width, (double) jukebox_qrcode_view->quit_box_height);
-    cairo_stroke(cr);
   }
   
   /* paint */
