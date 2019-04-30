@@ -49,7 +49,10 @@ gboolean monothek_diskjokey_payment_controller_key_press_event_callback(GtkWidge
 									MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
 #endif
 
+void monothek_diskjokey_payment_controller_real_do_transaction(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+
 void monothek_diskjokey_payment_controller_real_transaction_completed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+void monothek_diskjokey_payment_controller_real_transaction_failed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
 
 /**
  * SECTION:monothek_diskjokey_payment_controller
@@ -62,7 +65,9 @@ void monothek_diskjokey_payment_controller_real_transaction_completed(MonothekDi
  */
 
 enum{
+  DO_TRANSACTION,
   TRANSACTION_COMPLETED,
+  TRANSACTION_FAILED,
   LAST_SIGNAL,
 };
 
@@ -131,9 +136,29 @@ monothek_diskjokey_payment_controller_class_init(MonothekDiskjokeyPaymentControl
   controller->reset = monothek_diskjokey_payment_controller_reset;
   
   /* MonothekDiskjokeyPaymentControllerClass */
+  diskjokey_payment_controller->do_transaction = monothek_diskjokey_payment_controller_real_do_transaction;
+
   diskjokey_payment_controller->transaction_completed = monothek_diskjokey_payment_controller_real_transaction_completed;
+  diskjokey_payment_controller->transaction_failed = monothek_diskjokey_payment_controller_real_transaction_failed;
 
   /* signals */
+  /**
+   * MonothekDiskjokeyPaymentController::do-transaction:
+   * @diskjokey_payment_controller: the #MonothekDiskjokeyPaymentController
+   *
+   * The ::do-transaction signal notifies about running transaction.
+   *
+   * Since: 1.0.0
+   */
+  diskjokey_payment_controller_signals[DO_TRANSACTION] =
+    g_signal_new("do-transaction",
+		 G_TYPE_FROM_CLASS(diskjokey_payment_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekDiskjokeyPaymentControllerClass, do_transaction),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
   /**
    * MonothekDiskjokeyPaymentController::transaction-completed:
    * @diskjokey_payment_controller: the #MonothekDiskjokeyPaymentController
@@ -147,6 +172,23 @@ monothek_diskjokey_payment_controller_class_init(MonothekDiskjokeyPaymentControl
 		 G_TYPE_FROM_CLASS(diskjokey_payment_controller),
 		 G_SIGNAL_RUN_LAST,
 		 G_STRUCT_OFFSET(MonothekDiskjokeyPaymentControllerClass, transaction_completed),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekDiskjokeyPaymentController::transaction-failed:
+   * @diskjokey_payment_controller: the #MonothekDiskjokeyPaymentController
+   *
+   * The ::transaction-failed signal notifies about failed transaction.
+   *
+   * Since: 1.0.0
+   */
+  diskjokey_payment_controller_signals[TRANSACTION_FAILED] =
+    g_signal_new("transaction-failed",
+		 G_TYPE_FROM_CLASS(diskjokey_payment_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekDiskjokeyPaymentControllerClass, transaction_failed),
 		 NULL, NULL,
 		 g_cclosure_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
@@ -259,6 +301,31 @@ monothek_diskjokey_payment_controller_key_press_event_callback(GtkWidget *widget
 #endif
 
 void
+monothek_diskjokey_payment_controller_real_do_transaction(MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
+{
+  //TODO:JK: implement me
+}
+
+/**
+ * monothek_diskjokey_payment_controller_do_transaction:
+ * @diskjokey_payment_controller: the #MonothekDiskjokeyPaymentController
+ * 
+ * Payment transaction completed.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_diskjokey_payment_controller_do_transaction(MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_DISKJOKEY_PAYMENT_CONTROLLER(diskjokey_payment_controller));
+  
+  g_object_ref((GObject *) diskjokey_payment_controller);
+  g_signal_emit(G_OBJECT(diskjokey_payment_controller),
+		diskjokey_payment_controller_signals[DO_TRANSACTION], 0);
+  g_object_unref((GObject *) diskjokey_payment_controller);
+}
+
+void
 monothek_diskjokey_payment_controller_real_transaction_completed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
 {
   MonothekWindow *window;
@@ -291,6 +358,31 @@ monothek_diskjokey_payment_controller_transaction_completed(MonothekDiskjokeyPay
   g_object_ref((GObject *) diskjokey_payment_controller);
   g_signal_emit(G_OBJECT(diskjokey_payment_controller),
 		diskjokey_payment_controller_signals[TRANSACTION_COMPLETED], 0);
+  g_object_unref((GObject *) diskjokey_payment_controller);
+}
+
+void
+monothek_diskjokey_payment_controller_real_transaction_failed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
+{
+  //TODO:JK: implement me
+}
+
+/**
+ * monothek_diskjokey_payment_controller_transaction_failed:
+ * @diskjokey_payment_controller: the #MonothekDiskjokeyPaymentController
+ * 
+ * Payment transaction failed.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_diskjokey_payment_controller_transaction_failed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_DISKJOKEY_PAYMENT_CONTROLLER(diskjokey_payment_controller));
+  
+  g_object_ref((GObject *) diskjokey_payment_controller);
+  g_signal_emit(G_OBJECT(diskjokey_payment_controller),
+		diskjokey_payment_controller_signals[TRANSACTION_FAILED], 0);
   g_object_unref((GObject *) diskjokey_payment_controller);
 }
 

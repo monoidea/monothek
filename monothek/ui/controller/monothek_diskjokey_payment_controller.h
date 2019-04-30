@@ -46,12 +46,18 @@ struct _MonothekDiskjokeyPaymentControllerClass
 {
   MonothekControllerClass controller;
 
+  void (*do_transaction)(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+
   void (*transaction_completed)(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+  void (*transaction_failed)(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
 };
 
 GType monothek_diskjokey_payment_controller_get_type(void);
 
+void monothek_diskjokey_payment_controller_do_transaction(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+
 void monothek_diskjokey_payment_controller_transaction_completed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+void monothek_diskjokey_payment_controller_transaction_failed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
 
 MonothekDiskjokeyPaymentController* monothek_diskjokey_payment_controller_new();
 

@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -46,12 +46,18 @@ struct _MonothekJukeboxPaymentControllerClass
 {
   MonothekControllerClass controller;
 
+  void (*do_transaction)(MonothekJukeboxPaymentController *jukebox_payment_controller);
+
   void (*transaction_completed)(MonothekJukeboxPaymentController *jukebox_payment_controller);
+  void (*transaction_failed)(MonothekJukeboxPaymentController *jukebox_payment_controller);
 };
 
 GType monothek_jukebox_payment_controller_get_type(void);
 
+void monothek_jukebox_payment_controller_do_transaction(MonothekJukeboxPaymentController *jukebox_payment_controller);
+
 void monothek_jukebox_payment_controller_transaction_completed(MonothekJukeboxPaymentController *jukebox_payment_controller);
+void monothek_jukebox_payment_controller_transaction_failed(MonothekJukeboxPaymentController *jukebox_payment_controller);
 
 MonothekJukeboxPaymentController* monothek_jukebox_payment_controller_new();
 

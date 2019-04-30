@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -47,7 +47,10 @@ gboolean monothek_jukebox_payment_controller_key_press_event_callback(GtkWidget 
 								      MonothekJukeboxPaymentController *jukebox_payment_controller);
 #endif
 
+void monothek_jukebox_payment_controller_real_do_transaction(MonothekJukeboxPaymentController *jukebox_payment_controller);
+
 void monothek_jukebox_payment_controller_real_transaction_completed(MonothekJukeboxPaymentController *jukebox_payment_controller);
+void monothek_jukebox_payment_controller_real_transaction_failed(MonothekJukeboxPaymentController *jukebox_payment_controller);
 
 /**
  * SECTION:monothek_jukebox_payment_controller
@@ -60,7 +63,9 @@ void monothek_jukebox_payment_controller_real_transaction_completed(MonothekJuke
  */
 
 enum{
+  DO_TRANSACTION,
   TRANSACTION_COMPLETED,
+  TRANSACTION_FAILED,
   LAST_SIGNAL,
 };
 
@@ -123,9 +128,29 @@ monothek_jukebox_payment_controller_class_init(MonothekJukeboxPaymentControllerC
   gobject->finalize = monothek_jukebox_payment_controller_finalize;
 
   /* MonothekJukeboxPaymentController */
+  jukebox_payment_controller->do_transaction = monothek_jukebox_payment_controller_real_do_transaction;
+
   jukebox_payment_controller->transaction_completed = monothek_jukebox_payment_controller_real_transaction_completed;
+  jukebox_payment_controller->transaction_failed = monothek_jukebox_payment_controller_real_transaction_failed;
 
   /* signals */
+  /**
+   * MonothekJukeboxPaymentController::do-transaction:
+   * @jukebox_payment_controller: the #MonothekJukeboxPaymentController
+   *
+   * The ::do-transaction signal notifies about running transaction.
+   *
+   * Since: 1.0.0
+   */
+  jukebox_payment_controller_signals[DO_TRANSACTION] =
+    g_signal_new("do-transaction",
+		 G_TYPE_FROM_CLASS(jukebox_payment_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekJukeboxPaymentControllerClass, do_transaction),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
   /**
    * MonothekJukeboxPaymentController::transaction-completed:
    * @jukebox_payment_controller: the #MonothekJukeboxPaymentController
@@ -139,6 +164,23 @@ monothek_jukebox_payment_controller_class_init(MonothekJukeboxPaymentControllerC
 		 G_TYPE_FROM_CLASS(jukebox_payment_controller),
 		 G_SIGNAL_RUN_LAST,
 		 G_STRUCT_OFFSET(MonothekJukeboxPaymentControllerClass, transaction_completed),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekJukeboxPaymentController::transaction-failed:
+   * @jukebox_payment_controller: the #MonothekJukeboxPaymentController
+   *
+   * The ::transaction-failed signal notifies about failed transaction.
+   *
+   * Since: 1.0.0
+   */
+  jukebox_payment_controller_signals[TRANSACTION_FAILED] =
+    g_signal_new("transaction-failed",
+		 G_TYPE_FROM_CLASS(jukebox_payment_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekJukeboxPaymentControllerClass, transaction_failed),
 		 NULL, NULL,
 		 g_cclosure_marshal_VOID__VOID,
 		 G_TYPE_NONE, 0);
@@ -245,6 +287,31 @@ monothek_jukebox_payment_controller_key_press_event_callback(GtkWidget *widget,
 #endif
 
 void
+monothek_jukebox_payment_controller_real_do_transaction(MonothekJukeboxPaymentController *jukebox_payment_controller)
+{
+  //TODO:JK: implement me
+}
+
+/**
+ * monothek_jukebox_payment_controller_do_transaction:
+ * @jukebox_payment_controller: the #MonothekJukeboxPaymentController
+ * 
+ * Payment transaction completed.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_jukebox_payment_controller_do_transaction(MonothekJukeboxPaymentController *jukebox_payment_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_JUKEBOX_PAYMENT_CONTROLLER(jukebox_payment_controller));
+  
+  g_object_ref((GObject *) jukebox_payment_controller);
+  g_signal_emit(G_OBJECT(jukebox_payment_controller),
+		jukebox_payment_controller_signals[DO_TRANSACTION], 0);
+  g_object_unref((GObject *) jukebox_payment_controller);
+}
+
+void
 monothek_jukebox_payment_controller_real_transaction_completed(MonothekJukeboxPaymentController *jukebox_payment_controller)
 {
   MonothekWindow *window;
@@ -277,6 +344,31 @@ monothek_jukebox_payment_controller_transaction_completed(MonothekJukeboxPayment
   g_object_ref((GObject *) jukebox_payment_controller);
   g_signal_emit(G_OBJECT(jukebox_payment_controller),
 		jukebox_payment_controller_signals[TRANSACTION_COMPLETED], 0);
+  g_object_unref((GObject *) jukebox_payment_controller);
+}
+
+void
+monothek_jukebox_payment_controller_real_transaction_failed(MonothekJukeboxPaymentController *jukebox_payment_controller)
+{
+  //TODO:JK: implement me
+}
+
+/**
+ * monothek_jukebox_payment_controller_transaction_failed:
+ * @jukebox_payment_controller: the #MonothekJukeboxPaymentController
+ * 
+ * Payment transaction failed.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_jukebox_payment_controller_transaction_failed(MonothekJukeboxPaymentController *jukebox_payment_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_JUKEBOX_PAYMENT_CONTROLLER(jukebox_payment_controller));
+  
+  g_object_ref((GObject *) jukebox_payment_controller);
+  g_signal_emit(G_OBJECT(jukebox_payment_controller),
+		jukebox_payment_controller_signals[TRANSACTION_FAILED], 0);
   g_object_unref((GObject *) jukebox_payment_controller);
 }
 

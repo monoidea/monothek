@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -38,6 +38,8 @@ typedef struct _MonothekDiskjokeyPaymentModelClass MonothekDiskjokeyPaymentModel
 struct _MonothekDiskjokeyPaymentModel
 {
   GObject gobject;
+
+  gboolean continue_session;
 };
 
 struct _MonothekDiskjokeyPaymentModelClass

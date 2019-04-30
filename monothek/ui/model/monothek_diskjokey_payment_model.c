@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -50,6 +50,7 @@ void monothek_diskjokey_payment_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_CONTINUE_SESSION,
 };
 
 static gpointer monothek_diskjokey_payment_model_parent_class = NULL;
@@ -103,6 +104,21 @@ monothek_diskjokey_payment_model_class_init(MonothekDiskjokeyPaymentModelClass *
   gobject->finalize = monothek_diskjokey_payment_model_finalize;
 
   /* properties */
+  /**
+   * MonothekDiskjokeySequencerModel:continue-session:
+   *
+   * If to continue the session.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("continue-session",
+				    i18n_pspec("continue session"),
+				    i18n_pspec("If to continue the session"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_CONTINUE_SESSION,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +126,7 @@ monothek_diskjokey_payment_model_class_init(MonothekDiskjokeyPaymentModelClass *
 void
 monothek_diskjokey_payment_model_init(MonothekDiskjokeyPaymentModel *diskjokey_payment_model)
 {
-  //TODO:JK: implement me
+  diskjokey_payment_model->continue_session = FALSE;
 }
 
 void
@@ -124,6 +140,11 @@ monothek_diskjokey_payment_model_set_property(GObject *gobject,
   diskjokey_payment_model = MONOTHEK_DISKJOKEY_PAYMENT_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_CONTINUE_SESSION:
+    {
+      diskjokey_payment_model->continue_session = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -141,6 +162,12 @@ monothek_diskjokey_payment_model_get_property(GObject *gobject,
   diskjokey_payment_model = MONOTHEK_DISKJOKEY_PAYMENT_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_CONTINUE_SESSION:
+    {
+      g_value_set_boolean(value,
+			  diskjokey_payment_model->continue_session);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

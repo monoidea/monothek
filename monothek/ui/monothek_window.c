@@ -37,6 +37,7 @@
 #include <monothek/ui/controller/monothek_jukebox_mode_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_playlist_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_track_controller.h>
+#include <monothek/ui/controller/monothek_jukebox_info_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_end_controller.h>
 #include <monothek/ui/controller/monothek_jukebox_qrcode_controller.h>
 #include <monothek/ui/controller/monothek_diskjokey_sequencer_controller.h>
@@ -52,6 +53,7 @@
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
 #include <monothek/ui/model/monothek_jukebox_playlist_model.h>
 #include <monothek/ui/model/monothek_jukebox_track_model.h>
+#include <monothek/ui/model/monothek_jukebox_info_model.h>
 #include <monothek/ui/model/monothek_jukebox_end_model.h>
 #include <monothek/ui/model/monothek_jukebox_qrcode_model.h>
 #include <monothek/ui/model/monothek_diskjokey_sequencer_model.h>
@@ -67,6 +69,7 @@
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
 #include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
+#include <monothek/ui/view/monothek_jukebox_info_view.h>
 #include <monothek/ui/view/monothek_jukebox_end_view.h>
 #include <monothek/ui/view/monothek_jukebox_qrcode_view.h>
 #include <monothek/ui/view/monothek_diskjokey_sequencer_view.h>
@@ -502,6 +505,31 @@ monothek_window_init(MonothekWindow *window)
 	       "model", model,
 	       NULL);
 
+  /* jukebox info view */
+  model = monothek_jukebox_info_model_new();
+  g_object_ref(model);
+  window->model = g_list_prepend(window->model,
+				 model);
+
+  view = monothek_jukebox_info_view_new();
+  g_object_set(view,
+	       "model", model,
+	       NULL);
+  gtk_box_pack_start(window->view,
+		     view,
+		     FALSE, FALSE,
+		     0);
+
+  controller = monothek_jukebox_info_controller_new();
+  g_object_ref(controller);
+  window->controller = g_list_prepend(window->controller,
+				      controller);
+  
+  g_object_set(controller,
+	       "view", view,
+	       "model", model,
+	       NULL);
+
   /* jukebox end view */
   model = monothek_jukebox_end_model_new();
   g_object_ref(model);
@@ -914,7 +942,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 	}
 
 	monothek_view_reset(MONOTHEK_VIEW(list->data),
-			    TRUE, TRUE);
+			    FALSE, TRUE);
 	
 	ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 	gtk_widget_hide(list->data);

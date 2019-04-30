@@ -40,6 +40,15 @@ typedef struct _MonothekJukeboxInfoViewClass MonothekJukeboxInfoViewClass;
 struct _MonothekJukeboxInfoView
 {
   MonothekView monothek_view;
+
+  // ok
+  gdouble ok_box_line_width;
+
+  gdouble ok_box_x0;
+  gdouble ok_box_y0;
+
+  gdouble ok_box_width;
+  gdouble ok_box_height;
 };
 
 struct _MonothekJukeboxInfoViewClass

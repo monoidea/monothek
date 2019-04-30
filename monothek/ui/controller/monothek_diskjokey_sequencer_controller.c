@@ -957,78 +957,7 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 void
 monothek_diskjokey_sequencer_controller_reset(MonothekController *controller)
 {
-  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
-  MonothekDiskjokeySequencerModel *model;
-
-  gdouble bpm;
-  gdouble swing;
-
-#ifdef __APPLE__
-  clock_serv_t cclock;
-  mach_timespec_t mts;
-#endif
-
-  diskjokey_sequencer_controller = MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(controller);
-  
-  g_object_get(diskjokey_sequencer_controller,
-	       "model", &model,
-	       NULL);
-
-  monothek_diskjokey_sequencer_controller_clear(diskjokey_sequencer_controller);
-
-  model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
-
-  model->techno_active = TRUE;
-  model->house_active = FALSE;
-  model->hiphop_active = FALSE;
-
-  model->random_active = FALSE;
-  model->clear_active = FALSE;
-
-  model->run_active = FALSE;
-
-  model->active_column = -1;
-
-  model->current_tab = 0;
-
-  model->tab_active[0] = TRUE;
-  model->tab_active[1] = FALSE;
-  model->tab_active[2] = FALSE;
-  model->tab_active[3] = FALSE;
-
-  /* bpm */
-  bpm = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT;
-  
-  model->bpm = bpm;
-  monothek_diskjokey_sequencer_controller_change_bpm(diskjokey_sequencer_controller,
-						     bpm);
-
-  /* swing */
-  swing = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT;
-  
-  model->swing = swing;
-  monothek_diskjokey_sequencer_controller_change_swing(diskjokey_sequencer_controller,
-						       swing);
-  
-  /* load drum kit */
-  monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
-							MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME);
-
-  /* reset timer */
-#ifdef __APPLE__
-  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-    
-  clock_get_time(cclock, &mts);
-  mach_port_deallocate(mach_task_self(), cclock);
-    
-  diskjokey_sequencer_controller->start_time->tv_sec = mts.tv_sec;
-  diskjokey_sequencer_controller->start_time->tv_nsec = mts.tv_nsec;
-#else
-  clock_gettime(CLOCK_MONOTONIC, diskjokey_sequencer_controller->start_time);
-#endif
-
-  diskjokey_sequencer_controller->timer->tv_sec = 0;
-  diskjokey_sequencer_controller->timer->tv_nsec = 0;
+  //TODO:JK: implement me
 }
 
 void

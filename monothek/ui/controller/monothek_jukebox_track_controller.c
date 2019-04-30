@@ -40,7 +40,7 @@
 
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
-#include <monothek/ui/view/monothek_jukebox_end_view.h>
+#include <monothek/ui/view/monothek_jukebox_info_view.h>
 #include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 
 #ifdef __APPLE__
@@ -642,7 +642,7 @@ void
 monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *jukebox_track_controller)
 {
   MonothekWindow *window;
-  MonothekJukeboxModeView *view;
+  MonothekJukeboxTrackView *view;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
@@ -675,6 +675,9 @@ monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *juke
   g_object_get(jukebox_track_controller,
 	       "view", &view,
 	       NULL);
+
+  gtk_adjustment_set_value(view->progress,
+			   0.0);
 
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
@@ -713,7 +716,7 @@ void
 monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *jukebox_track_controller)
 {
   MonothekWindow *window;
-  MonothekJukeboxModeView *view;
+  MonothekJukeboxTrackView *view;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
@@ -746,6 +749,9 @@ monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *juke
   g_object_get(jukebox_track_controller,
 	       "view", &view,
 	       NULL);
+
+  gtk_adjustment_set_value(view->progress,
+			   0.0);
 
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
@@ -784,7 +790,7 @@ void
 monothek_jukebox_track_controller_real_back(MonothekJukeboxTrackController *jukebox_track_controller)
 {
   MonothekWindow *window;
-  MonothekJukeboxModeView *view;
+  MonothekJukeboxTrackView *view;
 
   /* change view */
   g_object_get(jukebox_track_controller,
@@ -1156,8 +1162,11 @@ monothek_jukebox_track_controller_real_completed(MonothekJukeboxTrackController 
 
   if(!g_strcmp0("play",
 		g_value_get_string(jukebox_mode))){
+    monothek_view_reset(view,
+			TRUE, TRUE);
+
     monothek_window_change_view(window,
-				MONOTHEK_TYPE_JUKEBOX_END_VIEW, G_TYPE_NONE);
+				MONOTHEK_TYPE_JUKEBOX_INFO_VIEW, G_TYPE_NONE);
   }else{
     guint test_count;
     

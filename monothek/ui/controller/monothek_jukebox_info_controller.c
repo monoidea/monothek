@@ -30,8 +30,7 @@
 #include <monothek/ui/model/monothek_jukebox_info_model.h>
 
 #include <monothek/ui/view/monothek_jukebox_info_view.h>
-#include <monothek/ui/view/monothek_jukebox_playlist_view.h>
-#include <monothek/ui/view/monothek_jukebox_track_view.h>
+#include <monothek/ui/view/monothek_jukebox_qrcode_view.h>
 
 #include <stdlib.h>
 
@@ -167,9 +166,9 @@ monothek_jukebox_info_controller_init(MonothekJukeboxInfoController *jukebox_inf
   jukebox_info_controller->jukebox_ok = 
     action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
 						    "action-identifier", "jukebox-ok",
-						    "x0", 740,
-						    "y0", 580,
-						    "width", 400,
+						    "x0", 800,
+						    "y0", 760,
+						    "width", 320,
 						    "height", 140,
 						    NULL);
   monothek_controller_add_action_box(jukebox_info_controller,
@@ -294,7 +293,7 @@ monothek_jukebox_info_controller_real_ok(MonothekJukeboxInfoController *jukebox_
 				   MONOTHEK_TYPE_WINDOW);
 
   monothek_window_change_view(window,
-			      MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, G_TYPE_NONE);
+			      MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW, G_TYPE_NONE);
 }
 
 /**
