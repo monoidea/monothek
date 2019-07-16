@@ -334,8 +334,10 @@ monothek_load_controller_real_completed(MonothekLoadController *load_controller)
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
 
+#if !defined(MONOTHEK_NO_LOAD_VIEW)
   monothek_window_change_view(window,
 			      MONOTHEK_TYPE_START_VIEW, G_TYPE_NONE);
+#endif
 }
 
 /**

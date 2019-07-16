@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = po
 
 ACLOCAL_AMFLAGS = -I m4
-AM_CPPFLAGS = -std=gnu99 -include errno.h -I$(top_srcdir) -DMONOTHEK_DEVEL_MODE=1 -DSRCDIR=\"$(srcdir)\" -DDESTDIR=\"$(DESTDIR)$(datadir)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security
+AM_CPPFLAGS = -std=gnu99 -include errno.h -I$(top_srcdir) -DMONOTHEK_DEVEL_MODE=1 -DMONOTHEK_NO_LOAD_VIEW=1 -DSRCDIR=\"$(srcdir)\" -DDESTDIR=\"$(DESTDIR)$(datadir)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security
 
 # what flags you want to pass to the C compiler & linker
 CFLAGS =  @CFLAGS@
