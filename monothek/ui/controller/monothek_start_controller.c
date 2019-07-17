@@ -301,15 +301,30 @@ monothek_start_controller_reset(MonothekController *controller)
   MonothekStartController *start_controller;
   MonothekStartModel *model;
 
-  start_controller = MONOTHEK_START_CONTROLLER(controller);
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *preserve_diskjokey;
   
+  start_controller = MONOTHEK_START_CONTROLLER(controller);
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
   g_object_get(start_controller,
 	       "model", &model,
 	       NULL);
+  
+  preserve_diskjokey = g_hash_table_lookup(session->value,
+					   "preserve-diskjokey");
 
-  g_free(model->purchase_filename);
-
-  model->purchase_filename = NULL;
+  if(!g_value_get_boolean(preserve_diskjokey)){
+    g_free(model->purchase_filename);
+    
+    model->purchase_filename = NULL;
+  }
 }
 
 void
@@ -356,6 +371,11 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
 {
   MonothekStartModel *model;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *preserve_diskjokey;
+
   gchar *purchase_path;
   gchar *purchase_filename;
   gchar *product_name;
@@ -369,7 +389,17 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
 
   GError *error;
 
-#if 0
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  preserve_diskjokey = g_hash_table_lookup(session->value,
+					   "preserve-diskjokey");
+
+  g_value_set_boolean(preserve_diskjokey, FALSE);
+  
+#if !defined(MONOTHEK_DEVEL_MODE)
   g_object_get(start_controller,
 	       "model", &model,
 	       NULL);
@@ -401,10 +431,10 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
 			    &error);
 
   if(exit_status){
-#endif
     monothek_start_controller_launch_jukebox(start_controller);
-#if 0
   }
+#else
+  monothek_start_controller_launch_jukebox(start_controller);
 #endif
 }
 
@@ -465,7 +495,7 @@ monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *a
 
   GError *error;
 
-#if 0
+#if !defined(MONOTHEK_DEVEL_MODE)
   g_object_get(start_controller,
 	       "model", &model,
 	       NULL);
@@ -497,10 +527,10 @@ monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *a
 			    &error);
 
   if(exit_status){
-#endif
     monothek_start_controller_launch_diskjokey(start_controller);
-#if 0
   }
+#else
+  monothek_start_controller_launch_diskjokey(start_controller);
 #endif
 }
 

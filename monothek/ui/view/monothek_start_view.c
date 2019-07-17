@@ -621,7 +621,8 @@ void
 monothek_start_view_reset(MonothekView *view,
 			  gboolean reset_defaults, gboolean reset_current)
 {
-  //TODO:JK: implement me
+  monothek_view_clear(view,
+		      TRUE, TRUE);
 }
 
 void
@@ -638,8 +639,6 @@ monothek_start_view_clear(MonothekView *view,
     start_model->jukebox_start_active = FALSE;
     start_model->diskjokey_start_active = FALSE;
   }
-  
-  //TODO:JK: implement me
 }
 
 /**

@@ -142,7 +142,7 @@ monothek_session_init(MonothekSession *session)
   g_value_init(value,
 	       G_TYPE_BOOLEAN);
 
-  g_value_set_boolean(value, TRUE);
+  g_value_set_boolean(value, FALSE);
 
   g_hash_table_insert(session->value,
 		      "preserve-jukebox", value);
@@ -153,8 +153,7 @@ monothek_session_init(MonothekSession *session)
   g_value_init(value,
 	       G_TYPE_STRING);
 
-  g_value_set_string(value,
-		     "test");
+  g_value_set_string(value, "test");
 
   g_hash_table_insert(session->value,
 		      "jukebox-mode", value);
@@ -165,8 +164,7 @@ monothek_session_init(MonothekSession *session)
   g_value_init(value,
 	       G_TYPE_STRING);
 
-  g_value_set_string(value,
-		     NULL);
+  g_value_set_string(value, NULL);
 
   g_hash_table_insert(session->value,
 		      "jukebox-song-filename", value);
@@ -188,7 +186,7 @@ monothek_session_init(MonothekSession *session)
   g_value_init(value,
 	       G_TYPE_BOOLEAN);
 
-  g_value_set_boolean(value, TRUE);
+  g_value_set_boolean(value, FALSE);
 
   g_hash_table_insert(session->value,
 		      "preserve-diskjokey", value);
