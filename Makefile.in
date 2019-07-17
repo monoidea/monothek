@@ -229,6 +229,7 @@ am__objects_15 = $(am__objects_1) \
 	monothek/ui/view/libmonothek_la-monothek_start_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_closed_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_outage_view.lo \
+	monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_diskjokey_payment_view.lo \
 	monothek/ui/view/libmonothek_la-monothek_jukebox_mode_view.lo \
@@ -349,6 +350,7 @@ am__depfiles_remade = monothek/$(DEPDIR)/ui-monothek_main.Po \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo \
+	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Plo \
 	monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -872,6 +874,7 @@ libmonothek_view_h_sources = \
 	monothek/ui/view/monothek_start_view.h \
 	monothek/ui/view/monothek_closed_view.h \
 	monothek/ui/view/monothek_outage_view.h \
+	monothek/ui/view/monothek_transaction_failed_view.h \
 	monothek/ui/view/monothek_jukebox_payment_view.h \
 	monothek/ui/view/monothek_diskjokey_payment_view.h \
 	monothek/ui/view/monothek_jukebox_mode_view.h \
@@ -892,6 +895,7 @@ libmonothek_view_c_sources = \
 	monothek/ui/view/monothek_start_view.c \
 	monothek/ui/view/monothek_closed_view.c \
 	monothek/ui/view/monothek_outage_view.c \
+	monothek/ui/view/monothek_transaction_failed_view.c \
 	monothek/ui/view/monothek_jukebox_payment_view.c \
 	monothek/ui/view/monothek_diskjokey_payment_view.c \
 	monothek/ui/view/monothek_jukebox_mode_view.c \
@@ -1289,6 +1293,9 @@ monothek/ui/view/libmonothek_la-monothek_closed_view.lo:  \
 monothek/ui/view/libmonothek_la-monothek_outage_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
+monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo:  \
+	monothek/ui/view/$(am__dirstamp) \
+	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
 monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo:  \
 	monothek/ui/view/$(am__dirstamp) \
 	monothek/ui/view/$(DEPDIR)/$(am__dirstamp)
@@ -1440,6 +1447,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -1863,6 +1871,13 @@ monothek/ui/view/libmonothek_la-monothek_outage_view.lo: monothek/ui/view/monoth
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_outage_view.c' object='monothek/ui/view/libmonothek_la-monothek_outage_view.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_outage_view.lo `test -f 'monothek/ui/view/monothek_outage_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_outage_view.c
+
+monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo: monothek/ui/view/monothek_transaction_failed_view.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo `test -f 'monothek/ui/view/monothek_transaction_failed_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_transaction_failed_view.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Tpo monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='monothek/ui/view/monothek_transaction_failed_view.c' object='monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -c -o monothek/ui/view/libmonothek_la-monothek_transaction_failed_view.lo `test -f 'monothek/ui/view/monothek_transaction_failed_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_transaction_failed_view.c
 
 monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo: monothek/ui/view/monothek_jukebox_payment_view.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libmonothek_la_CFLAGS) $(CFLAGS) -MT monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo -MD -MP -MF monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_jukebox_payment_view.Tpo -c -o monothek/ui/view/libmonothek_la-monothek_jukebox_payment_view.lo `test -f 'monothek/ui/view/monothek_jukebox_payment_view.c' || echo '$(srcdir)/'`monothek/ui/view/monothek_jukebox_payment_view.c
@@ -2421,6 +2436,7 @@ distclean: distclean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
+	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -2537,6 +2553,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_load_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_outage_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_start_view.Plo
+	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_transaction_failed_view.Plo
 	-rm -f monothek/ui/view/$(DEPDIR)/libmonothek_la-monothek_view.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

@@ -232,9 +232,6 @@ monothek_outage_view_draw(MonothekView *view)
   
   cairo_t *cr;
 
-  guint width, height;
-  guint x_outage, y_outage;
-
   static const gdouble white_gc = 65535.0;
 
   outage_view = MONOTHEK_OUTAGE_VIEW(view);
@@ -251,12 +248,6 @@ monothek_outage_view_draw(MonothekView *view)
 
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
-
-  x_outage = 0;
-  y_outage = 0;
-
-  width = GTK_WIDGET(view)->allocation.width;
-  height = GTK_WIDGET(view)->allocation.height;
 
   cairo_set_source_rgb(cr,
 		       1.0,

@@ -22,6 +22,9 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_start_model.h>

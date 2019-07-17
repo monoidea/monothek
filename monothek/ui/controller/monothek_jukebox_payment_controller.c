@@ -22,10 +22,14 @@
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
 
+#include <monothek/session/monothek_session_manager.h>
+#include <monothek/session/monothek_session.h>
+
 #include <monothek/ui/monothek_window.h>
 
 #include <monothek/ui/model/monothek_jukebox_payment_model.h>
 
+#include <monothek/ui/view/monothek_transaction_failed_view.h>
 #include <monothek/ui/view/monothek_jukebox_payment_view.h>
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
 
@@ -317,6 +321,22 @@ monothek_jukebox_payment_controller_real_transaction_completed(MonothekJukeboxPa
   MonothekWindow *window;
   MonothekJukeboxPaymentView *view;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *preserve_jukebox;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  preserve_jukebox = g_hash_table_lookup(session->value,
+					 "preserve-jukebox");
+
+  g_value_set_boolean(preserve_jukebox, TRUE);
+
+  /* change view */
   g_object_get(jukebox_payment_controller,
 	       "view", &view,
 	       NULL);
@@ -350,7 +370,19 @@ monothek_jukebox_payment_controller_transaction_completed(MonothekJukeboxPayment
 void
 monothek_jukebox_payment_controller_real_transaction_failed(MonothekJukeboxPaymentController *jukebox_payment_controller)
 {
-  //TODO:JK: implement me
+  MonothekWindow *window;
+  MonothekJukeboxPaymentView *view;
+
+  /* change view */
+  g_object_get(jukebox_payment_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW, G_TYPE_NONE);
 }
 
 /**
