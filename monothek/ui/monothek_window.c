@@ -942,7 +942,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 	}
 
 	monothek_view_reset(MONOTHEK_VIEW(list->data),
-			    FALSE, TRUE);
+			    TRUE, TRUE);
 	
 	ags_connectable_disconnect(AGS_CONNECTABLE(list->data));
 	gtk_widget_hide(list->data);
@@ -976,7 +976,7 @@ monothek_window_real_change_view(MonothekWindow *window,
 
 	if(controller != NULL){
 	  ags_connectable_connect(AGS_CONNECTABLE(controller->data));
-//	  monothek_controller_reset(controller->data);
+	  monothek_controller_reset(controller->data);
 	}
 	
 	break;

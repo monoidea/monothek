@@ -126,6 +126,8 @@ monothek_session_class_init(MonothekSessionClass *session)
 void
 monothek_session_init(MonothekSession *session)
 {
+  GValue *value;
+  
   session->session_id = NULL;
 
   session->value = g_hash_table_new_full(g_direct_hash,
@@ -133,6 +135,63 @@ monothek_session_init(MonothekSession *session)
 					 NULL,
 					 NULL);
   g_hash_table_ref(session->value);
+
+  /* preserve jukebox */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_BOOLEAN);
+
+  g_value_set_boolean(value, TRUE);
+
+  g_hash_table_insert(session->value,
+		      "preserve-jukebox", value);
+
+  /* jukebox mode */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_STRING);
+
+  g_value_set_string(value,
+		     "test");
+
+  g_hash_table_insert(session->value,
+		      "jukebox-mode", value);
+
+  /* jukebox song filename */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_STRING);
+
+  g_value_set_string(value,
+		     NULL);
+
+  g_hash_table_insert(session->value,
+		      "jukebox-song-filename", value);
+
+  /* jukebox test count */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_UINT);
+
+  g_value_set_uint(value, 0);
+  
+  g_hash_table_insert(session->value,
+		      "jukebox-test-count", value);
+  
+  /* preserve diskjokey */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_BOOLEAN);
+
+  g_value_set_boolean(value, TRUE);
+
+  g_hash_table_insert(session->value,
+		      "preserve-diskjokey", value);
 }
 
 void

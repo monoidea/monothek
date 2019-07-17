@@ -658,16 +658,6 @@ monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *juke
   jukebox_mode = g_hash_table_lookup(session->value,
 				     "jukebox-mode");
 
-  if(jukebox_mode == NULL){
-    jukebox_mode = g_new0(GValue,
-			  1);
-    g_value_init(jukebox_mode,
-		 G_TYPE_STRING);
-
-    g_hash_table_insert(session->value,
-			"jukebox-mode", jukebox_mode);
-  }
-
   g_value_set_string(jukebox_mode,
 		     "test");
 
@@ -731,16 +721,6 @@ monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *juke
   /* set jukebox mode - play */
   jukebox_mode = g_hash_table_lookup(session->value,
 				     "jukebox-mode");
-
-  if(jukebox_mode == NULL){
-    jukebox_mode = g_new0(GValue,
-			  1);
-    g_value_init(jukebox_mode,
-		 G_TYPE_STRING);
-
-    g_hash_table_insert(session->value,
-			"jukebox-mode", jukebox_mode);
-  }
 
   g_value_set_string(jukebox_mode,
 		     "play");
@@ -1175,19 +1155,7 @@ monothek_jukebox_track_controller_real_completed(MonothekJukeboxTrackController 
     jukebox_test_count = g_hash_table_lookup(session->value,
 					     "jukebox-test-count");
 
-    test_count = 0;
-    
-    if(jukebox_test_count == NULL){
-      jukebox_test_count = g_new0(GValue,
-				  1);
-      g_value_init(jukebox_test_count,
-		   G_TYPE_UINT);
-
-      g_hash_table_insert(session->value,
-			  "jukebox-test-count", jukebox_test_count);
-    }else{
-      test_count = g_value_get_uint(jukebox_test_count);
-    }
+    test_count = g_value_get_uint(jukebox_test_count);
     
     test_count++;
     g_value_set_uint(jukebox_test_count,

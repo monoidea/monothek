@@ -509,16 +509,6 @@ monothek_jukebox_mode_controller_real_test(MonothekJukeboxModeController *jukebo
   jukebox_mode = g_hash_table_lookup(session->value,
 				     "jukebox-mode");
 
-  if(jukebox_mode == NULL){
-    jukebox_mode = g_new0(GValue,
-			  1);
-    g_value_init(jukebox_mode,
-		 G_TYPE_STRING);
-
-    g_hash_table_insert(session->value,
-			"jukebox-mode", jukebox_mode);
-  }
-
   g_value_set_string(jukebox_mode,
 		     "test");
   
@@ -572,16 +562,6 @@ monothek_jukebox_mode_controller_real_play(MonothekJukeboxModeController *jukebo
   /* set jukebox mode - play */
   jukebox_mode = g_hash_table_lookup(session->value,
 				     "jukebox-mode");
-
-  if(jukebox_mode == NULL){
-    jukebox_mode = g_new0(GValue,
-			  1);
-    g_value_init(jukebox_mode,
-		 G_TYPE_STRING);
-
-    g_hash_table_insert(session->value,
-			"jukebox-mode", jukebox_mode);
-  }
 
   g_value_set_string(jukebox_mode,
 		     "play");
@@ -638,16 +618,6 @@ monothek_jukebox_mode_controller_real_cancel(MonothekJukeboxModeController *juke
   /* set jukebox mode - play */
   jukebox_mode = g_hash_table_lookup(session->value,
 				     "jukebox-mode");
-
-  if(jukebox_mode == NULL){
-    jukebox_mode = g_new0(GValue,
-			  1);
-    g_value_init(jukebox_mode,
-		 G_TYPE_STRING);
-
-    g_hash_table_insert(session->value,
-			"jukebox-mode", jukebox_mode);
-  }
 
   g_value_set_string(jukebox_mode,
 		     "play");

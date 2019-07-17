@@ -330,7 +330,7 @@ monothek_diskjokey_payment_controller_real_transaction_completed(MonothekDiskjok
 {
   MonothekWindow *window;
   MonothekDiskjokeyPaymentView *view;
-
+  
   g_object_get(diskjokey_payment_controller,
 	       "view", &view,
 	       NULL);
@@ -339,7 +339,7 @@ monothek_diskjokey_payment_controller_real_transaction_completed(MonothekDiskjok
 				   MONOTHEK_TYPE_WINDOW);
 
   monothek_window_change_view(window,
-			      MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW, G_TYPE_NONE);
+			      MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW, MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW);
 }
 
 /**

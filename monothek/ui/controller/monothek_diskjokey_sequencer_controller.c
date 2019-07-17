@@ -957,7 +957,28 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 void
 monothek_diskjokey_sequencer_controller_reset(MonothekController *controller)
 {
-  //TODO:JK: implement me
+  MonothekDiskjokeySequencerView *view;
+  
+  MonothekDiskjokeySequencerModel *model;
+
+  MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
+
+  diskjokey_sequencer_controller = MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(controller);
+  
+  g_object_get(diskjokey_sequencer_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
+  g_object_set(model,
+	       "run-active", TRUE,
+	       NULL);
+  
+  gtk_widget_queue_draw(view);
+
+  /* start run */
+  monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,
+					      TRUE);
 }
 
 void
@@ -1704,63 +1725,7 @@ void
 monothek_diskjokey_sequencer_controller_run_clicked_callback(MonothekActionBox *action_box,
 							     MonothekDiskjokeySequencerController *diskjokey_sequencer_controller)
 {
-  MonothekDiskjokeySequencerView *view;
-  
-  MonothekDiskjokeySequencerModel *model;
-
-  MonothekRack *rack;
-  AgsAudio *sequencer;
-  AgsChannel *channel;
-
-  MonothekSessionManager *session_manager;
-  MonothekSession *session;
-
-  GList *recall_id;
-  
-  GValue *rack_value;
-
-  /* find session */
-  session_manager = monothek_session_manager_get_instance();
-  session = monothek_session_manager_find_session(session_manager,
-						  MONOTHEK_SESSION_DEFAULT_SESSION);
-
-  /* get rack */
-  rack_value = g_hash_table_lookup(session->value,
-				   "rack");
-
-  rack = g_value_get_object(rack_value);
-
-  /* check scope */
-  sequencer = rack->sequencer;
-
-  recall_id = ags_audio_check_scope(sequencer,
-				    AGS_SOUND_SCOPE_SEQUENCER);
-
-  /* model and view */
-  g_object_get(diskjokey_sequencer_controller,
-	       "model", &model,
-	       "view", &view,
-	       NULL);
-  
-  if(recall_id != NULL){
-    g_object_set(model,
-		 "run-active", FALSE,
-		 NULL);
-    gtk_widget_queue_draw(view);
-
-    monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,
-						FALSE);
-  }else{
-    g_object_set(model,
-		 "run-active", TRUE,
-		 NULL);
-    gtk_widget_queue_draw(view);
-
-    monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,
-						TRUE);
-  }
-
-  g_list_free(recall_id);
+  //empty
 }
 
 void
@@ -2650,6 +2615,11 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 
     GObject *output_soundcard;
 
+#ifdef __APPLE__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+#endif
+
     struct timespec duration;
     
     GList *task;
@@ -2660,6 +2630,18 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 		 "output-soundcard", &output_soundcard,
 		 NULL);
     
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    
+    diskjokey_sequencer_controller->start_time->tv_sec = mts.tv_sec;
+    diskjokey_sequencer_controller->start_time->tv_nsec = mts.tv_nsec;
+#else
+    clock_gettime(CLOCK_MONOTONIC, diskjokey_sequencer_controller->start_time);
+#endif
+
     /* start audio */
     task = NULL;
     

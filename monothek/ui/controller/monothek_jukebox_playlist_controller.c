@@ -383,16 +383,6 @@ monothek_jukebox_playlist_controller_real_select_song(MonothekJukeboxPlaylistCon
   jukebox_song_filename = g_hash_table_lookup(session->value,
 					      "jukebox-song-filename");
 
-  if(jukebox_song_filename == NULL){
-    jukebox_song_filename = g_new0(GValue,
-				   1);
-    g_value_init(jukebox_song_filename,
-		 G_TYPE_STRING);
-
-    g_hash_table_insert(session->value,
-			"jukebox-song-filename", jukebox_song_filename);
-  }
-
   g_value_set_string(jukebox_song_filename,
 		     song_filename);
   

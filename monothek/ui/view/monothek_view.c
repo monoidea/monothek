@@ -269,6 +269,8 @@ monothek_view_class_init(MonothekViewClass *view)
   /**
    * MonothekView::reset:
    * @view: the #MonothekView
+   * @reset_defaults: 
+   * @reset_current:
    *
    * The ::reset signal notifies about key pressed.
    *
