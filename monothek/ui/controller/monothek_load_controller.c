@@ -186,6 +186,11 @@ monothek_load_controller_connectable_interface_init(AgsConnectableInterface *con
 void
 monothek_load_controller_init(MonothekLoadController *load_controller)
 {
+#ifdef __APPLE__
+  clock_serv_t cclock;
+  mach_timespec_t mts;
+#endif
+
   if(monothek_load_controller_message_monitor == NULL){
     monothek_load_controller_message_monitor = g_hash_table_new_full(g_direct_hash, g_direct_equal,
 								     NULL,
