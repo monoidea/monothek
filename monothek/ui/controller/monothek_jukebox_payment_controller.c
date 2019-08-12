@@ -324,17 +324,19 @@ monothek_jukebox_payment_controller_real_transaction_completed(MonothekJukeboxPa
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  GValue *preserve_jukebox;
+  GValue *value;
 
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,
 						  MONOTHEK_SESSION_DEFAULT_SESSION);
 
-  preserve_jukebox = g_hash_table_lookup(session->value,
-					 "preserve-jukebox");
+  /* set preserve jukebox - TRUE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-jukebox");
 
-  g_value_set_boolean(preserve_jukebox, TRUE);
+  g_value_set_boolean(value,
+		      TRUE);
 
   /* change view */
   g_object_get(jukebox_payment_controller,

@@ -21,7 +21,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #include <monothek/session/monothek_session_manager.h>
 #include <monothek/session/monothek_session.h>
@@ -1409,8 +1408,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   gboolean is_output;
   guint i;
   
-  GValue *rack_value;
-
+  GValue *value;
+  
   monothek_application_context = (MonothekApplicationContext *) application_context;
 
   audio_loop = AGS_APPLICATION_CONTEXT(monothek_application_context)->main_loop;
@@ -1874,16 +1873,71 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   rack = monothek_rack_new(soundcard);
   monothek_rack_setup_tree(rack);
   
-  rack_value = g_new0(GValue,
+  value = g_new0(GValue,
 		      1);
-  g_value_init(rack_value,
+  g_value_init(value,
 	       G_TYPE_OBJECT);
 
-  g_value_set_object(rack_value,
+  g_value_set_object(value,
 		     rack);
   
   g_hash_table_insert(session->value,
-		      "rack", rack_value);
+		      "rack", value);
+
+  /* preserve jukebox */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_BOOLEAN);
+
+  g_value_set_boolean(value, TRUE);
+
+  g_hash_table_insert(session->value,
+		      "preserve-jukebox", value);
+
+  /* jukebox mode */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_STRING);
+
+  g_value_set_string(value, "test");
+
+  g_hash_table_insert(session->value,
+		      "jukebox-mode", value);
+
+  /* jukebox song filename */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_STRING);
+
+  g_value_set_string(value, NULL);
+
+  g_hash_table_insert(session->value,
+		      "jukebox-song-filename", value);
+
+  /* jukebox test count */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_UINT);
+
+  g_value_set_uint(value, 0);
+  
+  g_hash_table_insert(session->value,
+		      "jukebox-test-count", value);
+  
+  /* preserve diskjokey */
+  value = g_new0(GValue,
+		 1);
+  g_value_init(value,
+	       G_TYPE_BOOLEAN);
+
+  g_value_set_boolean(value, TRUE);
+
+  g_hash_table_insert(session->value,
+		      "preserve-diskjokey", value);
   
   /* audio file manager */
   audio_file_manager = monothek_audio_file_manager_get_instance();
@@ -2020,16 +2074,6 @@ monothek_application_context_register_types(AgsApplicationContext *application_c
 
   ags_route_lv2_audio_get_type();
   ags_route_lv2_audio_run_get_type();
-  
-  /* gui */
-  //TODO:JK: move me
-  ags_led_get_type();
-  ags_indicator_get_type();
-  ags_vindicator_get_type();
-  ags_hindicator_get_type();
-  ags_dial_get_type();
-  ags_notebook_get_type();
-  ags_piano_get_type();
 }
 
 void

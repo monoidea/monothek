@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_RACK                (monothek_rack_get_type())
 #define MONOTHEK_RACK(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_RACK, MonothekRack))

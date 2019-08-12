@@ -153,7 +153,7 @@ libmonothek_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 am__objects_1 =
 am__objects_2 = $(am__objects_1)
 am__objects_3 = $(am__objects_2) $(am__objects_2) $(am__objects_2) \
@@ -276,7 +276,7 @@ monothek_ui_DEPENDENCIES = libmonothek.la $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 monothek_ui_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(monothek_ui_CFLAGS) \
 	$(CFLAGS) $(monothek_ui_LDFLAGS) $(LDFLAGS) -o $@
@@ -548,8 +548,6 @@ LDFLAGS = @LDFLAGS@ $(LTLIBINTL)
 LIBAGS_AUDIO_CFLAGS = @LIBAGS_AUDIO_CFLAGS@
 LIBAGS_AUDIO_LIBS = @LIBAGS_AUDIO_LIBS@
 LIBAGS_CFLAGS = @LIBAGS_CFLAGS@
-LIBAGS_GUI_CFLAGS = @LIBAGS_GUI_CFLAGS@
-LIBAGS_GUI_LIBS = @LIBAGS_GUI_LIBS@
 LIBAGS_LIBS = @LIBAGS_LIBS@
 LIBICONV = @LIBICONV@
 LIBINTL = @LIBINTL@

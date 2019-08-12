@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_COPY_PATTERN_CHANNEL                (monothek_copy_pattern_channel_get_type())
 #define MONOTHEK_COPY_PATTERN_CHANNEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL, MonothekCopyPatternChannel))

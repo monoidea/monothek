@@ -647,7 +647,7 @@ monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *juke
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  GValue *jukebox_mode;
+  GValue *value;
 
   /* find session */
   session_manager = monothek_session_manager_get_instance();
@@ -655,10 +655,10 @@ monothek_jukebox_track_controller_real_test(MonothekJukeboxTrackController *juke
 						  MONOTHEK_SESSION_DEFAULT_SESSION);
 
   /* set jukebox mode - test */
-  jukebox_mode = g_hash_table_lookup(session->value,
-				     "jukebox-mode");
+  value = g_hash_table_lookup(session->value,
+			      "jukebox-mode");
 
-  g_value_set_string(jukebox_mode,
+  g_value_set_string(value,
 		     "test");
 
   /* change view */
@@ -711,7 +711,7 @@ monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *juke
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  GValue *jukebox_mode;
+  GValue *value;
 
   /* find session */
   session_manager = monothek_session_manager_get_instance();
@@ -719,12 +719,19 @@ monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *juke
 						  MONOTHEK_SESSION_DEFAULT_SESSION);
 
   /* set jukebox mode - play */
-  jukebox_mode = g_hash_table_lookup(session->value,
-				     "jukebox-mode");
+  value = g_hash_table_lookup(session->value,
+			      "jukebox-mode");
 
-  g_value_set_string(jukebox_mode,
+  g_value_set_string(value,
 		     "play");
 
+  /* set preserve jukebox - FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-jukebox");
+
+  g_value_set_boolean(value,
+		      FALSE);
+  
   /* change view */
   g_object_get(jukebox_track_controller,
 	       "view", &view,

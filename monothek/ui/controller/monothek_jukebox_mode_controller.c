@@ -45,6 +45,8 @@ void monothek_jukebox_mode_controller_finalize(GObject *gobject);
 void monothek_jukebox_mode_controller_connect(AgsConnectable *connectable);
 void monothek_jukebox_mode_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_mode_controller_reset(MonothekController *controller);
+
 void monothek_jukebox_mode_controller_jukebox_test_enter_callback(MonothekActionBox *action_box,
 								  MonothekJukeboxModeController *jukebox_mode_controller);
 void monothek_jukebox_mode_controller_jukebox_test_leave_callback(MonothekActionBox *action_box,
@@ -137,6 +139,7 @@ monothek_jukebox_mode_controller_class_init(MonothekJukeboxModeControllerClass *
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_jukebox_mode_controller_parent_class = g_type_class_peek_parent(jukebox_mode_controller);
 
@@ -144,6 +147,11 @@ monothek_jukebox_mode_controller_class_init(MonothekJukeboxModeControllerClass *
   gobject = (GObjectClass *) jukebox_mode_controller;
 
   gobject->finalize = monothek_jukebox_mode_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) jukebox_mode_controller;
+  
+  controller->reset = monothek_jukebox_mode_controller_reset;
 
   /* MonothekJukeboxModeController */
   jukebox_mode_controller->test = monothek_jukebox_mode_controller_real_test;
@@ -352,6 +360,54 @@ monothek_jukebox_mode_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_jukebox_mode_controller_jukebox_cancel_clicked_callback),
 		      jukebox_mode_controller,
 		      NULL);
+}
+
+void
+monothek_jukebox_mode_controller_reset(MonothekController *controller)
+{
+  MonothekJukeboxModeController *jukebox_mode_controller;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
+
+  jukebox_mode_controller = MONOTHEK_JUKEBOX_MODE_CONTROLLER(controller);
+  
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* check preserve jukebox FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-jukebox");
+
+  if(!g_value_get_boolean(value)){
+    g_value_set_boolean(value,
+			TRUE);
+
+    /* reset jukebox mode to default - test */
+    value = g_hash_table_lookup(session->value,
+				"jukebox-mode");
+
+    g_value_set_string(value,
+		       "test");
+    
+    /* reset jukebox song filename to default - NULL */
+    value = g_hash_table_lookup(session->value,
+				"jukebox-song-filename");
+
+    g_value_set_string(value,
+		       NULL);
+
+    /* reset jukebox test count to default - 0 */
+    value = g_hash_table_lookup(session->value,
+				"jukebox-test-count");
+
+    g_value_set_uint(value,
+		     0);
+  }
 }
 
 void

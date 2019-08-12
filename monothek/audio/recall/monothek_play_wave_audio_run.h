@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN                (monothek_play_wave_audio_run_get_type())
 #define MONOTHEK_PLAY_WAVE_AUDIO_RUN(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN, MonothekPlayWaveAudioRun))

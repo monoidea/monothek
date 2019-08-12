@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_AUDIO_FILE_MANAGER                (monothek_audio_file_manager_get_type())
 #define MONOTHEK_AUDIO_FILE_MANAGER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_AUDIO_FILE_MANAGER, MonothekAudioFileManager))

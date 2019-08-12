@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #include <monothek/ui/monothek_window.h>
 

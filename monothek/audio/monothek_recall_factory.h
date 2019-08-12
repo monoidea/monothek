@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_RECALL_FACTORY                (monothek_recall_factory_get_type())
 #define MONOTHEK_RECALL_FACTORY(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_RECALL_FACTORY, MonothekRecallFactory))

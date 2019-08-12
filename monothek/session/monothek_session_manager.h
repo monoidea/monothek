@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_SESSION_MANAGER                (monothek_session_manager_get_type())
 #define MONOTHEK_SESSION_MANAGER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_SESSION_MANAGER, MonothekSessionManager))

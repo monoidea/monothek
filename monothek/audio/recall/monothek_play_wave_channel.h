@@ -27,7 +27,6 @@
 
 #include <ags/libags.h>
 #include <ags/libags-audio.h>
-#include <ags/libags-gui.h>
 
 #define MONOTHEK_TYPE_PLAY_WAVE_CHANNEL                (monothek_play_wave_channel_get_type())
 #define MONOTHEK_PLAY_WAVE_CHANNEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL, MonothekPlayWaveChannel))
