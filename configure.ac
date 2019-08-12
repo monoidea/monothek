@@ -87,6 +87,7 @@ AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 AM_EXTRA_RECURSIVE_TARGETS([monothek-docs])
 AC_CONFIG_FILES([
 Makefile
+docs/reference/libmonothek/Makefile
 m4/Makefile
 po/Makefile.in])
 

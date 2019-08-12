@@ -1,0 +1,5925 @@
+<MACRO>
+<NAME>ENABLE_NLS</NAME>
+#define ENABLE_NLS 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_DCGETTEXT</NAME>
+#define HAVE_DCGETTEXT 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_DLFCN_H</NAME>
+#define HAVE_DLFCN_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_GETTEXT</NAME>
+#define HAVE_GETTEXT 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_INTTYPES_H</NAME>
+#define HAVE_INTTYPES_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_LIBDL</NAME>
+#define HAVE_LIBDL 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_LIBM</NAME>
+#define HAVE_LIBM 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_MALLOC</NAME>
+#define HAVE_MALLOC 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_MEMORY_H</NAME>
+#define HAVE_MEMORY_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_REALLOC</NAME>
+#define HAVE_REALLOC 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STDINT_H</NAME>
+#define HAVE_STDINT_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STDLIB_H</NAME>
+#define HAVE_STDLIB_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STRINGS_H</NAME>
+#define HAVE_STRINGS_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STRING_H</NAME>
+#define HAVE_STRING_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_SYS_STAT_H</NAME>
+#define HAVE_SYS_STAT_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_SYS_TYPES_H</NAME>
+#define HAVE_SYS_TYPES_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_UNISTD_H</NAME>
+#define HAVE_UNISTD_H 1
+</MACRO>
+<MACRO>
+<NAME>LT_OBJDIR</NAME>
+#define LT_OBJDIR ".libs/"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE</NAME>
+#define PACKAGE "monothek"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_BUGREPORT</NAME>
+#define PACKAGE_BUGREPORT "jkraehemann@gmail.com"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_NAME</NAME>
+#define PACKAGE_NAME "monothek"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_STRING</NAME>
+#define PACKAGE_STRING "monothek 1.0.0-PRERELEASE"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_TARNAME</NAME>
+#define PACKAGE_TARNAME "monothek"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_URL</NAME>
+#define PACKAGE_URL ""
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_VERSION</NAME>
+#define PACKAGE_VERSION "1.0.0-PRERELEASE"
+</MACRO>
+<MACRO>
+<NAME>STDC_HEADERS</NAME>
+#define STDC_HEADERS 1
+</MACRO>
+<MACRO>
+<NAME>VERSION</NAME>
+#define VERSION "1.0.0-PRERELEASE"
+</MACRO>
+<MACRO>
+<NAME>gettext</NAME>
+#  define gettext(Msgid) \
+     dgettext (DEFAULT_TEXT_DOMAIN, Msgid)
+</MACRO>
+<MACRO>
+<NAME>ngettext</NAME>
+#  define ngettext(Msgid1, Msgid2, N) \
+     dngettext (DEFAULT_TEXT_DOMAIN, Msgid1, Msgid2, N)
+</MACRO>
+<MACRO>
+<NAME>dgettext</NAME>
+# define dgettext(Domainname, Msgid) ((void) (Domainname), gettext (Msgid))
+</MACRO>
+<MACRO>
+<NAME>dcgettext</NAME>
+# define dcgettext(Domainname, Msgid, Category) \
+    ((void) (Category), dgettext (Domainname, Msgid))
+</MACRO>
+<MACRO>
+<NAME>dngettext</NAME>
+# define dngettext(Domainname, Msgid1, Msgid2, N) \
+    ((void) (Domainname), ngettext (Msgid1, Msgid2, N))
+</MACRO>
+<MACRO>
+<NAME>dcngettext</NAME>
+# define dcngettext(Domainname, Msgid1, Msgid2, N, Category) \
+    ((void) (Category), dngettext (Domainname, Msgid1, Msgid2, N))
+</MACRO>
+<MACRO>
+<NAME>textdomain</NAME>
+# define textdomain(Domainname) ((const char *) (Domainname))
+</MACRO>
+<MACRO>
+<NAME>bindtextdomain</NAME>
+# define bindtextdomain(Domainname, Dirname) \
+    ((void) (Domainname), (const char *) (Dirname))
+</MACRO>
+<MACRO>
+<NAME>bind_textdomain_codeset</NAME>
+# define bind_textdomain_codeset(Domainname, Codeset) \
+    ((void) (Domainname), (const char *) (Codeset))
+</MACRO>
+<MACRO>
+<NAME>setlocale</NAME>
+# define setlocale rpl_setlocale
+</MACRO>
+<MACRO>
+<NAME>gettext_noop</NAME>
+#define gettext_noop(String) String
+</MACRO>
+<MACRO>
+<NAME>GETTEXT_CONTEXT_GLUE</NAME>
+#define GETTEXT_CONTEXT_GLUE "\004"
+</MACRO>
+<MACRO>
+<NAME>pgettext</NAME>
+# define pgettext(Msgctxt, Msgid) \
+   pgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
+</MACRO>
+<MACRO>
+<NAME>dpgettext</NAME>
+#define dpgettext(Domainname, Msgctxt, Msgid) \
+  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
+</MACRO>
+<MACRO>
+<NAME>dcpgettext</NAME>
+#define dcpgettext(Domainname, Msgctxt, Msgid, Category) \
+  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, Category)
+</MACRO>
+<MACRO>
+<NAME>npgettext</NAME>
+# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
+   npgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
+</MACRO>
+<MACRO>
+<NAME>dnpgettext</NAME>
+#define dnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
+  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
+</MACRO>
+<MACRO>
+<NAME>dcnpgettext</NAME>
+#define dcnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N, Category) \
+  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, Category)
+</MACRO>
+<FUNCTION>
+<NAME>pgettext_aux</NAME>
+<RETURNS>const char  *</RETURNS>
+const char *domain, const char *msg_ctxt_id, const char *msgid, int category
+</FUNCTION>
+<FUNCTION>
+<NAME>npgettext_aux</NAME>
+<RETURNS>const char  *</RETURNS>
+const char *domain, const char *msg_ctxt_id, const char *msgid, const char *msgid_plural, unsigned long int n, int category
+</FUNCTION>
+<MACRO>
+<NAME>pgettext_expr</NAME>
+#define pgettext_expr(Msgctxt, Msgid) \
+  dcpgettext_expr (NULL, Msgctxt, Msgid, LC_MESSAGES)
+</MACRO>
+<MACRO>
+<NAME>dpgettext_expr</NAME>
+#define dpgettext_expr(Domainname, Msgctxt, Msgid) \
+  dcpgettext_expr (Domainname, Msgctxt, Msgid, LC_MESSAGES)
+</MACRO>
+<FUNCTION>
+<NAME>dcpgettext_expr</NAME>
+<RETURNS>const char  *</RETURNS>
+const char *domain, const char *msgctxt, const char *msgid, int category
+</FUNCTION>
+<MACRO>
+<NAME>npgettext_expr</NAME>
+#define npgettext_expr(Msgctxt, Msgid, MsgidPlural, N) \
+  dcnpgettext_expr (NULL, Msgctxt, Msgid, MsgidPlural, N, LC_MESSAGES)
+</MACRO>
+<MACRO>
+<NAME>dnpgettext_expr</NAME>
+#define dnpgettext_expr(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
+  dcnpgettext_expr (Domainname, Msgctxt, Msgid, MsgidPlural, N, LC_MESSAGES)
+</MACRO>
+<FUNCTION>
+<NAME>dcnpgettext_expr</NAME>
+<RETURNS>const char  *</RETURNS>
+const char *domain, const char *msgctxt, const char *msgid, const char *msgid_plural, unsigned long int n, int category
+</FUNCTION>
+<MACRO>
+<NAME>i18n</NAME>
+#define i18n(x) gettext(x)
+</MACRO>
+<MACRO>
+<NAME>i18n_pspec</NAME>
+#define i18n_pspec(x) gettext(x)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TYPE_RACK</NAME>
+#define MONOTHEK_TYPE_RACK                (monothek_rack_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RACK</NAME>
+#define MONOTHEK_RACK(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_RACK, MonothekRack))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RACK_CLASS</NAME>
+#define MONOTHEK_RACK_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_RACK, MonothekRackClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_RACK</NAME>
+#define MONOTHEK_IS_RACK(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_RACK))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_RACK_CLASS</NAME>
+#define MONOTHEK_IS_RACK_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_RACK))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RACK_GET_CLASS</NAME>
+#define MONOTHEK_RACK_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_RACK, MonothekRackClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RACK_DEFAULT_AUDIO_CHANNELS</NAME>
+#define MONOTHEK_RACK_DEFAULT_AUDIO_CHANNELS (2)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RACK_DEFAULT_SEQUENCER_INPUT_PADS</NAME>
+#define MONOTHEK_RACK_DEFAULT_SEQUENCER_INPUT_PADS (9)
+</MACRO>
+<ENUM>
+<NAME>MonothekRackFlags</NAME>
+typedef enum{
+  MONOTHEK_RACK_ADDED_TO_REGISTRY           = 1,
+  MONOTHEK_RACK_CONNECTED                   = 1 <<  1,
+}MonothekRackFlags;
+</ENUM>
+<STRUCT>
+<NAME>MonothekRack</NAME>
+struct _MonothekRack
+{
+  GObject gobject;
+
+  guint flags;
+
+  pthread_mutex_t *obj_mutex;
+  pthread_mutexattr_t *obj_mutexattr;
+
+  AgsUUID *uuid;
+
+  guint audio_channels;
+
+  GObject *output_soundcard;
+  
+  AgsAudio *panel;
+  AgsAudio *mixer;
+  AgsAudio *player;
+  AgsAudio *sequencer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekRackClass</NAME>
+struct _MonothekRackClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_rack_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_get_class_mutex</NAME>
+<RETURNS>pthread_mutex_t * </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_test_flags</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekRack *rack, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_set_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekRack *rack, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_unset_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekRack *rack, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_create_panel</NAME>
+<RETURNS>AgsAudio * </RETURNS>
+MonothekRack *rack
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_create_mixer</NAME>
+<RETURNS>AgsAudio * </RETURNS>
+MonothekRack *rack
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_create_player</NAME>
+<RETURNS>AgsAudio * </RETURNS>
+MonothekRack *rack
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_create_sequencer</NAME>
+<RETURNS>AgsAudio * </RETURNS>
+MonothekRack *rack
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_setup_tree</NAME>
+<RETURNS>void  </RETURNS>
+MonothekRack *rack
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_rack_new</NAME>
+<RETURNS>MonothekRack * </RETURNS>
+GObject *output_soundcard
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_RECALL_FACTORY</NAME>
+#define MONOTHEK_TYPE_RECALL_FACTORY                (monothek_recall_factory_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RECALL_FACTORY</NAME>
+#define MONOTHEK_RECALL_FACTORY(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_RECALL_FACTORY, MonothekRecallFactory))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RECALL_FACTORY_CLASS</NAME>
+#define MONOTHEK_RECALL_FACTORY_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_RECALL_FACTORY, MonothekRecallFactoryClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_RECALL_FACTORY</NAME>
+#define MONOTHEK_IS_RECALL_FACTORY(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_RECALL_FACTORY))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_RECALL_FACTORY_CLASS</NAME>
+#define MONOTHEK_IS_RECALL_FACTORY_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_RECALL_FACTORY))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_RECALL_FACTORY_GET_CLASS</NAME>
+#define MONOTHEK_RECALL_FACTORY_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_RECALL_FACTORY, MonothekRecallFactoryClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekRecallFactory</NAME>
+struct _MonothekRecallFactory
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekRecallFactoryClass</NAME>
+struct _MonothekRecallFactoryClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_recall_factory_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_recall_factory_create</NAME>
+<RETURNS>GList * </RETURNS>
+AgsAudio *audio, AgsRecallContainer *play_container, AgsRecallContainer *recall_container, gchar *plugin_name, guint start_audio_channel, guint stop_audio_channel, guint start_pad, guint stop_pad, guint create_flags, guint recall_flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_recall_factory_new</NAME>
+<RETURNS>MonothekRecallFactory * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_AUDIO_FILE_MANAGER</NAME>
+#define MONOTHEK_TYPE_AUDIO_FILE_MANAGER                (monothek_audio_file_manager_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_AUDIO_FILE_MANAGER</NAME>
+#define MONOTHEK_AUDIO_FILE_MANAGER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_AUDIO_FILE_MANAGER, MonothekAudioFileManager))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_AUDIO_FILE_MANAGER_CLASS</NAME>
+#define MONOTHEK_AUDIO_FILE_MANAGER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_AUDIO_FILE_MANAGER, MonothekAudioFileManagerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_AUDIO_FILE_MANAGER</NAME>
+#define MONOTHEK_IS_AUDIO_FILE_MANAGER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_AUDIO_FILE_MANAGER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_AUDIO_FILE_MANAGER_CLASS</NAME>
+#define MONOTHEK_IS_AUDIO_FILE_MANAGER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_AUDIO_FILE_MANAGER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_AUDIO_FILE_MANAGER_GET_CLASS</NAME>
+#define MONOTHEK_AUDIO_FILE_MANAGER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_AUDIO_FILE_MANAGER, MonothekAudioFileManagerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekAudioFileManager</NAME>
+struct _MonothekAudioFileManager
+{
+  GObject gobject;
+  
+  GList *audio_file;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekAudioFileManagerClass</NAME>
+struct _MonothekAudioFileManagerClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_add_audio_file</NAME>
+<RETURNS>void  </RETURNS>
+MonothekAudioFileManager *audio_file_manager, GObject *audio_file
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_remove_audio_file</NAME>
+<RETURNS>void  </RETURNS>
+MonothekAudioFileManager *audio_file_manager, GObject *audio_file
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_find_audio_file</NAME>
+<RETURNS>GObject * </RETURNS>
+MonothekAudioFileManager *audio_file_manager, gchar *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_load_playlist</NAME>
+<RETURNS>void  </RETURNS>
+MonothekAudioFileManager *audio_file_manager, GSList *filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_get_instance</NAME>
+<RETURNS>MonothekAudioFileManager * </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_audio_file_manager_new</NAME>
+<RETURNS>MonothekAudioFileManager * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_COPY_PATTERN_AUDIO</NAME>
+#define MONOTHEK_TYPE_COPY_PATTERN_AUDIO                (monothek_copy_pattern_audio_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_AUDIO</NAME>
+#define MONOTHEK_COPY_PATTERN_AUDIO(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_COPY_PATTERN_AUDIO, MonothekCopyPatternAudio))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_AUDIO_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_AUDIO_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_COPY_PATTERN_AUDIO, MonothekCopyPatternAudioClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_AUDIO</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_AUDIO(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_COPY_PATTERN_AUDIO))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_AUDIO_CLASS</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_AUDIO_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_COPY_PATTERN_AUDIO))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_AUDIO_GET_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_AUDIO_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_COPY_PATTERN_AUDIO, MonothekCopyPatternAudioClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCopyPatternAudio</NAME>
+struct _MonothekCopyPatternAudio
+{
+  AgsCopyPatternAudio copy_pattern_audio;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCopyPatternAudioClass</NAME>
+struct _MonothekCopyPatternAudioClass
+{
+  AgsCopyPatternAudioClass copy_pattern_audio;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_copy_pattern_audio_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_copy_pattern_audio_new</NAME>
+<RETURNS>MonothekCopyPatternAudio * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN</NAME>
+#define MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN                (monothek_copy_pattern_audio_run_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_AUDIO_RUN</NAME>
+#define MONOTHEK_COPY_PATTERN_AUDIO_RUN(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN, MonothekCopyPatternAudioRun))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_AUDIO_RUN_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_AUDIO_RUN_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN, MonothekCopyPatternAudioRunClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_AUDIO_RUN</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_AUDIO_RUN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_AUDIO_RUN_CLASS</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_AUDIO_RUN_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_AUDIO_RUN_GET_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_AUDIO_RUN_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_COPY_PATTERN_AUDIO_RUN, MonothekCopyPatternAudioRunClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCopyPatternAudioRun</NAME>
+struct _MonothekCopyPatternAudioRun
+{
+  AgsCopyPatternAudioRun copy_pattern_audio_run;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCopyPatternAudioRunClass</NAME>
+struct _MonothekCopyPatternAudioRunClass
+{
+  AgsCopyPatternAudioRunClass copy_pattern_audio_run;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_copy_pattern_audio_run_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_copy_pattern_audio_run_new</NAME>
+<RETURNS>MonothekCopyPatternAudioRun * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_COPY_PATTERN_CHANNEL</NAME>
+#define MONOTHEK_TYPE_COPY_PATTERN_CHANNEL                (monothek_copy_pattern_channel_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_CHANNEL</NAME>
+#define MONOTHEK_COPY_PATTERN_CHANNEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL, MonothekCopyPatternChannel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_CHANNEL_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_CHANNEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_COPY_PATTERN_CHANNEL, MonothekCopyPatternChannelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_CHANNEL</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_CHANNEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_CHANNEL_CLASS</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_CHANNEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_CHANNEL_GET_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_CHANNEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_COPY_PATTERN_CHANNEL, MonothekCopyPatternChannelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCopyPatternChannel</NAME>
+struct _MonothekCopyPatternChannel
+{
+  AgsCopyPatternChannel copy_pattern_channel;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCopyPatternChannelClass</NAME>
+struct _MonothekCopyPatternChannelClass
+{
+  AgsCopyPatternChannelClass copy_pattern_channel;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_copy_pattern_channel_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_copy_pattern_channel_new</NAME>
+<RETURNS>MonothekCopyPatternChannel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN</NAME>
+#define MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN                (monothek_copy_pattern_channel_run_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_CHANNEL_RUN</NAME>
+#define MONOTHEK_COPY_PATTERN_CHANNEL_RUN(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN, MonothekCopyPatternChannelRun))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_CHANNEL_RUN_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_CHANNEL_RUN_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN, MonothekCopyPatternChannelRunClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_CHANNEL_RUN</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_CHANNEL_RUN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_COPY_PATTERN_CHANNEL_RUN_CLASS</NAME>
+#define MONOTHEK_IS_COPY_PATTERN_CHANNEL_RUN_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_COPY_PATTERN_CHANNEL_RUN_GET_CLASS</NAME>
+#define MONOTHEK_COPY_PATTERN_CHANNEL_RUN_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_COPY_PATTERN_CHANNEL_RUN, MonothekCopyPatternChannelRunClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCopyPatternChannelRun</NAME>
+struct _MonothekCopyPatternChannelRun
+{
+  AgsCopyPatternChannelRun copy_pattern_channel_run;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCopyPatternChannelRunClass</NAME>
+struct _MonothekCopyPatternChannelRunClass
+{
+  AgsCopyPatternChannelRunClass copy_pattern_channel_run;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_copy_pattern_channel_run_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_copy_pattern_channel_run_new</NAME>
+<RETURNS>MonothekCopyPatternChannelRun * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DELAY_AUDIO</NAME>
+#define MONOTHEK_TYPE_DELAY_AUDIO                (monothek_delay_audio_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DELAY_AUDIO</NAME>
+#define MONOTHEK_DELAY_AUDIO(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DELAY_AUDIO, MonothekDelayAudio))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DELAY_AUDIO_CLASS</NAME>
+#define MONOTHEK_DELAY_AUDIO_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_DELAY_AUDIO, MonothekDelayAudioClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DELAY_AUDIO</NAME>
+#define MONOTHEK_IS_DELAY_AUDIO(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_DELAY_AUDIO))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DELAY_AUDIO_CLASS</NAME>
+#define MONOTHEK_IS_DELAY_AUDIO_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_DELAY_AUDIO))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DELAY_AUDIO_GET_CLASS</NAME>
+#define MONOTHEK_DELAY_AUDIO_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_DELAY_AUDIO, MonothekDelayAudioClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDelayAudio</NAME>
+struct _MonothekDelayAudio
+{
+  AgsDelayAudio delay_audio;
+
+  AgsPort *sequencer_paused;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDelayAudioClass</NAME>
+struct _MonothekDelayAudioClass
+{
+  AgsDelayAudioClass delay_audio;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_delay_audio_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_delay_audio_new</NAME>
+<RETURNS>MonothekDelayAudio * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DELAY_AUDIO_RUN</NAME>
+#define MONOTHEK_TYPE_DELAY_AUDIO_RUN                (monothek_delay_audio_run_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DELAY_AUDIO_RUN</NAME>
+#define MONOTHEK_DELAY_AUDIO_RUN(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DELAY_AUDIO_RUN, MonothekDelayAudioRun))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DELAY_AUDIO_RUN_CLASS</NAME>
+#define MONOTHEK_DELAY_AUDIO_RUN_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_DELAY_AUDIO_RUN, MonothekDelayAudioRunClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DELAY_AUDIO_RUN</NAME>
+#define MONOTHEK_IS_DELAY_AUDIO_RUN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_DELAY_AUDIO_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DELAY_AUDIO_RUN_CLASS</NAME>
+#define MONOTHEK_IS_DELAY_AUDIO_RUN_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_DELAY_AUDIO_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DELAY_AUDIO_RUN_GET_CLASS</NAME>
+#define MONOTHEK_DELAY_AUDIO_RUN_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_DELAY_AUDIO_RUN, MonothekDelayAudioRunClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDelayAudioRun</NAME>
+struct _MonothekDelayAudioRun
+{
+  AgsDelayAudioRun delay_audio_run;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDelayAudioRunClass</NAME>
+struct _MonothekDelayAudioRunClass
+{
+  AgsDelayAudioRunClass delay_audio_run;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_delay_audio_run_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_delay_audio_run_new</NAME>
+<RETURNS>MonothekDelayAudioRun * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_PLAY_WAVE_AUDIO</NAME>
+#define MONOTHEK_TYPE_PLAY_WAVE_AUDIO                (monothek_play_wave_audio_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_AUDIO</NAME>
+#define MONOTHEK_PLAY_WAVE_AUDIO(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_PLAY_WAVE_AUDIO, MonothekPlayWaveAudio))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_AUDIO_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_AUDIO_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_PLAY_WAVE_AUDIO, MonothekPlayWaveAudioClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_AUDIO</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_AUDIO(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_PLAY_WAVE_AUDIO))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_AUDIO_CLASS</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_AUDIO_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_PLAY_WAVE_AUDIO))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_AUDIO_GET_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_AUDIO_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_PLAY_WAVE_AUDIO, MonothekPlayWaveAudioClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekPlayWaveAudio</NAME>
+struct _MonothekPlayWaveAudio
+{
+  AgsPlayWaveAudio play_wave_audio;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekPlayWaveAudioClass</NAME>
+struct _MonothekPlayWaveAudioClass
+{
+  AgsPlayWaveAudioClass play_wave_audio;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_play_wave_audio_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_play_wave_audio_new</NAME>
+<RETURNS>MonothekPlayWaveAudio * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN</NAME>
+#define MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN                (monothek_play_wave_audio_run_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_AUDIO_RUN</NAME>
+#define MONOTHEK_PLAY_WAVE_AUDIO_RUN(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN, MonothekPlayWaveAudioRun))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_AUDIO_RUN_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_AUDIO_RUN_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN, MonothekPlayWaveAudioRunClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_AUDIO_RUN</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_AUDIO_RUN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_AUDIO_RUN_CLASS</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_AUDIO_RUN_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_AUDIO_RUN_GET_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_AUDIO_RUN_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_PLAY_WAVE_AUDIO_RUN, MonothekPlayWaveAudioRunClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekPlayWaveAudioRun</NAME>
+struct _MonothekPlayWaveAudioRun
+{
+  AgsPlayWaveAudioRun play_wave_audio_run;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekPlayWaveAudioRunClass</NAME>
+struct _MonothekPlayWaveAudioRunClass
+{
+  AgsPlayWaveAudioRunClass play_wave_audio_run;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_play_wave_audio_run_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_play_wave_audio_run_new</NAME>
+<RETURNS>MonothekPlayWaveAudioRun * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_PLAY_WAVE_CHANNEL</NAME>
+#define MONOTHEK_TYPE_PLAY_WAVE_CHANNEL                (monothek_play_wave_channel_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_CHANNEL</NAME>
+#define MONOTHEK_PLAY_WAVE_CHANNEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL, MonothekPlayWaveChannel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_CHANNEL_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_CHANNEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_PLAY_WAVE_CHANNEL, MonothekPlayWaveChannelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_CHANNEL</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_CHANNEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_CHANNEL_CLASS</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_CHANNEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_CHANNEL_GET_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_CHANNEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_PLAY_WAVE_CHANNEL, MonothekPlayWaveChannelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekPlayWaveChannel</NAME>
+struct _MonothekPlayWaveChannel
+{
+  AgsPlayWaveChannel play_wave_channel;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekPlayWaveChannelClass</NAME>
+struct _MonothekPlayWaveChannelClass
+{
+  AgsPlayWaveChannelClass play_wave_channel;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_play_wave_channel_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_play_wave_channel_new</NAME>
+<RETURNS>MonothekPlayWaveChannel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN</NAME>
+#define MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN                (monothek_play_wave_channel_run_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_CHANNEL_RUN</NAME>
+#define MONOTHEK_PLAY_WAVE_CHANNEL_RUN(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN, MonothekPlayWaveChannelRun))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_CHANNEL_RUN_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_CHANNEL_RUN_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN, MonothekPlayWaveChannelRunClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_CHANNEL_RUN</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_CHANNEL_RUN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_PLAY_WAVE_CHANNEL_RUN_CLASS</NAME>
+#define MONOTHEK_IS_PLAY_WAVE_CHANNEL_RUN_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_PLAY_WAVE_CHANNEL_RUN_GET_CLASS</NAME>
+#define MONOTHEK_PLAY_WAVE_CHANNEL_RUN_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_PLAY_WAVE_CHANNEL_RUN, MonothekPlayWaveChannelRunClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekPlayWaveChannelRun</NAME>
+struct _MonothekPlayWaveChannelRun
+{
+  AgsPlayWaveChannelRun play_wave_channel_run;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekPlayWaveChannelRunClass</NAME>
+struct _MonothekPlayWaveChannelRunClass
+{
+  AgsPlayWaveChannelRunClass play_wave_channel_run;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_play_wave_channel_run_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_play_wave_channel_run_new</NAME>
+<RETURNS>MonothekPlayWaveChannelRun * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_EXPORT_OUTPUT</NAME>
+#define MONOTHEK_TYPE_EXPORT_OUTPUT                (monothek_export_output_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_OUTPUT</NAME>
+#define MONOTHEK_EXPORT_OUTPUT(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_EXPORT_OUTPUT, MonothekExportOutput))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_OUTPUT_CLASS</NAME>
+#define MONOTHEK_EXPORT_OUTPUT_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_EXPORT_OUTPUT, MonothekExportOutputClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_EXPORT_OUTPUT</NAME>
+#define MONOTHEK_IS_EXPORT_OUTPUT(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_EXPORT_OUTPUT))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_EXPORT_OUTPUT_CLASS</NAME>
+#define MONOTHEK_IS_EXPORT_OUTPUT_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_EXPORT_OUTPUT))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_OUTPUT_GET_CLASS</NAME>
+#define MONOTHEK_EXPORT_OUTPUT_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_EXPORT_OUTPUT, MonothekExportOutputClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_PATH</NAME>
+#define MONOTHEK_EXPORT_PATH SRCDIR "/monothek.home/export"
+</MACRO>
+<STRUCT>
+<NAME>MonothekExportOutput</NAME>
+struct _MonothekExportOutput
+{
+  AgsExportOutput export_output;
+
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekExportOutputClass</NAME>
+struct _MonothekExportOutputClass
+{
+  AgsExportOutputClass export_output;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_export_output_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_export_output_new</NAME>
+<RETURNS>MonothekExportOutput * </RETURNS>
+AgsExportThread *export_thread, GObject *soundcard, struct timespec *duration
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_EXPORT_THREAD</NAME>
+#define MONOTHEK_TYPE_EXPORT_THREAD                (monothek_export_thread_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_THREAD</NAME>
+#define MONOTHEK_EXPORT_THREAD(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_EXPORT_THREAD, MonothekExportThread))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_THREAD_CLASS</NAME>
+#define MONOTHEK_EXPORT_THREAD_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_EXPORT_THREAD, MonothekExportThreadClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_EXPORT_THREAD</NAME>
+#define MONOTHEK_IS_EXPORT_THREAD(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_EXPORT_THREAD))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_EXPORT_THREAD_CLASS</NAME>
+#define MONOTHEK_IS_EXPORT_THREAD_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_EXPORT_THREAD))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_EXPORT_THREAD_GET_CLASS</NAME>
+#define MONOTHEK_EXPORT_THREAD_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_EXPORT_THREAD, MonothekExportThreadClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekExportThread</NAME>
+struct _MonothekExportThread
+{
+  AgsExportThread export_thread;
+
+  struct timespec *start_time;
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekExportThreadClass</NAME>
+struct _MonothekExportThreadClass
+{
+  AgsExportThreadClass export_thread;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_export_thread_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_export_thread_new</NAME>
+<RETURNS>MonothekExportThread * </RETURNS>
+GObject *soundcard, AgsAudioFile *audio_file
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_QRCODE</NAME>
+#define MONOTHEK_TYPE_QRCODE                (monothek_qrcode_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE</NAME>
+#define MONOTHEK_QRCODE(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_QRCODE, MonothekQrcode))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_CLASS</NAME>
+#define MONOTHEK_QRCODE_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_QRCODE, MonothekQrcodeClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_QRCODE</NAME>
+#define MONOTHEK_IS_QRCODE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_QRCODE))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_QRCODE_CLASS</NAME>
+#define MONOTHEK_IS_QRCODE_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_QRCODE))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_GET_CLASS</NAME>
+#define MONOTHEK_QRCODE_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_QRCODE, MonothekQrcodeClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_DEFAULT_URL</NAME>
+#define MONOTHEK_QRCODE_DEFAULT_URL "http://monothek.ch"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_DEFAULT_FILENAME</NAME>
+#define MONOTHEK_QRCODE_DEFAULT_FILENAME SRCDIR "/monothek.share/monothek/qrcode/qrcode.xpm"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_DEFAULT_SVG_WIDTH</NAME>
+#define MONOTHEK_QRCODE_DEFAULT_SVG_WIDTH (480)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_DEFAULT_SVG_HEIGHT</NAME>
+#define MONOTHEK_QRCODE_DEFAULT_SVG_HEIGHT (480)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_DEFAULT_PNG_WIDTH</NAME>
+#define MONOTHEK_QRCODE_DEFAULT_PNG_WIDTH (480)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_QRCODE_DEFAULT_PNG_HEIGHT</NAME>
+#define MONOTHEK_QRCODE_DEFAULT_PNG_HEIGHT (480)
+</MACRO>
+<STRUCT>
+<NAME>MonothekQrcode</NAME>
+struct _MonothekQrcode
+{
+  GObject gobject;
+  
+  guint flags;
+  
+  gchar *url;
+  gchar *filename;
+  
+  QRcode *qrcode;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekQrcodeClass</NAME>
+struct _MonothekQrcodeClass
+{
+  GObjectClass gobject;
+
+  void (*encode)(MonothekQrcode *qrcode);
+  
+  void (*write)(MonothekQrcode *qrcode);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_qrcode_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_qrcode_encode</NAME>
+<RETURNS>void  </RETURNS>
+MonothekQrcode *qrcode
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_qrcode_write</NAME>
+<RETURNS>void  </RETURNS>
+MonothekQrcode *qrcode
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_qrcode_export_svg</NAME>
+<RETURNS>void  </RETURNS>
+MonothekQrcode *qrcode, gchar *svg_filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_qrcode_export_png</NAME>
+<RETURNS>void  </RETURNS>
+MonothekQrcode *qrcode, gchar *png_filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_qrcode_new</NAME>
+<RETURNS>MonothekQrcode * </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_cclosure_marshal_VOID__BOOLEAN_BOOLEAN</NAME>
+<RETURNS>void  </RETURNS>
+GClosure     *closure, GValue       *return_value, guint         n_param_values, const GValue *param_values, gpointer      invocation_hint, gpointer      marshal_data
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_cclosure_marshal_VOID__ULONG_ULONG</NAME>
+<RETURNS>void  </RETURNS>
+GClosure     *closure, GValue       *return_value, guint         n_param_values, const GValue *param_values, gpointer      invocation_hint, gpointer      marshal_data
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_cclosure_marshal_BOOLEAN__DOUBLE</NAME>
+<RETURNS>void  </RETURNS>
+GClosure     *closure, GValue       *return_value, guint         n_param_values, const GValue *param_values, gpointer      invocation_hint, gpointer      marshal_data
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_SESSION</NAME>
+#define MONOTHEK_TYPE_SESSION                (monothek_session_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION</NAME>
+#define MONOTHEK_SESSION(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_SESSION, MonothekSession))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION_CLASS</NAME>
+#define MONOTHEK_SESSION_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_SESSION, MonothekSessionClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SESSION</NAME>
+#define MONOTHEK_IS_SESSION(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_SESSION))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SESSION_CLASS</NAME>
+#define MONOTHEK_IS_SESSION_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_SESSION))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION_GET_CLASS</NAME>
+#define MONOTHEK_SESSION_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_SESSION, MonothekSessionClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION_DEFAULT_SESSION</NAME>
+#define MONOTHEK_SESSION_DEFAULT_SESSION "default-session"
+</MACRO>
+<STRUCT>
+<NAME>MonothekSession</NAME>
+struct _MonothekSession
+{
+  GObject gobject;
+
+  gchar *session_id;
+
+  GHashTable *value;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekSessionClass</NAME>
+struct _MonothekSessionClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_session_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_session_new</NAME>
+<RETURNS>MonothekSession * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_SESSION_MANAGER</NAME>
+#define MONOTHEK_TYPE_SESSION_MANAGER                (monothek_session_manager_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION_MANAGER</NAME>
+#define MONOTHEK_SESSION_MANAGER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_SESSION_MANAGER, MonothekSessionManager))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION_MANAGER_CLASS</NAME>
+#define MONOTHEK_SESSION_MANAGER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_SESSION_MANAGER, MonothekSessionManagerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SESSION_MANAGER</NAME>
+#define MONOTHEK_IS_SESSION_MANAGER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_SESSION_MANAGER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SESSION_MANAGER_CLASS</NAME>
+#define MONOTHEK_IS_SESSION_MANAGER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_SESSION_MANAGER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SESSION_MANAGER_GET_CLASS</NAME>
+#define MONOTHEK_SESSION_MANAGER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_SESSION_MANAGER, MonothekSessionManagerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekSessionManager</NAME>
+struct _MonothekSessionManager
+{
+  GObject gobject;
+  
+  GList *session;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekSessionManagerClass</NAME>
+struct _MonothekSessionManagerClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_session_manager_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_session_manager_add_session</NAME>
+<RETURNS>void  </RETURNS>
+MonothekSessionManager *session_manager, GObject *session
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_session_manager_remove_session</NAME>
+<RETURNS>void  </RETURNS>
+MonothekSessionManager *session_manager, GObject *session
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_session_manager_find_session</NAME>
+<RETURNS>GObject * </RETURNS>
+MonothekSessionManager *session_manager, gchar *session_id
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_session_manager_get_instance</NAME>
+<RETURNS>MonothekSessionManager * </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_session_manager_new</NAME>
+<RETURNS>MonothekSessionManager * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>ENABLE_NLS</NAME>
+#define ENABLE_NLS 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_DCGETTEXT</NAME>
+#define HAVE_DCGETTEXT 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_DLFCN_H</NAME>
+#define HAVE_DLFCN_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_GETTEXT</NAME>
+#define HAVE_GETTEXT 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_INTTYPES_H</NAME>
+#define HAVE_INTTYPES_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_LIBDL</NAME>
+#define HAVE_LIBDL 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_LIBM</NAME>
+#define HAVE_LIBM 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_MALLOC</NAME>
+#define HAVE_MALLOC 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_MEMORY_H</NAME>
+#define HAVE_MEMORY_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_REALLOC</NAME>
+#define HAVE_REALLOC 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STDINT_H</NAME>
+#define HAVE_STDINT_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STDLIB_H</NAME>
+#define HAVE_STDLIB_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STRINGS_H</NAME>
+#define HAVE_STRINGS_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_STRING_H</NAME>
+#define HAVE_STRING_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_SYS_STAT_H</NAME>
+#define HAVE_SYS_STAT_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_SYS_TYPES_H</NAME>
+#define HAVE_SYS_TYPES_H 1
+</MACRO>
+<MACRO>
+<NAME>HAVE_UNISTD_H</NAME>
+#define HAVE_UNISTD_H 1
+</MACRO>
+<MACRO>
+<NAME>LT_OBJDIR</NAME>
+#define LT_OBJDIR ".libs/"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE</NAME>
+#define PACKAGE "monothek"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_BUGREPORT</NAME>
+#define PACKAGE_BUGREPORT "jkraehemann@gmail.com"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_NAME</NAME>
+#define PACKAGE_NAME "monothek"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_STRING</NAME>
+#define PACKAGE_STRING "monothek 1.0.0"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_TARNAME</NAME>
+#define PACKAGE_TARNAME "monothek"
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_URL</NAME>
+#define PACKAGE_URL ""
+</MACRO>
+<MACRO>
+<NAME>PACKAGE_VERSION</NAME>
+#define PACKAGE_VERSION "1.0.0"
+</MACRO>
+<MACRO>
+<NAME>STDC_HEADERS</NAME>
+#define STDC_HEADERS 1
+</MACRO>
+<MACRO>
+<NAME>VERSION</NAME>
+#define VERSION "1.0.0"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TYPE_APPLICATION_CONTEXT</NAME>
+#define MONOTHEK_TYPE_APPLICATION_CONTEXT                (monothek_application_context_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_APPLICATION_CONTEXT</NAME>
+#define MONOTHEK_APPLICATION_CONTEXT(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_APPLICATION_CONTEXT, MonothekApplicationContext))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_APPLICATION_CONTEXT_CLASS</NAME>
+#define MONOTHEK_APPLICATION_CONTEXT_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST(class, MONOTHEK_TYPE_APPLICATION_CONTEXT, MonothekApplicationContextClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_APPLICATION_CONTEXT</NAME>
+#define MONOTHEK_IS_APPLICATION_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), MONOTHEK_TYPE_APPLICATION_CONTEXT))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_APPLICATION_CONTEXT_CLASS</NAME>
+#define MONOTHEK_IS_APPLICATION_CONTEXT_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE ((class), MONOTHEK_TYPE_APPLICATION_CONTEXT))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_APPLICATION_CONTEXT_GET_CLASS</NAME>
+#define MONOTHEK_APPLICATION_CONTEXT_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS(obj, MONOTHEK_TYPE_APPLICATION_CONTEXT, MonothekApplicationContextClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VERSION</NAME>
+#define MONOTHEK_VERSION "1.0.0"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BUILD_ID</NAME>
+#define MONOTHEK_BUILD_ID "Wed Oct 17 18:17:09 UTC 2018"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DEFAULT_DIRECTORY</NAME>
+#define MONOTHEK_DEFAULT_DIRECTORY ".monothek"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DEFAULT_CONFIG</NAME>
+#define MONOTHEK_DEFAULT_CONFIG "monothek.conf"
+</MACRO>
+<ENUM>
+<NAME>MonothekApplicationContextFlags</NAME>
+typedef enum{
+  MONOTHEK_APPLICATION_CONTEXT_SHOW_GUI      = 1,
+}MonothekApplicationContextFlags;
+</ENUM>
+<STRUCT>
+<NAME>MonothekApplicationContext</NAME>
+struct _MonothekApplicationContext
+{
+  AgsApplicationContext application_context;
+
+  volatile gboolean gui_ready;
+  
+  AgsThreadPool *thread_pool;
+
+  AgsPollingThread *polling_thread;
+
+  GList *worker;
+  
+  GObject *default_soundcard;
+
+  AgsThread *default_soundcard_thread;
+  AgsThread *default_export_thread;
+
+  AgsThread *gui_thread;
+  
+  AgsThread *autosave_thread;
+
+  AgsServer *server;
+  
+  GList *soundcard;
+  GList *sequencer;
+
+  GList *sound_server;
+  GList *audio;
+
+  GList *osc_server;
+  
+  MonothekWindow *window;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekApplicationContextClass</NAME>
+struct _MonothekApplicationContextClass
+{
+  AgsApplicationContextClass application_context;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_application_context_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_application_context_new</NAME>
+<RETURNS>MonothekApplicationContext * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_WINDOW</NAME>
+#define MONOTHEK_TYPE_WINDOW                (monothek_window_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_WINDOW</NAME>
+#define MONOTHEK_WINDOW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_WINDOW, MonothekWindow))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_WINDOW_CLASS</NAME>
+#define MONOTHEK_WINDOW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_WINDOW, MonothekWindowClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_WINDOW</NAME>
+#define MONOTHEK_IS_WINDOW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_WINDOW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_WINDOW_CLASS</NAME>
+#define MONOTHEK_IS_WINDOW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_WINDOW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_WINDOW_GET_CLASS</NAME>
+#define MONOTHEK_WINDOW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_WINDOW, MonothekWindowClass))
+</MACRO>
+<ENUM>
+<NAME>MonothekWindowFlags</NAME>
+typedef enum{
+  MONOTHEK_WINDOW_ADDED_TO_REGISTRY           = 1,
+  MONOTHEK_WINDOW_CONNECTED                   = 1 <<  1,
+}MonothekWindowFlags;
+</ENUM>
+<STRUCT>
+<NAME>MonothekWindow</NAME>
+struct _MonothekWindow
+{
+  GtkWindow window;
+
+  guint flags;
+
+  GList *model;
+  
+  GList *controller;
+  
+  GType current_view_type;
+  GtkBox *view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekWindowClass</NAME>
+struct _MonothekWindowClass
+{
+  GtkWindowClass window;
+
+  void (*change_view)(MonothekWindow *window,
+		      GType view_type, GType view_type_old);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_window_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_window_test_flags</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekWindow *window, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_window_set_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekWindow *window, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_window_unset_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekWindow *window, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_window_change_view</NAME>
+<RETURNS>void  </RETURNS>
+MonothekWindow *window, GType view_type, GType view_type_old
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_window_new</NAME>
+<RETURNS>MonothekWindow * </RETURNS>
+GObject *application_context
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_ACTION_BOX</NAME>
+#define MONOTHEK_TYPE_ACTION_BOX                (monothek_action_box_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_ACTION_BOX</NAME>
+#define MONOTHEK_ACTION_BOX(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_ACTION_BOX, MonothekActionBox))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_ACTION_BOX_CLASS</NAME>
+#define MONOTHEK_ACTION_BOX_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_ACTION_BOX, MonothekActionBoxClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_ACTION_BOX</NAME>
+#define MONOTHEK_IS_ACTION_BOX(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_ACTION_BOX))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_ACTION_BOX_CLASS</NAME>
+#define MONOTHEK_IS_ACTION_BOX_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_ACTION_BOX))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_ACTION_BOX_GET_CLASS</NAME>
+#define MONOTHEK_ACTION_BOX_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_ACTION_BOX, MonothekActionBoxClass))
+</MACRO>
+<ENUM>
+<NAME>MonothekActionBoxButtonMask</NAME>
+typedef enum{
+  MONOTHEK_ACTION_BOX_BUTTON_1            = 1,
+}MonothekActionBoxButtonMask;
+</ENUM>
+<STRUCT>
+<NAME>MonothekActionBox</NAME>
+struct _MonothekActionBox
+{
+  GObject gobject;
+
+  guint button_mask;
+
+  gboolean enabled;
+  gboolean is_active;
+  
+  gchar *action_identifier;
+  
+  guint x0;
+  guint y0;
+
+  guint width;
+  guint height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekActionBoxClass</NAME>
+struct _MonothekActionBoxClass
+{
+  GObjectClass gobject;
+
+  void (*activate)(MonothekActionBox *action_box);
+  void (*clicked)(MonothekActionBox *action_box);
+  
+  void (*enter)(MonothekActionBox *action_box);
+  void (*leave)(MonothekActionBox *action_box);
+  
+  void (*pressed)(MonothekActionBox *action_box);
+  void (*released)(MonothekActionBox *action_box);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_action_box_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_get_active</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_activate</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_clicked</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_enter</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_leave</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_pressed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_released</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_box_new</NAME>
+<RETURNS>MonothekActionBox * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_ACTION_SLIDER</NAME>
+#define MONOTHEK_TYPE_ACTION_SLIDER                (monothek_action_slider_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_ACTION_SLIDER</NAME>
+#define MONOTHEK_ACTION_SLIDER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_ACTION_SLIDER, MonothekActionSlider))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_ACTION_SLIDER_CLASS</NAME>
+#define MONOTHEK_ACTION_SLIDER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_ACTION_SLIDER, MonothekActionSliderClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_ACTION_SLIDER</NAME>
+#define MONOTHEK_IS_ACTION_SLIDER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_ACTION_SLIDER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_ACTION_SLIDER_CLASS</NAME>
+#define MONOTHEK_IS_ACTION_SLIDER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_ACTION_SLIDER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_ACTION_SLIDER_GET_CLASS</NAME>
+#define MONOTHEK_ACTION_SLIDER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_ACTION_SLIDER, MonothekActionSliderClass))
+</MACRO>
+<ENUM>
+<NAME>MonothekActionSliderButtonMask</NAME>
+typedef enum{
+  MONOTHEK_ACTION_SLIDER_BUTTON_1            = 1,
+}MonothekActionSliderButtonMask;
+</ENUM>
+<STRUCT>
+<NAME>MonothekActionSlider</NAME>
+struct _MonothekActionSlider
+{
+  GObject gobject;
+
+  guint button_mask;
+  guint orientation;
+  
+  GtkAdjustment *adjustment;
+  
+  gchar *action_identifier;
+  
+  guint x0;
+  guint y0;
+
+  guint width;
+  guint height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekActionSliderClass</NAME>
+struct _MonothekActionSliderClass
+{
+  GObjectClass gobject;
+
+  gboolean (*change_value)(MonothekActionSlider *action_slider,
+			   gdouble new_value);
+  void (*move_slider)(MonothekActionSlider *action_slider);
+
+  void (*value_changed)(MonothekActionSlider *action_slider);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_action_slider_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_slider_change_value</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekActionSlider *action_slider, gdouble new_value
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_slider_move_slider</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionSlider *action_slider
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_slider_value_changed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekActionSlider *action_slider
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_action_slider_new</NAME>
+<RETURNS>MonothekActionSlider * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_BANNER_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_BANNER_CONTROLLER                (monothek_banner_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_CONTROLLER</NAME>
+#define MONOTHEK_BANNER_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_BANNER_CONTROLLER, MonothekBannerController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_BANNER_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_BANNER_CONTROLLER, MonothekBannerControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_BANNER_CONTROLLER</NAME>
+#define MONOTHEK_IS_BANNER_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_BANNER_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_BANNER_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_BANNER_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_BANNER_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_BANNER_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_BANNER_CONTROLLER, MonothekBannerControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekBannerController</NAME>
+struct _MonothekBannerController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekBannerControllerClass</NAME>
+struct _MonothekBannerControllerClass
+{
+  MonothekControllerClass controller;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_banner_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_banner_controller_new</NAME>
+<RETURNS>MonothekBannerController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CLOSED_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_CLOSED_CONTROLLER                (monothek_closed_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_CONTROLLER</NAME>
+#define MONOTHEK_CLOSED_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CLOSED_CONTROLLER, MonothekClosedController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_CLOSED_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CLOSED_CONTROLLER, MonothekClosedControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CLOSED_CONTROLLER</NAME>
+#define MONOTHEK_IS_CLOSED_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CLOSED_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CLOSED_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_CLOSED_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CLOSED_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_CLOSED_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CLOSED_CONTROLLER, MonothekClosedControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekClosedController</NAME>
+struct _MonothekClosedController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekClosedControllerClass</NAME>
+struct _MonothekClosedControllerClass
+{
+  MonothekControllerClass controller;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_closed_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_closed_controller_new</NAME>
+<RETURNS>MonothekClosedController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_CONTROLLER                (monothek_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CONTROLLER</NAME>
+#define MONOTHEK_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CONTROLLER, MonothekController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CONTROLLER, MonothekControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CONTROLLER</NAME>
+#define MONOTHEK_IS_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CONTROLLER, MonothekControllerClass))
+</MACRO>
+<ENUM>
+<NAME>MonothekControllerFlags</NAME>
+typedef enum{
+  MONOTHEK_CONTROLLER_ADDED_TO_REGISTRY           = 1,
+  MONOTHEK_CONTROLLER_CONNECTED                   = 1 <<  1,
+}MonothekControllerFlags;
+</ENUM>
+<STRUCT>
+<NAME>MonothekController</NAME>
+struct _MonothekController
+{
+  GObject gobject;
+
+  guint flags;
+
+  GObject *model;
+  
+  MonothekView *view;
+
+  GList *action_box;
+  GList *action_slider;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekControllerClass</NAME>
+struct _MonothekControllerClass
+{
+  GObjectClass gobject;
+
+  void (*reset)(MonothekController *controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_test_flags</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekController *controller, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_set_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_unset_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_add_action_box</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller, MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_remove_action_box</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller, MonothekActionBox *action_box
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_add_action_slider</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller, MonothekActionSlider *action_slider
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_remove_action_slider</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller, MonothekActionSlider *action_slider
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_find_view_type</NAME>
+<RETURNS>GList * </RETURNS>
+GList *list, GType view_type
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_reset</NAME>
+<RETURNS>void  </RETURNS>
+MonothekController *controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_controller_new</NAME>
+<RETURNS>MonothekController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CREDITS_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_CREDITS_CONTROLLER                (monothek_credits_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_CONTROLLER</NAME>
+#define MONOTHEK_CREDITS_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CREDITS_CONTROLLER, MonothekCreditsController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_CREDITS_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CREDITS_CONTROLLER, MonothekCreditsControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CREDITS_CONTROLLER</NAME>
+#define MONOTHEK_IS_CREDITS_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CREDITS_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CREDITS_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_CREDITS_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CREDITS_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_CREDITS_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CREDITS_CONTROLLER, MonothekCreditsControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCreditsController</NAME>
+struct _MonothekCreditsController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCreditsControllerClass</NAME>
+struct _MonothekCreditsControllerClass
+{
+  MonothekControllerClass controller;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_credits_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_credits_controller_new</NAME>
+<RETURNS>MonothekCreditsController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER                (monothek_diskjokey_end_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_CONTROLLER</NAME>
+#define MONOTHEK_DISKJOKEY_END_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER, MonothekDiskjokeyEndController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_END_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER, MonothekDiskjokeyEndControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_END_CONTROLLER</NAME>
+#define MONOTHEK_IS_DISKJOKEY_END_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_END_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_END_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_END_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_END_CONTROLLER, MonothekDiskjokeyEndControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyEndController</NAME>
+struct _MonothekDiskjokeyEndController
+{
+  MonothekController controller;
+
+  MonothekActionBox *diskjokey_restart;
+  MonothekActionBox *diskjokey_quit_and_save;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyEndControllerClass</NAME>
+struct _MonothekDiskjokeyEndControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*restart)(MonothekDiskjokeyEndController *diskjokey_end_controller);
+  void (*quit_and_save)(MonothekDiskjokeyEndController *diskjokey_end_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_controller_restart</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyEndController *diskjokey_end_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_controller_quit_and_save</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyEndController *diskjokey_end_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_controller_new</NAME>
+<RETURNS>MonothekDiskjokeyEndController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER                (monothek_diskjokey_payment_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_CONTROLLER</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER, MonothekDiskjokeyPaymentController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER, MonothekDiskjokeyPaymentControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_PAYMENT_CONTROLLER</NAME>
+#define MONOTHEK_IS_DISKJOKEY_PAYMENT_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_PAYMENT_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_PAYMENT_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_CONTROLLER, MonothekDiskjokeyPaymentControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyPaymentController</NAME>
+struct _MonothekDiskjokeyPaymentController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyPaymentControllerClass</NAME>
+struct _MonothekDiskjokeyPaymentControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*do_transaction)(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+
+  void (*transaction_completed)(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+  void (*transaction_failed)(MonothekDiskjokeyPaymentController *diskjokey_payment_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_controller_do_transaction</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyPaymentController *diskjokey_payment_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_controller_transaction_completed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyPaymentController *diskjokey_payment_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_controller_transaction_failed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyPaymentController *diskjokey_payment_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_controller_new</NAME>
+<RETURNS>MonothekDiskjokeyPaymentController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER                (monothek_diskjokey_qrcode_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER, MonothekDiskjokeyQrcodeController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER, MonothekDiskjokeyQrcodeControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_QRCODE_CONTROLLER</NAME>
+#define MONOTHEK_IS_DISKJOKEY_QRCODE_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_QRCODE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_QRCODE_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_CONTROLLER, MonothekDiskjokeyQrcodeControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyQrcodeController</NAME>
+struct _MonothekDiskjokeyQrcodeController
+{
+  MonothekController controller;
+
+  MonothekActionBox *quit;
+
+  struct timespec *start_time;
+  struct timespec *timer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyQrcodeControllerClass</NAME>
+struct _MonothekDiskjokeyQrcodeControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*timeout)(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
+
+  void (*quit)(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_controller_timeout</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_controller_quit</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_controller_new</NAME>
+<RETURNS>MonothekDiskjokeyQrcodeController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER                (monothek_diskjokey_sequencer_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER, MonothekDiskjokeySequencerController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER, MonothekDiskjokeySequencerControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_SEQUENCER_CONTROLLER</NAME>
+#define MONOTHEK_IS_DISKJOKEY_SEQUENCER_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_SEQUENCER_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_SEQUENCER_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_CONTROLLER, MonothekDiskjokeySequencerControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeySequencerController</NAME>
+struct _MonothekDiskjokeySequencerController
+{
+  MonothekController controller;
+
+  MonothekActionBox ***pad;
+
+  MonothekActionBox *techno;
+  MonothekActionBox *house;
+  MonothekActionBox *hiphop;
+
+  MonothekActionBox *clear;
+  MonothekActionBox *random;
+
+  MonothekActionBox *run;
+
+  MonothekActionBox **tab;
+
+  MonothekActionSlider *bpm;
+  MonothekActionSlider *swing;
+
+  struct timespec *start_time;
+  struct timespec *timer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeySequencerControllerClass</NAME>
+struct _MonothekDiskjokeySequencerControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*toggle_pad)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		     guint x, guint y);
+
+  void (*switch_page)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		      guint page_index);
+  void (*select_bank)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		      guint bank_0, guint bank_1);
+
+  void (*change_bpm)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		     gdouble bpm);
+  void (*change_swing)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		       gdouble swing);
+  void (*change_duration)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+			  guint step_count);
+
+  void (*load_drum_kit)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+			gchar *drum_kit);
+
+  void (*clear)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+  void (*random)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+
+  void (*progress)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+		   gdouble value);
+
+  void (*run)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller,
+	      gboolean do_run);
+
+  void (*completed)(MonothekDiskjokeySequencerController *diskjokey_sequencer_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_toggle_pad</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, guint x, guint y
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_switch_page</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, guint page_index
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_select_bank</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, guint bank_0, guint bank_1
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_change_bpm</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, gdouble bpm
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_change_swing</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, gdouble swing
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_change_duration</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, guint step_count
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_load_drum_kit</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, gchar *drum_kit
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_clear</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_random</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_progress</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, gdouble value
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_run</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller, gboolean do_run
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_completed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_position_timeout</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekDiskjokeySequencerController *diskjokey_sequencer_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_progress_increase_timeout</NAME>
+<RETURNS>gboolean  </RETURNS>
+GObject *gobject
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_controller_new</NAME>
+<RETURNS>MonothekDiskjokeySequencerController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER                (monothek_jukebox_end_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_END_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER, MonothekJukeboxEndController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_END_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER, MonothekJukeboxEndControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_END_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_END_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_END_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_END_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_END_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_END_CONTROLLER, MonothekJukeboxEndControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxEndController</NAME>
+struct _MonothekJukeboxEndController
+{
+  MonothekController controller;
+
+  MonothekActionBox *jukebox_restart;
+  MonothekActionBox *jukebox_quit_and_save;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxEndControllerClass</NAME>
+struct _MonothekJukeboxEndControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*restart)(MonothekJukeboxEndController *jukebox_end_controller);
+  void (*quit_and_save)(MonothekJukeboxEndController *jukebox_end_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_end_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_end_controller_restart</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxEndController *jukebox_end_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_end_controller_quit_and_save</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxEndController *jukebox_end_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_end_controller_new</NAME>
+<RETURNS>MonothekJukeboxEndController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER                (monothek_jukebox_info_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_INFO_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER, MonothekJukeboxInfoController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_INFO_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER, MonothekJukeboxInfoControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_INFO_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_INFO_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_INFO_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_INFO_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_INFO_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_INFO_CONTROLLER, MonothekJukeboxInfoControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxInfoController</NAME>
+struct _MonothekJukeboxInfoController
+{
+  MonothekController controller;
+
+  MonothekActionBox *jukebox_ok;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxInfoControllerClass</NAME>
+struct _MonothekJukeboxInfoControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*ok)(MonothekJukeboxInfoController *jukebox_info_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_info_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_info_controller_ok</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxInfoController *jukebox_info_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_info_controller_new</NAME>
+<RETURNS>MonothekJukeboxInfoController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER                (monothek_jukebox_mode_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_MODE_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER, MonothekJukeboxModeController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER, MonothekJukeboxModeControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_MODE_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_MODE_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_MODE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_MODE_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_MODE_CONTROLLER, MonothekJukeboxModeControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxModeController</NAME>
+struct _MonothekJukeboxModeController
+{
+  MonothekController controller;
+
+  MonothekActionBox *jukebox_test;
+  MonothekActionBox *jukebox_play;
+  MonothekActionBox *jukebox_cancel;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxModeControllerClass</NAME>
+struct _MonothekJukeboxModeControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*test)(MonothekJukeboxModeController *jukebox_mode_controller);
+  void (*play)(MonothekJukeboxModeController *jukebox_mode_controller);
+  void (*cancel)(MonothekJukeboxModeController *jukebox_mode_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_controller_test</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxModeController *jukebox_mode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_controller_play</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxModeController *jukebox_mode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_controller_cancel</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxModeController *jukebox_mode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_controller_new</NAME>
+<RETURNS>MonothekJukeboxModeController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER                (monothek_jukebox_payment_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER, MonothekJukeboxPaymentController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER, MonothekJukeboxPaymentControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PAYMENT_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_PAYMENT_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PAYMENT_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_PAYMENT_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_CONTROLLER, MonothekJukeboxPaymentControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxPaymentController</NAME>
+struct _MonothekJukeboxPaymentController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxPaymentControllerClass</NAME>
+struct _MonothekJukeboxPaymentControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*do_transaction)(MonothekJukeboxPaymentController *jukebox_payment_controller);
+
+  void (*transaction_completed)(MonothekJukeboxPaymentController *jukebox_payment_controller);
+  void (*transaction_failed)(MonothekJukeboxPaymentController *jukebox_payment_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_controller_do_transaction</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxPaymentController *jukebox_payment_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_controller_transaction_completed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxPaymentController *jukebox_payment_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_controller_transaction_failed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxPaymentController *jukebox_payment_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_controller_new</NAME>
+<RETURNS>MonothekJukeboxPaymentController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER                (monothek_jukebox_playlist_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER, MonothekJukeboxPlaylistController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER, MonothekJukeboxPlaylistControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PLAYLIST_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_PLAYLIST_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PLAYLIST_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_PLAYLIST_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_CONTROLLER, MonothekJukeboxPlaylistControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_SONG_ROW_COUNT</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_SONG_ROW_COUNT (12)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxPlaylistController</NAME>
+struct _MonothekJukeboxPlaylistController
+{
+  MonothekController controller;
+
+  MonothekActionBox **song_select;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxPlaylistControllerClass</NAME>
+struct _MonothekJukeboxPlaylistControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*select_song)(MonothekJukeboxPlaylistController *jukebox_playlist_controller,
+		      gchar *song_filename);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_controller_select_song</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxPlaylistController *jukebox_playlist_controller, gchar *song_filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_controller_new</NAME>
+<RETURNS>MonothekJukeboxPlaylistController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER                (monothek_jukebox_qrcode_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER, MonothekJukeboxQrcodeController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER, MonothekJukeboxQrcodeControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_QRCODE_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_QRCODE_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_QRCODE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_QRCODE_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_CONTROLLER, MonothekJukeboxQrcodeControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxQrcodeController</NAME>
+struct _MonothekJukeboxQrcodeController
+{
+  MonothekController controller;
+
+  MonothekActionBox *quit;
+
+  struct timespec *start_time;
+  struct timespec *timer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxQrcodeControllerClass</NAME>
+struct _MonothekJukeboxQrcodeControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*timeout)(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+
+  void (*quit)(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_controller_timeout</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxQrcodeController *jukebox_qrcode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_controller_quit</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxQrcodeController *jukebox_qrcode_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_controller_new</NAME>
+<RETURNS>MonothekJukeboxQrcodeController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER                (monothek_jukebox_track_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_CONTROLLER</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER, MonothekJukeboxTrackController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER, MonothekJukeboxTrackControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER</NAME>
+#define MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_TRACK_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_CONTROLLER, MonothekJukeboxTrackControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_CONTROLLER_TEST_TIME_SEC</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_CONTROLLER_TEST_TIME_SEC (30)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxTrackController</NAME>
+struct _MonothekJukeboxTrackController
+{
+  MonothekController controller;
+
+  MonothekActionBox *jukebox_play;
+  MonothekActionBox *jukebox_test;
+  MonothekActionBox *jukebox_back;
+
+  struct timespec *start_time;
+  struct timespec *timer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxTrackControllerClass</NAME>
+struct _MonothekJukeboxTrackControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*test)(MonothekJukeboxTrackController *jukebox_track_controller);
+  void (*play)(MonothekJukeboxTrackController *jukebox_track_controller);
+  void (*back)(MonothekJukeboxTrackController *jukebox_track_controller);
+
+  void (*progress)(MonothekJukeboxTrackController *jukebox_track_controller,
+		   gdouble value);
+
+  void (*test_time_expired)(MonothekJukeboxTrackController *jukebox_track_controller);
+
+  void (*run)(MonothekJukeboxTrackController *jukebox_track_controller,
+	      gboolean do_run);
+
+  void (*completed)(MonothekJukeboxTrackController *jukebox_track_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_test</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_play</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_back</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_progress</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller, gdouble value
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_test_time_expired</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_run</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller, gboolean do_run
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_completed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackController *jukebox_track_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_progress_increase_timeout</NAME>
+<RETURNS>gboolean  </RETURNS>
+GObject *gobject
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_controller_new</NAME>
+<RETURNS>MonothekJukeboxTrackController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_LOAD_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_LOAD_CONTROLLER                (monothek_load_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_CONTROLLER</NAME>
+#define MONOTHEK_LOAD_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_LOAD_CONTROLLER, MonothekLoadController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_LOAD_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_LOAD_CONTROLLER, MonothekLoadControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_LOAD_CONTROLLER</NAME>
+#define MONOTHEK_IS_LOAD_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_LOAD_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_LOAD_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_LOAD_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_LOAD_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_LOAD_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_LOAD_CONTROLLER, MonothekLoadControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekLoadController</NAME>
+struct _MonothekLoadController
+{
+  MonothekController controller;
+
+  struct timespec *start_time;
+  struct timespec *timer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekLoadControllerClass</NAME>
+struct _MonothekLoadControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*progress)(MonothekLoadController *load_controller,
+		   gdouble value);
+
+  void (*completed)(MonothekLoadController *load_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_load_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_controller_progress</NAME>
+<RETURNS>void  </RETURNS>
+MonothekLoadController *load_controller, gdouble value
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_controller_completed</NAME>
+<RETURNS>void  </RETURNS>
+MonothekLoadController *load_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_controller_message_monitor_timeout</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekLoadController *load_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_controller_progress_increase_timeout</NAME>
+<RETURNS>gboolean  </RETURNS>
+GObject *gobject
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_controller_new</NAME>
+<RETURNS>MonothekLoadController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_OUTAGE_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_OUTAGE_CONTROLLER                (monothek_outage_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_CONTROLLER</NAME>
+#define MONOTHEK_OUTAGE_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_OUTAGE_CONTROLLER, MonothekOutageController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_OUTAGE_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_OUTAGE_CONTROLLER, MonothekOutageControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_OUTAGE_CONTROLLER</NAME>
+#define MONOTHEK_IS_OUTAGE_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_OUTAGE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_OUTAGE_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_OUTAGE_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_OUTAGE_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_OUTAGE_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_OUTAGE_CONTROLLER, MonothekOutageControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekOutageController</NAME>
+struct _MonothekOutageController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekOutageControllerClass</NAME>
+struct _MonothekOutageControllerClass
+{
+  MonothekControllerClass controller;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_outage_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_outage_controller_new</NAME>
+<RETURNS>MonothekOutageController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_SCREENSAVER_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_SCREENSAVER_CONTROLLER                (monothek_screensaver_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_CONTROLLER</NAME>
+#define MONOTHEK_SCREENSAVER_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_SCREENSAVER_CONTROLLER, MonothekScreensaverController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_SCREENSAVER_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_SCREENSAVER_CONTROLLER, MonothekScreensaverControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SCREENSAVER_CONTROLLER</NAME>
+#define MONOTHEK_IS_SCREENSAVER_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_SCREENSAVER_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SCREENSAVER_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_SCREENSAVER_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_SCREENSAVER_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_SCREENSAVER_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_SCREENSAVER_CONTROLLER, MonothekScreensaverControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekScreensaverController</NAME>
+struct _MonothekScreensaverController
+{
+  MonothekController controller;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekScreensaverControllerClass</NAME>
+struct _MonothekScreensaverControllerClass
+{
+  MonothekControllerClass controller;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_screensaver_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_screensaver_controller_new</NAME>
+<RETURNS>MonothekScreensaverController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_START_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_START_CONTROLLER                (monothek_start_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_CONTROLLER</NAME>
+#define MONOTHEK_START_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_START_CONTROLLER, MonothekStartController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_START_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_START_CONTROLLER, MonothekStartControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_START_CONTROLLER</NAME>
+#define MONOTHEK_IS_START_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_START_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_START_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_START_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_START_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_START_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_CONTROLLER, MonothekStartControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekStartController</NAME>
+struct _MonothekStartController
+{
+  MonothekController controller;
+
+  MonothekActionBox *jukebox_launch;
+  MonothekActionBox *diskjokey_launch;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekStartControllerClass</NAME>
+struct _MonothekStartControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*launch_jukebox)(MonothekStartController *start_controller);
+  void (*launch_diskjokey)(MonothekStartController *start_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_start_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_start_controller_launch_jukebox</NAME>
+<RETURNS>void  </RETURNS>
+MonothekStartController *start_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_start_controller_launch_diskjokey</NAME>
+<RETURNS>void  </RETURNS>
+MonothekStartController *start_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_start_controller_new</NAME>
+<RETURNS>MonothekStartController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER</NAME>
+#define MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER                (monothek_transaction_failed_controller_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_CONTROLLER</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_CONTROLLER(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER, MonothekTransactionFailedController))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_CONTROLLER_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER, MonothekTransactionFailedControllerClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_TRANSACTION_FAILED_CONTROLLER</NAME>
+#define MONOTHEK_IS_TRANSACTION_FAILED_CONTROLLER(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_TRANSACTION_FAILED_CONTROLLER_CLASS</NAME>
+#define MONOTHEK_IS_TRANSACTION_FAILED_CONTROLLER_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_CONTROLLER_GET_CLASS</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_CONTROLLER_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_CONTROLLER, MonothekTransactionFailedControllerClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekTransactionFailedController</NAME>
+struct _MonothekTransactionFailedController
+{
+  MonothekController controller;
+
+  struct timespec *start_time;
+  struct timespec *timer;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekTransactionFailedControllerClass</NAME>
+struct _MonothekTransactionFailedControllerClass
+{
+  MonothekControllerClass controller;
+
+  void (*timeout)(MonothekTransactionFailedController *transaction_failed_controller);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_transaction_failed_controller_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_transaction_failed_controller_timeout</NAME>
+<RETURNS>void  </RETURNS>
+MonothekTransactionFailedController *transaction_failed_controller
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_transaction_failed_controller_progress_increase_timeout</NAME>
+<RETURNS>gboolean  </RETURNS>
+GObject *gobject
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_transaction_failed_controller_new</NAME>
+<RETURNS>MonothekTransactionFailedController * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_BANNER_MODEL</NAME>
+#define MONOTHEK_TYPE_BANNER_MODEL                (monothek_banner_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_MODEL</NAME>
+#define MONOTHEK_BANNER_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_BANNER_MODEL, MonothekBannerModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_MODEL_CLASS</NAME>
+#define MONOTHEK_BANNER_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_BANNER_MODEL, MonothekBannerModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_BANNER_MODEL</NAME>
+#define MONOTHEK_IS_BANNER_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_BANNER_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_BANNER_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_BANNER_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_BANNER_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_BANNER_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_BANNER_MODEL, MonothekBannerModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekBannerModel</NAME>
+struct _MonothekBannerModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekBannerModelClass</NAME>
+struct _MonothekBannerModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_banner_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_banner_model_new</NAME>
+<RETURNS>MonothekBannerModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CLOSED_MODEL</NAME>
+#define MONOTHEK_TYPE_CLOSED_MODEL                (monothek_closed_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_MODEL</NAME>
+#define MONOTHEK_CLOSED_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CLOSED_MODEL, MonothekClosedModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_MODEL_CLASS</NAME>
+#define MONOTHEK_CLOSED_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CLOSED_MODEL, MonothekClosedModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CLOSED_MODEL</NAME>
+#define MONOTHEK_IS_CLOSED_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CLOSED_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CLOSED_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_CLOSED_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CLOSED_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_CLOSED_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CLOSED_MODEL, MonothekClosedModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekClosedModel</NAME>
+struct _MonothekClosedModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekClosedModelClass</NAME>
+struct _MonothekClosedModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_closed_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_closed_model_new</NAME>
+<RETURNS>MonothekClosedModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CREDITS_MODEL</NAME>
+#define MONOTHEK_TYPE_CREDITS_MODEL                (monothek_credits_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_MODEL</NAME>
+#define MONOTHEK_CREDITS_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CREDITS_MODEL, MonothekCreditsModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_MODEL_CLASS</NAME>
+#define MONOTHEK_CREDITS_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CREDITS_MODEL, MonothekCreditsModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CREDITS_MODEL</NAME>
+#define MONOTHEK_IS_CREDITS_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CREDITS_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CREDITS_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_CREDITS_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CREDITS_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_CREDITS_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CREDITS_MODEL, MonothekCreditsModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCreditsModel</NAME>
+struct _MonothekCreditsModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCreditsModelClass</NAME>
+struct _MonothekCreditsModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_credits_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_credits_model_new</NAME>
+<RETURNS>MonothekCreditsModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_END_MODEL</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_END_MODEL                (monothek_diskjokey_end_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_MODEL</NAME>
+#define MONOTHEK_DISKJOKEY_END_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_END_MODEL, MonothekDiskjokeyEndModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_MODEL_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_END_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_END_MODEL, MonothekDiskjokeyEndModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_END_MODEL</NAME>
+#define MONOTHEK_IS_DISKJOKEY_END_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_END_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_END_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_END_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_END_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_END_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_END_MODEL, MonothekDiskjokeyEndModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyEndModel</NAME>
+struct _MonothekDiskjokeyEndModel
+{
+  GObject gobject;
+
+  gboolean diskjokey_restart_active;
+  gboolean diskjokey_quit_and_save_active;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyEndModelClass</NAME>
+struct _MonothekDiskjokeyEndModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_model_new</NAME>
+<RETURNS>MonothekDiskjokeyEndModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL                (monothek_diskjokey_payment_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_MODEL</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL, MonothekDiskjokeyPaymentModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_MODEL_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL, MonothekDiskjokeyPaymentModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_PAYMENT_MODEL</NAME>
+#define MONOTHEK_IS_DISKJOKEY_PAYMENT_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_PAYMENT_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_PAYMENT_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_MODEL, MonothekDiskjokeyPaymentModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyPaymentModel</NAME>
+struct _MonothekDiskjokeyPaymentModel
+{
+  GObject gobject;
+
+  gboolean continue_session;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyPaymentModelClass</NAME>
+struct _MonothekDiskjokeyPaymentModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_model_new</NAME>
+<RETURNS>MonothekDiskjokeyPaymentModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL                (monothek_diskjokey_qrcode_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_MODEL</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL, MonothekDiskjokeyQrcodeModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_MODEL_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL, MonothekDiskjokeyQrcodeModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_QRCODE_MODEL</NAME>
+#define MONOTHEK_IS_DISKJOKEY_QRCODE_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_QRCODE_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_QRCODE_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_MODEL, MonothekDiskjokeyQrcodeModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_MODEL_DEFAULT_DURATION_SEC</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_MODEL_DEFAULT_DURATION_SEC (120)
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyQrcodeModel</NAME>
+struct _MonothekDiskjokeyQrcodeModel
+{
+  GObject gobject;
+
+  gboolean quit_active;
+  
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyQrcodeModelClass</NAME>
+struct _MonothekDiskjokeyQrcodeModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_model_new</NAME>
+<RETURNS>MonothekDiskjokeyQrcodeModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL                (monothek_diskjokey_sequencer_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL, MonothekDiskjokeySequencerModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL, MonothekDiskjokeySequencerModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_SEQUENCER_MODEL</NAME>
+#define MONOTHEK_IS_DISKJOKEY_SEQUENCER_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_SEQUENCER_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_SEQUENCER_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_MODEL, MonothekDiskjokeySequencerModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT (9)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT (64)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT (4)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER (80.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER (160.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT (120.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_LOWER</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_LOWER (0.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_UPPER</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_UPPER (5.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT (0.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME SRCDIR "/monothek.share/monothek/drumkit/techno.xml"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC (600)
+</MACRO>
+<ENUM>
+<NAME>MonothekDiskjokeySequencerModelGenre</NAME>
+typedef enum{
+  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO,
+  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE,
+  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP,
+}MonothekDiskjokeySequencerModelGenre;
+</ENUM>
+<STRUCT>
+<NAME>MonothekDiskjokeySequencerModel</NAME>
+struct _MonothekDiskjokeySequencerModel
+{
+  GObject gobject;
+
+  gboolean **pad_active;
+
+  guint current_genre;
+  gboolean techno_active;
+  gboolean house_active;
+  gboolean hiphop_active;
+
+  gboolean random_active;
+  gboolean clear_active;
+  
+  gboolean run_active;
+
+  gint active_column;
+
+  guint current_tab;
+  gboolean *tab_active;
+
+  gdouble bpm_upper;
+  gdouble bpm_lower;
+  gdouble bpm;
+
+  gdouble swing_upper;
+  gdouble swing_lower;
+  gdouble swing;
+  
+  gchar **techno_label;
+  gchar **techno_sample;
+
+  gchar **techno_bank_name;
+  gchar *default_techno_bank_name;
+  
+  GHashTable **techno_control;
+  GHashTable **techno_bank;
+
+  gchar **house_label;
+  gchar **house_sample;
+
+  gchar **house_bank_name;
+  gchar *default_house_bank_name;
+
+  GHashTable **house_control;
+  GHashTable **house_bank;
+
+  gchar **hiphop_label;
+  gchar **hiphop_sample;
+
+  gchar **hiphop_bank_name;
+  gchar *default_hiphop_bank_name;
+
+  GHashTable **hiphop_control;
+  GHashTable **hiphop_bank;
+  
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeySequencerModelClass</NAME>
+struct _MonothekDiskjokeySequencerModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_model_set_pad_active</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerModel *diskjokey_sequencer_model, guint x, guint y, gboolean is_active
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_model_get_pad_active</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekDiskjokeySequencerModel *diskjokey_sequencer_model, guint x, guint y
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_model_set_tab_active</NAME>
+<RETURNS>void  </RETURNS>
+MonothekDiskjokeySequencerModel *diskjokey_sequencer_model, guint x, gboolean is_active
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_model_get_tab_active</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekDiskjokeySequencerModel *diskjokey_sequencer_model, guint x
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_model_new</NAME>
+<RETURNS>MonothekDiskjokeySequencerModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_END_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_END_MODEL                (monothek_jukebox_end_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_END_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_END_MODEL, MonothekJukeboxEndModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_END_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_END_MODEL, MonothekJukeboxEndModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_END_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_END_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_END_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_END_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_END_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_END_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_END_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_END_MODEL, MonothekJukeboxEndModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxEndModel</NAME>
+struct _MonothekJukeboxEndModel
+{
+  GObject gobject;
+
+  gboolean jukebox_restart_active;
+  gboolean jukebox_quit_and_save_active;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxEndModelClass</NAME>
+struct _MonothekJukeboxEndModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_end_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_end_model_new</NAME>
+<RETURNS>MonothekJukeboxEndModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_INFO_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_INFO_MODEL                (monothek_jukebox_info_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_INFO_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL, MonothekJukeboxInfoModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_INFO_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL, MonothekJukeboxInfoModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_INFO_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_INFO_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_INFO_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_INFO_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_INFO_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_INFO_MODEL, MonothekJukeboxInfoModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_MODEL_DEFAULT_DURATION_SEC</NAME>
+#define MONOTHEK_JUKEBOX_INFO_MODEL_DEFAULT_DURATION_SEC (120)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxInfoModel</NAME>
+struct _MonothekJukeboxInfoModel
+{
+  GObject gobject;
+
+  gchar *song_filename;
+  
+  gchar *song_title;
+  
+  gchar *artist;
+
+  gboolean jukebox_ok_active;
+  
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxInfoModelClass</NAME>
+struct _MonothekJukeboxInfoModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_info_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_info_model_load_song_filename</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxInfoModel *jukebox_info_model, gchar *song_filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_info_model_new</NAME>
+<RETURNS>MonothekJukeboxInfoModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_MODE_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_MODE_MODEL                (monothek_jukebox_mode_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_MODE_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL, MonothekJukeboxModeModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL, MonothekJukeboxModeModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_MODE_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_MODE_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_MODE_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_MODE_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_MODE_MODEL, MonothekJukeboxModeModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_MODEL_DEFAULT_MAX_ATTEMPTS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_MODEL_DEFAULT_MAX_ATTEMPTS (3)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxModeModel</NAME>
+struct _MonothekJukeboxModeModel
+{
+  GObject gobject;
+
+  guint attempts;
+  guint max_attempts;
+
+  gboolean jukebox_test_active;
+  gboolean jukebox_play_active;
+  gboolean jukebox_cancel_active;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxModeModelClass</NAME>
+struct _MonothekJukeboxModeModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_model_new</NAME>
+<RETURNS>MonothekJukeboxModeModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL                (monothek_jukebox_payment_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL, MonothekJukeboxPaymentModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL, MonothekJukeboxPaymentModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PAYMENT_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_PAYMENT_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PAYMENT_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_PAYMENT_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_MODEL, MonothekJukeboxPaymentModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxPaymentModel</NAME>
+struct _MonothekJukeboxPaymentModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxPaymentModelClass</NAME>
+struct _MonothekJukeboxPaymentModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_model_new</NAME>
+<RETURNS>MonothekJukeboxPaymentModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL                (monothek_jukebox_playlist_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PLAYLIST_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_PLAYLIST_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PLAYLIST_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_PLAYLIST_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME SRCDIR "/monothek.share/monothek/playlist/jukebox.xml"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT (12)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_SONG_TITEL</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_SONG_TITEL "FANTASY GIRL"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ARTIST</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ARTIST "KLANGTHERAPEUTEN"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ALBUM</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ALBUM "FANTASY GIRL / BOOTY CITY"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_DURATION_SEC</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_DURATION_SEC (372)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxPlaylistModel</NAME>
+struct _MonothekJukeboxPlaylistModel
+{
+  GObject gobject;
+
+  gboolean *song_select_active;
+ 
+  gchar **song_filename;
+  gchar **cover_filename;
+
+  gchar **song_title;
+  gchar **artist;
+  gchar **album;
+
+  struct timespec **duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxPlaylistModelClass</NAME>
+struct _MonothekJukeboxPlaylistModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_model_new</NAME>
+<RETURNS>MonothekJukeboxPlaylistModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL                (monothek_jukebox_qrcode_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL, MonothekJukeboxQrcodeModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL, MonothekJukeboxQrcodeModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_QRCODE_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_QRCODE_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_QRCODE_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_QRCODE_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_MODEL, MonothekJukeboxQrcodeModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_MODEL_DEFAULT_DURATION_SEC</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_MODEL_DEFAULT_DURATION_SEC (120)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxQrcodeModel</NAME>
+struct _MonothekJukeboxQrcodeModel
+{
+  GObject gobject;
+
+  gboolean quit_active;
+  
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxQrcodeModelClass</NAME>
+struct _MonothekJukeboxQrcodeModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_model_new</NAME>
+<RETURNS>MonothekJukeboxQrcodeModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL                (monothek_jukebox_track_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_MODEL</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL, MonothekJukeboxTrackModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_MODEL_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL, MonothekJukeboxTrackModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_TRACK_MODEL</NAME>
+#define MONOTHEK_IS_JUKEBOX_TRACK_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_TRACK_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_TRACK_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_MODEL, MonothekJukeboxTrackModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_MODEL_DEFAULT_MAX_ATTEMPTS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_MODEL_DEFAULT_MAX_ATTEMPTS (3)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxTrackModel</NAME>
+struct _MonothekJukeboxTrackModel
+{
+  GObject gobject;
+
+  guint attempts;
+  guint max_attempts;
+
+  gboolean jukebox_test_active;
+  gboolean jukebox_play_active;
+  gboolean jukebox_back_active;
+
+  gchar *song_filename;
+  gboolean test_mode;
+  
+  gchar *cover_filename;
+  
+  gchar *song_title;
+  
+  gchar *artist;
+  gchar *album;
+
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxTrackModelClass</NAME>
+struct _MonothekJukeboxTrackModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_track_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_model_load_song_filename</NAME>
+<RETURNS>void  </RETURNS>
+MonothekJukeboxTrackModel *jukebox_track_model, gchar *song_filename
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_model_new</NAME>
+<RETURNS>MonothekJukeboxTrackModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_LOAD_MODEL</NAME>
+#define MONOTHEK_TYPE_LOAD_MODEL                (monothek_load_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_MODEL</NAME>
+#define MONOTHEK_LOAD_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_LOAD_MODEL, MonothekLoadModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_MODEL_CLASS</NAME>
+#define MONOTHEK_LOAD_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_LOAD_MODEL, MonothekLoadModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_LOAD_MODEL</NAME>
+#define MONOTHEK_IS_LOAD_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_LOAD_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_LOAD_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_LOAD_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_LOAD_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_LOAD_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_LOAD_MODEL, MonothekLoadModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekLoadModel</NAME>
+struct _MonothekLoadModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekLoadModelClass</NAME>
+struct _MonothekLoadModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_load_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_model_new</NAME>
+<RETURNS>MonothekLoadModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_OUTAGE_MODEL</NAME>
+#define MONOTHEK_TYPE_OUTAGE_MODEL                (monothek_outage_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_MODEL</NAME>
+#define MONOTHEK_OUTAGE_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_OUTAGE_MODEL, MonothekOutageModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_MODEL_CLASS</NAME>
+#define MONOTHEK_OUTAGE_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_OUTAGE_MODEL, MonothekOutageModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_OUTAGE_MODEL</NAME>
+#define MONOTHEK_IS_OUTAGE_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_OUTAGE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_OUTAGE_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_OUTAGE_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_OUTAGE_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_OUTAGE_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_OUTAGE_MODEL, MonothekOutageModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekOutageModel</NAME>
+struct _MonothekOutageModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekOutageModelClass</NAME>
+struct _MonothekOutageModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_outage_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_outage_model_new</NAME>
+<RETURNS>MonothekOutageModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_SCREENSAVER_MODEL</NAME>
+#define MONOTHEK_TYPE_SCREENSAVER_MODEL                (monothek_screensaver_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_MODEL</NAME>
+#define MONOTHEK_SCREENSAVER_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_SCREENSAVER_MODEL, MonothekScreensaverModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_MODEL_CLASS</NAME>
+#define MONOTHEK_SCREENSAVER_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_SCREENSAVER_MODEL, MonothekScreensaverModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SCREENSAVER_MODEL</NAME>
+#define MONOTHEK_IS_SCREENSAVER_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_SCREENSAVER_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SCREENSAVER_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_SCREENSAVER_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_SCREENSAVER_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_SCREENSAVER_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_SCREENSAVER_MODEL, MonothekScreensaverModelClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekScreensaverModel</NAME>
+struct _MonothekScreensaverModel
+{
+  GObject gobject;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekScreensaverModelClass</NAME>
+struct _MonothekScreensaverModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_screensaver_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_screensaver_model_new</NAME>
+<RETURNS>MonothekScreensaverModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_START_MODEL</NAME>
+#define MONOTHEK_TYPE_START_MODEL                (monothek_start_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_MODEL</NAME>
+#define MONOTHEK_START_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_START_MODEL, MonothekStartModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_MODEL_CLASS</NAME>
+#define MONOTHEK_START_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_START_MODEL, MonothekStartModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_START_MODEL</NAME>
+#define MONOTHEK_IS_START_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_START_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_START_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_START_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_START_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_START_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_MODEL, MonothekStartModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_MODEL_PURCHASE_PATH</NAME>
+#define MONOTHEK_START_MODEL_PURCHASE_PATH SRCDIR "/monothek.home/purchase"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_MODEL_DEFAULT_JUKEBOX_PRICE</NAME>
+#define MONOTHEK_START_MODEL_DEFAULT_JUKEBOX_PRICE (5.0)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_MODEL_DEFAULT_DISKJOKEY_PRICE</NAME>
+#define MONOTHEK_START_MODEL_DEFAULT_DISKJOKEY_PRICE (5.0)
+</MACRO>
+<STRUCT>
+<NAME>MonothekStartModel</NAME>
+struct _MonothekStartModel
+{
+  GObject gobject;
+
+  guint nth_position;
+  
+  gdouble jukebox_price;
+  gboolean jukebox_start_active;
+  
+  gdouble diskjokey_price;
+  gboolean diskjokey_start_active;
+
+  gchar *purchase_filename;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekStartModelClass</NAME>
+struct _MonothekStartModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_start_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_start_model_new</NAME>
+<RETURNS>MonothekStartModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL</NAME>
+#define MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL                (monothek_transaction_failed_model_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_MODEL</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_MODEL(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL, MonothekTransactionFailedModel))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_MODEL_CLASS</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_MODEL_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL, MonothekTransactionFailedModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_TRANSACTION_FAILED_MODEL</NAME>
+#define MONOTHEK_IS_TRANSACTION_FAILED_MODEL(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_TRANSACTION_FAILED_MODEL_CLASS</NAME>
+#define MONOTHEK_IS_TRANSACTION_FAILED_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_MODEL_GET_CLASS</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_MODEL, MonothekTransactionFailedModelClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_MODEL_DEFAULT_DURATION_SEC</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_MODEL_DEFAULT_DURATION_SEC (10)
+</MACRO>
+<STRUCT>
+<NAME>MonothekTransactionFailedModel</NAME>
+struct _MonothekTransactionFailedModel
+{
+  GObject gobject;
+  
+  struct timespec *duration;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekTransactionFailedModelClass</NAME>
+struct _MonothekTransactionFailedModelClass
+{
+  GObjectClass gobject;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_transaction_failed_model_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_transaction_failed_model_new</NAME>
+<RETURNS>MonothekTransactionFailedModel * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_BANNER_VIEW</NAME>
+#define MONOTHEK_TYPE_BANNER_VIEW                (monothek_banner_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_VIEW</NAME>
+#define MONOTHEK_BANNER_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_BANNER_VIEW, MonothekBannerView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_VIEW_CLASS</NAME>
+#define MONOTHEK_BANNER_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_BANNER_VIEW, MonothekBannerViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_BANNER_VIEW</NAME>
+#define MONOTHEK_IS_BANNER_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_BANNER_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_BANNER_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_BANNER_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_BANNER_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_BANNER_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_BANNER_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_BANNER_VIEW, MonothekBannerViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekBannerView</NAME>
+struct _MonothekBannerView
+{
+  MonothekView monothek_view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekBannerViewClass</NAME>
+struct _MonothekBannerViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_banner_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_banner_view_new</NAME>
+<RETURNS>MonothekBannerView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CLOSED_VIEW</NAME>
+#define MONOTHEK_TYPE_CLOSED_VIEW                (monothek_closed_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_VIEW</NAME>
+#define MONOTHEK_CLOSED_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CLOSED_VIEW, MonothekClosedView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_VIEW_CLASS</NAME>
+#define MONOTHEK_CLOSED_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CLOSED_VIEW, MonothekClosedViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CLOSED_VIEW</NAME>
+#define MONOTHEK_IS_CLOSED_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CLOSED_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CLOSED_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_CLOSED_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CLOSED_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CLOSED_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_CLOSED_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CLOSED_VIEW, MonothekClosedViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekClosedView</NAME>
+struct _MonothekClosedView
+{
+  MonothekView monothek_view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekClosedViewClass</NAME>
+struct _MonothekClosedViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_closed_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_closed_view_new</NAME>
+<RETURNS>MonothekClosedView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_CREDITS_VIEW</NAME>
+#define MONOTHEK_TYPE_CREDITS_VIEW                (monothek_credits_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_VIEW</NAME>
+#define MONOTHEK_CREDITS_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_CREDITS_VIEW, MonothekCreditsView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_VIEW_CLASS</NAME>
+#define MONOTHEK_CREDITS_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_CREDITS_VIEW, MonothekCreditsViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CREDITS_VIEW</NAME>
+#define MONOTHEK_IS_CREDITS_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_CREDITS_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_CREDITS_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_CREDITS_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_CREDITS_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_CREDITS_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_CREDITS_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_CREDITS_VIEW, MonothekCreditsViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekCreditsView</NAME>
+struct _MonothekCreditsView
+{
+  MonothekView monothek_view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekCreditsViewClass</NAME>
+struct _MonothekCreditsViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_credits_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_credits_view_new</NAME>
+<RETURNS>MonothekCreditsView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_END_VIEW</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_END_VIEW                (monothek_diskjokey_end_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_VIEW</NAME>
+#define MONOTHEK_DISKJOKEY_END_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_END_VIEW, MonothekDiskjokeyEndView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_VIEW_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_END_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_END_VIEW, MonothekDiskjokeyEndViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_END_VIEW</NAME>
+#define MONOTHEK_IS_DISKJOKEY_END_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_END_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_END_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_END_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_END_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_END_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_END_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_END_VIEW, MonothekDiskjokeyEndViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyEndView</NAME>
+struct _MonothekDiskjokeyEndView
+{
+  MonothekView monothek_view;
+
+  //continue
+  gdouble continue_box_line_width;
+
+  gdouble continue_box_x0;
+  gdouble continue_box_y0;
+
+  gdouble continue_box_width;
+  gdouble continue_box_height;
+
+  //quit
+  gdouble quit_box_line_width;
+
+  gdouble quit_box_x0;
+  gdouble quit_box_y0;
+
+  gdouble quit_box_width;
+  gdouble quit_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyEndViewClass</NAME>
+struct _MonothekDiskjokeyEndViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_end_view_new</NAME>
+<RETURNS>MonothekDiskjokeyEndView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW                (monothek_diskjokey_payment_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_VIEW</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW, MonothekDiskjokeyPaymentView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW, MonothekDiskjokeyPaymentViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_PAYMENT_VIEW</NAME>
+#define MONOTHEK_IS_DISKJOKEY_PAYMENT_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_PAYMENT_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_PAYMENT_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW, MonothekDiskjokeyPaymentViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CARDS_PNG</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CARDS_PNG SRCDIR "/monothek.share/monothek/images/diskjokey-payment-cards.png"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_PAYMENT_VIEW_NFC_PNG</NAME>
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_NFC_PNG SRCDIR "/monothek.share/monothek/images/diskjokey-payment-nfc.png"
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyPaymentView</NAME>
+struct _MonothekDiskjokeyPaymentView
+{
+  MonothekView monothek_view;
+
+  //pay
+  gdouble pay_box_line_width;
+
+  gdouble pay_box_x0;
+  gdouble pay_box_y0;
+
+  gdouble pay_box_width;
+  gdouble pay_box_height;
+
+  //arrow
+  gdouble arrow_box_x0;
+  gdouble arrow_box_y0;
+
+  gdouble arrow_box_width;
+  gdouble arrow_box_height;
+
+  gdouble arrow_top_x0;
+  gdouble arrow_top_y0;
+
+  gdouble arrow_top_width;
+  gdouble arrow_top_height;
+
+  //images
+  gdouble cards_box_x0;
+  gdouble cards_box_y0;
+
+  gchar *cards_png_filename;
+
+  gdouble nfc_box_x0;
+  gdouble nfc_box_y0;
+
+  gchar *nfc_png_filename;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyPaymentViewClass</NAME>
+struct _MonothekDiskjokeyPaymentViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_payment_view_new</NAME>
+<RETURNS>MonothekDiskjokeyPaymentView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW                (monothek_diskjokey_qrcode_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_VIEW</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW, MonothekDiskjokeyQrcodeView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_VIEW_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW, MonothekDiskjokeyQrcodeViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_QRCODE_VIEW</NAME>
+#define MONOTHEK_IS_DISKJOKEY_QRCODE_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_QRCODE_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_QRCODE_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_QRCODE_VIEW, MonothekDiskjokeyQrcodeViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_VIEW_PADDING_TOP</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_VIEW_PADDING_TOP (12.9)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_QRCODE_VIEW_PADDING_LEFT</NAME>
+#define MONOTHEK_DISKJOKEY_QRCODE_VIEW_PADDING_LEFT (20.0)
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeyQrcodeView</NAME>
+struct _MonothekDiskjokeyQrcodeView
+{
+  MonothekView monothek_view;
+
+  //quit
+  gdouble quit_box_line_width;
+
+  gdouble quit_box_x0;
+  gdouble quit_box_y0;
+
+  gdouble quit_box_width;
+  gdouble quit_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeyQrcodeViewClass</NAME>
+struct _MonothekDiskjokeyQrcodeViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_qrcode_view_new</NAME>
+<RETURNS>MonothekDiskjokeyQrcodeView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW</NAME>
+#define MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW                (monothek_diskjokey_sequencer_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_VIEW</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW, MonothekDiskjokeySequencerView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW, MonothekDiskjokeySequencerViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_SEQUENCER_VIEW</NAME>
+#define MONOTHEK_IS_DISKJOKEY_SEQUENCER_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_DISKJOKEY_SEQUENCER_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_DISKJOKEY_SEQUENCER_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_SEQUENCER_VIEW, MonothekDiskjokeySequencerViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT (16)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_ROW_COUNT</NAME>
+#define MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_ROW_COUNT (9)
+</MACRO>
+<STRUCT>
+<NAME>MonothekDiskjokeySequencerView</NAME>
+struct _MonothekDiskjokeySequencerView
+{
+  MonothekView monothek_view;
+
+  gdouble active_column_line_width;
+
+  //pattern
+  gdouble pattern_line_width;
+
+  gdouble pattern_x0;
+  gdouble pattern_y0;
+
+  gdouble pattern_column_spacing;
+  gdouble pattern_row_spacing;
+
+  gdouble pad_width;
+  gdouble pad_height;
+
+  //tab
+  gdouble tab_box_line_width[4];
+
+  gdouble tab_box_x0[4];
+  gdouble tab_box_y0[4];
+
+  gdouble tab_box_width[4];
+  gdouble tab_box_height[4];
+
+  //bpm
+  gdouble bpm_box_line_width;
+
+  gdouble bpm_box_x0;
+  gdouble bpm_box_y0;
+
+  gdouble bpm_box_width;
+  gdouble bpm_box_height;
+
+  gdouble bpm_control_line_width;
+
+  gdouble bpm_control_x0;
+  gdouble bpm_control_y0;
+
+  gdouble bpm_control_width;
+  gdouble bpm_control_height;
+  
+  //swing
+  gdouble swing_box_line_width;
+
+  gdouble swing_box_x0;
+  gdouble swing_box_y0;
+
+  gdouble swing_box_width;
+  gdouble swing_box_height;
+
+  gdouble swing_control_line_width;
+
+  gdouble swing_control_x0;
+  gdouble swing_control_y0;
+
+  gdouble swing_control_width;
+  gdouble swing_control_height;
+  
+  //techno
+  gdouble techno_box_line_width;
+
+  gdouble techno_box_x0;
+  gdouble techno_box_y0;
+
+  gdouble techno_box_width;
+  gdouble techno_box_height;
+
+  //house
+  gdouble house_box_line_width;
+
+  gdouble house_box_x0;
+  gdouble house_box_y0;
+
+  gdouble house_box_width;
+  gdouble house_box_height;
+
+  //hiphop
+  gdouble hiphop_box_line_width;
+
+  gdouble hiphop_box_x0;
+  gdouble hiphop_box_y0;
+
+  gdouble hiphop_box_width;
+  gdouble hiphop_box_height;
+
+  //random
+  gdouble random_box_line_width;
+
+  gdouble random_box_x0;
+  gdouble random_box_y0;
+
+  gdouble random_box_width;
+  gdouble random_box_height;
+
+  //clear
+  gdouble clear_box_line_width;
+
+  gdouble clear_box_x0;
+  gdouble clear_box_y0;
+
+  gdouble clear_box_width;
+  gdouble clear_box_height;
+
+  //timer
+  GtkAdjustment *progress;
+
+  gdouble timer_box_line_width;
+
+  gdouble timer_box_x0;
+  gdouble timer_box_y0;
+
+  gdouble timer_box_width;
+  gdouble timer_box_height;
+
+  //stop
+  gdouble stop_box_line_width;
+
+  gdouble stop_box_x0;
+  gdouble stop_box_y0;
+
+  gdouble stop_box_width;
+  gdouble stop_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekDiskjokeySequencerViewClass</NAME>
+struct _MonothekDiskjokeySequencerViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_diskjokey_sequencer_view_new</NAME>
+<RETURNS>MonothekDiskjokeySequencerView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_END_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_END_VIEW                (monothek_jukebox_end_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_END_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_END_VIEW, MonothekJukeboxEndView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_END_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_END_VIEW, MonothekJukeboxEndViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_END_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_END_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_END_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_END_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_END_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_END_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_END_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_END_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_END_VIEW, MonothekJukeboxEndViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxEndView</NAME>
+struct _MonothekJukeboxEndView
+{
+  MonothekView monothek_view;
+
+  //continue
+  gdouble continue_box_line_width;
+
+  gdouble continue_box_x0;
+  gdouble continue_box_y0;
+
+  gdouble continue_box_width;
+  gdouble continue_box_height;
+
+  //quit
+  gdouble quit_box_line_width;
+
+  gdouble quit_box_x0;
+  gdouble quit_box_y0;
+
+  gdouble quit_box_width;
+  gdouble quit_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxEndViewClass</NAME>
+struct _MonothekJukeboxEndViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_end_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_end_view_new</NAME>
+<RETURNS>MonothekJukeboxEndView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_INFO_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_INFO_VIEW                (monothek_jukebox_info_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_INFO_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_INFO_VIEW, MonothekJukeboxInfoView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_INFO_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_INFO_VIEW, MonothekJukeboxInfoViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_INFO_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_INFO_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_INFO_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_INFO_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_INFO_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_INFO_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_INFO_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_INFO_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_INFO_VIEW, MonothekJukeboxInfoViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxInfoView</NAME>
+struct _MonothekJukeboxInfoView
+{
+  MonothekView monothek_view;
+
+  // ok
+  gdouble ok_box_line_width;
+
+  gdouble ok_box_x0;
+  gdouble ok_box_y0;
+
+  gdouble ok_box_width;
+  gdouble ok_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxInfoViewClass</NAME>
+struct _MonothekJukeboxInfoViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_info_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_info_view_new</NAME>
+<RETURNS>MonothekJukeboxInfoView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_MODE_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_MODE_VIEW                (monothek_jukebox_mode_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_MODE_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_MODE_VIEW, MonothekJukeboxModeView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_MODE_VIEW, MonothekJukeboxModeViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_MODE_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_MODE_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_MODE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_MODE_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_MODE_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_MODE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_MODE_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_MODE_VIEW, MonothekJukeboxModeViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_VIEW_PADDING_TOP</NAME>
+#define MONOTHEK_JUKEBOX_MODE_VIEW_PADDING_TOP (12.9)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_MODE_VIEW_PADDING_LEFT</NAME>
+#define MONOTHEK_JUKEBOX_MODE_VIEW_PADDING_LEFT (20.0)
+</MACRO>
+<ENUM>
+<NAME>MonothekJukeboxModeViewFlags</NAME>
+typedef enum{
+  MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS                = 1,
+  MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS               = 1 <<  1,
+  MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST                 = 1 <<  2,
+  MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST                  = 1 <<  3,
+}MonothekJukeboxModeViewFlags;
+</ENUM>
+<STRUCT>
+<NAME>MonothekJukeboxModeView</NAME>
+struct _MonothekJukeboxModeView
+{
+  MonothekView monothek_view;
+
+  guint flags;
+  
+  //test  
+  gdouble test_box_line_width;
+
+  gdouble test_box_x0;
+  gdouble test_box_y0;
+
+  gdouble test_box_width;
+  gdouble test_box_height;
+
+  //play
+  gdouble play_box_line_width;
+
+  gdouble play_box_x0;
+  gdouble play_box_y0;
+
+  gdouble play_box_width;
+  gdouble play_box_height;
+
+  //cancel
+  gdouble cancel_box_line_width;
+
+  gdouble cancel_box_x0;
+  gdouble cancel_box_y0;
+
+  gdouble cancel_box_width;
+  gdouble cancel_box_height;
+
+  gchar *current_test_message;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxModeViewClass</NAME>
+struct _MonothekJukeboxModeViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_mode_view_new</NAME>
+<RETURNS>MonothekJukeboxModeView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW                (monothek_jukebox_payment_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW, MonothekJukeboxPaymentView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW, MonothekJukeboxPaymentViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PAYMENT_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_PAYMENT_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PAYMENT_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_PAYMENT_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW, MonothekJukeboxPaymentViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG SRCDIR "/monothek.share/monothek/images/jukebox-payment-cards.png"
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG</NAME>
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG SRCDIR "/monothek.share/monothek/images/jukebox-payment-nfc.png"
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxPaymentView</NAME>
+struct _MonothekJukeboxPaymentView
+{
+  MonothekView monothek_view;
+
+  //pay
+  gdouble pay_box_line_width;
+
+  gdouble pay_box_x0;
+  gdouble pay_box_y0;
+
+  gdouble pay_box_width;
+  gdouble pay_box_height;
+
+  //arrow
+  gdouble arrow_box_x0;
+  gdouble arrow_box_y0;
+
+  gdouble arrow_box_width;
+  gdouble arrow_box_height;
+
+  gdouble arrow_top_x0;
+  gdouble arrow_top_y0;
+
+  gdouble arrow_top_width;
+  gdouble arrow_top_height;
+
+  gdouble cards_box_x0;
+  gdouble cards_box_y0;
+  gchar *cards_png_filename;
+  
+  gdouble nfc_box_x0;
+  gdouble nfc_box_y0;
+  gchar *nfc_png_filename;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxPaymentViewClass</NAME>
+struct _MonothekJukeboxPaymentViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_payment_view_new</NAME>
+<RETURNS>MonothekJukeboxPaymentView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW                (monothek_jukebox_playlist_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, MonothekJukeboxPlaylistView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, MonothekJukeboxPlaylistViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PLAYLIST_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_PLAYLIST_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_PLAYLIST_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_PLAYLIST_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_VIEW, MonothekJukeboxPlaylistViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_PLAYLIST_VIEW_SONG_ROW_COUNT</NAME>
+#define MONOTHEK_JUKEBOX_PLAYLIST_VIEW_SONG_ROW_COUNT (12)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxPlaylistView</NAME>
+struct _MonothekJukeboxPlaylistView
+{
+  MonothekView monothek_view;
+
+  gdouble title_x0;
+  gdouble artist_x0;
+  gdouble album_x0;
+  gdouble duration_x0;
+
+  gdouble song_box_line_width;
+  
+  gdouble table_x0;
+  gdouble table_y0;
+
+  gdouble row_width;
+  gdouble row_height;
+
+  gdouble row_spacing;
+  gdouble text_spacing;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxPlaylistViewClass</NAME>
+struct _MonothekJukeboxPlaylistViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_playlist_view_new</NAME>
+<RETURNS>MonothekJukeboxPlaylistView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW                (monothek_jukebox_qrcode_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW, MonothekJukeboxQrcodeView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW, MonothekJukeboxQrcodeViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_QRCODE_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_QRCODE_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_QRCODE_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_QRCODE_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW, MonothekJukeboxQrcodeViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_VIEW_PADDING_TOP</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_VIEW_PADDING_TOP (12.9)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_QRCODE_VIEW_PADDING_LEFT</NAME>
+#define MONOTHEK_JUKEBOX_QRCODE_VIEW_PADDING_LEFT (20.0)
+</MACRO>
+<STRUCT>
+<NAME>MonothekJukeboxQrcodeView</NAME>
+struct _MonothekJukeboxQrcodeView
+{
+  MonothekView monothek_view;
+
+  //quit
+  gdouble quit_box_line_width;
+
+  gdouble quit_box_x0;
+  gdouble quit_box_y0;
+
+  gdouble quit_box_width;
+  gdouble quit_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxQrcodeViewClass</NAME>
+struct _MonothekJukeboxQrcodeViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_qrcode_view_new</NAME>
+<RETURNS>MonothekJukeboxQrcodeView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW</NAME>
+#define MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW                (monothek_jukebox_track_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_VIEW</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, MonothekJukeboxTrackView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_VIEW_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, MonothekJukeboxTrackViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_TRACK_VIEW</NAME>
+#define MONOTHEK_IS_JUKEBOX_TRACK_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_JUKEBOX_TRACK_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_JUKEBOX_TRACK_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW, MonothekJukeboxTrackViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_TOP</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_TOP (12.9)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_LEFT</NAME>
+#define MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_LEFT (20.0)
+</MACRO>
+<ENUM>
+<NAME>MonothekJukeboxTrackViewFlags</NAME>
+typedef enum{
+  MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS            = 1,
+  MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_NO_TEST_CONTROL     = 1 <<  1,
+  MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS           = 1 <<  2,
+}MonothekJukeboxTrackViewFlags;
+</ENUM>
+<STRUCT>
+<NAME>MonothekJukeboxTrackView</NAME>
+struct _MonothekJukeboxTrackView
+{
+  MonothekView monothek_view;
+
+  guint flags;
+  
+  //cover
+  cairo_surface_t *cover_surface;
+  
+  gdouble cover_box_line_width;
+
+  gdouble cover_box_x0;
+  gdouble cover_box_y0;
+
+  gdouble cover_box_width;
+  gdouble cover_box_height;
+
+  //progress
+  GtkAdjustment *progress;
+  
+  gdouble progress_box_line_width;
+
+  gdouble progress_box_x0;
+  gdouble progress_box_y0;
+
+  gdouble progress_box_width;
+  gdouble progress_box_height;
+
+  // play
+  gdouble play_box_line_width;
+
+  gdouble play_box_x0;
+  gdouble play_box_y0;
+
+  gdouble play_box_width;
+  gdouble play_box_height;
+
+  // test
+  gdouble test_box_line_width;
+
+  gdouble test_box_x0;
+  gdouble test_box_y0;
+
+  gdouble test_box_width;
+  gdouble test_box_height;
+
+  // back
+  gdouble back_box_line_width;
+
+  gdouble back_box_x0;
+  gdouble back_box_y0;
+
+  gdouble back_box_width;
+  gdouble back_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekJukeboxTrackViewClass</NAME>
+struct _MonothekJukeboxTrackViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_jukebox_track_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_jukebox_track_view_new</NAME>
+<RETURNS>MonothekJukeboxTrackView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_LOAD_VIEW</NAME>
+#define MONOTHEK_TYPE_LOAD_VIEW                (monothek_load_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_VIEW</NAME>
+#define MONOTHEK_LOAD_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_LOAD_VIEW, MonothekLoadView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_VIEW_CLASS</NAME>
+#define MONOTHEK_LOAD_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_LOAD_VIEW, MonothekLoadViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_LOAD_VIEW</NAME>
+#define MONOTHEK_IS_LOAD_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_LOAD_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_LOAD_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_LOAD_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_LOAD_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_LOAD_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_LOAD_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_LOAD_VIEW, MonothekLoadViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekLoadView</NAME>
+struct _MonothekLoadView
+{
+  MonothekView monothek_view;
+
+  gdouble progress_x0;
+  gdouble progress_y0;
+
+  gdouble progress_width;
+  gdouble progress_height;
+
+  guint progress_position;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekLoadViewClass</NAME>
+struct _MonothekLoadViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_load_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_load_view_new</NAME>
+<RETURNS>MonothekLoadView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_OUTAGE_VIEW</NAME>
+#define MONOTHEK_TYPE_OUTAGE_VIEW                (monothek_outage_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_VIEW</NAME>
+#define MONOTHEK_OUTAGE_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_OUTAGE_VIEW, MonothekOutageView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_VIEW_CLASS</NAME>
+#define MONOTHEK_OUTAGE_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_OUTAGE_VIEW, MonothekOutageViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_OUTAGE_VIEW</NAME>
+#define MONOTHEK_IS_OUTAGE_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_OUTAGE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_OUTAGE_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_OUTAGE_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_OUTAGE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_OUTAGE_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_OUTAGE_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_OUTAGE_VIEW, MonothekOutageViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekOutageView</NAME>
+struct _MonothekOutageView
+{
+  MonothekView monothek_view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekOutageViewClass</NAME>
+struct _MonothekOutageViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_outage_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_outage_view_new</NAME>
+<RETURNS>MonothekOutageView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_SCREENSAVER_VIEW</NAME>
+#define MONOTHEK_TYPE_SCREENSAVER_VIEW                (monothek_screensaver_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_VIEW</NAME>
+#define MONOTHEK_SCREENSAVER_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_SCREENSAVER_VIEW, MonothekScreensaverView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_VIEW_CLASS</NAME>
+#define MONOTHEK_SCREENSAVER_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_SCREENSAVER_VIEW, MonothekScreensaverViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SCREENSAVER_VIEW</NAME>
+#define MONOTHEK_IS_SCREENSAVER_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_SCREENSAVER_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_SCREENSAVER_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_SCREENSAVER_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_SCREENSAVER_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_SCREENSAVER_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_SCREENSAVER_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_SCREENSAVER_VIEW, MonothekScreensaverViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekScreensaverView</NAME>
+struct _MonothekScreensaverView
+{
+  MonothekView monothek_view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekScreensaverViewClass</NAME>
+struct _MonothekScreensaverViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_screensaver_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_screensaver_view_new</NAME>
+<RETURNS>MonothekScreensaverView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_START_VIEW</NAME>
+#define MONOTHEK_TYPE_START_VIEW                (monothek_start_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_VIEW</NAME>
+#define MONOTHEK_START_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_START_VIEW, MonothekStartView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_VIEW_CLASS</NAME>
+#define MONOTHEK_START_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_START_VIEW, MonothekStartViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_START_VIEW</NAME>
+#define MONOTHEK_IS_START_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_START_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_START_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_START_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_START_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_START_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_START_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_VIEW, MonothekStartViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekStartView</NAME>
+struct _MonothekStartView
+{
+  MonothekView monothek_view;
+
+  gdouble outer_box_line_width;
+
+  //jukebox
+  gdouble jukebox_x0;
+  gdouble jukebox_y0;
+
+  gdouble jukebox_width;
+  gdouble jukebox_height;
+
+  gdouble jukebox_start_box_line_width;
+
+  gdouble jukebox_start_box_x0;
+  gdouble jukebox_start_box_y0;
+
+  gdouble jukebox_start_box_width;
+  gdouble jukebox_start_box_height;
+
+  //diskjokey
+  gdouble diskjokey_x0;
+  gdouble diskjokey_y0;
+
+  gdouble diskjokey_width;
+  gdouble diskjokey_height;
+
+  gdouble diskjokey_start_box_line_width;
+
+  gdouble diskjokey_start_box_x0;
+  gdouble diskjokey_start_box_y0;
+
+  gdouble diskjokey_start_box_width;
+  gdouble diskjokey_start_box_height;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekStartViewClass</NAME>
+struct _MonothekStartViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_start_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_start_view_new</NAME>
+<RETURNS>MonothekStartView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW</NAME>
+#define MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW                (monothek_transaction_failed_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_VIEW</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW, MonothekTransactionFailedView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_VIEW_CLASS</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW, MonothekTransactionFailedViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_TRANSACTION_FAILED_VIEW</NAME>
+#define MONOTHEK_IS_TRANSACTION_FAILED_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_TRANSACTION_FAILED_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_TRANSACTION_FAILED_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_TRANSACTION_FAILED_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_TRANSACTION_FAILED_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW, MonothekTransactionFailedViewClass))
+</MACRO>
+<STRUCT>
+<NAME>MonothekTransactionFailedView</NAME>
+struct _MonothekTransactionFailedView
+{
+  MonothekView monothek_view;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekTransactionFailedViewClass</NAME>
+struct _MonothekTransactionFailedViewClass
+{
+  MonothekViewClass monothek_view;
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_transaction_failed_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_transaction_failed_view_new</NAME>
+<RETURNS>MonothekTransactionFailedView * </RETURNS>
+
+</FUNCTION>
+<MACRO>
+<NAME>MONOTHEK_TYPE_VIEW</NAME>
+#define MONOTHEK_TYPE_VIEW                (monothek_view_get_type())
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VIEW</NAME>
+#define MONOTHEK_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST((obj), MONOTHEK_TYPE_VIEW, MonothekView))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VIEW_CLASS</NAME>
+#define MONOTHEK_VIEW_CLASS(class)        (G_TYPE_CHECK_CLASS_CAST((class), MONOTHEK_TYPE_VIEW, MonothekViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_VIEW</NAME>
+#define MONOTHEK_IS_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE((obj), MONOTHEK_TYPE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_IS_VIEW_CLASS</NAME>
+#define MONOTHEK_IS_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_VIEW))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VIEW_GET_CLASS</NAME>
+#define MONOTHEK_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_VIEW, MonothekViewClass))
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VIEW_DEFAULT_JUKEBOX_GC</NAME>
+#define MONOTHEK_VIEW_DEFAULT_JUKEBOX_GC ((guint32) 0xffff)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VIEW_DEFAULT_DISKJOKEY_GC</NAME>
+#define MONOTHEK_VIEW_DEFAULT_DISKJOKEY_GC ((guint32) 0xff00ff)
+</MACRO>
+<MACRO>
+<NAME>MONOTHEK_VIEW_DEFAULT_FONT</NAME>
+#define MONOTHEK_VIEW_DEFAULT_FONT "Eurostile"
+</MACRO>
+<ENUM>
+<NAME>MonothekViewFlags</NAME>
+typedef enum{
+  MONOTHEK_VIEW_ADDED_TO_REGISTRY           = 1,
+  MONOTHEK_VIEW_CONNECTED                   = 1 <<  1,
+}MonothekViewFlags;
+</ENUM>
+<ENUM>
+<NAME>MonothekViewButtonState</NAME>
+typedef enum{
+  MONOTHEK_VIEW_BUTTON_1_PRESSED     = 1,
+}MonothekViewButtonState;
+</ENUM>
+<STRUCT>
+<NAME>MonothekView</NAME>
+struct _MonothekView
+{
+  GtkWidget widget;
+
+  guint flags;
+
+  guint button_state;
+
+  guint32 jukebox_gc;
+  guint32 diskjokey_gc;
+
+  gchar *font;
+
+  GObject *model;
+};
+</STRUCT>
+<STRUCT>
+<NAME>MonothekViewClass</NAME>
+struct _MonothekViewClass
+{
+  GtkWidgetClass widget;
+
+  void (*draw)(MonothekView *view);
+
+  void (*reset)(MonothekView *view,
+		gboolean reset_defaults, gboolean reset_current);
+  void (*clear)(MonothekView *view,
+		gboolean clear_all, gboolean clear_hover);
+};
+</STRUCT>
+<FUNCTION>
+<NAME>monothek_view_get_type</NAME>
+<RETURNS>GType  </RETURNS>
+void
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_test_flags</NAME>
+<RETURNS>gboolean  </RETURNS>
+MonothekView *view, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_set_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekView *view, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_unset_flags</NAME>
+<RETURNS>void  </RETURNS>
+MonothekView *view, guint flags
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_draw</NAME>
+<RETURNS>void  </RETURNS>
+MonothekView *view
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_reset</NAME>
+<RETURNS>void  </RETURNS>
+MonothekView *view, gboolean reset_defaults, gboolean reset_current
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_clear</NAME>
+<RETURNS>void  </RETURNS>
+MonothekView *view, gboolean clear_all, gboolean clear_hover
+</FUNCTION>
+<FUNCTION>
+<NAME>monothek_view_new</NAME>
+<RETURNS>MonothekView * </RETURNS>
+
+</FUNCTION>

@@ -665,19 +665,13 @@ monothek_ui_CFLAGS = @MONOTHEK_CFLAGS@ $(LIBAGS_CFLAGS) \
 monothek_ui_LDFLAGS = @MONOTHEK_LDFLAGS@ -pthread
 libmonothekdir = $(libdir)/monothek
 libmonothek_LTLIBRARIES = libmonothek.la
-EXTRA_DIST = config.rpath \
-	monothek/config.h.in \
-	gtk-doc.make \
-	aclocal.m4 \
-	README \
-	m4/Makefile.am \
-	m4/Makefile.in \
-	monothek/i18n.h \
-	monothek/gettext.h \
-	monothek/object/monothek_marshallers.list \
-	m4/README \
-	po/README
-
+EXTRA_DIST = config.rpath monothek/config.h.in gtk-doc.make aclocal.m4 \
+	README m4/Makefile.am m4/Makefile.in monothek/i18n.h \
+	monothek/gettext.h monothek/object/monothek_marshallers.list \
+	m4/README po/README docs/reference/libmonothek/git.mk \
+	docs/reference/libmonothek/gtk-doc.make \
+	docs/reference/libmonothek/Makefile.am \
+	docs/reference/libmonothek/Makefile.in
 CLEANFILES = \
 	m4/Makefile
 
@@ -2652,8 +2646,6 @@ dvi: dvi-recursive
 
 dvi-am:
 
-html: html-recursive
-
 html-am:
 
 info: info-recursive
@@ -2786,8 +2778,6 @@ mostlyclean: mostlyclean-recursive
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-pdf: pdf-recursive
-
 pdf-am:
 
 ps: ps-recursive
@@ -2821,6 +2811,14 @@ uninstall-am: uninstall-binPROGRAMS uninstall-libmonothekLTLIBRARIES
 
 .PRECIOUS: Makefile
 
+
+html:
+	$(MAKE) -C $(top_srcdir)/docs/reference/libmonothek
+	cd $(top_srcdir)
+
+pdf:
+	$(MAKE) -C $(top_srcdir)/docs/reference/libmonothek
+	cd $(top_srcdir)
 
 gen-marshallers:
 	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.h

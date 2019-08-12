@@ -1,0 +1,700 @@
+<ARG>
+<NAME>MonothekActionBox::action-identifier</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>action identifier</NICK>
+<BLURB>This string is the action identifier.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionBox::height</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>height</NICK>
+<BLURB>The height of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionBox::width</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>width</NICK>
+<BLURB>The width of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionBox::x0</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>x0</NICK>
+<BLURB>The x0 of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionBox::y0</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>y0</NICK>
+<BLURB>The y0 of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionSlider::action-identifier</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>action identifier</NICK>
+<BLURB>This string is the action identifier.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionSlider::height</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>height</NICK>
+<BLURB>The height of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionSlider::width</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>width</NICK>
+<BLURB>The width of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionSlider::x0</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>x0</NICK>
+<BLURB>The x0 of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekActionSlider::y0</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>y0</NICK>
+<BLURB>The y0 of region.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekApplicationContext::window</NAME>
+<TYPE>MonothekWindow*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>window of monothek application context</NICK>
+<BLURB>The window which this monothek application context assigned to.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekAudioFileManager::audio-file</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>containing audio_file</NICK>
+<BLURB>The audio_file it contains.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekController::action-box</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>action box list</NICK>
+<BLURB>The action box list.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekController::action-slider</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>action slider list</NICK>
+<BLURB>The action slider list.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekController::model</NAME>
+<TYPE>GObject*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>assigned model</NICK>
+<BLURB>The model it is assigned with.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekController::view</NAME>
+<TYPE>MonothekView*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>assigned view</NICK>
+<BLURB>The view it is assigned with.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDelayAudio::sequencer-paused</NAME>
+<TYPE>AgsPort*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>sequencer paused</NICK>
+<BLURB>If sequencer is paused.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeyEndModel::diskjokey-quit-and-save-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>diskjokey quit and save active</NICK>
+<BLURB>If diskjokey quit and save is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeyEndModel::diskjokey-restart-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>diskjokey restart active</NICK>
+<BLURB>If diskjokey restart is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeyPaymentModel::continue-session</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>continue session</NICK>
+<BLURB>If to continue the session.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::clear-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>clear active</NICK>
+<BLURB>If clear is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::duration</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>r</FLAGS>
+<NICK>duration</NICK>
+<BLURB>The assigned duration.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::hiphop-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>hiphop active</NICK>
+<BLURB>If hiphop is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::house-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>house active</NICK>
+<BLURB>If house is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::random-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>random active</NICK>
+<BLURB>If random is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::run-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>run active</NICK>
+<BLURB>If run is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekDiskjokeySequencerModel::techno-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>techno active</NICK>
+<BLURB>If techno is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekExportOutput::duration</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>duration</NICK>
+<BLURB>The duration to export.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekExportThread::duration</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>duration</NICK>
+<BLURB>The duration to export.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekExportThread::start-time</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>start time</NICK>
+<BLURB>The start time of export.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxEndModel::jukebox-quit-and-save-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox quit and save active</NICK>
+<BLURB>If jukebox quit and save is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxEndModel::jukebox-restart-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox restart active</NICK>
+<BLURB>If jukebox restart is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxInfoModel::artist</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>artist</NICK>
+<BLURB>The assigned artist.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxInfoModel::jukebox-ok-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox ok active</NICK>
+<BLURB>If jukebox ok is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxInfoModel::song-filename</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>song filename</NICK>
+<BLURB>The assigned song filename.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxInfoModel::song-title</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>song title</NICK>
+<BLURB>The assigned song title.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxModeModel::attempts</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>test attempts</NICK>
+<BLURB>Test attempts count.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxModeModel::jukebox-cancel-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox cancel active</NICK>
+<BLURB>If jukebox cancel is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxModeModel::jukebox-play-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox play active</NICK>
+<BLURB>If jukebox play is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxModeModel::jukebox-test-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox test active</NICK>
+<BLURB>If jukebox test is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxModeModel::max-attempts</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>maximum attempts</NICK>
+<BLURB>Test maximum attempts count.</BLURB>
+<DEFAULT>3</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::album</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>album</NICK>
+<BLURB>The assigned album.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::artist</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>artist</NICK>
+<BLURB>The assigned artist.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::attempts</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>test attempts</NICK>
+<BLURB>Test attempts count.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::cover-filename</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>cover filename</NICK>
+<BLURB>The assigned cover filename.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::duration</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>r</FLAGS>
+<NICK>duration</NICK>
+<BLURB>The assigned duration.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::jukebox-back-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox back active</NICK>
+<BLURB>If jukebox back is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::jukebox-play-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox play active</NICK>
+<BLURB>If jukebox play is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::jukebox-test-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox test active</NICK>
+<BLURB>If jukebox test is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::max-attempts</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>maximum attempts</NICK>
+<BLURB>Test maximum attempts count.</BLURB>
+<DEFAULT>3</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::song-filename</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>song filename</NICK>
+<BLURB>The assigned song filename.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::song-title</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>song title</NICK>
+<BLURB>The assigned song title.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekJukeboxTrackModel::test-mode</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>test mode</NICK>
+<BLURB>The test mode property.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekQrcode::filename</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>filename</NICK>
+<BLURB>The assigned filename.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekQrcode::qrcode</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>r</FLAGS>
+<NICK>qrcode</NICK>
+<BLURB>The assigned qrcode.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekQrcode::url</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>url</NICK>
+<BLURB>The assigned url.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekRack::audio-channels</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>audio channels count</NICK>
+<BLURB>The count of audio channels of audio.</BLURB>
+<DEFAULT>2</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekRack::output-soundcard</NAME>
+<TYPE>GObject*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>output soundcard</NICK>
+<BLURB>The output soundcard which this rack is packed into.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekSession::session-id</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>session id</NICK>
+<BLURB>The assigned session id.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekSessionManager::session</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>containing session</NICK>
+<BLURB>The session it contains.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekStartModel::diskjokey-start-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>diskjokey start active</NICK>
+<BLURB>If diskjokey start is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekStartModel::jukebox-start-active</NAME>
+<TYPE>gboolean</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox start active</NICK>
+<BLURB>If jukebox start is active.</BLURB>
+<DEFAULT>FALSE</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekStartModel::nth-position</NAME>
+<TYPE>guint</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>nth position</NICK>
+<BLURB>nth position.</BLURB>
+<DEFAULT>0</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekStartModel::purchase-filename</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>purchase filename</NICK>
+<BLURB>purchase filename.</BLURB>
+<DEFAULT>NULL</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekTransactionFailedModel::duration</NAME>
+<TYPE>gpointer</TYPE>
+<RANGE></RANGE>
+<FLAGS>r</FLAGS>
+<NICK>duration</NICK>
+<BLURB>The assigned duration.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekView::diskjokey-gc</NAME>
+<TYPE>guint</TYPE>
+<RANGE><= 16777215</RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>diskjokey ground color</NICK>
+<BLURB>The diskjokey's ground color.</BLURB>
+<DEFAULT>16711935</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekView::font</NAME>
+<TYPE>gchar*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>font</NICK>
+<BLURB>The font to be used for drawing strings.</BLURB>
+<DEFAULT>"Eurostile"</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekView::jukebox-gc</NAME>
+<TYPE>guint</TYPE>
+<RANGE><= 16777215</RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>jukebox ground color</NICK>
+<BLURB>The jukebox's ground color.</BLURB>
+<DEFAULT>65535</DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekView::model</NAME>
+<TYPE>GObject*</TYPE>
+<RANGE></RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>model</NICK>
+<BLURB>The model of view.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+
+<ARG>
+<NAME>MonothekWindow::current-view-type</NAME>
+<TYPE>GType*</TYPE>
+<RANGE>void</RANGE>
+<FLAGS>rw</FLAGS>
+<NICK>current view type</NICK>
+<BLURB>The type of the current view.</BLURB>
+<DEFAULT></DEFAULT>
+</ARG>
+

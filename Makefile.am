@@ -40,6 +40,8 @@ EXTRA_DIST = config.rpath \
 	m4/README \
 	po/README
 
+EXTRA_DIST += docs/reference/libmonothek/git.mk docs/reference/libmonothek/gtk-doc.make docs/reference/libmonothek/Makefile.am docs/reference/libmonothek/Makefile.in
+
 CLEANFILES = \
 	m4/Makefile
 
@@ -354,6 +356,14 @@ monothek_uiheaders = \
 
 monothek_ui_c_sources = \
 	monothek/monothek_main.c
+
+html:
+	$(MAKE) -C $(top_srcdir)/docs/reference/libmonothek
+	cd $(top_srcdir)
+
+pdf:
+	$(MAKE) -C $(top_srcdir)/docs/reference/libmonothek
+	cd $(top_srcdir)
 
 gen-marshallers:
 	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.h

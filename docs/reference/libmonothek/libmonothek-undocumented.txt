@@ -1,0 +1,170 @@
+0% symbol docs coverage.
+467 symbols documented.
+58 symbols incomplete.
+157 not documented.
+
+
+ENABLE_NLS
+GETTEXT_CONTEXT_GLUE
+HAVE_DCGETTEXT
+HAVE_DLFCN_H
+HAVE_GETTEXT
+HAVE_INTTYPES_H
+HAVE_LIBDL
+HAVE_LIBM
+HAVE_MALLOC
+HAVE_MEMORY_H
+HAVE_REALLOC
+HAVE_STDINT_H
+HAVE_STDLIB_H
+HAVE_STRINGS_H
+HAVE_STRING_H
+HAVE_SYS_STAT_H
+HAVE_SYS_TYPES_H
+HAVE_UNISTD_H
+LT_OBJDIR
+MONOTHEK_BUILD_ID
+MONOTHEK_DEFAULT_CONFIG
+MONOTHEK_DEFAULT_DIRECTORY
+MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CARDS_PNG
+MONOTHEK_DISKJOKEY_PAYMENT_VIEW_NFC_PNG
+MONOTHEK_DISKJOKEY_QRCODE_MODEL_DEFAULT_DURATION_SEC
+MONOTHEK_DISKJOKEY_QRCODE_VIEW_PADDING_LEFT
+MONOTHEK_DISKJOKEY_QRCODE_VIEW_PADDING_TOP
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_DEFAULT_DURATION_SEC
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_LOWER
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_UPPER
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TAB_COUNT
+MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME
+MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_COLUMN_COUNT
+MONOTHEK_DISKJOKEY_SEQUENCER_VIEW_PATTERN_ROW_COUNT
+MONOTHEK_EXPORT_PATH
+MONOTHEK_JUKEBOX_INFO_MODEL_DEFAULT_DURATION_SEC
+MONOTHEK_JUKEBOX_MODE_MODEL_DEFAULT_MAX_ATTEMPTS
+MONOTHEK_JUKEBOX_MODE_VIEW_PADDING_LEFT
+MONOTHEK_JUKEBOX_MODE_VIEW_PADDING_TOP
+MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG
+MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG
+MONOTHEK_JUKEBOX_PLAYLIST_CONTROLLER_SONG_ROW_COUNT
+MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ALBUM
+MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_ARTIST
+MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_DURATION_SEC
+MONOTHEK_JUKEBOX_PLAYLIST_MODEL_DEFAULT_SONG_TITEL
+MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME
+MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT
+MONOTHEK_JUKEBOX_PLAYLIST_VIEW_SONG_ROW_COUNT
+MONOTHEK_JUKEBOX_QRCODE_MODEL_DEFAULT_DURATION_SEC
+MONOTHEK_JUKEBOX_QRCODE_VIEW_PADDING_LEFT
+MONOTHEK_JUKEBOX_QRCODE_VIEW_PADDING_TOP
+MONOTHEK_JUKEBOX_TRACK_CONTROLLER_TEST_TIME_SEC
+MONOTHEK_JUKEBOX_TRACK_MODEL_DEFAULT_MAX_ATTEMPTS
+MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_LEFT
+MONOTHEK_JUKEBOX_TRACK_VIEW_PADDING_TOP
+MONOTHEK_QRCODE_DEFAULT_FILENAME
+MONOTHEK_QRCODE_DEFAULT_PNG_HEIGHT
+MONOTHEK_QRCODE_DEFAULT_PNG_WIDTH
+MONOTHEK_QRCODE_DEFAULT_SVG_HEIGHT
+MONOTHEK_QRCODE_DEFAULT_SVG_WIDTH
+MONOTHEK_QRCODE_DEFAULT_URL
+MONOTHEK_RACK_DEFAULT_AUDIO_CHANNELS
+MONOTHEK_RACK_DEFAULT_SEQUENCER_INPUT_PADS
+MONOTHEK_START_MODEL_DEFAULT_DISKJOKEY_PRICE
+MONOTHEK_START_MODEL_DEFAULT_JUKEBOX_PRICE
+MONOTHEK_START_MODEL_PURCHASE_PATH
+MONOTHEK_TRANSACTION_FAILED_MODEL_DEFAULT_DURATION_SEC
+MONOTHEK_VERSION
+MONOTHEK_VIEW_DEFAULT_DISKJOKEY_GC
+MONOTHEK_VIEW_DEFAULT_FONT
+MONOTHEK_VIEW_DEFAULT_JUKEBOX_GC
+MonothekActionBoxButtonMask (<items>)
+MonothekActionSliderButtonMask (<items>)
+MonothekApplicationContextFlags (<items>)
+MonothekControllerFlags
+MonothekDiskjokeySequencerModelGenre (<items>)
+MonothekJukeboxModeViewFlags (<items>)
+MonothekJukeboxTrackViewFlags (<items>)
+MonothekRackFlags (<items>)
+MonothekView::reset (reset_defaults, reset_current)
+MonothekViewButtonState (<items>)
+MonothekViewFlags (<items>)
+MonothekWindowFlags
+PACKAGE
+PACKAGE_BUGREPORT
+PACKAGE_NAME
+PACKAGE_STRING
+PACKAGE_TARNAME
+PACKAGE_URL
+PACKAGE_VERSION
+STDC_HEADERS
+VERSION
+bind_textdomain_codeset (<parameters>)
+bindtextdomain (<parameters>)
+dcgettext (<parameters>)
+dcngettext (<parameters>)
+dcnpgettext (<parameters>)
+dcnpgettext_expr (<parameters>)
+dcpgettext (<parameters>)
+dcpgettext_expr (<parameters>)
+dgettext (<parameters>)
+dngettext (<parameters>)
+dnpgettext (<parameters>)
+dnpgettext_expr (<parameters>)
+dpgettext (<parameters>)
+dpgettext_expr (<parameters>)
+gettext (<parameters>)
+gettext_noop (<parameters>)
+i18n (<parameters>)
+i18n_pspec (<parameters>)
+monothek_application_context_new
+monothek_cclosure_marshal_BOOLEAN__DOUBLE (<parameters>)
+monothek_cclosure_marshal_VOID__BOOLEAN_BOOLEAN (<parameters>)
+monothek_cclosure_marshal_VOID__ULONG_ULONG (<parameters>)
+monothek_diskjokey_sequencer_controller_position_timeout (<parameters>)
+monothek_diskjokey_sequencer_controller_progress_increase_timeout (<parameters>)
+monothek_diskjokey_sequencer_model_get_pad_active (<parameters>)
+monothek_diskjokey_sequencer_model_get_tab_active (<parameters>)
+monothek_diskjokey_sequencer_model_set_pad_active (is_active)
+monothek_diskjokey_sequencer_model_set_tab_active (is_active)
+monothek_jukebox_playlist_controller_select_song (song_filename)
+monothek_qrcode_encode (<parameters>)
+monothek_qrcode_export_png (<parameters>)
+monothek_qrcode_export_svg (<parameters>)
+monothek_qrcode_write (<parameters>)
+monothek_rack_create_mixer (<parameters>)
+monothek_rack_create_panel (<parameters>)
+monothek_rack_create_player (<parameters>)
+monothek_rack_create_sequencer (<parameters>)
+monothek_rack_setup_tree (<parameters>)
+monothek_transaction_failed_controller_progress_increase_timeout (<parameters>)
+monothek_view_clear (clear_all, clear_hover)
+monothek_view_reset (reset_defaults, reset_current)
+ngettext (<parameters>)
+npgettext (<parameters>)
+npgettext_aux (<parameters>)
+npgettext_expr (<parameters>)
+pgettext (<parameters>)
+pgettext_aux (<parameters>)
+pgettext_expr (<parameters>)
+setlocale
+textdomain (<parameters>)
+
+config:Long_Description
+config:Short_Description
+gettext:Long_Description
+gettext:Short_Description
+i18n:Long_Description
+i18n:Short_Description
+monothek_export_thread:Long_Description
+monothek_export_thread:Short_Description
+monothek_main:Long_Description
+monothek_main:Short_Description
+monothek_marshal:Long_Description
+monothek_marshal:Short_Description

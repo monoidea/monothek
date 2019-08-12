@@ -1,0 +1,435 @@
+<SIGNAL>
+<NAME>MonothekActionBox::activate</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionBox *monothekactionbox
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionBox::clicked</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionBox *monothekactionbox
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionBox::enter</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionBox *monothekactionbox
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionBox::leave</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionBox *monothekactionbox
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionBox::pressed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionBox *monothekactionbox
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionBox::released</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionBox *monothekactionbox
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionSlider::change-value</NAME>
+<RETURNS>gboolean</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionSlider *monothekactionslider
+gdouble  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionSlider::move-slider</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionSlider *monothekactionslider
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekActionSlider::value-changed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekActionSlider *monothekactionslider
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekController::reset</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekController *monothekcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyEndController::quit-and-save</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyEndController *monothekdiskjokeyendcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyEndController::restart</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyEndController *monothekdiskjokeyendcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyPaymentController::do-transaction</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyPaymentController *monothekdiskjokeypaymentcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyPaymentController::transaction-completed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyPaymentController *monothekdiskjokeypaymentcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyPaymentController::transaction-failed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyPaymentController *monothekdiskjokeypaymentcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyQrcodeController::quit</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyQrcodeController *monothekdiskjokeyqrcodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeyQrcodeController::timeout</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeyQrcodeController *monothekdiskjokeyqrcodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::change-bpm</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+gdouble  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::change-duration</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+guint  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::change-swing</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+gdouble  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::clear</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::completed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::load-drum-kit</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+gchar *arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::progress</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+gdouble  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::random</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::run</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+gboolean  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::select-bank</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+guint  arg1
+guint  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::switch-page</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+guint  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekDiskjokeySequencerController::toggle-pad</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekDiskjokeySequencerController *monothekdiskjokeysequencercontroller
+guint  arg1
+guint  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxEndController::quit-and-save</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxEndController *monothekjukeboxendcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxEndController::restart</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxEndController *monothekjukeboxendcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxInfoController::ok</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxInfoController *monothekjukeboxinfocontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxModeController::cancel</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxModeController *monothekjukeboxmodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxModeController::play</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxModeController *monothekjukeboxmodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxModeController::test</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxModeController *monothekjukeboxmodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxPaymentController::do-transaction</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxPaymentController *monothekjukeboxpaymentcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxPaymentController::transaction-completed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxPaymentController *monothekjukeboxpaymentcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxPaymentController::transaction-failed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxPaymentController *monothekjukeboxpaymentcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxPlaylistController::select-song</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxPlaylistController *monothekjukeboxplaylistcontroller
+gchar *arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxQrcodeController::quit</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxQrcodeController *monothekjukeboxqrcodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxQrcodeController::timeout</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxQrcodeController *monothekjukeboxqrcodecontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::back</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::completed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::play</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::progress</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+gdouble  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::run</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+gboolean  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::test</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekJukeboxTrackController::test-time-expired</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekJukeboxTrackController *monothekjukeboxtrackcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekLoadController::completed</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekLoadController *monothekloadcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekLoadController::progress</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekLoadController *monothekloadcontroller
+gdouble  arg1
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekQrcode::encode</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekQrcode *monothekqrcode
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekQrcode::write</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekQrcode *monothekqrcode
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekStartController::launch-diskjokey</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekStartController *monothekstartcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekStartController::launch-jukebox</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekStartController *monothekstartcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekTransactionFailedController::timeout</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekTransactionFailedController *monothektransactionfailedcontroller
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekView::clear</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekView *monothekview
+gboolean  arg1
+gboolean  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekView::draw</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekView *monothekview
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekView::reset</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekView *monothekview
+gboolean  arg1
+gboolean  arg2
+</SIGNAL>
+
+<SIGNAL>
+<NAME>MonothekWindow::change-view</NAME>
+<RETURNS>void</RETURNS>
+<FLAGS>l</FLAGS>
+MonothekWindow *monothekwindow
+gulong  arg1
+gulong  arg2
+</SIGNAL>
+
