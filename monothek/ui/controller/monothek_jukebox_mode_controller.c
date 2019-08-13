@@ -365,7 +365,11 @@ monothek_jukebox_mode_controller_disconnect(AgsConnectable *connectable)
 void
 monothek_jukebox_mode_controller_reset(MonothekController *controller)
 {
+  MonothekJukeboxModeView *view;
+  
   MonothekJukeboxModeController *jukebox_mode_controller;
+
+  MonothekJukeboxModeModel *model;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
@@ -374,6 +378,11 @@ monothek_jukebox_mode_controller_reset(MonothekController *controller)
 
   jukebox_mode_controller = MONOTHEK_JUKEBOX_MODE_CONTROLLER(controller);
   
+  g_object_get(jukebox_mode_controller,
+	       "model", &model,
+	       "view", &view,
+	       NULL);
+
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,
@@ -406,8 +415,41 @@ monothek_jukebox_mode_controller_reset(MonothekController *controller)
 				"jukebox-test-count");
 
     g_value_set_uint(value,
-		     0);
+		     3);
+
+    /* reset defaults */
+    jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
+
+    jukebox_mode_view->flags &= (~(MONOTHEK_JUKEBOX_MODE_VIEW_MORE_TESTS |
+				   MONOTHEK_JUKEBOX_MODE_VIEW_ONE_TEST |
+				   MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST));
+
+    g_object_set(jukebox_mode_model,
+		 "attempts", 3,
+		 NULL);
+
+    /* test */
+    jukebox_mode_view->test_box_x0 = 740.0;
+
+    jukebox_mode_controller->jukebox_test->enabled = TRUE;
+
+    jukebox_mode_controller->jukebox_test->x0 = 740;
+
+    /* play */
+    jukebox_mode_controller->jukebox_play->enabled = FALSE;
+
+    /* cancel */
+    jukebox_mode_controller->jukebox_cancel->enabled = FALSE;
+
+    /* message */
+    g_free(jukebox_mode_view->current_test_message);
+
+    jukebox_mode_view->current_test_message = g_strdup("YOU CAN TEST 3 OUT\nOF 3 TRACKS.");
   }
+
+  /* unref */
+  g_object_unref(jukebox_mode_view);
+  g_object_unref(jukebox_mode_model);
 }
 
 void

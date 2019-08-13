@@ -859,6 +859,9 @@ monothek_jukebox_track_view_reset(MonothekView *view,
 
   jukebox_track_view = MONOTHEK_JUKEBOX_TRACK_VIEW(view);
 
+  monothek_view_clear(view,
+		      TRUE, TRUE);
+
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,
@@ -898,10 +901,6 @@ monothek_jukebox_track_view_reset(MonothekView *view,
   if(jukebox_test_count != NULL){
     test_count = g_value_get_uint(jukebox_test_count);
   }
-
-  g_object_set(jukebox_track_model,
-	       "attempts", test_count,
-	       NULL);
   
   if(reset_current){
     switch(jukebox_track_model->attempts){
@@ -989,10 +988,6 @@ monothek_jukebox_track_view_clear(MonothekView *view,
     jukebox_track_model->jukebox_test_active = FALSE;
     jukebox_track_model->jukebox_play_active = FALSE;
     jukebox_track_model->jukebox_back_active = FALSE;
-  }
-  
-  if(clear_all){
-    jukebox_track_model->attempts = 0;
   }
 }
 

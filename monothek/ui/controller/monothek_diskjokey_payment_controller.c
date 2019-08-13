@@ -367,20 +367,36 @@ monothek_diskjokey_payment_controller_transaction_completed(MonothekDiskjokeyPay
 void
 monothek_diskjokey_payment_controller_real_transaction_failed(MonothekDiskjokeyPaymentController *diskjokey_payment_controller)
 {
+  MonothekWindow *window;
+  MonothekDiskjokeyPaymentView *view;
+
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  GValue *preserve_diskjokey;
+  GValue *value;
 
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,
 						  MONOTHEK_SESSION_DEFAULT_SESSION);
 
-  preserve_diskjokey = g_hash_table_lookup(session->value,
-					   "preserve-diskjokey");
+  /* set preserve diskjokey - FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-diskjokey");
 
-  g_value_set_boolean(preserve_diskjokey, FALSE);
+  g_value_set_boolean(value,
+		      FALSE);
+
+  /* change view */
+  g_object_get(diskjokey_payment_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_TRANSACTION_FAILED_VIEW, G_TYPE_NONE);
 }
 
 /**

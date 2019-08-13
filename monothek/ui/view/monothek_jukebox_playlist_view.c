@@ -267,6 +267,9 @@ monothek_jukebox_playlist_view_draw(MonothekView *view)
 
   jukebox_playlist_view = MONOTHEK_JUKEBOX_PLAYLIST_VIEW(view);
   
+  monothek_view_clear(view,
+		      TRUE, TRUE);
+
   /* call parent */
   MONOTHEK_VIEW_CLASS(monothek_jukebox_playlist_view_parent_class)->draw(view);
 

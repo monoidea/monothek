@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -1882,7 +1882,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 		     rack);
   
   g_hash_table_insert(session->value,
-		      "rack", value);
+		      "rack",
+		      value);
 
   /* preserve jukebox */
   value = g_new0(GValue,
@@ -1890,7 +1891,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   g_value_init(value,
 	       G_TYPE_BOOLEAN);
 
-  g_value_set_boolean(value, TRUE);
+  g_value_set_boolean(value,
+		      TRUE);
 
   g_hash_table_insert(session->value,
 		      "preserve-jukebox", value);
@@ -1901,7 +1903,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   g_value_init(value,
 	       G_TYPE_STRING);
 
-  g_value_set_string(value, "test");
+  g_value_set_string(value,
+		     "test");
 
   g_hash_table_insert(session->value,
 		      "jukebox-mode", value);
@@ -1912,7 +1915,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   g_value_init(value,
 	       G_TYPE_STRING);
 
-  g_value_set_string(value, NULL);
+  g_value_set_string(value,
+		     NULL);
 
   g_hash_table_insert(session->value,
 		      "jukebox-song-filename", value);
@@ -1923,7 +1927,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   g_value_init(value,
 	       G_TYPE_UINT);
 
-  g_value_set_uint(value, 0);
+  g_value_set_uint(value,
+		   3);
   
   g_hash_table_insert(session->value,
 		      "jukebox-test-count", value);
@@ -1934,7 +1939,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   g_value_init(value,
 	       G_TYPE_BOOLEAN);
 
-  g_value_set_boolean(value, TRUE);
+  g_value_set_boolean(value,
+		      TRUE);
 
   g_hash_table_insert(session->value,
 		      "preserve-diskjokey", value);

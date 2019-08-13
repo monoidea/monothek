@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -410,11 +410,29 @@ monothek_diskjokey_end_controller_real_restart(MonothekDiskjokeyEndController *d
   MonothekWindow *window;
   MonothekDiskjokeyEndView *view;
   
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
+
   /* change view */
   g_object_get(diskjokey_end_controller,
 	       "view", &view,
 	       NULL);
 
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set preserve diskjokey - TRUE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-diskjokey");
+
+  g_value_set_boolean(value,
+		      TRUE);
+
+  /* change view */
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
 
@@ -447,11 +465,29 @@ monothek_diskjokey_end_controller_real_quit_and_save(MonothekDiskjokeyEndControl
   MonothekWindow *window;
   MonothekDiskjokeyEndView *view;
 
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
+
   /* change view */
   g_object_get(diskjokey_end_controller,
 	       "view", &view,
 	       NULL);
 
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set preserve diskjokey - FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-diskjokey");
+
+  g_value_set_boolean(value,
+		      FALSE);
+
+  /* change view */
   window = gtk_widget_get_ancestor(view,
 				   MONOTHEK_TYPE_WINDOW);
 

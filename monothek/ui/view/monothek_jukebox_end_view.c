@@ -497,6 +497,9 @@ void
 monothek_jukebox_end_view_reset(MonothekView *view,
 				gboolean reset_defaults, gboolean reset_current)
 {
+  monothek_view_clear(view,
+		      TRUE, TRUE);
+
   //TODO:JK: implement me
 }
   

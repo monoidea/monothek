@@ -724,13 +724,6 @@ monothek_jukebox_track_controller_real_play(MonothekJukeboxTrackController *juke
 
   g_value_set_string(value,
 		     "play");
-
-  /* set preserve jukebox - FALSE */
-  value = g_hash_table_lookup(session->value,
-			      "preserve-jukebox");
-
-  g_value_set_boolean(value,
-		      FALSE);
   
   /* change view */
   g_object_get(jukebox_track_controller,

@@ -478,6 +478,9 @@ monothek_jukebox_info_view_reset(MonothekView *view,
 
   jukebox_info_view = MONOTHEK_JUKEBOX_INFO_VIEW(view);
 
+  monothek_view_clear(view,
+		      TRUE, TRUE);
+
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,

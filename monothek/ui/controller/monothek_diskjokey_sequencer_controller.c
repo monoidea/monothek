@@ -957,20 +957,108 @@ monothek_diskjokey_sequencer_controller_disconnect(AgsConnectable *connectable)
 void
 monothek_diskjokey_sequencer_controller_reset(MonothekController *controller)
 {
-  MonothekDiskjokeySequencerView *view;
+  MonothekDiskjokeySequencerView *diskjokey_sequencer_view;
   
-  MonothekDiskjokeySequencerModel *model;
+  MonothekDiskjokeySequencerModel *diskjokey_sequencer_model;
 
   MonothekDiskjokeySequencerController *diskjokey_sequencer_controller;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
 
   diskjokey_sequencer_controller = MONOTHEK_DISKJOKEY_SEQUENCER_CONTROLLER(controller);
   
   g_object_get(diskjokey_sequencer_controller,
-	       "model", &model,
-	       "view", &view,
+	       "model", &diskjokey_sequencer_model,
+	       "view", &diskjokey_sequencer_view,
 	       NULL);
 
-  g_object_set(model,
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* check preserve jukebox FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-diskjokey");
+
+  if(!g_value_get_boolean(value)){
+    gdouble bpm;
+    gdouble swing;
+    guint i, j;
+
+#ifdef __APPLE__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+#endif
+
+    g_value_set_boolean(value,
+			TRUE);
+    
+    diskjokey_sequencer_model->current_genre = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO;
+
+    diskjokey_sequencer_model->techno_active = TRUE;
+    diskjokey_sequencer_model->house_active = FALSE;
+    diskjokey_sequencer_model->hiphop_active = FALSE;
+
+    diskjokey_sequencer_model->random_active = FALSE;
+    diskjokey_sequencer_model->clear_active = FALSE;
+
+    diskjokey_sequencer_model->run_active = FALSE;
+
+    diskjokey_sequencer_model->active_column = -1;
+
+    diskjokey_sequencer_model->current_tab = 0;
+
+    diskjokey_sequencer_model->tab_active[0] = TRUE;
+    diskjokey_sequencer_model->tab_active[1] = FALSE;
+    diskjokey_sequencer_model->tab_active[2] = FALSE;
+    diskjokey_sequencer_model->tab_active[3] = FALSE;
+
+    for(i = 0; i < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT; i++){
+      for(j = 0; j < MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_COLUMN_COUNT; j++){
+	diskjokey_sequencer_model->pad_active[i][j] = FALSE;
+      }
+    }
+
+    /* bpm */
+    bpm = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT;
+  
+    diskjokey_sequencer_model->bpm = bpm;
+    monothek_diskjokey_sequencer_controller_change_bpm(diskjokey_sequencer_controller,
+						       bpm);
+
+    /* swing */
+    swing = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT;
+  
+    diskjokey_sequencer_model->swing = swing;
+    monothek_diskjokey_sequencer_controller_change_swing(diskjokey_sequencer_controller,
+							 swing);
+  
+    /* load drum kit */
+    monothek_diskjokey_sequencer_controller_load_drum_kit(diskjokey_sequencer_controller,
+							  MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME);
+
+    /* reset timer */
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    
+    diskjokey_sequencer_controller->start_time->tv_sec = mts.tv_sec;
+    diskjokey_sequencer_controller->start_time->tv_nsec = mts.tv_nsec;
+#else
+    clock_gettime(CLOCK_MONOTONIC, diskjokey_sequencer_controller->start_time);
+#endif
+
+    diskjokey_sequencer_controller->timer->tv_sec = 0;
+    diskjokey_sequencer_controller->timer->tv_nsec = 0;
+  }
+    
+  g_object_set(diskjokey_sequencer_model,
 	       "run-active", TRUE,
 	       NULL);
   

@@ -302,16 +302,25 @@ void
 monothek_jukebox_end_controller_reset(MonothekController *controller)
 {
   MonothekJukeboxEndController *jukebox_end_controller;
-  MonothekJukeboxEndModel *model;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
 
   jukebox_end_controller = MONOTHEK_JUKEBOX_END_CONTROLLER(controller);
-  
-  g_object_get(jukebox_end_controller,
-	       "model", &model,
-	       NULL);
 
-  model->jukebox_restart_active = FALSE;
-  model->jukebox_quit_and_save_active = FALSE;
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set preserve jukebox - FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-jukebox");
+
+  g_value_set_boolean(value,
+		      FALSE);
 }
 
 void

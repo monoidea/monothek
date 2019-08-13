@@ -307,7 +307,7 @@ monothek_start_controller_reset(MonothekController *controller)
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  GValue *preserve_diskjokey;
+  GValue *preserve_diskjokey, *preserve_jukebox;
   
   start_controller = MONOTHEK_START_CONTROLLER(controller);
 
@@ -323,7 +323,11 @@ monothek_start_controller_reset(MonothekController *controller)
   preserve_diskjokey = g_hash_table_lookup(session->value,
 					   "preserve-diskjokey");
 
-  if(!g_value_get_boolean(preserve_diskjokey)){
+  preserve_jukebox = g_hash_table_lookup(session->value,
+					 "preserve-jukebox");
+
+  if(!g_value_get_boolean(preserve_diskjokey) &&
+     !g_value_get_boolean(preserve_jukebox)){
     g_free(model->purchase_filename);
     
     model->purchase_filename = NULL;
@@ -374,11 +378,6 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
 {
   MonothekStartModel *model;
 
-  MonothekSessionManager *session_manager;
-  MonothekSession *session;
-
-  GValue *preserve_diskjokey;
-
   gchar *purchase_path;
   gchar *purchase_filename;
   gchar *product_name;
@@ -392,16 +391,6 @@ monothek_start_controller_jukebox_launch_clicked_callback(MonothekActionBox *act
 
   GError *error;
 
-  /* find session */
-  session_manager = monothek_session_manager_get_instance();
-  session = monothek_session_manager_find_session(session_manager,
-						  MONOTHEK_SESSION_DEFAULT_SESSION);
-
-  preserve_diskjokey = g_hash_table_lookup(session->value,
-					   "preserve-diskjokey");
-
-  g_value_set_boolean(preserve_diskjokey, FALSE);
-  
 #if !defined(MONOTHEK_DEVEL_MODE)
   g_object_get(start_controller,
 	       "model", &model,

@@ -321,23 +321,6 @@ monothek_jukebox_payment_controller_real_transaction_completed(MonothekJukeboxPa
   MonothekWindow *window;
   MonothekJukeboxPaymentView *view;
 
-  MonothekSessionManager *session_manager;
-  MonothekSession *session;
-
-  GValue *value;
-
-  /* find session */
-  session_manager = monothek_session_manager_get_instance();
-  session = monothek_session_manager_find_session(session_manager,
-						  MONOTHEK_SESSION_DEFAULT_SESSION);
-
-  /* set preserve jukebox - TRUE */
-  value = g_hash_table_lookup(session->value,
-			      "preserve-jukebox");
-
-  g_value_set_boolean(value,
-		      TRUE);
-
   /* change view */
   g_object_get(jukebox_payment_controller,
 	       "view", &view,
@@ -374,6 +357,23 @@ monothek_jukebox_payment_controller_real_transaction_failed(MonothekJukeboxPayme
 {
   MonothekWindow *window;
   MonothekJukeboxPaymentView *view;
+
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set preserve jukebox - FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-jukebox");
+
+  g_value_set_boolean(value,
+		      FALSE);
 
   /* change view */
   g_object_get(jukebox_payment_controller,
