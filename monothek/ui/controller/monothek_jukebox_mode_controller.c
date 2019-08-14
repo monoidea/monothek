@@ -365,11 +365,11 @@ monothek_jukebox_mode_controller_disconnect(AgsConnectable *connectable)
 void
 monothek_jukebox_mode_controller_reset(MonothekController *controller)
 {
-  MonothekJukeboxModeView *view;
+  MonothekJukeboxModeView *jukebox_mode_view;
   
   MonothekJukeboxModeController *jukebox_mode_controller;
 
-  MonothekJukeboxModeModel *model;
+  MonothekJukeboxModeModel *jukebox_mode_model;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
@@ -379,8 +379,8 @@ monothek_jukebox_mode_controller_reset(MonothekController *controller)
   jukebox_mode_controller = MONOTHEK_JUKEBOX_MODE_CONTROLLER(controller);
   
   g_object_get(jukebox_mode_controller,
-	       "model", &model,
-	       "view", &view,
+	       "model", &jukebox_mode_model,
+	       "view", &jukebox_mode_view,
 	       NULL);
 
   /* find session */

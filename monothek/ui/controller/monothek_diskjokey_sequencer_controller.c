@@ -1062,7 +1062,7 @@ monothek_diskjokey_sequencer_controller_reset(MonothekController *controller)
 	       "run-active", TRUE,
 	       NULL);
   
-  gtk_widget_queue_draw(view);
+  gtk_widget_queue_draw(diskjokey_sequencer_view);
 
   /* start run */
   monothek_diskjokey_sequencer_controller_run(diskjokey_sequencer_controller,

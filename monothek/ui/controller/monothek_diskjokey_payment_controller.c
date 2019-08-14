@@ -29,6 +29,7 @@
 
 #include <monothek/ui/model/monothek_diskjokey_payment_model.h>
 
+#include <monothek/ui/view/monothek_transaction_failed_view.h>
 #include <monothek/ui/view/monothek_diskjokey_payment_view.h>
 #include <monothek/ui/view/monothek_diskjokey_sequencer_view.h>
 

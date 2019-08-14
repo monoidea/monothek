@@ -1,0 +1,10 @@
+<fop version="2.0">
+  <renderers>
+    <renderer mime="application/pdf">
+      <fonts>
+	<directory recursive="true">/usr/share/fonts</directory>
+	<auto-detect/>
+      </fonts>
+    </renderer>
+  </renderers>
+</fop>
