@@ -109,7 +109,7 @@ monothek_audio_file_manager_class_init(MonothekAudioFileManagerClass *audio_file
   /**
    * MonothekAudioFileManager:audio_file:
    *
-   * The containing #MonothekAudioFile.
+   * The #GList-struct containing #AgsAudioFile.
    * 
    * Since: 1.0.0
    */
@@ -195,7 +195,7 @@ monothek_audio_file_manager_finalize(GObject *gobject)
 /**
  * monothek_audio_file_manager_add_audio_file:
  * @audio_file_manager: the #MonothekAudioFileManager
- * @audio_file: the #MonothekAudioFile
+ * @audio_file: the #AgsAudioFile
  * 
  * Add @audio_file to @audio_file_manager.
  * 
@@ -221,7 +221,7 @@ monothek_audio_file_manager_add_audio_file(MonothekAudioFileManager *audio_file_
 /**
  * monothek_audio_file_manager_remove_audio_file:
  * @audio_file_manager: the #MonothekAudioFileManager
- * @audio_file: the #MonothekAudioFile
+ * @audio_file: the #AgsAudioFile
  * 
  * Remove @audio_file from @audio_file_manager.
  * 
@@ -251,7 +251,7 @@ monothek_audio_file_manager_remove_audio_file(MonothekAudioFileManager *audio_fi
  * 
  * Find audio file by @filename.
  *
- * Returns: the matching #MonothekAudioFile if found, otherwise %NULL
+ * Returns: the matching #AgsAudioFile if found, otherwise %NULL
  * 
  * Since: 1.0.0
  */
@@ -297,7 +297,7 @@ monothek_audio_file_manager_find_audio_file(MonothekAudioFileManager *audio_file
  * @audio_file_manager: the #MonothekAudioFileManager
  * @filename: the #GSList-struct containing filename as string
  * 
- * Load playlist from @filename and read #AgsWave.
+ * Load playlist from @filename and read #AgsWave from #AgsAudioFile.
  * 
  * Since: 1.0.0
  */
