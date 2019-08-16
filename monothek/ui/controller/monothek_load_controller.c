@@ -372,7 +372,7 @@ monothek_load_controller_completed(MonothekLoadController *load_controller)
  *
  * Returns: %TRUE if proceed with monitor, otherwise %FALSE
  *
- * Since: 2.0.0
+ * Since: 1.0.0
  */
 gboolean
 monothek_load_controller_message_monitor_timeout(MonothekLoadController *load_controller)

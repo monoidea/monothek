@@ -15,7 +15,7 @@
 <!-- A copy of the license is included in the section entitled "GNU -->
 <!-- Free Documentation License". -->
 
-<book id="index">
+<book xmlns:xi="http://www.w3.org/2001/XInclude" id="index">
   <bookinfo>
     <title>Monothek Application Reference Manual</title>
     <releaseinfo>
@@ -159,6 +159,8 @@
 	The monothek's views from MVC.
       </para>
       
+      <xi:include href="xml/monothek_view.xml"/>
+
       <xi:include href="xml/monothek_load_view.xml"/>
       <xi:include href="xml/monothek_banner_view.xml"/>
       <xi:include href="xml/monothek_closed_view.xml"/>
@@ -195,6 +197,8 @@
       <para>
 	The monothek's controllers from MVC.
       </para>
+
+      <xi:include href="xml/monothek_controller.xml"/>
 
       <xi:include href="xml/monothek_load_controller.xml"/>
       <xi:include href="xml/monothek_banner_controller.xml"/>
