@@ -619,14 +619,8 @@ monothek_jukebox_playlist_view_clear(MonothekView *view,
 	       NULL);
 
   if(clear_all || clear_hover){
-    guint i;
-    
-    for(i = 0; i < MONOTHEK_JUKEBOX_PLAYLIST_MODEL_SONG_ROW_COUNT; i++){
-      jukebox_playlist_model->song_select_active[i] = FALSE;
-    }
+    //TODO:JK: implement me
   }
-  
-  //TODO:JK: implement me
 }
 
 /**

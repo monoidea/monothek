@@ -62,6 +62,8 @@ void monothek_diskjokey_qrcode_controller_timeout(MonothekDiskjokeyQrcodeControl
 
 void monothek_diskjokey_qrcode_controller_quit(MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
 
+gboolean monothek_diskjokey_qrcode_controller_progress_increase_timeout(GObject *gobject);
+
 MonothekDiskjokeyQrcodeController* monothek_diskjokey_qrcode_controller_new();
 
 #endif /*__MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER_H__*/

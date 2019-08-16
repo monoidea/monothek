@@ -29,6 +29,8 @@
 
 #include <monothek/ui/model/monothek_jukebox_mode_model.h>
 
+#include <monothek/ui/controller/monothek_jukebox_track_controller.h>
+
 #include <monothek/ui/view/monothek_jukebox_mode_view.h>
 #include <monothek/ui/view/monothek_jukebox_playlist_view.h>
 #include <monothek/ui/view/monothek_jukebox_track_view.h>
@@ -365,14 +367,19 @@ monothek_jukebox_mode_controller_disconnect(AgsConnectable *connectable)
 void
 monothek_jukebox_mode_controller_reset(MonothekController *controller)
 {
+  MonothekWindow *window;
   MonothekJukeboxModeView *jukebox_mode_view;
+  MonothekJukeboxTrackView *jukebox_track_view;
   
   MonothekJukeboxModeController *jukebox_mode_controller;
+  MonothekJukeboxTrackController *jukebox_track_controller;
 
   MonothekJukeboxModeModel *jukebox_mode_model;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
+
+  GList *list_start, *list;
 
   GValue *value;
 
@@ -415,7 +422,7 @@ monothek_jukebox_mode_controller_reset(MonothekController *controller)
 				"jukebox-test-count");
 
     g_value_set_uint(value,
-		     3);
+		     0);
 
     /* reset defaults */
     jukebox_mode_view->flags |= MONOTHEK_JUKEBOX_MODE_VIEW_ALL_TESTS;
@@ -425,7 +432,7 @@ monothek_jukebox_mode_controller_reset(MonothekController *controller)
 				   MONOTHEK_JUKEBOX_MODE_VIEW_NO_TEST));
 
     g_object_set(jukebox_mode_model,
-		 "attempts", 3,
+		 "attempts", 0,
 		 NULL);
 
     /* test */
@@ -445,6 +452,55 @@ monothek_jukebox_mode_controller_reset(MonothekController *controller)
     g_free(jukebox_mode_view->current_test_message);
 
     jukebox_mode_view->current_test_message = g_strdup("YOU CAN TEST 3 OUT\nOF 3 TRACKS.");
+
+    /* track view */
+    window = gtk_widget_get_ancestor(jukebox_mode_view,
+				     MONOTHEK_TYPE_WINDOW);
+
+    jukebox_track_view = NULL;
+    jukebox_track_controller = NULL;
+    
+    list =
+      list_start = gtk_container_get_children(window->view);
+
+    while(list != NULL){
+      if(G_OBJECT_TYPE(list->data) == MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW){
+	jukebox_track_view = list->data;
+	
+	break;
+      }
+      
+      list = list->next;
+    }
+
+    g_list_free(list_start);
+    
+    list = monothek_controller_find_view_type(window->controller,
+					      MONOTHEK_TYPE_JUKEBOX_TRACK_VIEW);
+
+    if(list != NULL){
+      jukebox_track_controller = list->data;
+    }
+    
+    jukebox_track_view->flags |= MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS;
+      
+    jukebox_track_view->flags &= (~(MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_NO_TEST_CONTROL |
+				    MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS));
+
+    /* play */
+    jukebox_track_view->play_box_x0 = 120.0;
+
+    jukebox_track_controller->jukebox_play->x0 = 120;
+
+    /* test */
+    jukebox_track_view->test_box_x0 = 700.0;
+
+    jukebox_track_controller->jukebox_test->enabled = TRUE;
+
+    /* back */
+    jukebox_track_view->back_box_x0 = 1280.0;
+
+    jukebox_track_controller->jukebox_back->x0 = 1280;
   }
 
   /* unref */

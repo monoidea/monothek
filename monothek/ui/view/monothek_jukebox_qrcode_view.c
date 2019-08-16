@@ -24,6 +24,10 @@
 
 #include <stdlib.h>
 
+#include <monothek/ui/monothek_window.h>
+
+#include <monothek/ui/controller/monothek_jukebox_qrcode_controller.h>
+
 #include <monothek/ui/model/monothek_jukebox_qrcode_model.h>
 
 #include <monothek/i18n.h>
@@ -246,10 +250,15 @@ monothek_jukebox_qrcode_view_disconnect(AgsConnectable *connectable)
 void
 monothek_jukebox_qrcode_view_draw(MonothekView *view)
 {
+  MonothekWindow *window;
   MonothekJukeboxQrcodeView *jukebox_qrcode_view;
   
+  MonothekJukeboxQrcodeController *jukebox_qrcode_controller;
+
   MonothekJukeboxQrcodeModel *jukebox_qrcode_model;
 
+  GList *list;
+  
   cairo_t *cr;
 
   guint width, height;
@@ -269,10 +278,22 @@ monothek_jukebox_qrcode_view_draw(MonothekView *view)
     return;
   }
 
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
   g_object_get(view,
 	       "model", &jukebox_qrcode_model,
 	       NULL);
 
+  jukebox_qrcode_controller = NULL;
+  
+  list = monothek_controller_find_view_type(window->controller,
+					    MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW);
+
+  if(list != NULL){
+    jukebox_qrcode_controller = list->data;
+  }
+  
   cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
 
@@ -407,7 +428,9 @@ monothek_jukebox_qrcode_view_draw(MonothekView *view)
     }
 
     /* counter */
-    counter = g_strdup_printf("2:00");
+    counter = g_strdup_printf("%d:%.2d",
+			      1 - (jukebox_qrcode_controller->timer->tv_sec / 60),
+			      59 - (jukebox_qrcode_controller->timer->tv_sec % 60));
     
     layout = pango_cairo_create_layout(cr);
     pango_layout_set_text(layout, counter, -1);

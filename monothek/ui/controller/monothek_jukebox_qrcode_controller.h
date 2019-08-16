@@ -62,6 +62,8 @@ void monothek_jukebox_qrcode_controller_timeout(MonothekJukeboxQrcodeController 
 
 void monothek_jukebox_qrcode_controller_quit(MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 
+gboolean monothek_jukebox_qrcode_controller_progress_increase_timeout(GObject *gobject);
+
 MonothekJukeboxQrcodeController* monothek_jukebox_qrcode_controller_new();
 
 #endif /*__MONOTHEK_JUKEBOX_QRCODE_CONTROLLER_H__*/

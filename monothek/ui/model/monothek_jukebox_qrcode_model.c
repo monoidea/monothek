@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018 Joël Krähemann
+ * Copyright (C) 2018-2019 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -50,6 +50,8 @@ void monothek_jukebox_qrcode_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_QUIT_ACTIVE,
+  PROP_DURATION,
 };
 
 static gpointer monothek_jukebox_qrcode_model_parent_class = NULL;
@@ -103,6 +105,36 @@ monothek_jukebox_qrcode_model_class_init(MonothekJukeboxQrcodeModelClass *jukebo
   gobject->finalize = monothek_jukebox_qrcode_model_finalize;
 
   /* properties */
+  /**
+   * MonothekJukeboxQrcodeModel:quit-active:
+   *
+   * If quit is active.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_boolean("quit-active",
+				    i18n_pspec("quit active"),
+				    i18n_pspec("If quit is active"),
+				    FALSE,
+				    G_PARAM_READABLE | G_PARAM_WRITABLE);
+  g_object_class_install_property(gobject,
+				  PROP_QUIT_ACTIVE,
+				  param_spec);
+
+  /**
+   * MonothekJukeboxQrcodeModel:duration:
+   *
+   * The assigned duration.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_pointer("duration",
+				   i18n_pspec("duration"),
+				   i18n_pspec("The assigned duration"),
+				   G_PARAM_READABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DURATION,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +142,12 @@ monothek_jukebox_qrcode_model_class_init(MonothekJukeboxQrcodeModelClass *jukebo
 void
 monothek_jukebox_qrcode_model_init(MonothekJukeboxQrcodeModel *jukebox_qrcode_model)
 {
-  //TODO:JK: implement me
+  jukebox_qrcode_model->quit_active = FALSE;
+
+  /* duration */
+  jukebox_qrcode_model->duration = (struct timespec *) malloc(sizeof(struct timespec));
+  jukebox_qrcode_model->duration->tv_sec = MONOTHEK_JUKEBOX_QRCODE_MODEL_DEFAULT_DURATION_SEC;
+  jukebox_qrcode_model->duration->tv_nsec = 0;
 }
 
 void
@@ -124,6 +161,11 @@ monothek_jukebox_qrcode_model_set_property(GObject *gobject,
   jukebox_qrcode_model = MONOTHEK_JUKEBOX_QRCODE_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_QUIT_ACTIVE:
+    {
+      jukebox_qrcode_model->quit_active = g_value_get_boolean(value);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;
@@ -141,6 +183,17 @@ monothek_jukebox_qrcode_model_get_property(GObject *gobject,
   jukebox_qrcode_model = MONOTHEK_JUKEBOX_QRCODE_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_QUIT_ACTIVE:
+    {
+      g_value_set_boolean(value,
+			  jukebox_qrcode_model->quit_active);
+    }
+    break;
+  case PROP_DURATION:
+    {
+      g_value_set_pointer(value, jukebox_qrcode_model->duration);
+    }
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

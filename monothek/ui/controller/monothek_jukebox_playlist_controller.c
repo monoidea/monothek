@@ -298,7 +298,7 @@ monothek_jukebox_playlist_controller_jukebox_song_select_enter_callback(Monothek
   sscanf(action_box->action_identifier,
 	 "jukebox-playlist-track-%d",
 	 &position);
-  
+
   if(position >= 0){
     model->song_select_active[position] = TRUE;
   }

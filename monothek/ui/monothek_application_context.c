@@ -1928,7 +1928,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 	       G_TYPE_UINT);
 
   g_value_set_uint(value,
-		   3);
+		   0);
   
   g_hash_table_insert(session->value,
 		      "jukebox-test-count", value);

@@ -901,6 +901,10 @@ monothek_jukebox_track_view_reset(MonothekView *view,
   if(jukebox_test_count != NULL){
     test_count = g_value_get_uint(jukebox_test_count);
   }
+
+  g_object_set(jukebox_track_model,
+	       "attempts", test_count,
+	       NULL);
   
   if(reset_current){
     switch(jukebox_track_model->attempts){
@@ -945,28 +949,6 @@ monothek_jukebox_track_view_reset(MonothekView *view,
     }
     break;
     }
-  }
-  
-  if(reset_defaults){
-    jukebox_track_view->flags |= MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_CONTROLS;
-      
-    jukebox_track_view->flags &= (~(MONOTHEK_JUKEBOX_TRACK_VIEW_CONFIRM_NO_TEST_CONTROL |
-				    MONOTHEK_JUKEBOX_TRACK_VIEW_PLAYBACK_CONTROLS));
-
-    /* play */
-    jukebox_track_view->play_box_x0 = 120.0;
-
-    jukebox_track_controller->jukebox_play->x0 = 120;
-
-    /* test */
-    jukebox_track_view->test_box_x0 = 700.0;
-
-    jukebox_track_controller->jukebox_test->enabled = TRUE;
-
-    /* back */
-    jukebox_track_view->back_box_x0 = 1280.0;
-
-    jukebox_track_controller->jukebox_back->x0 = 1280;
   }
 }
 

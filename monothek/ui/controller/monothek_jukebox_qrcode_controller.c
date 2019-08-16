@@ -44,6 +44,8 @@ void monothek_jukebox_qrcode_controller_finalize(GObject *gobject);
 void monothek_jukebox_qrcode_controller_connect(AgsConnectable *connectable);
 void monothek_jukebox_qrcode_controller_disconnect(AgsConnectable *connectable);
 
+void monothek_jukebox_qrcode_controller_reset(MonothekController *controller);
+
 void monothek_jukebox_qrcode_controller_quit_enter_callback(MonothekActionBox *action_box,
 							    MonothekJukeboxQrcodeController *jukebox_qrcode_controller);
 void monothek_jukebox_qrcode_controller_quit_leave_callback(MonothekActionBox *action_box,
@@ -74,6 +76,8 @@ static gpointer monothek_jukebox_qrcode_controller_parent_class = NULL;
 static AgsConnectableInterface* monothek_jukebox_qrcode_controller_parent_connectable_interface;
 
 static guint jukebox_qrcode_controller_signals[LAST_SIGNAL];
+
+GHashTable *monothek_jukebox_qrcode_controller_progress_increase = NULL;
 
 GType
 monothek_jukebox_qrcode_controller_get_type()
@@ -120,6 +124,7 @@ monothek_jukebox_qrcode_controller_class_init(MonothekJukeboxQrcodeControllerCla
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_jukebox_qrcode_controller_parent_class = g_type_class_peek_parent(jukebox_qrcode_controller);
 
@@ -127,6 +132,11 @@ monothek_jukebox_qrcode_controller_class_init(MonothekJukeboxQrcodeControllerCla
   gobject = (GObjectClass *) jukebox_qrcode_controller;
 
   gobject->finalize = monothek_jukebox_qrcode_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) jukebox_qrcode_controller;
+  
+  controller->reset = monothek_jukebox_qrcode_controller_reset;
 
   /* MonothekJukeboxQrcodeController */
   jukebox_qrcode_controller->timeout = monothek_jukebox_qrcode_controller_real_timeout;
@@ -193,6 +203,29 @@ monothek_jukebox_qrcode_controller_init(MonothekJukeboxQrcodeController *jukebox
 			      NULL);
   monothek_controller_add_action_box(jukebox_qrcode_controller,
 				     action_box);
+
+  /* progress */
+  if(monothek_jukebox_qrcode_controller_progress_increase == NULL){
+    monothek_jukebox_qrcode_controller_progress_increase = g_hash_table_new_full(g_direct_hash, g_direct_equal,
+										 NULL,
+										 NULL);
+  }
+
+  jukebox_qrcode_controller->start_time = (struct timespec *) malloc(sizeof(struct timespec));
+  jukebox_qrcode_controller->start_time->tv_sec = 0;
+  jukebox_qrcode_controller->start_time->tv_nsec = 0;
+  
+  jukebox_qrcode_controller->timer = (struct timespec *) malloc(sizeof(struct timespec));
+  jukebox_qrcode_controller->timer->tv_sec = 0;
+  jukebox_qrcode_controller->timer->tv_nsec = 0;
+
+  /* progress timeout - add */
+  g_hash_table_insert(monothek_jukebox_qrcode_controller_progress_increase,
+		      jukebox_qrcode_controller, monothek_jukebox_qrcode_controller_progress_increase_timeout);
+  
+  g_timeout_add(1000 / 2,
+		(GSourceFunc) monothek_jukebox_qrcode_controller_progress_increase_timeout,
+		(gpointer) jukebox_qrcode_controller);
 }
 
 void
@@ -201,7 +234,11 @@ monothek_jukebox_qrcode_controller_finalize(GObject *gobject)
   MonothekJukeboxQrcodeController *jukebox_qrcode_controller;
 
   jukebox_qrcode_controller = (MonothekJukeboxQrcodeController *) gobject;
-  
+
+  /* progress timeout - remove */
+  g_hash_table_remove(monothek_jukebox_qrcode_controller_progress_increase,
+		      jukebox_qrcode_controller);
+    
   /* call parent */
   G_OBJECT_CLASS(monothek_jukebox_qrcode_controller_parent_class)->finalize(gobject);
 }
@@ -251,6 +288,27 @@ monothek_jukebox_qrcode_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_jukebox_qrcode_controller_quit_clicked_callback),
 		      jukebox_qrcode_controller,
 		      NULL);
+}
+
+void
+monothek_jukebox_qrcode_controller_reset(MonothekController *controller)
+{
+  MonothekJukeboxQrcodeController *jukebox_qrcode_controller;
+
+  jukebox_qrcode_controller = MONOTHEK_JUKEBOX_QRCODE_CONTROLLER(controller);
+
+  /* reset timer */
+#ifdef __APPLE__
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+  clock_get_time(cclock, &mts);
+  mach_port_deallocate(mach_task_self(), cclock);
+    
+  jukebox_qrcode_controller->start_time->tv_sec = mts.tv_sec;
+  jukebox_qrcode_controller->start_time->tv_nsec = mts.tv_nsec;
+#else
+  clock_gettime(CLOCK_MONOTONIC, jukebox_qrcode_controller->start_time);
+#endif  
 }
 
 void
@@ -368,6 +426,76 @@ monothek_jukebox_qrcode_controller_quit(MonothekJukeboxQrcodeController *jukebox
   g_signal_emit(G_OBJECT(jukebox_qrcode_controller),
 		jukebox_qrcode_controller_signals[QUIT], 0);
   g_object_unref((GObject *) jukebox_qrcode_controller);
+}
+
+gboolean
+monothek_jukebox_qrcode_controller_progress_increase_timeout(GObject *gobject)
+{
+  MonothekJukeboxQrcodeController *jukebox_qrcode_controller;
+
+  jukebox_qrcode_controller = gobject;
+  
+  if(g_hash_table_lookup(monothek_jukebox_qrcode_controller_progress_increase,
+			 gobject) != NULL){
+    MonothekJukeboxQrcodeModel *jukebox_qrcode_model;
+
+    MonothekJukeboxQrcodeView *jukebox_qrcode_view;
+
+#ifdef __APPLE__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+#endif
+
+    struct timespec *duration;
+    struct timespec time_now;
+    
+    gdouble value;
+
+    if(jukebox_qrcode_controller->start_time->tv_sec == 0){
+      return(TRUE);
+    }
+    
+    g_object_get(jukebox_qrcode_controller,
+		 "model", &jukebox_qrcode_model,
+		 "view", &jukebox_qrcode_view,
+		 NULL);
+    
+    g_object_get(jukebox_qrcode_model,
+		 "duration", &duration,
+		 NULL);
+    
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    
+    time_now.tv_sec = mts.tv_sec;
+    time_now.tv_nsec = mts.tv_nsec;
+#else
+    clock_gettime(CLOCK_MONOTONIC, &time_now);
+#endif
+
+    /* calculate timer */
+    if(time_now.tv_nsec >= jukebox_qrcode_controller->start_time->tv_nsec){
+      jukebox_qrcode_controller->timer->tv_sec = time_now.tv_sec - jukebox_qrcode_controller->start_time->tv_sec;
+      jukebox_qrcode_controller->timer->tv_nsec = time_now.tv_nsec - jukebox_qrcode_controller->start_time->tv_nsec;
+    }else{
+      jukebox_qrcode_controller->timer->tv_sec = time_now.tv_sec - jukebox_qrcode_controller->start_time->tv_sec - 1;
+      jukebox_qrcode_controller->timer->tv_nsec = NSEC_PER_SEC - jukebox_qrcode_controller->start_time->tv_nsec + time_now.tv_sec;
+    }
+
+    /* calculate progress */
+    if(time_now.tv_sec - jukebox_qrcode_controller->start_time->tv_sec < duration->tv_sec){
+      gtk_widget_queue_draw(jukebox_qrcode_view);
+    }else{
+      monothek_jukebox_qrcode_controller_timeout(jukebox_qrcode_controller);
+    }
+    
+    return(TRUE);
+  }else{
+    return(FALSE);
+  }
 }
 
 /**

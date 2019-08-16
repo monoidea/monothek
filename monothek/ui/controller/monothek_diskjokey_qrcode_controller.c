@@ -32,6 +32,11 @@
 #include <monothek/ui/view/monothek_start_view.h>
 #include <monothek/ui/view/monothek_diskjokey_qrcode_view.h>
 
+#ifdef __APPLE__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -43,6 +48,8 @@ void monothek_diskjokey_qrcode_controller_finalize(GObject *gobject);
 
 void monothek_diskjokey_qrcode_controller_connect(AgsConnectable *connectable);
 void monothek_diskjokey_qrcode_controller_disconnect(AgsConnectable *connectable);
+
+void monothek_diskjokey_qrcode_controller_reset(MonothekController *controller);
 
 void monothek_diskjokey_qrcode_controller_quit_enter_callback(MonothekActionBox *action_box,
 							      MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller);
@@ -74,6 +81,8 @@ static gpointer monothek_diskjokey_qrcode_controller_parent_class = NULL;
 static AgsConnectableInterface* monothek_diskjokey_qrcode_controller_parent_connectable_interface;
 
 static guint diskjokey_qrcode_controller_signals[LAST_SIGNAL];
+
+GHashTable *monothek_diskjokey_qrcode_controller_progress_increase = NULL;
 
 GType
 monothek_diskjokey_qrcode_controller_get_type()
@@ -120,6 +129,7 @@ monothek_diskjokey_qrcode_controller_class_init(MonothekDiskjokeyQrcodeControlle
 {
   GObjectClass *gobject;
   GtkWidgetClass *widget;
+  MonothekControllerClass *controller;
 
   monothek_diskjokey_qrcode_controller_parent_class = g_type_class_peek_parent(diskjokey_qrcode_controller);
 
@@ -127,6 +137,11 @@ monothek_diskjokey_qrcode_controller_class_init(MonothekDiskjokeyQrcodeControlle
   gobject = (GObjectClass *) diskjokey_qrcode_controller;
 
   gobject->finalize = monothek_diskjokey_qrcode_controller_finalize;
+
+  /* MonothekControllerClass */
+  controller = (MonothekControllerClass *) diskjokey_qrcode_controller;
+  
+  controller->reset = monothek_diskjokey_qrcode_controller_reset;
 
   /* MonothekDiskjokeyQrcodeController */
   diskjokey_qrcode_controller->timeout = monothek_diskjokey_qrcode_controller_real_timeout;
@@ -193,6 +208,29 @@ monothek_diskjokey_qrcode_controller_init(MonothekDiskjokeyQrcodeController *dis
 			      NULL);
   monothek_controller_add_action_box(diskjokey_qrcode_controller,
 				     action_box);
+
+  /* progress */
+  if(monothek_diskjokey_qrcode_controller_progress_increase == NULL){
+    monothek_diskjokey_qrcode_controller_progress_increase = g_hash_table_new_full(g_direct_hash, g_direct_equal,
+										   NULL,
+										   NULL);
+  }
+
+  diskjokey_qrcode_controller->start_time = (struct timespec *) malloc(sizeof(struct timespec));
+  diskjokey_qrcode_controller->start_time->tv_sec = 0;
+  diskjokey_qrcode_controller->start_time->tv_nsec = 0;
+  
+  diskjokey_qrcode_controller->timer = (struct timespec *) malloc(sizeof(struct timespec));
+  diskjokey_qrcode_controller->timer->tv_sec = 0;
+  diskjokey_qrcode_controller->timer->tv_nsec = 0;
+
+  /* progress timeout - add */
+  g_hash_table_insert(monothek_diskjokey_qrcode_controller_progress_increase,
+		      diskjokey_qrcode_controller, monothek_diskjokey_qrcode_controller_progress_increase_timeout);
+  
+  g_timeout_add(1000 / 2,
+		(GSourceFunc) monothek_diskjokey_qrcode_controller_progress_increase_timeout,
+		(gpointer) diskjokey_qrcode_controller);
 }
 
 void
@@ -201,6 +239,10 @@ monothek_diskjokey_qrcode_controller_finalize(GObject *gobject)
   MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller;
 
   diskjokey_qrcode_controller = (MonothekDiskjokeyQrcodeController *) gobject;
+
+  /* progress timeout - remove */
+  g_hash_table_remove(monothek_diskjokey_qrcode_controller_progress_increase,
+		      diskjokey_qrcode_controller);
   
   /* call parent */
   G_OBJECT_CLASS(monothek_diskjokey_qrcode_controller_parent_class)->finalize(gobject);
@@ -251,6 +293,27 @@ monothek_diskjokey_qrcode_controller_disconnect(AgsConnectable *connectable)
 		      G_CALLBACK(monothek_diskjokey_qrcode_controller_quit_clicked_callback),
 		      diskjokey_qrcode_controller,
 		      NULL);
+}
+
+void
+monothek_diskjokey_qrcode_controller_reset(MonothekController *controller)
+{
+  MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller;
+
+  diskjokey_qrcode_controller = MONOTHEK_DISKJOKEY_QRCODE_CONTROLLER(controller);
+
+  /* reset timer */
+#ifdef __APPLE__
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+  clock_get_time(cclock, &mts);
+  mach_port_deallocate(mach_task_self(), cclock);
+    
+  diskjokey_qrcode_controller->start_time->tv_sec = mts.tv_sec;
+  diskjokey_qrcode_controller->start_time->tv_nsec = mts.tv_nsec;
+#else
+  clock_gettime(CLOCK_MONOTONIC, diskjokey_qrcode_controller->start_time);
+#endif  
 }
 
 void
@@ -368,6 +431,76 @@ monothek_diskjokey_qrcode_controller_quit(MonothekDiskjokeyQrcodeController *dis
   g_signal_emit(G_OBJECT(diskjokey_qrcode_controller),
 		diskjokey_qrcode_controller_signals[QUIT], 0);
   g_object_unref((GObject *) diskjokey_qrcode_controller);
+}
+
+gboolean
+monothek_diskjokey_qrcode_controller_progress_increase_timeout(GObject *gobject)
+{
+  MonothekDiskjokeyQrcodeController *diskjokey_qrcode_controller;
+
+  diskjokey_qrcode_controller = gobject;
+  
+  if(g_hash_table_lookup(monothek_diskjokey_qrcode_controller_progress_increase,
+			 gobject) != NULL){
+    MonothekDiskjokeyQrcodeModel *diskjokey_qrcode_model;
+
+    MonothekDiskjokeyQrcodeView *diskjokey_qrcode_view;
+
+#ifdef __APPLE__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+#endif
+
+    struct timespec *duration;
+    struct timespec time_now;
+    
+    gdouble value;
+
+    if(diskjokey_qrcode_controller->start_time->tv_sec == 0){
+      return(TRUE);
+    }
+    
+    g_object_get(diskjokey_qrcode_controller,
+		 "model", &diskjokey_qrcode_model,
+		 "view", &diskjokey_qrcode_view,
+		 NULL);
+    
+    g_object_get(diskjokey_qrcode_model,
+		 "duration", &duration,
+		 NULL);
+    
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    
+    time_now.tv_sec = mts.tv_sec;
+    time_now.tv_nsec = mts.tv_nsec;
+#else
+    clock_gettime(CLOCK_MONOTONIC, &time_now);
+#endif
+
+    /* calculate timer */
+    if(time_now.tv_nsec >= diskjokey_qrcode_controller->start_time->tv_nsec){
+      diskjokey_qrcode_controller->timer->tv_sec = time_now.tv_sec - diskjokey_qrcode_controller->start_time->tv_sec;
+      diskjokey_qrcode_controller->timer->tv_nsec = time_now.tv_nsec - diskjokey_qrcode_controller->start_time->tv_nsec;
+    }else{
+      diskjokey_qrcode_controller->timer->tv_sec = time_now.tv_sec - diskjokey_qrcode_controller->start_time->tv_sec - 1;
+      diskjokey_qrcode_controller->timer->tv_nsec = NSEC_PER_SEC - diskjokey_qrcode_controller->start_time->tv_nsec + time_now.tv_sec;
+    }
+
+    /* calculate progress */
+    if(time_now.tv_sec - diskjokey_qrcode_controller->start_time->tv_sec < duration->tv_sec){
+      gtk_widget_queue_draw(diskjokey_qrcode_view);
+    }else{
+      monothek_diskjokey_qrcode_controller_timeout(diskjokey_qrcode_controller);
+    }
+    
+    return(TRUE);
+  }else{
+    return(FALSE);
+  }
 }
 
 /**
