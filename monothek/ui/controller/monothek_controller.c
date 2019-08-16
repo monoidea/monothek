@@ -487,6 +487,7 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
 {
   GList *list_start, *list;
   
+  /* action box */
   g_object_get(controller,
 	       "action-box", &list_start,
 	       NULL);
@@ -528,6 +529,56 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
 
   g_list_free(list_start);
   
+  /* action slider */
+  g_object_get(controller,
+	       "action-slider", &list_start,
+	       NULL);
+
+  list = list_start;
+
+  while(list != NULL){
+    guint x0, y0;
+    guint width, height;
+
+    g_object_get(G_OBJECT(list->data),
+		 "x0", &x0,
+		 "y0", &y0,
+		 "width", &width,
+		 "height", &height,
+		 NULL);
+
+    if(x0 <= ((GdkEventMotion *) event)->x &&
+       x0 + width > ((GdkEventMotion *) event)->x &&
+       y0 <= ((GdkEventMotion *) event)->y &&
+       y0 + height > ((GdkEventMotion *) event)->y){      
+      GtkAdjustment *adjustment;
+
+      gdouble event_x, event_y;
+      gdouble new_value;
+
+      adjustment = MONOTHEK_ACTION_SLIDER(list->data)->adjustment;
+      new_value = 0.0;
+
+      event_x = ((GdkEventButton *) event)->x;
+      event_y = ((GdkEventButton *) event)->y;
+      
+      if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
+	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / width * (event_x - x0);
+      }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
+	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / height * (event_y - y0);
+      }
+      
+      monothek_action_slider_change_value(list->data,
+					  new_value);
+      monothek_action_slider_move_slider(list->data);
+      monothek_action_slider_value_changed(list->data);
+    }
+    
+    list = list->next;
+  }
+
+  g_list_free(list_start);
+
   return(FALSE);
 }
 
@@ -567,6 +618,10 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
        y0 <= ((GdkEventButton *) event)->y &&
        y0 + height > ((GdkEventButton *) event)->y){
       monothek_action_box_pressed(list->data);
+    }else{
+      if(monothek_action_box_get_active(list->data)){
+	monothek_action_box_leave(list->data);
+      }
     }
     
     list = list->next;
@@ -662,6 +717,10 @@ monothek_controller_button_release_event_callback(GtkWidget *widget,
        y0 <= ((GdkEventButton *) event)->y &&
        y0 + height > ((GdkEventButton *) event)->y){
       monothek_action_box_released(list->data);
+    }else{
+      if(monothek_action_box_get_active(list->data)){
+	monothek_action_box_leave(list->data);
+      }
     }
     
     list = list->next;

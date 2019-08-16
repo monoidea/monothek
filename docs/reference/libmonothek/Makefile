@@ -642,8 +642,8 @@ REPORT_FILES = \
 CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS) gtkdoc-check.test
 #HTML_BUILD_STAMP = 
 HTML_BUILD_STAMP = html-build.stamp
-#PDF_BUILD_STAMP = 
-PDF_BUILD_STAMP = pdf-build.stamp
+PDF_BUILD_STAMP = 
+#PDF_BUILD_STAMP = pdf-build.stamp
 
 #### setup ####
 GTK_DOC_V_SETUP = $(GTK_DOC_V_SETUP_$(V))
@@ -680,11 +680,11 @@ GTK_DOC_V_PDF_0 = @echo "  DOC   Building PDF";
 
 # Comment this out if you want 'make check' to test you doc status
 # and run some sanity checks
-TESTS_ENVIRONMENT = \
-  DOC_MODULE=$(DOC_MODULE) DOC_MAIN_SGML_FILE=$(DOC_MAIN_SGML_FILE) \
-  SRCDIR=$(abs_srcdir) BUILDDIR=$(abs_builddir)
+#TESTS_ENVIRONMENT = \
+#  DOC_MODULE=$(DOC_MODULE) DOC_MAIN_SGML_FILE=$(DOC_MAIN_SGML_FILE) \
+#  SRCDIR=$(abs_srcdir) BUILDDIR=$(abs_builddir)
 
-TESTS = $(GTKDOC_CHECK)
+#TESTS = $(GTKDOC_CHECK)
 all: all-am
 
 .SUFFIXES:
@@ -928,7 +928,7 @@ distdir-am: $(DISTFILES)
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
 check: check-am
-#all-local:
+all-local:
 all-am: Makefile all-local
 installdirs:
 install: install-am
@@ -1064,7 +1064,7 @@ gtkdoc-check.test: Makefile
 all-gtk-doc: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
 .PHONY: all-gtk-doc
 
-all-local: all-gtk-doc
+#all-local: all-gtk-doc
 
 docs: $(HTML_BUILD_STAMP) $(PDF_BUILD_STAMP)
 
