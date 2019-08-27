@@ -401,7 +401,7 @@ monothek_audio_file_manager_load_playlist(MonothekAudioFileManager *audio_file_m
 /**
  * monothek_audio_file_manager_get_instance:
  * 
- * Get monothek audio_file manager instance.
+ * Get monothek audio file manager instance.
  *
  * Returns: the #MonothekAudioFileManager singleton
  * 

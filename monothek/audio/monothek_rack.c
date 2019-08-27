@@ -724,6 +724,10 @@ monothek_rack_create_mixer(MonothekRack *rack)
 
   audio = ags_audio_new(rack->output_soundcard);
   ags_audio_set_flags(audio, (AGS_AUDIO_ASYNC));
+
+  g_object_set(audio,
+               "audio-name", "monothek-mixer",
+	       NULL);
   
   ags_connectable_connect(audio);
   
@@ -736,6 +740,17 @@ monothek_rack_create_mixer(MonothekRack *rack)
   ags_audio_set_pads(audio,
 		     AGS_TYPE_OUTPUT,
 		     1, 0);
+
+  /* ags-play */
+  ags_recall_factory_create(audio,
+			    NULL, NULL,
+			    "ags-analyse",
+			    0, audio_channels,
+			    0, 1,
+			    (AGS_RECALL_FACTORY_INPUT,
+			     AGS_RECALL_FACTORY_PLAY |
+			     AGS_RECALL_FACTORY_ADD),
+			    0);
 
   return(audio);
 }
@@ -1050,25 +1065,45 @@ void
 monothek_rack_setup_tree(MonothekRack *rack)
 {
   AgsChannel *output, *input;
+
+  AgsApplicationContext *application_context;
+  
+  GList *start_list;
   
   guint i;
   
   if(!MONOTHEK_IS_RACK(rack)){
     return;
   }
+
+  application_context = ags_application_context_get_instance();
+  
+  start_list = NULL;
   
   /* create audio engine */
   rack->panel = monothek_rack_create_panel(rack);
+  start_list = g_list_prepend(start_list,
+			      rack->panel);
   g_object_ref(rack->panel);
   
   rack->mixer = monothek_rack_create_mixer(rack);
+  start_list = g_list_prepend(start_list,
+			      rack->mixer);
   g_object_ref(rack->mixer);
 
   rack->player = monothek_rack_create_player(rack);
+  start_list = g_list_prepend(start_list,
+			      rack->player);
   g_object_ref(rack->player);
 
   rack->sequencer = monothek_rack_create_sequencer(rack);
+  start_list = g_list_prepend(start_list,
+			      rack->sequencer);
   g_object_ref(rack->sequencer);
+
+  start_list = g_list_reverse(start_list);
+  ags_sound_provider_set_audio(AGS_SOUND_PROVIDER(application_context),
+			       start_list);
 
   /* link audio - panel and mixer */
   g_object_get(rack->panel,
