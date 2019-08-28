@@ -360,6 +360,9 @@ monothek_jukebox_qrcode_controller_real_timeout(MonothekJukeboxQrcodeController 
   MonothekWindow *window;
   MonothekJukeboxQrcodeView *view;
   
+  jukebox_qrcode_controller->start_time->tv_sec = 0;
+  jukebox_qrcode_controller->start_time->tv_nsec = 0;
+
   /* change view */
   g_object_get(jukebox_qrcode_controller,
 	       "view", &view,
@@ -397,6 +400,9 @@ monothek_jukebox_qrcode_controller_real_quit(MonothekJukeboxQrcodeController *ju
   MonothekWindow *window;
   MonothekJukeboxQrcodeView *view;
   
+  jukebox_qrcode_controller->start_time->tv_sec = 0;
+  jukebox_qrcode_controller->start_time->tv_nsec = 0;
+      
   /* change view */
   g_object_get(jukebox_qrcode_controller,
 	       "view", &view,

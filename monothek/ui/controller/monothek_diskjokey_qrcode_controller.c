@@ -365,6 +365,9 @@ monothek_diskjokey_qrcode_controller_real_timeout(MonothekDiskjokeyQrcodeControl
   MonothekWindow *window;
   MonothekDiskjokeyQrcodeView *view;
   
+  diskjokey_qrcode_controller->start_time->tv_sec = 0;
+  diskjokey_qrcode_controller->start_time->tv_nsec = 0;
+
   /* change view */
   g_object_get(diskjokey_qrcode_controller,
 	       "view", &view,
@@ -402,6 +405,9 @@ monothek_diskjokey_qrcode_controller_real_quit(MonothekDiskjokeyQrcodeController
   MonothekWindow *window;
   MonothekDiskjokeyQrcodeView *view;
   
+  diskjokey_qrcode_controller->start_time->tv_sec = 0;
+  diskjokey_qrcode_controller->start_time->tv_nsec = 0;
+
   /* change view */
   g_object_get(diskjokey_qrcode_controller,
 	       "view", &view,
