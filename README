@@ -35,4 +35,4 @@ make install
 
 To enable automatic login at boot, execute:
 
-# systemctl enable xlogin@monothek
+systemctl enable xlogin@monothek
