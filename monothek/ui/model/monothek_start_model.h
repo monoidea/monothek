@@ -33,7 +33,7 @@
 #define MONOTHEK_START_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_MODEL, MonothekStartModelClass))
 
 #ifdef MONOTHEK_DEVEL_MODE
-#define MONOTHEK_START_MODEL_PURCHASE_PATH SRCDIR "/monothek.home/purchase"
+#define MONOTHEK_START_MODEL_PURCHASE_PATH SRCDIR "/monothek.home/monothek/purchase"
 #else
 #define MONOTHEK_START_MODEL_PURCHASE_PATH "/home/monothek/purchase"
 #endif
