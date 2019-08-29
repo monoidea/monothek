@@ -32,3 +32,7 @@ run:
 ./configure --prefix=/usr
 make
 make install
+
+To enable automatic login at boot, execute:
+
+# systemctl enable xlogin@monothek

@@ -1,0 +1,9 @@
+[Unit]
+Description=X on %I
+Wants=graphical.target
+Before=graphical.target
+StopWhenUnneeded=true
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/x-daemon -noreset %I
