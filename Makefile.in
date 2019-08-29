@@ -2820,6 +2820,16 @@ pdf:
 	$(MAKE) -C $(top_srcdir)/docs/reference/libmonothek
 	cd $(top_srcdir)
 
+install-service:
+	install -c -p -m 755 $(top_builddir)/monothek.usr/bin/x-daemon $(bindir)/x-daemon
+	install -c -p -m 644 $(top_builddir)/monothek.etc/systemd/system/x@.service $(etcdir)/systemd/system/x@.service
+	install -c -p -m 644 $(top_builddir)/monothek.etc/systemd/system/xlogin@.service $(etcdir)/systemd/system/xlogin@.service
+	install -c -p -m 755 $(top_builddir)/monothek.etc/X11/xinit/xinitrc.d/25-xlogin.sh $(etcdir)/X11/xinit/xinitrc.d/25-xlogin.sh
+	install -c -p -m 644 $(top_builddir)/monothek.home/monothek/.xinitrc /home/monothek/.xinitrc
+
+install-conf:
+	install -c -p -m 644 $(top_builddir)/monothek.home/monothek/.monothek/monothek.conf /home/monothek/.monothek/monothek.conf
+
 gen-marshallers:
 	glib-genmarshal --prefix=monothek_cclosure_marshal --header monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.h
 	glib-genmarshal --prefix=monothek_cclosure_marshal --body monothek/object/monothek_marshallers.list > monothek/object/monothek_marshal.c
