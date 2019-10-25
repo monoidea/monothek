@@ -50,6 +50,7 @@ void monothek_banner_model_finalize(GObject *gobject);
 
 enum{
   PROP_0,
+  PROP_DURATION,
 };
 
 static gpointer monothek_banner_model_parent_class = NULL;
@@ -103,6 +104,20 @@ monothek_banner_model_class_init(MonothekBannerModelClass *banner_model)
   gobject->finalize = monothek_banner_model_finalize;
 
   /* properties */
+  /**
+   * MonothekBannerModel:duration:
+   *
+   * The assigned duration.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_pointer("duration",
+				    i18n_pspec("duration"),
+				    i18n_pspec("The assigned duration"),
+				    G_PARAM_READABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DURATION,
+				  param_spec);
 
   /* MonothekModel */
 }
@@ -110,7 +125,10 @@ monothek_banner_model_class_init(MonothekBannerModelClass *banner_model)
 void
 monothek_banner_model_init(MonothekBannerModel *banner_model)
 {
-  //TODO:JK: implement me
+  /* duration */
+  banner_model->duration = (struct timespec *) malloc(sizeof(struct timespec));
+  banner_model->duration->tv_sec = MONOTHEK_BANNER_MODEL_DEFAULT_DURATION_SEC;
+  banner_model->duration->tv_nsec = 0;
 }
 
 void
@@ -141,6 +159,11 @@ monothek_banner_model_get_property(GObject *gobject,
   banner_model = MONOTHEK_BANNER_MODEL(gobject);
 
   switch(prop_id){
+  case PROP_DURATION:
+  {
+    g_value_set_pointer(value, banner_model->duration);
+  }
+  break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(gobject, prop_id, param_spec);
     break;

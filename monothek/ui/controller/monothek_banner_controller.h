@@ -42,14 +42,29 @@ typedef struct _MonothekBannerControllerClass MonothekBannerControllerClass;
 struct _MonothekBannerController
 {
   MonothekController controller;
+
+  MonothekActionBox *enter_monothek;
+
+  struct timespec *start_time;
+  struct timespec *timer;
 };
 
 struct _MonothekBannerControllerClass
 {
   MonothekControllerClass controller;
+
+  void (*timeout)(MonothekBannerController *banner_controller);
+
+  void (*enter_monothek)(MonothekBannerController *banner_controller);
 };
 
 GType monothek_banner_controller_get_type(void);
+
+void monothek_banner_controller_timeout(MonothekBannerController *banner_controller);
+
+void monothek_banner_controller_enter_monothek(MonothekBannerController *banner_controller);
+
+gboolean monothek_banner_controller_progress_increase_timeout(GObject *gobject);
 
 MonothekBannerController* monothek_banner_controller_new();
 

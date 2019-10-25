@@ -24,6 +24,11 @@
 
 #include <monothek/ui/monothek_window.h>
 
+#include <monothek/ui/model/monothek_screensaver_model.h>
+
+#include <monothek/ui/view/monothek_banner_view.h>
+#include <monothek/ui/view/monothek_screensaver_view.h>
+
 #include <stdlib.h>
 
 #include <monothek/i18n.h>
@@ -38,6 +43,15 @@ void monothek_screensaver_controller_disconnect(AgsConnectable *connectable);
 
 void monothek_screensaver_controller_reset(MonothekController *controller);
 
+void monothek_screensaver_controller_stop_screensaver_enter_callback(MonothekActionBox *action_box,
+								     MonothekScreensaverController *screensaver_controller);
+void monothek_screensaver_controller_stop_screensaver_leave_callback(MonothekActionBox *action_box,
+								     MonothekScreensaverController *screensaver_controller);
+void monothek_screensaver_controller_stop_screensaver_clicked_callback(MonothekActionBox *action_box,
+								       MonothekScreensaverController *screensaver_controller);
+
+void monothek_screensaver_controller_real_stop_screensaver(MonothekScreensaverController *screensaver_controller);
+
 /**
  * SECTION:monothek_screensaver_controller
  * @short_description: The screensaver controller object.
@@ -49,6 +63,7 @@ void monothek_screensaver_controller_reset(MonothekController *controller);
  */
 
 enum{
+  STOP_SCREENSAVER,
   LAST_SIGNAL,
 };
 
@@ -115,6 +130,27 @@ monothek_screensaver_controller_class_init(MonothekScreensaverControllerClass *s
   controller = (MonothekControllerClass *) screensaver_controller;
   
   controller->reset = monothek_screensaver_controller_reset;
+
+  /* MonothekScreensaverController */
+  screensaver_controller->stop_screensaver = monothek_screensaver_controller_real_stop_screensaver;
+
+  /* signals */
+  /**
+   * MonothekScreensaverController::stop-screensaver:
+   * @screensaver_controller: the #MonothekScreensaverController
+   *
+   * The ::stop-screensaver signal notifies about stop screensaver.
+   *
+   * Since: 1.0.0
+   */
+  screensaver_controller_signals[STOP_SCREENSAVER] =
+    g_signal_new("stop-screensaver",
+		 G_TYPE_FROM_CLASS(screensaver_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekScreensaverControllerClass, stop_screensaver),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
 }
 
 void
@@ -129,7 +165,18 @@ monothek_screensaver_controller_connectable_interface_init(AgsConnectableInterfa
 void
 monothek_screensaver_controller_init(MonothekScreensaverController *screensaver_controller)
 {
-  //TODO:JK: implement me
+  MonothekActionBox *action_box;
+
+  screensaver_controller->stop_screensaver = 
+    action_box = (MonothekActionBox *) g_object_new(MONOTHEK_TYPE_ACTION_BOX,
+						    "action-identifier", "stop-screensaver",
+						    "x0", 0,
+						    "y0", 0,
+						    "width", 1920,
+						    "height", 1080,
+						    NULL);
+  monothek_controller_add_action_box(screensaver_controller,
+				     action_box);
 }
 
 void
@@ -155,6 +202,13 @@ monothek_screensaver_controller_connect(AgsConnectable *connectable)
   }
 
   monothek_screensaver_controller_parent_connectable_interface->connect(connectable);
+
+  g_signal_connect(screensaver_controller->stop_screensaver, "enter",
+		   G_CALLBACK(monothek_screensaver_controller_stop_screensaver_enter_callback), screensaver_controller);
+  g_signal_connect(screensaver_controller->stop_screensaver, "leave",
+		   G_CALLBACK(monothek_screensaver_controller_stop_screensaver_leave_callback), screensaver_controller);
+  g_signal_connect(screensaver_controller->stop_screensaver, "clicked",
+		   G_CALLBACK(monothek_screensaver_controller_stop_screensaver_clicked_callback), screensaver_controller);
 }
 
 void
@@ -169,12 +223,81 @@ monothek_screensaver_controller_disconnect(AgsConnectable *connectable)
   }
 
   monothek_screensaver_controller_parent_connectable_interface->disconnect(connectable);
+
+  g_object_disconnect(screensaver_controller->stop_screensaver,
+		      "any_signal::enter",
+		      G_CALLBACK(monothek_screensaver_controller_stop_screensaver_enter_callback),
+		      screensaver_controller,
+		      "any_signal::leave",
+		      G_CALLBACK(monothek_screensaver_controller_stop_screensaver_leave_callback),
+		      screensaver_controller,
+		      "any_signal::clicked",
+		      G_CALLBACK(monothek_screensaver_controller_stop_screensaver_clicked_callback),
+		      screensaver_controller,
+		      NULL);
 }
 
 void
 monothek_screensaver_controller_reset(MonothekController *controller)
 {
-  //TODO:JK: implemente me
+  //TODO:JK: implement me
+}
+
+void
+monothek_screensaver_controller_stop_screensaver_enter_callback(MonothekActionBox *action_box,
+								MonothekScreensaverController *screensaver_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_screensaver_controller_stop_screensaver_leave_callback(MonothekActionBox *action_box,
+								MonothekScreensaverController *screensaver_controller)
+{
+  //TODO:JK: implement me
+}
+
+void
+monothek_screensaver_controller_stop_screensaver_clicked_callback(MonothekActionBox *action_box,
+								  MonothekScreensaverController *screensaver_controller)
+{
+  monothek_screensaver_controller_stop_screensaver(screensaver_controller);
+}
+
+void
+monothek_screensaver_controller_real_stop_screensaver(MonothekScreensaverController *screensaver_controller)
+{
+  MonothekWindow *window;
+  MonothekScreensaverView *view;
+  
+  g_object_get(screensaver_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_BANNER_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_screensaver_controller_stop_screensaver:
+ * @screensaver_controller: the #MonothekScreensaverController
+ * 
+ * Stop screensaver.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_screensaver_controller_stop_screensaver(MonothekScreensaverController *screensaver_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_SCREENSAVER_CONTROLLER(screensaver_controller));
+  
+  g_object_ref((GObject *) screensaver_controller);
+  g_signal_emit(G_OBJECT(screensaver_controller),
+		screensaver_controller_signals[STOP_SCREENSAVER], 0);
+  g_object_unref((GObject *) screensaver_controller);
 }
 
 /**

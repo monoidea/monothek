@@ -32,12 +32,16 @@
 #define MONOTHEK_IS_BANNER_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_BANNER_MODEL))
 #define MONOTHEK_BANNER_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_BANNER_MODEL, MonothekBannerModelClass))
 
+#define MONOTHEK_BANNER_MODEL_DEFAULT_DURATION_SEC (20)
+
 typedef struct _MonothekBannerModel MonothekBannerModel;
 typedef struct _MonothekBannerModelClass MonothekBannerModelClass;
 
 struct _MonothekBannerModel
 {
   GObject gobject;
+
+  struct timespec *duration;
 };
 
 struct _MonothekBannerModelClass

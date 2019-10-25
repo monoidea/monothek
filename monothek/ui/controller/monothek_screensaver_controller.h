@@ -42,14 +42,20 @@ typedef struct _MonothekScreensaverControllerClass MonothekScreensaverController
 struct _MonothekScreensaverController
 {
   MonothekController controller;
+
+  MonothekActionBox *stop_screensaver;
 };
 
 struct _MonothekScreensaverControllerClass
 {
   MonothekControllerClass controller;
+
+  void (*stop_screensaver)(MonothekScreensaverController *screensaver_controller);
 };
 
 GType monothek_screensaver_controller_get_type(void);
+
+void monothek_screensaver_controller_stop_screensaver(MonothekScreensaverController *screensaver_controller);
 
 MonothekScreensaverController* monothek_screensaver_controller_new();
 
