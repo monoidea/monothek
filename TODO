@@ -1,7 +1,4 @@
 implement diskjokey counter end view
-implement diskjokey counter qrcode view
-implement diskjokey action box quit view
 implement diskjokey cancel view
 implement jukebox counter end view
 implement jukebox counter info view
-implement jukebox counter qrcode view

@@ -8,13 +8,44 @@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = po
 
+if WITH_GNULIB
+SUBDIRS += lib
+endif
+
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-threads=posix --without-included-regex
+
 ACLOCAL_AMFLAGS = -I m4
-AM_CPPFLAGS = -std=gnu99 -include errno.h -I$(top_srcdir) -DMONOTHEK_DEVEL_MODE=1 -DMONOTHEK_NO_LOAD_VIEW=1 -DSRCDIR=\"$(srcdir)\" -DDESTDIR=\"$(DESTDIR)$(datadir)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security
+AM_CPPFLAGS = -std=gnu99 -include errno.h
+
+if WITH_GNULIB
+AM_CPPFLAGS += -I$(top_srcdir)/lib
+endif
+
+if WITH_W32API
+AM_CPPFLAGS += -DMONOTHEK_DEVEL_MODE=1 -DMONOTHEK_W32API=1 -DAGS_W32API=1 -DHAVE_GLIB_2_6=1 -DHAVE_GLIB_2_44=1 -DHAVE_GLIB_2_54=1 -DMONOTHEK_LIBRARY_SUFFIX=\".dll\" -include $(top_srcdir)/monothek/config.h -I$(top_srcdir) -I/usr/lib/gcc/x86_64-w64-mingw32/8.3-win32/include-fixed -I/usr/lib/gcc/x86_64-w64-mingw32/8.3-win32/include -I/usr/x86_64-w64-mingw32/include -I/home/joelkraehemann/mingw64/target/include -I/home/joelkraehemann/mingw64/target/include/dssi -Werror=return-type -Werror=uninitialized -Werror=maybe-uninitialized
+AM_LDFLAGS = -no-undefined
+else
+if WITH_OSXAPI
+AM_CPPFLAGS += -DMONOTHEK_DEVEL_MODE=1 -fnested-functions -MONOTHEK_OSXAPI=1 -I/usr/include -I/opt/local/include -I/opt/local/include/dssi -DMONOTHEK_LIBRARY_SUFFIX=\".dylib\"
+else
+AM_CPPFLAGS += -DMONOTHEK_DEVEL_MODE=1 -DMONOTHEK_NO_LOAD_VIEW=1 -I/usr/include -DMONOTHEK_LIBRARY_SUFFIX=\".so\" -Werror=return-type -Werror=uninitialized -Werror=maybe-uninitialized
+endif
+endif
+
+AM_CPPFLAGS += -DSRCDIR=\"$(srcdir)\" -DDESTDIR=\"$(datadir)\" -DPACKAGE_VERSION=\"$(PACKAGE_VERSION)\" -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security
 
 # what flags you want to pass to the C compiler & linker
 CFLAGS =  @CFLAGS@
 LDFLAGS = @LDFLAGS@ $(LTLIBINTL)
 LIBTOOL_DEPS = @LIBTOOL_DEPS@
+
+if WITH_W32API
+LDFLAGS += -no-undefined
+endif
+
+if WITH_GNULIB
+LDFLAGS += -L./lib -lgnu
+endif
 
 monothek_ui_CFLAGS = @MONOTHEK_CFLAGS@
 monothek_ui_LDFLAGS = @MONOTHEK_LDFLAGS@
@@ -31,6 +62,7 @@ EXTRA_DIST = config.rpath \
 	monothek/config.h.in \
 	gtk-doc.make \
 	aclocal.m4 \
+	m4/gnulib-cache.m4 \
 	README \
 	m4/Makefile.am \
 	m4/Makefile.in \
@@ -54,16 +86,27 @@ libmonothek_la_HEADERS_0 = $(libmonothek_h_sources) $(libmonothek_lib_h_sources)
 libmonothek_la_SOURCES = $(libmonothek_la_HEADERS_0) $(libmonothek_c_sources) $(libmonothek_lib_c_sources) $(libmonothek_object_c_sources) $(libmonothek_session_c_sources) $(libmonothek_audio_c_sources) $(libmonothek_audio_task_c_sources) $(libmonothek_audio_thread_c_sources) $(libmonothek_recall_c_sources) $(libmonothek_audio_file_c_sources) $(libmonothek_model_c_sources) $(libmonothek_controller_c_sources) $(libmonothek_view_c_sources)
 
 # library libmonothek
-libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
-libmonothek_la_LDFLAGS = $(LDFLAGS) -version-info 1:0:0 -shared -fPIC -Wl,-soname,libmonothek.so -pthread
-libmonothek_la_LIBADD = -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(LIBQRENCODE_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
+libmonothek_la_CFLAGS = $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS) $(GTK_MAC_INTEGRATION_CFLAGS) $(W32API_CFLAGS)
+libmonothek_la_LDFLAGS = $(LDFLAGS) -version-info 1:0:0 -shared -fPIC -pthread
+libmonothek_la_LIBADD = -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(LIBQRENCODE_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS) $(GTK_MAC_INTEGRATION_LIBS) $(W32API_LIBS)
+
+if WITH_W32API
+else
+libmonothek_la_LDFLAGS += -Wl,-soname,libmonothek.so
+libmonothek_la_LIBADD += -ldl -lcrypt
+endif
 
 # monothek
 monothek_ui_SOURCES = $(monothek_ui_c_sources) $(monothek_uiheaders)
 
-monothek_ui_CFLAGS += $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS)
+monothek_ui_CFLAGS += $(W32API_CFLAGS) $(LIBAGS_CFLAGS) $(LIBAGS_AUDIO_CFLAGS) $(LIBAGS_GUI_CFLAGS) $(GOBJECT_CFLAGS) $(LIBQRENCODE_CFLAGS) $(FONTCONFIG_CFLAGS) $(GDKPIXBUF_CFLAGS) $(CAIRO_CFLAGS) $(GTK_CFLAGS) $(GTK_MAC_INTEGRATION_CFLAGS)
 monothek_ui_LDFLAGS += -pthread
-monothek_ui_LDADD = libmonothek.la -ldl -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(LIBQRENCODE_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS)
+monothek_ui_LDADD = libmonothek.la -lm $(LIBAGS_LIBS) $(LIBAGS_AUDIO_LIBS) $(LIBAGS_GUI_LIBS) $(GOBJECT_LIBS) $(LIBQRENCODE_LIBS) $(FONTCONFIG_LIBS) $(GDKPIXBUF_LIBS) $(CAIRO_LIBS) $(GTK_LIBS) $(GTK_MAC_INTEGRATION_LIBS) $(W32API_LIBS)
+
+if WITH_W32API
+else
+monothek_ui_LDADD += -ldl
+endif
 
 # libmonothek all files
 deprecated_libmonothek_h_sources =

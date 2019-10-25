@@ -46,9 +46,15 @@
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_SWING_DEFAULT (0.0)
 
 #if MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME "share\\monothek\\drumkit\\techno.xml"
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME "share\\monothek\\drumkit\\house.xml"
+#define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME "share\\monothek\\drumkit\\hip-hop.xml"
+#else
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME SRCDIR "/monothek.share/monothek/drumkit/techno.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME SRCDIR "/monothek.share/monothek/drumkit/house.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HIPHOP_FILENAME SRCDIR "/monothek.share/monothek/drumkit/hip-hop.xml"
+#endif
 #else
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_TECHNO_FILENAME "/usr/share/monothek/drumkit/techno.xml"
 #define MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_HOUSE_FILENAME "/usr/share/monothek/drumkit/house.xml"

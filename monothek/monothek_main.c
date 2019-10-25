@@ -20,6 +20,9 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <ags/libags.h>
+#include <ags/libags-audio.h>
+
 #include <gdk/gdk.h>
 #include <pango/pangocairo.h>
 
@@ -32,9 +35,8 @@
 
 #include <monothek/ui/monothek_application_context.h>
 
-#include "monothek_main.h"
-
 #include "config.h"
+#include "monothek_main.h"
 
 void*
 monothek_setup_thread(void *ptr)
@@ -54,6 +56,8 @@ monothek_setup_thread(void *ptr)
   //  pthread_mutex_unlock(monothek_gui_thread_get_dispatch_mutex());
   
   pthread_exit(NULL);
+
+  return(NULL);
 }
 
 void

@@ -35,8 +35,13 @@
 #define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_DISKJOKEY_PAYMENT_VIEW, MonothekDiskjokeyPaymentViewClass))
 
 #if MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CARDS_PNG "share\\monothek\\images\\diskjokey-payment-cards.png"
+#define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_NFC_PNG "share\\monothek\\images\\diskjokey-payment-nfc.png"
+#else
 #define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CARDS_PNG SRCDIR "/monothek.share/monothek/images/diskjokey-payment-cards.png"
 #define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_NFC_PNG SRCDIR "/monothek.share/monothek/images/diskjokey-payment-nfc.png"
+#endif
 #else
 #define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_CARDS_PNG "/usr/share/monothek/images/diskjokey-payment-cards.png"
 #define MONOTHEK_DISKJOKEY_PAYMENT_VIEW_NFC_PNG "/usr/share/monothek/images/diskjokey-payment-nfc.png"

@@ -51,9 +51,10 @@
 #include <monothek/ui/view/monothek_start_view.h>
 
 #include <sys/types.h>
-#include <pwd.h>
 
-#include <sys/mman.h>
+#ifndef MONOTHEK_W32API
+#include <pwd.h>
+#endif
 
 #include <stdbool.h>
 
@@ -355,15 +356,24 @@ monothek_application_context_sound_provider_interface_init(AgsSoundProviderInter
 void
 monothek_application_context_init(MonothekApplicationContext *monothek_application_context)
 {
+  AgsApplicationContext *application_context;
   AgsConfig *config;
 
+#ifndef MONOTHEK_W32API
   struct passwd *pw;
+  
+  uid_t uid;
+#endif
 
   gchar *wdir;
   gchar *config_file;
-  
-  uid_t uid;
+#if defined MONOTHEK_W32API
+  gchar *app_dir;
+  gchar *path;
+#endif
 
+  application_context = monothek_application_context;
+  
   if(ags_application_context == NULL){
     ags_application_context = monothek_application_context;
   }
@@ -372,6 +382,39 @@ monothek_application_context_init(MonothekApplicationContext *monothek_applicati
 		   FALSE);
   
   /* fundamental instances */
+#if defined MONOTHEK_W32API
+  app_dir = NULL;
+
+  if(strlen(application_context->argv[0]) > strlen("\\monothek-ui.exe")){
+    app_dir = g_strndup(application_context->argv[0],
+			strlen(application_context->argv[0]) - strlen("\\monothek-ui.exe"));
+  }
+  
+  path = g_strdup_printf("%s\\etc\\monothek",
+			 g_get_current_dir());
+    
+  if(!g_file_test(path,
+		  G_FILE_TEST_IS_DIR)){
+    g_free(path);
+
+    if(g_path_is_absolute(app_dir)){
+      path = g_strdup_printf("%s\\%s",
+			     app_dir,
+			     "\\etc\\monothek");
+    }else{
+      path = g_strdup_printf("%s\\%s\\%s",
+			     g_get_current_dir(),
+			     app_dir,
+			     "\\etc\\monothek");
+    }
+  }
+    
+  config_file = g_strdup_printf("%s/%s",
+				path,
+				AGS_DEFAULT_CONFIG);
+
+  g_free(path);
+#else
   uid = getuid();
   pw = getpwuid(uid);
   
@@ -382,6 +425,7 @@ monothek_application_context_init(MonothekApplicationContext *monothek_applicati
   config_file = g_strdup_printf("%s/%s",
 				wdir,
                                 MONOTHEK_DEFAULT_CONFIG);
+#endif
   
   config = ags_config_get_instance();
   AGS_APPLICATION_CONTEXT(monothek_application_context)->config = config;
@@ -1428,6 +1472,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   atexit(monothek_application_context_signal_cleanup);
 
   /* Ignore interactive and job-control signals.  */
+#ifndef MONOTHEK_W32API
   signal(SIGINT, SIG_IGN);
   signal(SIGQUIT, SIG_IGN);
   signal(SIGTSTP, SIG_IGN);
@@ -1442,6 +1487,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   ags_sigact.sa_flags = 0;
   sigaction(SIGINT, &ags_sigact, (struct sigaction *) NULL);
   sigaction(SA_RESTART, &ags_sigact, (struct sigaction *) NULL);
+#endif
   
   /* message delivery */
   message_delivery = ags_message_delivery_get_instance();

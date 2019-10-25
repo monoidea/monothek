@@ -35,7 +35,11 @@
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PLAYLIST_MODEL, MonothekJukeboxPlaylistModelClass))
 
 #if MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME "share\\monothek\\playlist\\jukebox.xml"
+#else
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME SRCDIR "/monothek.share/monothek/playlist/jukebox.xml"
+#endif
 #else
 #define MONOTHEK_JUKEBOX_PLAYLIST_MODEL_FILENAME "/usr/share/monothek/playlist/jukebox.xml"
 #endif

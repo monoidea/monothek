@@ -34,7 +34,11 @@
 #define MONOTHEK_EXPORT_OUTPUT_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_EXPORT_OUTPUT, MonothekExportOutputClass))
 
 #if MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_EXPORT_PATH "home\\monothek\\export"
+#else
 #define MONOTHEK_EXPORT_PATH SRCDIR "/monothek.home/monothek/export"
+#endif
 #else
 #define MONOTHEK_EXPORT_PATH "/home/monothek/export"
 #endif

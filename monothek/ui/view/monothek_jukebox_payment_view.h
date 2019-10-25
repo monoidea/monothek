@@ -35,8 +35,13 @@
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_PAYMENT_VIEW, MonothekJukeboxPaymentViewClass))
 
 #if MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG "share\\monothek\\images\\jukebox-payment-cards.png"
+#define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG "share\\monothek\\images\\jukebox-payment-nfc.png"
+#else
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG SRCDIR "/monothek.share/monothek/images/jukebox-payment-cards.png"
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG SRCDIR "/monothek.share/monothek/images/jukebox-payment-nfc.png"
+#endif
 #else
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_CARDS_PNG "/usr/share/monothek/images/jukebox-payment-cards.png"
 #define MONOTHEK_JUKEBOX_PAYMENT_VIEW_NFC_PNG "/usr/share/monothek/images/jukebox-payment-nfc.png"

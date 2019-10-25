@@ -2238,7 +2238,9 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	g_message("%s", iter[0]);
 
 	g_object_get(input,
+		     "pad", &pad,
 		     "first-recycling", &recycling,
+		     "recall", &start_recall,
 		     NULL);
 
 	ags_audio_signal_set_flags(audio_signal->data,
@@ -2318,7 +2320,9 @@ monothek_diskjokey_sequencer_controller_real_load_drum_kit(MonothekDiskjokeySequ
 	g_message("%s", iter[0]);
 
 	g_object_get(input,
+		     "pad", &pad,
 		     "first-recycling", &recycling,
+		     "recall", &start_recall,
 		     NULL);
 
 	ags_audio_signal_set_flags(audio_signal->data,

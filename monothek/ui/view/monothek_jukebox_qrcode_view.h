@@ -35,7 +35,11 @@
 #define MONOTHEK_JUKEBOX_QRCODE_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_JUKEBOX_QRCODE_VIEW, MonothekJukeboxQrcodeViewClass))
 
 #if MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_JUKEBOX_QRCODE_VIEW_DEFAULT_QRCODE_FILENAME "share\\monothek\\images\\monothek-qrcode.png"
+#else
 #define MONOTHEK_JUKEBOX_QRCODE_VIEW_DEFAULT_QRCODE_FILENAME SRCDIR "/monothek.share/monothek/images/monothek-qrcode.png"
+#endif
 #else
 #define MONOTHEK_JUKEBOX_QRCODE_VIEW_DEFAULT_QRCODE_FILENAME "/usr/share/monothek/images/monothek-qrcode.png"
 #endif

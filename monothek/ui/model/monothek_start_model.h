@@ -35,7 +35,11 @@
 #define MONOTHEK_START_MODEL_DEFAULT_DURATION_SEC (300)
 
 #ifdef MONOTHEK_DEVEL_MODE
+#if defined(MONOTHEK_W32API)
+#define MONOTHEK_START_MODEL_PURCHASE_PATH "home\\monothek\\purchase"
+#else
 #define MONOTHEK_START_MODEL_PURCHASE_PATH SRCDIR "/monothek.home/monothek/purchase"
+#endif
 #else
 #define MONOTHEK_START_MODEL_PURCHASE_PATH "/home/monothek/purchase"
 #endif
