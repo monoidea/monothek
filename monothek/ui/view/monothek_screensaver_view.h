@@ -34,6 +34,12 @@
 #define MONOTHEK_IS_SCREENSAVER_VIEW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_SCREENSAVER_VIEW))
 #define MONOTHEK_SCREENSAVER_VIEW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_SCREENSAVER_VIEW, MonothekScreensaverViewClass))
 
+#if MONOTHEK_DEVEL_MODE
+#define MONOTHEK_SCREENSAVER_VIEW_PICTURE SRCDIR "/monothek.share/monothek/images/monothek-banner.png"
+#else
+#define MONOTHEK_SCREENSAVER_VIEW_PICTURE "/usr/share/monothek/images/monothek-banner.png"
+#endif
+
 typedef struct _MonothekScreensaverView MonothekScreensaverView;
 typedef struct _MonothekScreensaverViewClass MonothekScreensaverViewClass;
 

@@ -32,6 +32,9 @@
 #define MONOTHEK_IS_WINDOW_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_WINDOW))
 #define MONOTHEK_WINDOW_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_WINDOW, MonothekWindowClass))
 
+#define MONOTHEK_WINDOW_DEFAULT_WIDTH (1920)
+#define MONOTHEK_WINDOW_DEFAULT_HEIGHT (1080)
+
 typedef struct _MonothekWindow MonothekWindow;
 typedef struct _MonothekWindowClass MonothekWindowClass;
 

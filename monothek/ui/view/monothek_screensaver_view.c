@@ -247,6 +247,22 @@ monothek_screensaver_view_draw(MonothekView *view)
   }
 
   cairo_surface_flush(cairo_get_target(cr));
+
+  {
+    cairo_surface_t *surface;
+
+    surface = cairo_image_surface_create_from_png(MONOTHEK_SCREENSAVER_VIEW_PICTURE);
+    cairo_surface_reference(surface);
+    
+    cairo_set_source_surface(cr,
+			     surface,
+			     0.0, 0.0);
+
+    cairo_paint(cr);
+
+    cairo_surface_destroy(surface);
+  }
+
   cairo_push_group(cr);
 
   cairo_set_source_rgb(cr,

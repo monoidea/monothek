@@ -254,7 +254,131 @@ monothek_credits_view_draw(MonothekView *view)
 		       1.0,
 		       1.0);
 
-  //TODO:JK implement me
+  {
+    PangoLayout *layout;
+    PangoFontDescription *desc;
+
+    PangoRectangle ink_rect;
+    PangoRectangle logical_rect;
+    
+    gchar *generic_font;
+    
+    static const guint font_size = 100;
+
+    generic_font = g_strdup_printf("%s Bold", view->font);
+
+    /* message */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "DESIGN + REALIZATION", -1);
+    desc = pango_font_description_from_string(generic_font);
+    pango_font_description_set_size(desc,
+				    38 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_alignment(layout,
+			       PANGO_ALIGN_CENTER);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 0.0 + ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 260.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* message */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "MONOIDEA", -1);
+    desc = pango_font_description_from_string(generic_font);
+    pango_font_description_set_size(desc,
+				    80 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_alignment(layout,
+			       PANGO_ALIGN_CENTER);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 0.0 + ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 360.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* free font string */
+    g_free(generic_font);
+  }
+  
+  {
+    PangoLayout *layout;
+    PangoFontDescription *desc;
+
+    PangoRectangle ink_rect;
+    PangoRectangle logical_rect;
+    
+    gchar *generic_font;
+    
+    static const guint font_size = 100;
+
+    generic_font = g_strdup_printf("%s Bold", view->font);
+
+    /* message */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "SOFTWARE DEVELOPMENT", -1);
+    desc = pango_font_description_from_string(generic_font);
+    pango_font_description_set_size(desc,
+				    38 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_alignment(layout,
+			       PANGO_ALIGN_CENTER);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 0.0 + ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 610.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* message */
+    layout = pango_cairo_create_layout(cr);
+    pango_layout_set_text(layout, "JOËL KRÄHEMANN", -1);
+    desc = pango_font_description_from_string(generic_font);
+    pango_font_description_set_size(desc,
+				    80 * PANGO_SCALE);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_alignment(layout,
+			       PANGO_ALIGN_CENTER);
+    pango_font_description_free(desc);
+
+    pango_layout_get_pixel_extents(layout,
+				   &ink_rect,
+				   &logical_rect);
+    cairo_move_to(cr,
+		  (double) 0.0 + ((1920.0 / 2.0) - (logical_rect.width / 2.0)),
+		  (double) 710.0);
+
+    pango_cairo_update_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
+
+    /* free font string */
+    g_free(generic_font);
+  }
   
   /* paint */
   cairo_pop_group_to_source(cr);

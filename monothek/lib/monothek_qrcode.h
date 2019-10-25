@@ -35,11 +35,11 @@
 #define MONOTHEK_QRCODE_DEFAULT_URL "http://monothek.ch"
 #define MONOTHEK_QRCODE_DEFAULT_FILENAME SRCDIR "/monothek.share/monothek/qrcode/qrcode.xpm"
 
-#define MONOTHEK_QRCODE_DEFAULT_SVG_WIDTH (480)
-#define MONOTHEK_QRCODE_DEFAULT_SVG_HEIGHT (480)
+#define MONOTHEK_QRCODE_DEFAULT_SVG_WIDTH (320)
+#define MONOTHEK_QRCODE_DEFAULT_SVG_HEIGHT (320)
 
-#define MONOTHEK_QRCODE_DEFAULT_PNG_WIDTH (480)
-#define MONOTHEK_QRCODE_DEFAULT_PNG_HEIGHT (480)
+#define MONOTHEK_QRCODE_DEFAULT_PNG_WIDTH (320)
+#define MONOTHEK_QRCODE_DEFAULT_PNG_HEIGHT (320)
 
 typedef struct _MonothekQrcode MonothekQrcode;
 typedef struct _MonothekQrcodeClass MonothekQrcodeClass;
