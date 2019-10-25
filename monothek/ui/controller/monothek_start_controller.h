@@ -43,11 +43,18 @@ struct _MonothekStartController
 
   MonothekActionBox *jukebox_launch;
   MonothekActionBox *diskjokey_launch;
+
+  struct timespec *start_time;
+  struct timespec *timer;
 };
 
 struct _MonothekStartControllerClass
 {
   MonothekControllerClass controller;
+
+  void (*timeout)(MonothekStartController *start_controller);
+
+  void (*activate_screensaver)(MonothekStartController *start_controller);
 
   void (*launch_jukebox)(MonothekStartController *start_controller);
   void (*launch_diskjokey)(MonothekStartController *start_controller);
@@ -55,8 +62,14 @@ struct _MonothekStartControllerClass
 
 GType monothek_start_controller_get_type(void);
 
+void monothek_start_controller_timeout(MonothekStartController *start_controller);
+
+void monothek_start_controller_activate_screensaver(MonothekStartController *start_controller);
+
 void monothek_start_controller_launch_jukebox(MonothekStartController *start_controller);
 void monothek_start_controller_launch_diskjokey(MonothekStartController *start_controller);
+
+gboolean monothek_start_controller_progress_increase_timeout(GObject *gobject);
 
 MonothekStartController* monothek_start_controller_new();
 

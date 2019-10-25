@@ -32,6 +32,8 @@
 #define MONOTHEK_IS_START_MODEL_CLASS(class)     (G_TYPE_CHECK_CLASS_TYPE((class), MONOTHEK_TYPE_START_MODEL))
 #define MONOTHEK_START_MODEL_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS((obj), MONOTHEK_TYPE_START_MODEL, MonothekStartModelClass))
 
+#define MONOTHEK_START_MODEL_DEFAULT_DURATION_SEC (300)
+
 #ifdef MONOTHEK_DEVEL_MODE
 #define MONOTHEK_START_MODEL_PURCHASE_PATH SRCDIR "/monothek.home/monothek/purchase"
 #else
@@ -57,6 +59,8 @@ struct _MonothekStartModel
   gboolean diskjokey_start_active;
 
   gchar *purchase_filename;
+  
+  struct timespec *duration;
 };
 
 struct _MonothekStartModelClass

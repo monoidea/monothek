@@ -54,6 +54,7 @@ enum{
   PROP_JUKEBOX_START_ACTIVE,
   PROP_DISKJOKEY_START_ACTIVE,
   PROP_PURCHASE_FILENAME,
+  PROP_DURATION,
 };
 
 static gpointer monothek_start_model_parent_class = NULL;
@@ -173,6 +174,21 @@ monothek_start_model_class_init(MonothekStartModelClass *start_model)
 				  PROP_PURCHASE_FILENAME,
 				  param_spec);
   
+  /**
+   * MonothekStartModel:duration:
+   *
+   * The assigned duration.
+   * 
+   * Since: 1.0.0
+   */
+  param_spec = g_param_spec_pointer("duration",
+				   i18n_pspec("duration"),
+				   i18n_pspec("The assigned duration"),
+				   G_PARAM_READABLE);
+  g_object_class_install_property(gobject,
+				  PROP_DURATION,
+				  param_spec);
+
   /* MonothekModel */
 }
 
@@ -188,6 +204,11 @@ monothek_start_model_init(MonothekStartModel *start_model)
   start_model->diskjokey_start_active = FALSE;
 
   start_model->purchase_filename = NULL;
+
+  /* duration */
+  start_model->duration = (struct timespec *) malloc(sizeof(struct timespec));
+  start_model->duration->tv_sec = MONOTHEK_START_MODEL_DEFAULT_DURATION_SEC;
+  start_model->duration->tv_nsec = 0;
 }
 
 void
@@ -260,6 +281,12 @@ monothek_start_model_get_property(GObject *gobject,
     {
       g_value_set_string(value,
 			 start_model->purchase_filename);
+    }
+    break;
+  case PROP_DURATION:
+    {
+      g_value_set_pointer(value,
+			  start_model->duration);
     }
     break;
   default:

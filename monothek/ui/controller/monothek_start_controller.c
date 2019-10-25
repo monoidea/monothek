@@ -30,8 +30,14 @@
 #include <monothek/ui/model/monothek_start_model.h>
 
 #include <monothek/ui/view/monothek_start_view.h>
+#include <monothek/ui/view/monothek_screensaver_view.h>
 #include <monothek/ui/view/monothek_jukebox_payment_view.h>
 #include <monothek/ui/view/monothek_diskjokey_payment_view.h>
+
+#ifdef __APPLE__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 
 #include <stdlib.h>
 
@@ -61,6 +67,8 @@ void monothek_start_controller_diskjokey_launch_leave_callback(MonothekActionBox
 void monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *action_box,
 								 MonothekStartController *start_controller);
 
+void monothek_start_controller_real_timeout(MonothekStartController *start_controller);
+void monothek_start_controller_real_activate_screensaver(MonothekStartController *start_controller);
 void monothek_start_controller_real_launch_jukebox(MonothekStartController *start_controller);
 void monothek_start_controller_real_launch_diskjokey(MonothekStartController *start_controller);
 
@@ -75,6 +83,8 @@ void monothek_start_controller_real_launch_diskjokey(MonothekStartController *st
  */
 
 enum{
+  TIMEOUT,
+  ACTIVATE_SCREENSAVER,
   LAUNCH_JUKEBOX,
   LAUNCH_DISKJOKEY,
   LAST_SIGNAL,
@@ -84,6 +94,8 @@ static gpointer monothek_start_controller_parent_class = NULL;
 static AgsConnectableInterface* monothek_start_controller_parent_connectable_interface;
 
 static guint start_controller_signals[LAST_SIGNAL];
+
+GHashTable *monothek_start_controller_progress_increase = NULL;
 
 GType
 monothek_start_controller_get_type()
@@ -145,10 +157,46 @@ monothek_start_controller_class_init(MonothekStartControllerClass *start_control
   controller->reset = monothek_start_controller_reset;
 
   /* MonothekStartController */
+  start_controller->timeout = monothek_start_controller_real_timeout;
+  start_controller->activate_screensaver = monothek_start_controller_real_activate_screensaver;
   start_controller->launch_jukebox = monothek_start_controller_real_launch_jukebox;
   start_controller->launch_diskjokey = monothek_start_controller_real_launch_diskjokey;
 
   /* signals */
+  /**
+   * MonothekStartController::timeout:
+   * @start_controller: the #MonothekStartController
+   *
+   * The ::timeout signal notifies about timeout expired.
+   *
+   * Since: 1.0.0
+   */
+  start_controller_signals[TIMEOUT] =
+    g_signal_new("timeout",
+		 G_TYPE_FROM_CLASS(start_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekStartControllerClass, timeout),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+
+  /**
+   * MonothekStartController::activate-screensaver:
+   * @start_controller: the #MonothekStartController
+   *
+   * The ::activate-screensaver signal notifies about screensaver activation.
+   *
+   * Since: 1.0.0
+   */
+  start_controller_signals[ACTIVATE_SCREENSAVER] =
+    g_signal_new("activate-screensaver",
+		 G_TYPE_FROM_CLASS(start_controller),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(MonothekStartControllerClass, activate_screensaver),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
+  
   /**
    * MonothekStartController::launch-jukebox:
    * @start_controller: the #MonothekStartController
@@ -219,6 +267,29 @@ monothek_start_controller_init(MonothekStartController *start_controller)
 						    NULL);
   monothek_controller_add_action_box(start_controller,
 				     action_box);  
+
+  /* progress */
+  if(monothek_start_controller_progress_increase == NULL){
+    monothek_start_controller_progress_increase = g_hash_table_new_full(g_direct_hash, g_direct_equal,
+									NULL,
+									NULL);
+  }
+
+  start_controller->start_time = (struct timespec *) malloc(sizeof(struct timespec));
+  start_controller->start_time->tv_sec = 0;
+  start_controller->start_time->tv_nsec = 0;
+  
+  start_controller->timer = (struct timespec *) malloc(sizeof(struct timespec));
+  start_controller->timer->tv_sec = 0;
+  start_controller->timer->tv_nsec = 0;
+
+  /* progress timeout - add */
+  g_hash_table_insert(monothek_start_controller_progress_increase,
+		      start_controller, monothek_start_controller_progress_increase_timeout);
+  
+  g_timeout_add(1000 / 2,
+		(GSourceFunc) monothek_start_controller_progress_increase_timeout,
+		(gpointer) start_controller);
 }
 
 void
@@ -227,6 +298,10 @@ monothek_start_controller_finalize(GObject *gobject)
   MonothekStartController *start_controller;
 
   start_controller = (MonothekStartController *) gobject;
+
+  /* progress timeout - remove */
+  g_hash_table_remove(monothek_start_controller_progress_increase,
+		      start_controller);
   
   /* call parent */
   G_OBJECT_CLASS(monothek_start_controller_parent_class)->finalize(gobject);
@@ -311,6 +386,19 @@ monothek_start_controller_reset(MonothekController *controller)
   
   start_controller = MONOTHEK_START_CONTROLLER(controller);
 
+  /* reset timer */
+#ifdef __APPLE__
+  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+  clock_get_time(cclock, &mts);
+  mach_port_deallocate(mach_task_self(), cclock);
+    
+  start_controller->start_time->tv_sec = mts.tv_sec;
+  start_controller->start_time->tv_nsec = mts.tv_nsec;
+#else
+  clock_gettime(CLOCK_MONOTONIC, start_controller->start_time);
+#endif  
+  
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,
@@ -527,11 +615,97 @@ monothek_start_controller_diskjokey_launch_clicked_callback(MonothekActionBox *a
 }
 
 void
+monothek_start_controller_real_timeout(MonothekStartController *start_controller)
+{
+  MonothekSessionManager *session_manager;
+  MonothekSession *session;
+
+  GValue *value;
+
+  start_controller->start_time->tv_sec = 0;
+  start_controller->start_time->tv_nsec = 0;
+
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
+  /* set preserve diskjokey - FALSE */
+  value = g_hash_table_lookup(session->value,
+			      "preserve-diskjokey");
+
+  g_value_set_boolean(value,
+		      FALSE);
+
+  /* activate screensaver */
+  monothek_start_controller_activate_screensaver(start_controller);
+}
+
+/**
+ * monothek_start_controller_timeout:
+ * @start_controller: the #MonothekStartController
+ * 
+ * Timeout expired.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_start_controller_timeout(MonothekStartController *start_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_START_CONTROLLER(start_controller));
+  
+  g_object_ref((GObject *) start_controller);
+  g_signal_emit(G_OBJECT(start_controller),
+		start_controller_signals[TIMEOUT], 0);
+  g_object_unref((GObject *) start_controller);
+}
+
+void
+monothek_start_controller_real_activate_screensaver(MonothekStartController *start_controller)
+{
+  MonothekWindow *window;
+  MonothekStartView *view;
+  
+  g_object_get(start_controller,
+	       "view", &view,
+	       NULL);
+
+  window = gtk_widget_get_ancestor(view,
+				   MONOTHEK_TYPE_WINDOW);
+
+  monothek_window_change_view(window,
+			      MONOTHEK_TYPE_SCREENSAVER_VIEW, G_TYPE_NONE);
+}
+
+/**
+ * monothek_start_controller_activate_screensaver:
+ * @start_controller: the #MonothekStartController
+ * 
+ * Activate screensaver.
+ * 
+ * Since: 1.0.0
+ */
+void
+monothek_start_controller_activate_screensaver(MonothekStartController *start_controller)
+{
+  g_return_if_fail(MONOTHEK_IS_START_CONTROLLER(start_controller));
+  
+  g_object_ref((GObject *) start_controller);
+  g_signal_emit(G_OBJECT(start_controller),
+		start_controller_signals[ACTIVATE_SCREENSAVER], 0);
+  g_object_unref((GObject *) start_controller);
+}
+
+void
 monothek_start_controller_real_launch_jukebox(MonothekStartController *start_controller)
 {
   MonothekWindow *window;
   MonothekStartView *view;
   
+  start_controller->start_time->tv_sec = 0;
+  start_controller->start_time->tv_nsec = 0;
+
+  /* change view */
   g_object_get(start_controller,
 	       "view", &view,
 	       NULL);
@@ -567,7 +741,11 @@ monothek_start_controller_real_launch_diskjokey(MonothekStartController *start_c
 {
   MonothekWindow *window;
   MonothekStartView *view;
-  
+
+  start_controller->start_time->tv_sec = 0;
+  start_controller->start_time->tv_nsec = 0;
+
+  /* change view */
   g_object_get(start_controller,
 	       "view", &view,
 	       NULL);
@@ -596,6 +774,76 @@ monothek_start_controller_launch_diskjokey(MonothekStartController *start_contro
   g_signal_emit(G_OBJECT(start_controller),
 		start_controller_signals[LAUNCH_DISKJOKEY], 0);
   g_object_unref((GObject *) start_controller);
+}
+
+gboolean
+monothek_start_controller_progress_increase_timeout(GObject *gobject)
+{
+  MonothekStartController *start_controller;
+
+  start_controller = gobject;
+  
+  if(g_hash_table_lookup(monothek_start_controller_progress_increase,
+			 gobject) != NULL){
+    MonothekStartModel *start_model;
+
+    MonothekStartView *start_view;
+
+#ifdef __APPLE__
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+#endif
+
+    struct timespec *duration;
+    struct timespec time_now;
+    
+    gdouble value;
+
+    if(start_controller->start_time->tv_sec == 0){
+      return(TRUE);
+    }
+    
+    g_object_get(start_controller,
+		 "model", &start_model,
+		 "view", &start_view,
+		 NULL);
+    
+    g_object_get(start_model,
+		 "duration", &duration,
+		 NULL);
+    
+#ifdef __APPLE__
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    
+    time_now.tv_sec = mts.tv_sec;
+    time_now.tv_nsec = mts.tv_nsec;
+#else
+    clock_gettime(CLOCK_MONOTONIC, &time_now);
+#endif
+
+    /* calculate timer */
+    if(time_now.tv_nsec >= start_controller->start_time->tv_nsec){
+      start_controller->timer->tv_sec = time_now.tv_sec - start_controller->start_time->tv_sec;
+      start_controller->timer->tv_nsec = time_now.tv_nsec - start_controller->start_time->tv_nsec;
+    }else{
+      start_controller->timer->tv_sec = time_now.tv_sec - start_controller->start_time->tv_sec - 1;
+      start_controller->timer->tv_nsec = NSEC_PER_SEC - start_controller->start_time->tv_nsec + time_now.tv_sec;
+    }
+
+    /* calculate progress */
+    if(time_now.tv_sec - start_controller->start_time->tv_sec < duration->tv_sec){
+      gtk_widget_queue_draw(start_view);
+    }else{
+      monothek_start_controller_timeout(start_controller);
+    }
+    
+    return(TRUE);
+  }else{
+    return(FALSE);
+  }
 }
 
 /**
