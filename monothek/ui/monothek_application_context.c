@@ -381,61 +381,13 @@ monothek_application_context_init(MonothekApplicationContext *monothek_applicati
   g_atomic_int_set(&(monothek_application_context->gui_ready),
 		   FALSE);
   
-  /* fundamental instances */
-#if defined MONOTHEK_W32API
-  app_dir = NULL;
-
-  if(strlen(application_context->argv[0]) > strlen("\\monothek-ui.exe")){
-    app_dir = g_strndup(application_context->argv[0],
-			strlen(application_context->argv[0]) - strlen("\\monothek-ui.exe"));
-  }
-  
-  path = g_strdup_printf("%s\\etc\\monothek",
-			 g_get_current_dir());
-    
-  if(!g_file_test(path,
-		  G_FILE_TEST_IS_DIR)){
-    g_free(path);
-
-    if(g_path_is_absolute(app_dir)){
-      path = g_strdup_printf("%s\\%s",
-			     app_dir,
-			     "\\etc\\monothek");
-    }else{
-      path = g_strdup_printf("%s\\%s\\%s",
-			     g_get_current_dir(),
-			     app_dir,
-			     "\\etc\\monothek");
-    }
-  }
-    
-  config_file = g_strdup_printf("%s/%s",
-				path,
-				AGS_DEFAULT_CONFIG);
-
-  g_free(path);
-#else
-  uid = getuid();
-  pw = getpwuid(uid);
-  
-  wdir = g_strdup_printf("%s/%s",
-                         pw->pw_dir,
-                         MONOTHEK_DEFAULT_DIRECTORY);
-
-  config_file = g_strdup_printf("%s/%s",
-				wdir,
-                                MONOTHEK_DEFAULT_CONFIG);
-#endif
-  
+  /* fundamental instances */  
   config = ags_config_get_instance();
   AGS_APPLICATION_CONTEXT(monothek_application_context)->config = config;
   g_object_ref(config);
   g_object_set(config,
 	       "application-context", monothek_application_context,
 	       NULL);
-
-  ags_config_load_from_file(config,
-                            config_file);
   
   AGS_APPLICATION_CONTEXT(monothek_application_context)->log = ags_log_get_instance();
   g_object_ref(AGS_APPLICATION_CONTEXT(monothek_application_context)->log);
@@ -1451,7 +1403,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   
   gboolean is_output;
   guint i;
-  
+
   GValue *value;
   
   monothek_application_context = (MonothekApplicationContext *) application_context;
@@ -1506,6 +1458,11 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 				 audio_message_queue);
 #endif
   
+  /* find session */
+  session_manager = monothek_session_manager_get_instance();
+  session = monothek_session_manager_find_session(session_manager,
+						  MONOTHEK_SESSION_DEFAULT_SESSION);
+
   /* AgsSoundcard */
   monothek_application_context->soundcard = NULL;
   soundcard = NULL;
@@ -1556,6 +1513,43 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 	  
 	  AGS_DEVOUT(soundcard)->flags &= (~AGS_DEVOUT_OSS);
 	  AGS_DEVOUT(soundcard)->flags |= AGS_DEVOUT_ALSA;
+	}
+      }else if(!g_ascii_strncasecmp(str,
+				    "wasapi",
+				    7)){
+	gchar *str;
+	
+	if(is_output){
+	  soundcard = (GObject *) ags_wasapi_devout_new((GObject *) monothek_application_context);	  
+
+	  str = ags_config_get_value(config,
+				     soundcard_group,
+				     "wasapi-share-mode");
+
+	  if(str != NULL &&
+	     !g_ascii_strncasecmp(str,
+				  "exclusive",
+				  10)){
+	    ags_wasapi_devout_set_flags(AGS_WASAPI_DEVOUT(soundcard),
+					AGS_WASAPI_DEVOUT_SHARE_MODE_EXCLUSIVE);
+	  }else{
+	    ags_wasapi_devout_unset_flags(AGS_WASAPI_DEVOUT(soundcard),
+					  AGS_WASAPI_DEVOUT_SHARE_MODE_EXCLUSIVE);
+	  }
+
+	  g_free(str);
+	  
+	  str = ags_config_get_value(config,
+				     soundcard_group,
+				     "wasapi-buffer-size");
+
+	  if(str != NULL){
+	    AGS_WASAPI_DEVOUT(soundcard)->wasapi_buffer_size = g_ascii_strtoull(str,
+										NULL,
+										10);
+	    
+	    g_free(str);
+	  }
 	}
       }else{
 	g_warning(i18n("unknown soundcard backend - %s"), str);
@@ -1666,7 +1660,18 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   }  
 
   g_free(soundcard_group);
-    
+
+
+  value = g_hash_table_lookup(session->value,
+			      "rack");
+
+  rack = g_value_get_object(value);
+  
+  g_object_set(rack,
+	       "output-soundcard", soundcard,
+	       NULL);
+  monothek_rack_setup_tree(rack);
+  
   /* AgsSoundcardThread and AgsExportThread */
   monothek_application_context->default_soundcard_thread = NULL;
   list = monothek_application_context->soundcard;
@@ -1692,14 +1697,17 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
     AGS_TASK(notify_soundcard)->task_thread = application_context->task_thread;
     
     if(AGS_IS_DEVOUT(list->data)){
-      AGS_DEVOUT(list->data)->notify_soundcard = notify_soundcard;
+      AGS_DEVOUT(list->data)->notify_soundcard = (GObject *) notify_soundcard;
+    }else if(AGS_IS_WASAPI_DEVOUT(list->data)){
+      AGS_WASAPI_DEVOUT(list->data)->notify_soundcard = (GObject *) notify_soundcard;
     }
 
     ags_task_thread_append_cyclic_task(application_context->task_thread,
 				       notify_soundcard);
 
     /* export thread */
-    if(AGS_IS_DEVOUT(list->data)){
+    if(AGS_IS_DEVOUT(list->data) ||
+       AGS_IS_WASAPI_DEVOUT(list->data)){
       export_thread = (AgsThread *) monothek_export_thread_new(list->data,
 							       NULL);
       ags_thread_add_child_extended(AGS_THREAD(audio_loop),
@@ -1909,87 +1917,6 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   
   /* AgsThreadPool */
   monothek_application_context->thread_pool = AGS_TASK_THREAD(application_context->task_thread)->thread_pool;
-
-  /* find session */
-  session_manager = monothek_session_manager_get_instance();
-  session = monothek_session_manager_find_session(session_manager,
-						  MONOTHEK_SESSION_DEFAULT_SESSION);
-
-  /* rack */
-  rack = monothek_rack_new(soundcard);
-  monothek_rack_setup_tree(rack);
-  
-  value = g_new0(GValue,
-		      1);
-  g_value_init(value,
-	       G_TYPE_OBJECT);
-
-  g_value_set_object(value,
-		     rack);
-  
-  g_hash_table_insert(session->value,
-		      "rack",
-		      value);
-
-  /* preserve jukebox */
-  value = g_new0(GValue,
-		 1);
-  g_value_init(value,
-	       G_TYPE_BOOLEAN);
-
-  g_value_set_boolean(value,
-		      TRUE);
-
-  g_hash_table_insert(session->value,
-		      "preserve-jukebox", value);
-
-  /* jukebox mode */
-  value = g_new0(GValue,
-		 1);
-  g_value_init(value,
-	       G_TYPE_STRING);
-
-  g_value_set_string(value,
-		     "test");
-
-  g_hash_table_insert(session->value,
-		      "jukebox-mode", value);
-
-  /* jukebox song filename */
-  value = g_new0(GValue,
-		 1);
-  g_value_init(value,
-	       G_TYPE_STRING);
-
-  g_value_set_string(value,
-		     NULL);
-
-  g_hash_table_insert(session->value,
-		      "jukebox-song-filename", value);
-
-  /* jukebox test count */
-  value = g_new0(GValue,
-		 1);
-  g_value_init(value,
-	       G_TYPE_UINT);
-
-  g_value_set_uint(value,
-		   0);
-  
-  g_hash_table_insert(session->value,
-		      "jukebox-test-count", value);
-  
-  /* preserve diskjokey */
-  value = g_new0(GValue,
-		 1);
-  g_value_init(value,
-	       G_TYPE_BOOLEAN);
-
-  g_value_set_boolean(value,
-		      TRUE);
-
-  g_hash_table_insert(session->value,
-		      "preserve-diskjokey", value);
   
   /* audio file manager */
   audio_file_manager = monothek_audio_file_manager_get_instance();
@@ -2038,8 +1965,6 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   
     /* free XML doc */
     xmlFreeDoc(doc);
-    xmlCleanupParser();
-    xmlMemoryDump();
   }
   
   monothek_audio_file_manager_load_playlist(audio_file_manager,

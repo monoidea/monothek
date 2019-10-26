@@ -128,7 +128,7 @@ monothek_session_init(MonothekSession *session)
 {
   session->session_id = NULL;
 
-  session->value = g_hash_table_new_full(g_direct_hash,
+  session->value = g_hash_table_new_full(g_str_hash,
 					 g_str_equal,
 					 NULL,
 					 NULL);

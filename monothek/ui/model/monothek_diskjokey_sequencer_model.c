@@ -475,8 +475,6 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   /* free XML doc */
   xmlFreeDoc(doc);
-  xmlCleanupParser();
-  xmlMemoryDump();
   
   /* house resources */
   diskjokey_sequencer_model->house_label = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
@@ -668,8 +666,6 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   /* free XML doc */
   xmlFreeDoc(doc);
-  xmlCleanupParser();
-  xmlMemoryDump();
 
   /* hip-hop resources */
   diskjokey_sequencer_model->hiphop_label = (gchar **) malloc((MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_ROW_COUNT + 1) * sizeof(gchar *));
@@ -861,8 +857,6 @@ monothek_diskjokey_sequencer_model_init(MonothekDiskjokeySequencerModel *diskjok
 
   /* free XML doc */
   xmlFreeDoc(doc);
-  xmlCleanupParser();
-  xmlMemoryDump();
 
   /* duration */
   diskjokey_sequencer_model->duration = (struct timespec *) malloc(sizeof(struct timespec));

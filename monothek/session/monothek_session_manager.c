@@ -279,8 +279,8 @@ monothek_session_manager_find_session(MonothekSessionManager *session_manager,
   list = start_list;
   
   while(list != NULL){
-    if(!g_strcmp0(MONOTHEK_SESSION(list->data)->session_id,
-		  session_id)){
+    if(!g_ascii_strcasecmp(MONOTHEK_SESSION(list->data)->session_id,
+			   session_id)){
       session = list->data;
       
       break;

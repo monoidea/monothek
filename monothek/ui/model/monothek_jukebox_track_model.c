@@ -722,8 +722,6 @@ monothek_jukebox_track_model_load_song_filename(MonothekJukeboxTrackModel *jukeb
   
   /* free XML doc */
   xmlFreeDoc(doc);
-  xmlCleanupParser();
-  xmlMemoryDump();
 }
 
 /**

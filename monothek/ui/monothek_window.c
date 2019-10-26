@@ -254,9 +254,6 @@ monothek_window_init(MonothekWindow *window)
   
   MonothekController *controller;
 
-  MonothekSessionManager *session_manager;
-  MonothekSession *session;
-
   GObject *model;
 
   GError *error;
@@ -268,15 +265,6 @@ monothek_window_init(MonothekWindow *window)
   
   gtk_window_set_title((GtkWindow *) window,
 		       "monoidea's monothek");
-
-  session_manager = monothek_session_manager_get_instance();
-
-  session = monothek_session_new();
-  g_object_set(session,
-	       "session-id", MONOTHEK_SESSION_DEFAULT_SESSION,
-	       NULL);
-  monothek_session_manager_add_session(session_manager,
-				       session);
 
 #if 0
   /* scrolled window */

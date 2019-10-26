@@ -405,8 +405,6 @@ monothek_jukebox_info_model_load_song_filename(MonothekJukeboxInfoModel *jukebox
   
   /* free XML doc */
   xmlFreeDoc(doc);
-  xmlCleanupParser();
-  xmlMemoryDump();
 }
 
 /**

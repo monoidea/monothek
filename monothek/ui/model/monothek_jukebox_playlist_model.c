@@ -259,8 +259,6 @@ monothek_jukebox_playlist_model_init(MonothekJukeboxPlaylistModel *jukebox_playl
 
   /* free XML doc */
   xmlFreeDoc(doc);
-  xmlCleanupParser();
-  xmlMemoryDump();
 }
 
 void
