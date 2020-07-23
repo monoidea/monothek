@@ -8,7 +8,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([monothek],[1.0.0-PRERELEASE],[jkraehemann@gmail.com])
+AC_INIT([monothek],[2.0.0-PRERELEASE],[jkraehemann@gmail.com])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([monothek/config.h.in])
 AC_CONFIG_HEADERS([monothek/config.h])
@@ -46,7 +46,7 @@ AC_ARG_ENABLE(quartz, [AS_HELP_STRING([--enable-quartz],
 
 # Checks for programs.
 AC_PROG_CC
-gl_EARLY
+# gl_EARLY
 AC_PROG_CPP
 AC_PROG_INSTALL
 
@@ -71,7 +71,7 @@ AS_IF([test "x$enable_x11" != xno],
 
 AS_IF([test "x$enable_quartz" != xno],
       [AC_DEFINE([MONOTHEK_WITH_QUARTZ], [1], [quartz enabled])
-       PKG_CHECK_MODULES([GTK_MAC_INTEGRATION], [gtk-mac-integration-gtk2 >= 2.0.7])
+       PKG_CHECK_MODULES([GTK_MAC_INTEGRATION], [gtk-mac-integration-gtk3 >= 2.0.0])
        AC_SUBST(GTK_MAC_INTEGRATION_CFLAGS)
        AC_SUBST(GTK_MAC_INTEGRATION_LIBS)
        AC_MSG_NOTICE([quartz enabled])],
@@ -119,19 +119,11 @@ PKG_CHECK_MODULES([LIBAGS_AUDIO], [libags_audio >= 2.2.0])
 AC_SUBST(LIBAGS_AUDIO_CFLAGS)
 AC_SUBST(LIBAGS_AUDIO_LIBS)
 
-PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.9.0])
-AC_SUBST(FONTCONFIG_CFLAGS)
-AC_SUBST(FONTCONFIG_LIBS)
-
-PKG_CHECK_MODULES([GDKPIXBUF], [gdk-pixbuf-2.0 >= 2.32.2])
-AC_SUBST(GDKPIXBUF_CFLAGS)
-AC_SUBST(GDKPIXBUF_LIBS)
-
 PKG_CHECK_MODULES([CAIRO], [cairo >= 1.12.0])
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
 
-PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.24.10])
+PKG_CHECK_MODULES([GTK], [gtk+-3.0 >= 3.18.0])
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
@@ -146,14 +138,16 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl])
 AM_CONDITIONAL([ENABLE_GTK_DOC], false)
 ])
 
-gl_INIT
+# gl_INIT
 
 AM_EXTRA_RECURSIVE_TARGETS([monothek-docs])
 AC_CONFIG_FILES([
 Makefile
-lib/Makefile
 docs/reference/libmonothek/Makefile
 m4/Makefile
-po/Makefile.in])
+po/Makefile.in
+po/Makefile])
+
+# lib/Makefile
 
 AC_OUTPUT

@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -60,12 +60,10 @@
 
 #include <monothek/i18n.h>
 
-void monothek_application_context_signal_handler(int signr);
-static void monothek_application_context_signal_cleanup();
-
 void monothek_application_context_class_init(MonothekApplicationContextClass *monothek_application_context);
 void monothek_application_context_connectable_interface_init(AgsConnectableInterface *connectable);
 void monothek_application_context_concurrency_provider_interface_init(AgsConcurrencyProviderInterface *concurrency_provider);
+void monothek_application_context_service_provider_interface_init(AgsServiceProviderInterface *service_provider);
 void monothek_application_context_sound_provider_interface_init(AgsSoundProviderInterface *sound_provider);
 void monothek_application_context_init(MonothekApplicationContext *monothek_application_context);
 void monothek_application_context_set_property(GObject *gobject,
@@ -83,31 +81,51 @@ void monothek_application_context_connect(AgsConnectable *connectable);
 void monothek_application_context_disconnect(AgsConnectable *connectable);
 
 AgsThread* monothek_application_context_get_main_loop(AgsConcurrencyProvider *concurrency_provider);
-AgsThread* monothek_application_context_get_task_thread(AgsConcurrencyProvider *concurrency_provider);
+void monothek_application_context_set_main_loop(AgsConcurrencyProvider *concurrency_provider,
+						AgsThread *main_loop);
+AgsTaskLauncher* monothek_application_context_get_task_launcher(AgsConcurrencyProvider *concurrency_provider);
+void monothek_application_context_set_task_launcher(AgsConcurrencyProvider *concurrency_provider,
+						    AgsTaskLauncher *task_launcher);
 AgsThreadPool* monothek_application_context_get_thread_pool(AgsConcurrencyProvider *concurrency_provider);
+void monothek_application_context_set_thread_pool(AgsConcurrencyProvider *concurrency_provider,
+						  AgsThreadPool *thread_pool);
 GList* monothek_application_context_get_worker(AgsConcurrencyProvider *concurrency_provider);
 void monothek_application_context_set_worker(AgsConcurrencyProvider *concurrency_provider,
-						 GList *worker);
+					     GList *worker);
+
+gboolean monothek_application_context_is_operating(AgsServiceProvider *service_provider);
+
+AgsServerStatus* monothek_application_context_server_status(AgsServiceProvider *service_provider);
+
+void monothek_application_context_set_registry(AgsServiceProvider *service_provider,
+					       AgsRegistry *registry);
+AgsRegistry* monothek_application_context_get_registry(AgsServiceProvider *service_provider);
+
+void monothek_application_context_set_server(AgsServiceProvider *service_provider,
+					     GList *server);
+GList* monothek_application_context_get_server(AgsServiceProvider *service_provider);
 
 GObject* monothek_application_context_get_default_soundcard(AgsSoundProvider *sound_provider);
 void monothek_application_context_set_default_soundcard(AgsSoundProvider *sound_provider,
-							    GObject *soundcard);
+							GObject *soundcard);
 GObject* monothek_application_context_get_default_soundcard_thread(AgsSoundProvider *sound_provider);
 void monothek_application_context_set_default_soundcard_thread(AgsSoundProvider *sound_provider,
-								   GObject *soundcard_thread);
+							       GObject *soundcard_thread);
 GList* monothek_application_context_get_soundcard(AgsSoundProvider *sound_provider);
 void monothek_application_context_set_soundcard(AgsSoundProvider *sound_provider,
-						    GList *soundcard);
+						GList *soundcard);
 GList* monothek_application_context_get_sequencer(AgsSoundProvider *sound_provider);
 void monothek_application_context_set_sequencer(AgsSoundProvider *sound_provider,
-						    GList *sequencer);
-GList* monothek_application_context_get_sound_server(AgsSoundProvider *sound_provider);
+						GList *sequencer);
 GList* monothek_application_context_get_audio(AgsSoundProvider *sound_provider);
 void monothek_application_context_set_audio(AgsSoundProvider *sound_provider,
-						GList *soundcard);
+					    GList *audio);
+GList* monothek_application_context_get_sound_server(AgsSoundProvider *sound_provider);
+void monothek_application_context_set_sound_server(AgsSoundProvider *sound_provider,
+						   GList *sound_server);
 GList* monothek_application_context_get_osc_server(AgsSoundProvider *sound_provider);
 void monothek_application_context_set_osc_server(AgsSoundProvider *sound_provider,
-						     GList *soundcard);
+						 GList *osc_server);
 
 void monothek_application_context_load_config(AgsApplicationContext *application_context);
 
@@ -119,6 +137,9 @@ void monothek_application_context_register_types(AgsApplicationContext *applicat
 void monothek_application_context_quit(AgsApplicationContext *application_context);
 
 void monothek_application_context_launch(AgsFileLaunch *launch, MonothekApplicationContext *application_context);
+
+void* monothek_application_context_server_main_loop_thread(GMainLoop *main_loop);
+void* monothek_application_context_audio_main_loop_thread(GMainLoop *main_loop);
 
 /**
  * SECTION:monothek_application_context
@@ -132,8 +153,8 @@ void monothek_application_context_launch(AgsFileLaunch *launch, MonothekApplicat
  */
 
 enum{
-  PROP_0,
-  PROP_WINDOW,
+     PROP_0,
+     PROP_WINDOW,
 };
 
 static gpointer monothek_application_context_parent_class = NULL;
@@ -162,102 +183,70 @@ monothek_application_context_get_type()
   static volatile gsize g_define_type_id__volatile = 0;
 
   if(g_once_init_enter (&g_define_type_id__volatile)){
-    GType ags_type_monothek_application_context = 0;
+    GType monothek_type_application_context = 0;
 
     static const GTypeInfo monothek_application_context_info = {
-      sizeof (MonothekApplicationContextClass),
-      NULL, /* base_init */
-      NULL, /* base_finalize */
-      (GClassInitFunc) monothek_application_context_class_init,
-      NULL, /* class_finalize */
-      NULL, /* class_data */
-      sizeof (MonothekApplicationContext),
-      0,    /* n_preallocs */
-      (GInstanceInitFunc) monothek_application_context_init,
+								sizeof (MonothekApplicationContextClass),
+								NULL, /* base_init */
+								NULL, /* base_finalize */
+								(GClassInitFunc) monothek_application_context_class_init,
+								NULL, /* class_finalize */
+								NULL, /* class_data */
+								sizeof (MonothekApplicationContext),
+								0,    /* n_preallocs */
+								(GInstanceInitFunc) monothek_application_context_init,
     };
 
-    static const GInterfaceInfo ags_connectable_interface_info = {
-      (GInterfaceInitFunc) monothek_application_context_connectable_interface_init,
-      NULL, /* interface_finalize */
-      NULL, /* interface_data */
+    static const GInterfaceInfo monothek_connectable_interface_info = {
+								       (GInterfaceInitFunc) monothek_application_context_connectable_interface_init,
+								       NULL, /* interface_finalize */
+								       NULL, /* interface_data */
     };
 
-    static const GInterfaceInfo ags_concurrency_provider_interface_info = {
-      (GInterfaceInitFunc) monothek_application_context_concurrency_provider_interface_init,
-      NULL, /* interface_finalize */
-      NULL, /* interface_data */
+    static const GInterfaceInfo monothek_concurrency_provider_interface_info = {
+										(GInterfaceInitFunc) monothek_application_context_concurrency_provider_interface_init,
+										NULL, /* interface_finalize */
+										NULL, /* interface_data */
     };
 
-    static const GInterfaceInfo ags_sound_provider_interface_info = {
-      (GInterfaceInitFunc) monothek_application_context_sound_provider_interface_init,
-      NULL, /* interface_finalize */
-      NULL, /* interface_data */
+    static const GInterfaceInfo monothek_service_provider_interface_info = {
+									    (GInterfaceInitFunc) monothek_application_context_service_provider_interface_init,
+									    NULL, /* interface_finalize */
+									    NULL, /* interface_data */
+    };
+    
+    static const GInterfaceInfo monothek_sound_provider_interface_info = {
+									  (GInterfaceInitFunc) monothek_application_context_sound_provider_interface_init,
+									  NULL, /* interface_finalize */
+									  NULL, /* interface_data */
     };
 
-    ags_type_monothek_application_context = g_type_register_static(AGS_TYPE_APPLICATION_CONTEXT,
-								   "MonothekApplicationContext",
-								   &monothek_application_context_info,
-								   0);
+    monothek_type_application_context = g_type_register_static(MONOTHEK_TYPE_APPLICATION_CONTEXT,
+							       "MonothekApplicationContext",
+							       &monothek_application_context_info,
+							       0);
 
-    g_type_add_interface_static(ags_type_monothek_application_context,
+    g_type_add_interface_static(monothek_type_application_context,
 				AGS_TYPE_CONNECTABLE,
-				&ags_connectable_interface_info);
+				&monothek_connectable_interface_info);
 
-    g_type_add_interface_static(ags_type_monothek_application_context,
+    g_type_add_interface_static(monothek_type_application_context,
 				AGS_TYPE_CONCURRENCY_PROVIDER,
-				&ags_concurrency_provider_interface_info);
+				&monothek_concurrency_provider_interface_info);
 
-    g_type_add_interface_static(ags_type_monothek_application_context,
+    g_type_add_interface_static(monothek_type_application_context,
+				AGS_TYPE_SERVICE_PROVIDER,
+				&monothek_service_provider_interface_info);
+
+    g_type_add_interface_static(monothek_type_application_context,
 				AGS_TYPE_SOUND_PROVIDER,
-				&ags_sound_provider_interface_info);
+				&monothek_sound_provider_interface_info);
 
-    g_once_init_leave(&g_define_type_id__volatile, ags_type_monothek_application_context);
+    g_once_init_leave(&g_define_type_id__volatile, monothek_type_application_context);
   }
 
   return g_define_type_id__volatile;
 }
-
-#ifndef AGS_USE_TIMER
-void
-monothek_application_context_signal_handler(int signr)
-{
-  if(signr == SIGINT){
-    //TODO:JK: do backup
-    
-    exit(-1);
-  }else{
-    sigemptyset(&(ags_sigact.sa_mask));
-    
-    //    if(signr == AGS_ASYNC_QUEUE_SIGNAL_HIGH){
-    // pthread_yield();
-    //    }
-  }
-}
-
-static void
-monothek_application_context_signal_cleanup()
-{
-  sigemptyset(&(ags_sigact.sa_mask));
-}
-#endif
-
-#ifdef AGS_USE_TIMER
-void
-monothek_application_context_signal_handler_timer(int sig, siginfo_t *si, void *uc)
-{
-  pthread_mutex_lock(AGS_THREAD(ags_application_context->main_loop)->timer_mutex);
-
-  g_atomic_int_set(&(AGS_THREAD(ags_application_context->main_loop)->timer_expired),
-		   TRUE);
-  
-  if(AGS_THREAD(ags_application_context->main_loop)->timer_wait){
-    pthread_cond_signal(AGS_THREAD(ags_application_context->main_loop)->timer_cond);
-  }
-    
-  pthread_mutex_unlock(AGS_THREAD(ags_application_context->main_loop)->timer_mutex);
-  //  signal(sig, SIG_IGN);
-}
-#endif
 
 void
 monothek_application_context_class_init(MonothekApplicationContextClass *monothek_application_context)
@@ -323,10 +312,30 @@ void
 monothek_application_context_concurrency_provider_interface_init(AgsConcurrencyProviderInterface *concurrency_provider)
 {
   concurrency_provider->get_main_loop = monothek_application_context_get_main_loop;
-  concurrency_provider->get_task_thread = monothek_application_context_get_task_thread;
+  concurrency_provider->set_main_loop = monothek_application_context_set_main_loop;
+
+  concurrency_provider->get_task_launcher = monothek_application_context_get_task_launcher;
+  concurrency_provider->set_task_launcher = monothek_application_context_set_task_launcher;
+
   concurrency_provider->get_thread_pool = monothek_application_context_get_thread_pool;
+  concurrency_provider->set_thread_pool = monothek_application_context_set_thread_pool;
+
   concurrency_provider->get_worker = monothek_application_context_get_worker;
   concurrency_provider->set_worker = monothek_application_context_set_worker;
+}
+
+void
+monothek_application_context_service_provider_interface_init(AgsServiceProviderInterface *service_provider)
+{
+  service_provider->is_operating = monothek_application_context_is_operating;
+
+  service_provider->server_status = monothek_application_context_server_status;
+
+  service_provider->set_registry = monothek_application_context_set_registry;
+  service_provider->get_registry = monothek_application_context_get_registry;
+  
+  service_provider->set_server = monothek_application_context_set_server;
+  service_provider->get_server = monothek_application_context_get_server;
 }
 
 void
@@ -345,6 +354,7 @@ monothek_application_context_sound_provider_interface_init(AgsSoundProviderInter
   sound_provider->set_sequencer = monothek_application_context_set_sequencer;
 
   sound_provider->get_sound_server = monothek_application_context_get_sound_server;
+  sound_provider->set_sound_server = monothek_application_context_set_sound_server;
 
   sound_provider->get_audio = monothek_application_context_get_audio;
   sound_provider->set_audio = monothek_application_context_set_audio;
@@ -395,19 +405,32 @@ monothek_application_context_init(MonothekApplicationContext *monothek_applicati
   /* Monothek application context */
   monothek_application_context->thread_pool = NULL;
 
-  monothek_application_context->polling_thread = NULL;
-
   monothek_application_context->worker = NULL;
   
+  monothek_application_context->is_operating = FALSE;
+
+  monothek_application_context->server_status = NULL;
+
+  monothek_application_context->registry = NULL;
+
+  monothek_application_context->server = NULL;
+
+  monothek_application_context->default_soundcard = NULL;
+
   monothek_application_context->default_soundcard_thread = NULL;
   monothek_application_context->default_export_thread = NULL;
-
+    
   monothek_application_context->soundcard = NULL;
   monothek_application_context->sequencer = NULL;
 
   monothek_application_context->sound_server = NULL;
   
   monothek_application_context->audio = NULL;
+
+  monothek_application_context->osc_server = NULL;
+
+  monothek_application_context->gui_ready = FALSE;
+  monothek_application_context->show_animation = TRUE;
 
   monothek_application_context->window = NULL;
 }
@@ -488,29 +511,36 @@ monothek_application_context_dispose(GObject *gobject)
     monothek_application_context->thread_pool = NULL;
   }
 
-  /* polling thread */
-  if(monothek_application_context->polling_thread != NULL){
-    g_object_unref(monothek_application_context->polling_thread);
-
-    monothek_application_context->polling_thread = NULL;
-  }
-
   /* worker thread */
-  if(monothek_application_context->worker != NULL){
-    list = monothek_application_context->worker;
-
-    while(list != NULL){
-      g_object_run_dispose(list->data);
-      
-      list = list->next;
-    }
-    
+  if(monothek_application_context->worker != NULL){    
     g_list_free_full(monothek_application_context->worker,
 		     g_object_unref);
 
     monothek_application_context->worker = NULL;
   }
-  
+
+  /* server status */
+  if(monothek_application_context->server_status != NULL){
+    g_object_unref(monothek_application_context->server_status);
+    
+    monothek_application_context->server_status = NULL;
+  }
+
+  /* server thread */
+  if(monothek_application_context->server != NULL){    
+    g_list_free_full(monothek_application_context->server,
+		     g_object_unref);
+
+    monothek_application_context->server = NULL;
+  }
+
+  /* default soundcard */
+  if(monothek_application_context->default_soundcard != NULL){
+    g_object_unref(monothek_application_context->default_soundcard);
+
+    monothek_application_context->default_soundcard = NULL;
+  }
+
   /* soundcard and export thread */
   if(monothek_application_context->default_soundcard_thread != NULL){
     g_object_unref(monothek_application_context->default_soundcard_thread);
@@ -524,22 +554,19 @@ monothek_application_context_dispose(GObject *gobject)
     monothek_application_context->default_export_thread = NULL;
   }
 
-  /* soundcard */
-  if(monothek_application_context->soundcard != NULL){
-    list = monothek_application_context->soundcard;
-
-    while(list != NULL){
-      g_object_set(list->data,
-		   "application-context", NULL,
-		   NULL);
-
-      list = list->next;
-    }
-    
+  /* soundcard and sequencer */
+  if(monothek_application_context->soundcard != NULL){    
     g_list_free_full(monothek_application_context->soundcard,
 		     g_object_unref);
 
     monothek_application_context->soundcard = NULL;
+  }
+
+  if(monothek_application_context->sequencer != NULL){
+    g_list_free_full(monothek_application_context->sequencer,
+		     g_object_unref);
+
+    monothek_application_context->sequencer = NULL;
   }
 
   /* audio */
@@ -548,6 +575,14 @@ monothek_application_context_dispose(GObject *gobject)
 		     g_object_unref);
 
     monothek_application_context->audio = NULL;
+  }
+
+  /* sound server */
+  if(monothek_application_context->sound_server != NULL){
+    g_list_free_full(monothek_application_context->sound_server,
+		     g_object_unref);
+
+    monothek_application_context->sound_server = NULL;
   }
 
   /* osc server */
@@ -576,21 +611,34 @@ monothek_application_context_finalize(GObject *gobject)
 
   monothek_application_context = MONOTHEK_APPLICATION_CONTEXT(gobject);
 
+  /* thread pool */
   if(monothek_application_context->thread_pool != NULL){
     g_object_unref(monothek_application_context->thread_pool);
   }
 
-  if(monothek_application_context->polling_thread != NULL){
-    g_object_unref(monothek_application_context->polling_thread);
-  }
-
-  if(monothek_application_context->worker != NULL){
+  /* worker thread */
+  if(monothek_application_context->worker != NULL){    
     g_list_free_full(monothek_application_context->worker,
 		     g_object_unref);
-
-    monothek_application_context->worker = NULL;
   }
-  
+
+  /* server status */
+  if(monothek_application_context->server_status != NULL){
+    g_object_unref(monothek_application_context->server_status);
+  }
+
+  /* server thread */
+  if(monothek_application_context->server != NULL){    
+    g_list_free_full(monothek_application_context->server,
+		     g_object_unref);
+  }
+
+  /* default soundcard */
+  if(monothek_application_context->default_soundcard != NULL){
+    g_object_unref(monothek_application_context->default_soundcard);
+  }
+
+  /* soundcard and export thread */
   if(monothek_application_context->default_soundcard_thread != NULL){
     g_object_unref(monothek_application_context->default_soundcard_thread);
   }
@@ -599,23 +647,33 @@ monothek_application_context_finalize(GObject *gobject)
     g_object_unref(monothek_application_context->default_export_thread);
   }
 
-  if(monothek_application_context->soundcard != NULL){
+  /* soundcard and sequencer */
+  if(monothek_application_context->soundcard != NULL){    
     g_list_free_full(monothek_application_context->soundcard,
 		     g_object_unref);
   }
 
+  if(monothek_application_context->sequencer != NULL){
+    g_list_free_full(monothek_application_context->sequencer,
+		     g_object_unref);
+  }
+
+  /* audio */
   if(monothek_application_context->audio != NULL){
     g_list_free_full(monothek_application_context->audio,
 		     g_object_unref);
   }
 
+  /* sound server */
+  if(monothek_application_context->sound_server != NULL){
+    g_list_free_full(monothek_application_context->sound_server,
+		     g_object_unref);
+  }
+
+  /* osc server */
   if(monothek_application_context->osc_server != NULL){
     g_list_free_full(monothek_application_context->osc_server,
 		     g_object_unref);
-  }
-  
-  if(monothek_application_context->window != NULL){
-    gtk_widget_destroy(monothek_application_context->window);
   }
   
   /* call parent */
@@ -667,56 +725,126 @@ AgsThread*
 monothek_application_context_get_main_loop(AgsConcurrencyProvider *concurrency_provider)
 {
   AgsThread *main_loop;
-  
-  pthread_mutex_t *application_context_mutex;
 
+  AgsApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(concurrency_provider);
+  
   /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
-  
-  application_context_mutex = AGS_APPLICATION_CONTEXT(concurrency_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get main loop */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  main_loop = (AgsThread *) AGS_APPLICATION_CONTEXT(concurrency_provider)->main_loop;
+  main_loop = (AgsThread *) application_context->main_loop;
 
   if(main_loop != NULL){
     g_object_ref(main_loop);
   }
   
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(main_loop);
 }
 
-AgsThread*
-monothek_application_context_get_task_thread(AgsConcurrencyProvider *concurrency_provider)
+void
+monothek_application_context_set_main_loop(AgsConcurrencyProvider *concurrency_provider,
+					   AgsThread *main_loop)
 {
-  AgsThread *task_thread;
+  AgsApplicationContext *application_context;
   
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
+  application_context = AGS_APPLICATION_CONTEXT(concurrency_provider);
+  
   /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
-  
-  application_context_mutex = AGS_APPLICATION_CONTEXT(concurrency_provider)->obj_mutex;
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get main loop */
+  g_rec_mutex_lock(application_context_mutex);
 
-  /* get task thread */
-  pthread_mutex_lock(application_context_mutex);
+  if(application_context->main_loop == main_loop){
+    g_rec_mutex_unlock(application_context_mutex);
+    
+    return;
+  }
 
-  task_thread = (AgsThread *) AGS_APPLICATION_CONTEXT(concurrency_provider)->task_thread;
-
-  if(task_thread != NULL){
-    g_object_ref(task_thread);
+  if(application_context->main_loop != NULL){
+    g_object_unref(application_context->main_loop);
   }
   
-  pthread_mutex_unlock(application_context_mutex);
+  if(main_loop != NULL){
+    g_object_ref(main_loop);
+  }
+  
+  application_context->main_loop = (GObject *) main_loop;
+  
+  g_rec_mutex_unlock(application_context_mutex);
+}
 
-  return(task_thread);
+AgsTaskLauncher*
+monothek_application_context_get_task_launcher(AgsConcurrencyProvider *concurrency_provider)
+{
+  AgsTaskLauncher *task_launcher;
+
+  AgsApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(concurrency_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get main loop */
+  g_rec_mutex_lock(application_context_mutex);
+
+  task_launcher = (AgsThread *) application_context->task_launcher;
+
+  if(task_launcher != NULL){
+    g_object_ref(task_launcher);
+  }
+  
+  g_rec_mutex_unlock(application_context_mutex);
+  
+  return(task_launcher);
+}
+
+void
+monothek_application_context_set_task_launcher(AgsConcurrencyProvider *concurrency_provider,
+					       AgsTaskLauncher *task_launcher)
+{
+  AgsApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(concurrency_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get main loop */
+  g_rec_mutex_lock(application_context_mutex);
+
+  if(application_context->task_launcher == task_launcher){
+    g_rec_mutex_unlock(application_context_mutex);
+    
+    return;
+  }
+
+  if(application_context->task_launcher != NULL){
+    g_object_unref(application_context->task_launcher);
+  }
+  
+  if(task_launcher != NULL){
+    g_object_ref(task_launcher);
+  }
+  
+  application_context->task_launcher = (GObject *) task_launcher;
+  
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 AgsThreadPool*
@@ -724,51 +852,86 @@ monothek_application_context_get_thread_pool(AgsConcurrencyProvider *concurrency
 {
   AgsThreadPool *thread_pool;
   
-  pthread_mutex_t *application_context_mutex;
-
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  MonothekApplicationContext *application_context;
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(concurrency_provider)->obj_mutex;
+  GRecMutex *application_context_mutex;
 
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  application_context = MONOTHEK_APPLICATION_CONTEXT(concurrency_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get thread pool */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  thread_pool = MONOTHEK_APPLICATION_CONTEXT(concurrency_provider)->thread_pool;
+  thread_pool = application_context->thread_pool;
 
   if(thread_pool != NULL){
     g_object_ref(thread_pool);
   }
   
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(thread_pool);
+}
+
+void
+monothek_application_context_set_thread_pool(AgsConcurrencyProvider *concurrency_provider,
+					     AgsThreadPool *thread_pool)
+{
+  MonothekApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(concurrency_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get main loop */
+  g_rec_mutex_lock(application_context_mutex);
+
+  if(application_context->thread_pool == thread_pool){
+    g_rec_mutex_unlock(application_context_mutex);
+    
+    return;
+  }
+
+  if(application_context->thread_pool != NULL){
+    g_object_unref(application_context->thread_pool);
+  }
+  
+  if(thread_pool != NULL){
+    g_object_ref(thread_pool);
+  }
+  
+  application_context->thread_pool = (GObject *) thread_pool;
+  
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GList*
 monothek_application_context_get_worker(AgsConcurrencyProvider *concurrency_provider)
 {
+  MonothekApplicationContext *application_context;
+  
   GList *worker;
   
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  application_context = MONOTHEK_APPLICATION_CONTEXT(concurrency_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(concurrency_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get worker */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  worker = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(concurrency_provider)->worker,
+  worker = g_list_copy_deep(application_context->worker,
 			    (GCopyFunc) g_object_ref,
 			    NULL);
   
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 
   return(worker);
 }
@@ -777,30 +940,201 @@ void
 monothek_application_context_set_worker(AgsConcurrencyProvider *concurrency_provider,
 					GList *worker)
 {
-  pthread_mutex_t *application_context_mutex;
-
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  MonothekApplicationContext *application_context;
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(concurrency_provider)->obj_mutex;
+  GRecMutex *application_context_mutex;
 
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  application_context = MONOTHEK_APPLICATION_CONTEXT(concurrency_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set worker */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(concurrency_provider)->worker == worker){
-    pthread_mutex_unlock(application_context_mutex);
+  if(application_context->worker == worker){
+    g_rec_mutex_unlock(application_context_mutex);
     
     return;
   }
 
-  g_list_free_full(MONOTHEK_APPLICATION_CONTEXT(concurrency_provider)->worker,
+  g_list_free_full(application_context->worker,
 		   g_object_unref);
   
-  MONOTHEK_APPLICATION_CONTEXT(concurrency_provider)->worker = worker;
+  application_context->worker = worker;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
+}
+
+gboolean
+monothek_application_context_is_operating(AgsServiceProvider *service_provider)
+{
+  MonothekApplicationContext *application_context;
+
+  gboolean is_operating;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(service_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get gui ready */
+  g_rec_mutex_lock(application_context_mutex);
+
+  is_operating = application_context->is_operating;
+   
+  g_rec_mutex_unlock(application_context_mutex);
+
+  return(is_operating);
+}
+
+AgsServerStatus*
+monothek_application_context_server_status(AgsServiceProvider *service_provider)
+{
+  AgsServerStatus *server_status;
+  
+  MonothekApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(service_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get thread pool */
+  g_rec_mutex_lock(application_context_mutex);
+
+  server_status = application_context->server_status;
+
+  if(server_status != NULL){
+    g_object_ref(server_status);
+  }
+  
+  g_rec_mutex_unlock(application_context_mutex);
+  
+  return(server_status);
+}
+
+AgsRegistry*
+monothek_application_context_get_registry(AgsServiceProvider *service_provider)
+{
+  AgsRegistry *registry;
+  
+  MonothekApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(service_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get thread pool */
+  g_rec_mutex_lock(application_context_mutex);
+
+  registry = application_context->registry;
+
+  if(registry != NULL){
+    g_object_ref(registry);
+  }
+  
+  g_rec_mutex_unlock(application_context_mutex);
+  
+  return(registry);
+}
+
+void
+monothek_application_context_set_registry(AgsServiceProvider *service_provider,
+					  AgsRegistry *registry)
+{
+  MonothekApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(service_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get main loop */
+  g_rec_mutex_lock(application_context_mutex);
+
+  if(application_context->registry == registry){
+    g_rec_mutex_unlock(application_context_mutex);
+    
+    return;
+  }
+
+  if(application_context->registry != NULL){
+    g_object_unref(application_context->registry);
+  }
+  
+  if(registry != NULL){
+    g_object_ref(registry);
+  }
+  
+  application_context->registry = (GObject *) registry;
+  
+  g_rec_mutex_unlock(application_context_mutex);
+}
+
+GList*
+monothek_application_context_get_server(AgsServiceProvider *service_provider)
+{
+  MonothekApplicationContext *application_context;
+  
+  GList *server;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(service_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* get server */
+  g_rec_mutex_lock(application_context_mutex);
+
+  server = g_list_copy_deep(application_context->server,
+			    (GCopyFunc) g_object_ref,
+			    NULL);
+  
+  g_rec_mutex_unlock(application_context_mutex);
+
+  return(server);
+}
+
+void
+monothek_application_context_set_server(AgsServiceProvider *service_provider,
+					GList *server)
+{
+  MonothekApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(service_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* set server */
+  g_rec_mutex_lock(application_context_mutex);
+
+  if(application_context->server == server){
+    g_rec_mutex_unlock(application_context_mutex);
+    
+    return;
+  }
+
+  g_list_free_full(application_context->server,
+		   g_object_unref);
+  
+  application_context->server = server;
+
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GObject*
@@ -808,17 +1142,17 @@ monothek_application_context_get_default_soundcard_thread(AgsSoundProvider *soun
 {
   GObject *soundcard_thread;
   
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get default soundcard thread */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
   soundcard_thread = (GObject *) MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard_thread;
 
@@ -826,7 +1160,7 @@ monothek_application_context_get_default_soundcard_thread(AgsSoundProvider *soun
     g_object_ref(soundcard_thread);
   }
   
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(soundcard_thread);
 }
@@ -836,45 +1170,45 @@ monothek_application_context_set_default_soundcard(AgsSoundProvider *sound_provi
 						   GObject *soundcard)
 {
   AgsMessageDelivery *message_delivery;
-  AgsMessageQueue *message_queue;
+  GList *start_message_queue;
 
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set default soundcard */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard == soundcard){
-    pthread_mutex_unlock(application_context_mutex);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard == soundcard){
+    g_rec_mutex_unlock(application_context_mutex);
 
     return;
   }
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard != NULL){
-    g_object_unref(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard != NULL){
+    g_object_unref(MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard);
   }
   
   if(soundcard != NULL){
     g_object_ref(soundcard);
   }
   
-  MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard = (GObject *) soundcard;
+  MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard = (GObject *) soundcard;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 
   /* emit message */
   message_delivery = ags_message_delivery_get_instance();
 
-  message_queue = (AgsMessageQueue *) ags_message_delivery_find_namespace(message_delivery,
-									  "libags-audio");
+  start_message_queue = ags_message_delivery_find_sender_namespace(message_delivery,
+								   "libags-audio");
 
-  if(message_queue != NULL){
+  if(start_message_queue != NULL){
     AgsMessageEnvelope *message;
 
     xmlDoc *doc;
@@ -892,10 +1226,10 @@ monothek_application_context_set_default_soundcard(AgsSoundProvider *sound_provi
 	       "AgsSoundProvider::set-default-soundcard");
 
     /* add message */
-    message = ags_message_envelope_alloc(G_OBJECT(sound_provider),
-					 NULL,
-					 doc);
-
+    message = ags_message_envelope_new(G_OBJECT(sound_provider),
+				       NULL,
+				       doc);
+    
     /* set parameter */
     message->n_params = 1;
 
@@ -915,9 +1249,12 @@ monothek_application_context_set_default_soundcard(AgsSoundProvider *sound_provi
     message->parameter_name[1] = NULL;
     
     /* add message */
-    ags_message_delivery_add_message(message_delivery,
-				     "libags-audio",
-				     message);
+    ags_message_delivery_add_message_envelope(message_delivery,
+					      "libags-audio",
+					      message);
+
+    g_list_free_full(start_message_queue,
+		     (GDestroyNotify) g_object_unref);
   }
 }
 
@@ -926,25 +1263,25 @@ monothek_application_context_get_default_soundcard(AgsSoundProvider *sound_provi
 {
   GObject *soundcard;
   
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get default soundcard */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  soundcard = (GObject *) MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard;
+  soundcard = (GObject *) MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard;
 
   if(soundcard != NULL){
     g_object_ref(soundcard);
   }
   
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(soundcard);
 }
@@ -953,59 +1290,59 @@ void
 monothek_application_context_set_default_soundcard_thread(AgsSoundProvider *sound_provider,
 							  GObject *soundcard_thread)
 {
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set default soundcard thread */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard_thread == (AgsThread *) soundcard_thread){
-    pthread_mutex_unlock(application_context_mutex);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard_thread == (AgsThread *) soundcard_thread){
+    g_rec_mutex_unlock(application_context_mutex);
   
     return;
   }
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard_thread != NULL){
-    g_object_unref(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard_thread);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard_thread != NULL){
+    g_object_unref(MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard_thread);
   }
   
   if(soundcard_thread != NULL){
     g_object_ref(soundcard_thread);
   }
   
-  MONOTHEK_APPLICATION_CONTEXT(sound_provider)->default_soundcard_thread = (AgsThread *) soundcard_thread;
+  MONOTHEK_APPLICATION_CONTEXT(application_context)->default_soundcard_thread = (AgsThread *) soundcard_thread;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GList*
 monothek_application_context_get_soundcard(AgsSoundProvider *sound_provider)
 {
+  AgsApplicationContext *application_context;
+
   GList *soundcard;
 
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get soundcard */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
   
-  soundcard = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->soundcard,
+  soundcard = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(application_context)->soundcard,
 			       (GCopyFunc) g_object_ref,
 			       NULL);
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(soundcard);
 }
@@ -1014,55 +1351,55 @@ void
 monothek_application_context_set_soundcard(AgsSoundProvider *sound_provider,
 					   GList *soundcard)
 {
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set soundcard */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->soundcard == soundcard){
-    pthread_mutex_unlock(application_context_mutex);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->soundcard == soundcard){
+    g_rec_mutex_unlock(application_context_mutex);
 
     return;
   }
   
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->soundcard != NULL){
-    g_list_free(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->soundcard);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->soundcard != NULL){
+    g_list_free(MONOTHEK_APPLICATION_CONTEXT(application_context)->soundcard);
   }
 
-  MONOTHEK_APPLICATION_CONTEXT(sound_provider)->soundcard = soundcard;
+  MONOTHEK_APPLICATION_CONTEXT(application_context)->soundcard = soundcard;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GList*
 monothek_application_context_get_sequencer(AgsSoundProvider *sound_provider)
 {
+  AgsApplicationContext *application_context;
+
   GList *sequencer;
 
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get sequencer */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
   
-  sequencer = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->sequencer,
+  sequencer = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(application_context)->sequencer,
 			       (GCopyFunc) g_object_ref,
-				NULL);
+			       NULL);
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(sequencer);
 }
@@ -1071,81 +1408,111 @@ void
 monothek_application_context_set_sequencer(AgsSoundProvider *sound_provider,
 					   GList *sequencer)
 {
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set sequencer */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->sequencer == sequencer){
-    pthread_mutex_unlock(application_context_mutex);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->sequencer == sequencer){
+    g_rec_mutex_unlock(application_context_mutex);
 
     return;
   }
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->sequencer != NULL){
-    g_list_free(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->sequencer);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->sequencer != NULL){
+    g_list_free(MONOTHEK_APPLICATION_CONTEXT(application_context)->sequencer);
   }
   
-  MONOTHEK_APPLICATION_CONTEXT(sound_provider)->sequencer = sequencer;
+  MONOTHEK_APPLICATION_CONTEXT(application_context)->sequencer = sequencer;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GList*
 monothek_application_context_get_sound_server(AgsSoundProvider *sound_provider)
 {
+  AgsApplicationContext *application_context;
+
   GList *sound_server;
 
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get sound server */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
   
-  sound_server = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->sound_server,
+  sound_server = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(application_context)->sound_server,
 				  (GCopyFunc) g_object_ref,
 				  NULL);
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(sound_server);
+}
+
+void
+monothek_application_context_set_sound_server(AgsSoundProvider *concurrency_provider,
+					      GList *sound_server)
+{
+  MonothekApplicationContext *application_context;
+  
+  GRecMutex *application_context_mutex;
+
+  application_context = MONOTHEK_APPLICATION_CONTEXT(concurrency_provider);
+  
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
+
+  /* set sound_server */
+  g_rec_mutex_lock(application_context_mutex);
+
+  if(application_context->sound_server == sound_server){
+    g_rec_mutex_unlock(application_context_mutex);
+    
+    return;
+  }
+
+  g_list_free_full(application_context->sound_server,
+		   g_object_unref);
+  
+  application_context->sound_server = sound_server;
+
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GList*
 monothek_application_context_get_audio(AgsSoundProvider *sound_provider)
 {
+  AgsApplicationContext *application_context;
+
   GList *audio;
 
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get audio */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
   
-  audio = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->audio,
+  audio = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(application_context)->audio,
 			   (GCopyFunc) g_object_ref,
 			   NULL);
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(audio);
 }
@@ -1154,55 +1521,55 @@ void
 monothek_application_context_set_audio(AgsSoundProvider *sound_provider,
 				       GList *audio)
 {
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set audio */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->audio == audio){
-    pthread_mutex_unlock(application_context_mutex);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->audio == audio){
+    g_rec_mutex_unlock(application_context_mutex);
 
     return;
   }
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->audio != NULL){
-    g_list_free(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->audio);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->audio != NULL){
+    g_list_free(MONOTHEK_APPLICATION_CONTEXT(application_context)->audio);
   }
 
-  MONOTHEK_APPLICATION_CONTEXT(sound_provider)->audio = audio;
+  MONOTHEK_APPLICATION_CONTEXT(application_context)->audio = audio;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 GList*
 monothek_application_context_get_osc_server(AgsSoundProvider *sound_provider)
 {
+  AgsApplicationContext *application_context;
+
   GList *osc_server;
 
-  pthread_mutex_t *application_context_mutex;
+  GRecMutex *application_context_mutex;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* get osc_server */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
   
-  osc_server = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->osc_server,
+  osc_server = g_list_copy_deep(MONOTHEK_APPLICATION_CONTEXT(application_context)->osc_server,
 				(GCopyFunc) g_object_ref,
 				NULL);
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
   
   return(osc_server);
 }
@@ -1211,31 +1578,31 @@ void
 monothek_application_context_set_osc_server(AgsSoundProvider *sound_provider,
 					    GList *osc_server)
 {
-  pthread_mutex_t *application_context_mutex;
+  AgsApplicationContext *application_context;
 
-  /* get mutex */
-  pthread_mutex_lock(ags_application_context_get_class_mutex());
+  GRecMutex *application_context_mutex;
+
+  application_context = AGS_APPLICATION_CONTEXT(sound_provider);
   
-  application_context_mutex = AGS_APPLICATION_CONTEXT(sound_provider)->obj_mutex;
-
-  pthread_mutex_unlock(ags_application_context_get_class_mutex());
+  /* get mutex */
+  application_context_mutex = AGS_APPLICATION_CONTEXT_GET_OBJ_MUTEX(application_context);
 
   /* set osc_server */
-  pthread_mutex_lock(application_context_mutex);
+  g_rec_mutex_lock(application_context_mutex);
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->osc_server == osc_server){
-    pthread_mutex_unlock(application_context_mutex);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->osc_server == osc_server){
+    g_rec_mutex_unlock(application_context_mutex);
 
     return;
   }
 
-  if(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->osc_server != NULL){
-    g_list_free(MONOTHEK_APPLICATION_CONTEXT(sound_provider)->osc_server);
+  if(MONOTHEK_APPLICATION_CONTEXT(application_context)->osc_server != NULL){
+    g_list_free(MONOTHEK_APPLICATION_CONTEXT(application_context)->osc_server);
   }
 
-  MONOTHEK_APPLICATION_CONTEXT(sound_provider)->osc_server = osc_server;
+  MONOTHEK_APPLICATION_CONTEXT(application_context)->osc_server = osc_server;
 
-  pthread_mutex_unlock(application_context_mutex);
+  g_rec_mutex_unlock(application_context_mutex);
 }
 
 void
@@ -1250,10 +1617,31 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
   MonothekApplicationContext *monothek_application_context;
   MonothekWindow *window;
 
-  AgsThread *audio_loop, *polling_thread, *task_thread;
-  AgsThreadPool *thread_pool;
+#ifdef AGS_WITH_QUARTZ
+  GtkosxApplication *app;
+#endif
+  
+  AgsThread *audio_loop;
+  AgsTaskLauncher *task_launcher;
+  AgsMessageDelivery *message_delivery;
+  AgsMessageQueue *message_queue;
+  AgsMessageQueue *audio_message_queue;
 
+  GMainContext *server_main_context;
+  GMainContext *audio_main_context;
+  GMainContext *osc_server_main_context;
+  GMainLoop *main_loop;
+  GThread *main_loop_thread;
+  
   GList *start_queue;
+  
+  gchar *filename;
+
+  guint i;
+
+  static const guint staging_program[] = {
+					  (AGS_SOUND_STAGING_AUTOMATE | AGS_SOUND_STAGING_RUN_INTER | AGS_SOUND_STAGING_FX),
+  };
   
   monothek_application_context = (MonothekApplicationContext *) application_context;
 
@@ -1266,68 +1654,112 @@ monothek_application_context_prepare(AgsApplicationContext *application_context)
   /*
    * fundamental thread setup
    */
-  /* AgsAudioLoop */
-  audio_loop =
-    application_context->main_loop = ags_audio_loop_new((GObject *) NULL,
-							(GObject *) monothek_application_context);
-  g_object_set(monothek_application_context,
-	       "main-loop", audio_loop,
-	       NULL);
+  /* server main context and main loop */
+  server_main_context = g_main_context_new();
+  g_main_context_ref(server_main_context);
 
+  monothek_application_context->server_main_context = server_main_context;
+
+  main_loop = g_main_loop_new(server_main_context,
+			      TRUE);
+
+  g_thread_new("Advanced Gtk+ Sequencer - server main loop",
+	       monothek_application_context_server_main_loop_thread,
+	       main_loop);
+
+  /* audio main context and main loop */
+#if 1
+  audio_main_context = g_main_context_new();
+  g_main_context_ref(audio_main_context);
+
+  monothek_application_context->audio_main_context = audio_main_context;
+
+  main_loop = g_main_loop_new(audio_main_context,
+			      TRUE);
+
+  g_thread_new("Advanced Gtk+ Sequencer - audio main loop",
+	       monothek_application_context_audio_main_loop_thread,
+	       main_loop);
+#else
+  monothek_application_context->audio_main_context = NULL;  
+#endif
+  
+  /* message delivery */
+  message_delivery = ags_message_delivery_get_instance();
+
+  message_queue = ags_message_queue_new("libags");
+  g_object_set(message_queue,
+	       "recipient-namespace", "libgsequencer",
+	       NULL);
+  ags_message_delivery_add_message_queue(message_delivery,
+					 (GObject *) message_queue);
+
+  audio_message_queue = ags_message_queue_new("libags-audio");
+  g_object_set(audio_message_queue,
+	       "recipient-namespace", "libgsequencer",
+	       NULL);
+  ags_message_delivery_add_message_queue(message_delivery,
+					 (GObject *) audio_message_queue);
+  
+  /* OSC server main context and main loop */
+  osc_server_main_context = g_main_context_new();
+  g_main_context_ref(osc_server_main_context);
+
+  monothek_application_context->osc_server_main_context = osc_server_main_context;
+
+  g_main_loop_new(osc_server_main_context,
+		  TRUE);
+
+  /* AgsAudioLoop */
+  audio_loop = (AgsThread *) ags_audio_loop_new();
+  ags_audio_loop_set_do_fx_staging(audio_loop, TRUE);
+  ags_audio_loop_set_staging_program(audio_loop,
+				     staging_program,
+				     1);
+  
   g_object_ref(audio_loop);
+  
+  application_context->main_loop = (GObject *) audio_loop;
   ags_connectable_connect(AGS_CONNECTABLE(audio_loop));
 
-  /* AgsPollingThread */
-  polling_thread = 
-    monothek_application_context->polling_thread = ags_polling_thread_new();
-  ags_thread_add_child_extended(AGS_THREAD(audio_loop),
-				(AgsThread *) polling_thread,
-				TRUE, TRUE);
-  
-  /* AgsTaskThread */
-  task_thread = 
-    application_context->task_thread = (GObject *) ags_task_thread_new();
-  thread_pool = AGS_TASK_THREAD(task_thread)->thread_pool;
-  ags_main_loop_set_async_queue(AGS_MAIN_LOOP(audio_loop),
-				task_thread);
-  ags_thread_add_child_extended(AGS_THREAD(audio_loop),
-				(AgsThread *) task_thread,
-				TRUE, TRUE);
+  /* AgsTaskLauncher */
+  task_launcher = ags_task_launcher_new();
+  g_object_ref(task_launcher);
 
-  /* start engine */
-  pthread_mutex_lock(audio_loop->start_mutex);
-  
-  start_queue = NULL;
-  start_queue = g_list_prepend(start_queue,
-			       polling_thread);
-  start_queue = g_list_prepend(start_queue,
-			       task_thread);
+  application_context->task_launcher = (GObject *) task_launcher;
+  ags_connectable_connect(AGS_CONNECTABLE(task_launcher));  
 
-  g_atomic_pointer_set(&(audio_loop->start_queue),
-		       start_queue);
+#if 0  
+  ags_task_launcher_attach(task_launcher,
+			   audio_main_context);
+#endif
   
-  pthread_mutex_unlock(audio_loop->start_mutex);
-
   /* start audio loop and thread pool*/
   ags_thread_start(audio_loop);
   
-  ags_thread_pool_start(thread_pool);
-
   /* wait for audio loop */
-  pthread_mutex_lock(audio_loop->start_mutex);
+  g_mutex_lock(AGS_THREAD_GET_START_MUTEX(audio_loop));
 
-  if(g_atomic_int_get(&(audio_loop->start_wait)) == TRUE){	
-    g_atomic_int_set(&(audio_loop->start_done),
-		     FALSE);
+  if(ags_thread_test_status_flags(audio_loop, AGS_THREAD_STATUS_START_WAIT)){
+    ags_thread_unset_status_flags(audio_loop, AGS_THREAD_STATUS_START_DONE);
       
-    while(g_atomic_int_get(&(audio_loop->start_wait)) == TRUE &&
-	  g_atomic_int_get(&(audio_loop->start_done)) == FALSE){
-      pthread_cond_wait(audio_loop->start_cond,
-			audio_loop->start_mutex);
+    while(ags_thread_test_status_flags(audio_loop, AGS_THREAD_STATUS_START_WAIT) &&
+	  !ags_thread_test_status_flags(audio_loop, AGS_THREAD_STATUS_START_DONE)){
+      g_cond_wait(AGS_THREAD_GET_START_COND(audio_loop),
+		  AGS_THREAD_GET_START_MUTEX(audio_loop));
     }
   }
     
-  pthread_mutex_unlock(audio_loop->start_mutex);
+  g_mutex_unlock(AGS_THREAD_GET_START_MUTEX(audio_loop));
+
+  /* start gui */
+  g_timeout_add((guint) (1000.0 / 30.0),
+		(GSourceFunc) monothek_application_context_message_monitor_timeout,
+		(gpointer) monothek_application_context);
+  
+  g_timeout_add((guint) (1000.0 / 30.0),
+		(GSourceFunc) monothek_application_context_task_timeout,
+		(gpointer) monothek_application_context);
 
   /* MonothekWindow */
   window = g_object_new(MONOTHEK_TYPE_WINDOW,
@@ -1366,23 +1798,32 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   MonothekRack *rack;
 
   MonothekAudioFileManager *audio_file_manager;
-  
-  AgsAudioLoop *audio_loop;
-  GObject *soundcard;
-
-  AgsOscServer *osc_server;
 
   MonothekSessionManager *session_manager;
   MonothekSession *session;
 
-  AgsMessageDelivery *message_delivery;
-  AgsMessageQueue *message_queue;
-  AgsMessageQueue *audio_message_queue;
-  AgsMessageQueue *monothek_message_queue;
+  GObject *soundcard;
+  GObject *sequencer;
+  AgsJackServer *jack_server;
+  AgsPulseServer *pulse_server;
+  AgsCoreAudioServer *core_audio_server;
+
+  AgsOscServer *osc_server;
+  
+  AgsLadspaManager *ladspa_manager;
+  AgsDssiManager *dssi_manager;
+  AgsLv2Manager *lv2_manager;
+  AgsLv2uiManager *lv2ui_manager;
+  AgsLv2WorkerManager *lv2_worker_manager;
+
+  AgsServer *server;
+  
+  AgsThread *main_loop;
   AgsThread *soundcard_thread;
   AgsThread *export_thread;
+  AgsThread *sequencer_thread;
   AgsDestroyWorker *destroy_worker;
-  AgsThread *main_loop;
+  AgsTaskLauncher *task_launcher;
 
   AgsLog *log;
   AgsConfig *config;
@@ -1390,74 +1831,45 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   GList *list;  
   GSList *slist;
   
+#ifndef AGS_W32API
   struct passwd *pw;
-
-#ifdef AGS_USE_TIMER
-  timer_t *timer_id;
+  
+  uid_t uid;
 #endif
 
+  gchar *blacklist_path;
+  gchar *blacklist_filename;
+  gchar *filename;
+  gchar *server_group;
   gchar *soundcard_group;
+  gchar *sequencer_group;
   gchar *osc_server_group;
   gchar *str;
   gchar *capability;
+#if defined AGS_W32API
+  gchar *app_dir;
+#endif
   
+  guint i, j;
+  gboolean has_core_audio;
+  gboolean has_pulse;
+  gboolean has_jack;
   gboolean is_output;
-  guint i;
 
   GValue *value;
   
   monothek_application_context = (MonothekApplicationContext *) application_context;
-
-  audio_loop = AGS_APPLICATION_CONTEXT(monothek_application_context)->main_loop;
 
   config = ags_config_get_instance();
   
   /* call parent */
   //  AGS_APPLICATION_CONTEXT_CLASS(monothek_application_context_parent_class)->setup(application_context);
 
-  g_object_get(application_context,
-	       "main-loop", &main_loop,
-	       NULL);
+  /* main loop */
+  main_loop = ags_concurrency_provider_get_main_loop(AGS_CONCURRENCY_PROVIDER(application_context));
 
   log = ags_log_get_instance();
-
-  atexit(monothek_application_context_signal_cleanup);
-
-  /* Ignore interactive and job-control signals.  */
-#ifndef MONOTHEK_W32API
-  signal(SIGINT, SIG_IGN);
-  signal(SIGQUIT, SIG_IGN);
-  signal(SIGTSTP, SIG_IGN);
-  signal(SIGTTIN, SIG_IGN);
-  signal(SIGTTOU, SIG_IGN);
-  signal(SIGCHLD, SIG_IGN);
-  signal(AGS_THREAD_RESUME_SIG, SIG_IGN);
-  signal(AGS_THREAD_SUSPEND_SIG, SIG_IGN);
-
-  ags_sigact.sa_handler = monothek_application_context_signal_handler;
-  sigemptyset(&ags_sigact.sa_mask);
-  ags_sigact.sa_flags = 0;
-  sigaction(SIGINT, &ags_sigact, (struct sigaction *) NULL);
-  sigaction(SA_RESTART, &ags_sigact, (struct sigaction *) NULL);
-#endif
-  
-  /* message delivery */
-  message_delivery = ags_message_delivery_get_instance();
-
-  message_queue = ags_message_queue_new("libmonothek");
-  ags_message_delivery_add_queue(message_delivery,
-				 message_queue);
-
-#if 0
-  message_queue = ags_message_queue_new("libags");
-  ags_message_delivery_add_queue(message_delivery,
-				 message_queue);
-
-  audio_message_queue = ags_message_queue_new("libags-audio");
-  ags_message_delivery_add_queue(message_delivery,
-				 audio_message_queue);
-#endif
-  
+    
   /* find session */
   session_manager = monothek_session_manager_get_instance();
   session = monothek_session_manager_find_session(session_manager,
@@ -1467,11 +1879,44 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
   monothek_application_context->soundcard = NULL;
   soundcard = NULL;
 
+  /* sound server */
+  monothek_application_context->sound_server = NULL;
+
+  /* core audio server */
+  core_audio_server = ags_core_audio_server_new(NULL);
+  monothek_application_context->sound_server = g_list_append(monothek_application_context->sound_server,
+							     core_audio_server);
+  g_object_ref(G_OBJECT(core_audio_server));
+
+  has_core_audio = FALSE;
+
+  /* pulse server */
+  pulse_server = ags_pulse_server_new(NULL);
+  monothek_application_context->sound_server = g_list_append(monothek_application_context->sound_server,
+							     pulse_server);
+  g_object_ref(G_OBJECT(pulse_server));
+
+  has_pulse = FALSE;
+  
+  /* jack server */
+  jack_server = ags_jack_server_new(NULL);
+  monothek_application_context->sound_server = g_list_append(monothek_application_context->sound_server,
+							     jack_server);
+  g_object_ref(G_OBJECT(jack_server));
+
+  has_jack = FALSE;
+
+  /* AgsSoundcard */
+  monothek_application_context->soundcard = NULL;
+  soundcard = NULL;
+
   soundcard_group = g_strdup("soundcard");
   
   for(i = 0; ; i++){
     guint pcm_channels, buffer_size, samplerate, format;
-
+    guint cache_buffer_size;
+    gboolean use_cache;
+    
     if(!g_key_file_has_group(config->key_file,
 			     soundcard_group)){
       if(i == 0){
@@ -1485,7 +1930,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 	break;
       }
     }
-
+    
     str = ags_config_get_value(config,
 			       soundcard_group,
 			       "backend");
@@ -1502,17 +1947,65 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 			    8)){
       is_output = FALSE;
     }
-    
+
     /* change soundcard */
     if(str != NULL){
       if(!g_ascii_strncasecmp(str,
-			      "alsa",
-			      5)){
+			      "core-audio",
+			      11)){
+	soundcard = ags_sound_server_register_soundcard(AGS_SOUND_SERVER(core_audio_server),
+							is_output);
+
+	has_core_audio = TRUE;
+      }else if(!g_ascii_strncasecmp(str,
+				    "pulse",
+				    6)){
+	soundcard = ags_sound_server_register_soundcard(AGS_SOUND_SERVER(pulse_server),
+							is_output);
+
+	has_pulse = TRUE;
+      }else if(!g_ascii_strncasecmp(str,
+				    "jack",
+				    5)){
+	if(!is_output){
+	  AgsJackClient *input_client;
+
+	  g_object_get(jack_server,
+		       "input-jack-client", &input_client,
+		       NULL);
+
+	  if(input_client == NULL){
+	    input_client = ags_jack_client_new((GObject *) jack_server);
+	    g_object_set(jack_server,
+			 "input-jack-client", input_client,
+			 NULL);
+	    ags_jack_server_add_client(jack_server,
+				       (GObject *) input_client);
+    
+	    ags_jack_client_open((AgsJackClient *) input_client,
+				 "ags-input-client");	    
+	  }else{
+	    g_object_unref(input_client);
+	  }
+	}
+	
+	soundcard = ags_sound_server_register_soundcard(AGS_SOUND_SERVER(jack_server),
+							is_output);
+	
+	has_jack = TRUE;
+      }else if(!g_ascii_strncasecmp(str,
+				    "alsa",
+				    5)){
 	if(is_output){
 	  soundcard = (GObject *) ags_devout_new((GObject *) monothek_application_context);
 	  
 	  AGS_DEVOUT(soundcard)->flags &= (~AGS_DEVOUT_OSS);
 	  AGS_DEVOUT(soundcard)->flags |= AGS_DEVOUT_ALSA;
+	}else{
+	  soundcard = (GObject *) ags_devin_new((GObject *) monothek_application_context);
+	  
+	  AGS_DEVIN(soundcard)->flags &= (~AGS_DEVIN_OSS);
+	  AGS_DEVIN(soundcard)->flags |= AGS_DEVIN_ALSA;
 	}
       }else if(!g_ascii_strncasecmp(str,
 				    "wasapi",
@@ -1550,15 +2043,60 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 	    
 	    g_free(str);
 	  }
+	}else{
+	  soundcard = (GObject *) ags_wasapi_devin_new((GObject *) monothek_application_context);
+
+	  str = ags_config_get_value(config,
+				     soundcard_group,
+				     "wasapi-share-mode");
+
+	  if(str != NULL &&
+	     !g_ascii_strncasecmp(str,
+				  "exclusive",
+				  10)){
+	    ags_wasapi_devin_set_flags(AGS_WASAPI_DEVIN(soundcard),
+				       AGS_WASAPI_DEVIN_SHARE_MODE_EXCLUSIVE);
+	  }else{
+	    ags_wasapi_devin_unset_flags(AGS_WASAPI_DEVIN(soundcard),
+					 AGS_WASAPI_DEVIN_SHARE_MODE_EXCLUSIVE);
+	  }
+
+	  g_free(str);
+	  
+	  str = ags_config_get_value(config,
+				     soundcard_group,
+				     "wasapi-buffer-size");
+
+	  if(str != NULL){
+	    AGS_WASAPI_DEVIN(soundcard)->wasapi_buffer_size = g_ascii_strtoull(str,
+									       NULL,
+									       10);
+	    
+	    g_free(str);
+	  }
+	}
+      }else if(!g_ascii_strncasecmp(str,
+				    "oss",
+				    4)){
+	if(is_output){
+	  soundcard = (GObject *) ags_devout_new((GObject *) monothek_application_context);
+
+	  AGS_DEVOUT(soundcard)->flags &= (~AGS_DEVOUT_ALSA);
+	  AGS_DEVOUT(soundcard)->flags |= AGS_DEVOUT_OSS;
+	}else{
+	  soundcard = (GObject *) ags_devin_new((GObject *) monothek_application_context);
+
+	  AGS_DEVIN(soundcard)->flags &= (~AGS_DEVIN_ALSA);
+	  AGS_DEVIN(soundcard)->flags |= AGS_DEVIN_OSS;	  
 	}
       }else{
 	g_warning(i18n("unknown soundcard backend - %s"), str);
-	
+
 	g_free(soundcard_group);    
 	soundcard_group = g_strdup_printf("%s-%d",
 					  AGS_CONFIG_SOUNDCARD,
 					  i);
-	
+    
 	continue;
       }
     }else{
@@ -1568,14 +2106,8 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
       soundcard_group = g_strdup_printf("%s-%d",
 					AGS_CONFIG_SOUNDCARD,
 					i);
-      
+          
       continue;
-    }
-    
-    if(monothek_application_context->soundcard == NULL){
-      g_object_set(audio_loop,
-		   "default-output-soundcard", G_OBJECT(soundcard),
-		   NULL);
     }
     
     monothek_application_context->soundcard = g_list_append(monothek_application_context->soundcard,
@@ -1649,6 +2181,83 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 			      buffer_size,
 			      format);
 
+    use_cache = TRUE;
+    str = ags_config_get_value(config,
+			       soundcard_group,
+			       "use-cache");
+
+    if(str != NULL &&
+       !g_strncasecmp(str,
+		      "false",
+		      5)){
+      use_cache = FALSE;
+    }
+
+    cache_buffer_size = 4096;
+    str = ags_config_get_value(config,
+			       soundcard_group,
+			       "cache-buffer-size");
+
+    if(str != NULL){
+      cache_buffer_size = g_ascii_strtoull(str,
+					   NULL,
+					   10);
+    }
+
+    if(AGS_IS_PULSE_DEVOUT(soundcard)){
+      GList *start_port, *port;
+
+      g_object_get(soundcard,
+		   "pulse-port", &start_port,
+		   NULL);
+
+      port = start_port;
+
+      while(port != NULL){
+	ags_pulse_port_set_samplerate(port->data,
+				      samplerate);
+	ags_pulse_port_set_pcm_channels(port->data,
+					pcm_channels);
+	ags_pulse_port_set_buffer_size(port->data,
+				       buffer_size);
+	ags_pulse_port_set_format(port->data,
+				  format);
+	ags_pulse_port_set_cache_buffer_size(port->data,
+					     buffer_size * ceil(cache_buffer_size / buffer_size));
+	
+	port = port->next;
+      }
+
+      g_list_free_full(start_port,
+		       g_object_unref);
+    }else if(AGS_IS_CORE_AUDIO_DEVOUT(soundcard)){
+      GList *start_port, *port;
+
+      g_object_get(soundcard,
+		   "core_audio-port", &start_port,
+		   NULL);
+
+      port = start_port;
+
+      while(port != NULL){
+	ags_core_audio_port_set_samplerate(port->data,
+					   samplerate);
+	ags_core_audio_port_set_pcm_channels(port->data,
+					     pcm_channels);
+	ags_core_audio_port_set_buffer_size(port->data,
+					    buffer_size);
+	ags_core_audio_port_set_format(port->data,
+				       format);
+	ags_core_audio_port_set_cache_buffer_size(port->data,
+						  buffer_size * ceil(cache_buffer_size / buffer_size));
+	
+	port = port->next;
+      }
+
+      g_list_free_full(start_port,
+		       g_object_unref);
+    }
+    
     g_free(soundcard_group);    
     soundcard_group = g_strdup_printf("%s-%d",
 				      AGS_CONFIG_SOUNDCARD,
@@ -1661,7 +2270,13 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 
   g_free(soundcard_group);
 
-
+  ags_sound_provider_set_default_soundcard(AGS_SOUND_PROVIDER(monothek_application_context),
+					   soundcard);
+  
+  /* AgsSequencer */
+  monothek_application_context->sequencer = NULL;
+  
+  /* MonothekRack */
   value = g_hash_table_lookup(session->value,
 			      "rack");
 
@@ -1672,63 +2287,241 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 	       NULL);
   monothek_rack_setup_tree(rack);
   
+  /* AgsServer */
+  monothek_application_context->server = NULL;
+  server = NULL;
+
+  server_group = g_strdup("server");
+  
+  for(i = 0; ; i++){
+    gchar *ip4, *ip6;
+
+    guint server_port;
+    gboolean auto_start;
+    gboolean any_address;
+    gboolean enable_ip4, enable_ip6;
+    
+    if(!g_key_file_has_group(config->key_file,
+			     server_group)){
+      if(i == 0){
+	g_free(server_group);    
+	server_group = g_strdup_printf("%s-%d",
+				       AGS_CONFIG_SERVER,
+				       i);
+    	
+	continue;
+      }else{
+	break;
+      }
+    }
+
+    server = ags_server_new();
+
+    monothek_application_context->server = g_list_append(monothek_application_context->server,
+							 server);
+    g_object_ref(server);
+
+    /* realm */
+    str = ags_config_get_value(config,
+			       server_group,
+			       "realm");
+    
+    if(str != NULL){
+      g_object_set(server,
+		   "realm", str,
+		   NULL);
+      
+      g_free(str);
+    }
+
+    /* any address */
+    any_address = FALSE;
+
+    str = ags_config_get_value(config,
+			       server_group,
+			       "any-address");
+    
+    if(str != NULL){
+      any_address = (!g_ascii_strncasecmp(str,
+					  "true",
+					  5)) ? TRUE: FALSE;
+      g_free(str);
+    }
+
+    if(any_address){
+      ags_server_set_flags(server,
+			   (AGS_SERVER_ANY_ADDRESS));
+    }
+
+    /* enable ip4 and ip6 */
+    enable_ip4 = FALSE;
+    enable_ip6 = FALSE;
+
+    str = ags_config_get_value(config,
+			       server_group,
+			       "enable-ip4");
+    
+    if(str != NULL){
+      enable_ip4 = (!g_ascii_strncasecmp(str,
+					 "true",
+					 5)) ? TRUE: FALSE;
+      g_free(str);
+    }
+
+    str = ags_config_get_value(config,
+			       server_group,
+			       "enable-ip6");
+
+    if(str != NULL){
+      enable_ip6 = (!g_ascii_strncasecmp(str,
+					 "true",
+					 5)) ? TRUE: FALSE;
+      g_free(str);
+    }
+
+    if(enable_ip4){
+      ags_server_set_flags(server,
+			   (AGS_SERVER_INET4));
+    }
+
+    if(enable_ip6){
+      ags_server_set_flags(server,
+			   (AGS_SERVER_INET6));
+    }
+
+    /* ip4 and ip6 address */
+    str = ags_config_get_value(config,
+			       server_group,
+			       "ip4-address");
+
+    if(str != NULL){
+      g_object_set(server,
+		   "ip4", str,
+		   NULL);
+      
+      g_free(str);
+    }
+
+    str = ags_config_get_value(config,
+			       server_group,
+			       "ip6-address");
+
+    if(str != NULL){
+      g_object_set(server,
+		   "ip6", str,
+		   NULL);
+      
+      g_free(str);
+    }
+
+    /* server port */
+    str = ags_config_get_value(config,
+			       server_group,
+			       "server-port");
+
+    if(str != NULL){
+      server_port = (guint) g_ascii_strtoull(str,
+					     NULL,
+					     10);
+
+      g_object_set(server,
+		   "server-port", server_port,
+		   NULL);
+    }
+    
+    /* auto-start */
+    auto_start = FALSE;
+    
+    str = ags_config_get_value(config,
+			       server_group,
+			       "auto-start");
+
+    if(str != NULL){
+      auto_start = (!g_ascii_strncasecmp(str,
+					 "true",
+					 5)) ? TRUE: FALSE;
+      g_free(str);
+    }
+
+    if(auto_start){
+      ags_server_set_flags(server, AGS_SERVER_AUTO_START);
+    }
+
+    g_free(server_group);    
+    server_group = g_strdup_printf("%s-%d",
+				   AGS_CONFIG_SERVER,
+				   i);
+  }
+
+  if(server == NULL){
+    server = ags_server_new();
+    ags_server_set_flags(server,
+			 (AGS_SERVER_INET4));
+
+    monothek_application_context->server = g_list_append(monothek_application_context->server,
+							 server);
+    g_object_ref(server);
+  }
+
   /* AgsSoundcardThread and AgsExportThread */
   monothek_application_context->default_soundcard_thread = NULL;
   list = monothek_application_context->soundcard;
     
   while(list != NULL){
-    AgsNotifySoundcard *notify_soundcard;
-
     guint soundcard_capability;
 
     soundcard_capability = ags_soundcard_get_capability(AGS_SOUNDCARD(list->data));
     
     soundcard_thread = (AgsThread *) ags_soundcard_thread_new(list->data,
 							      soundcard_capability);
-    ags_thread_add_child_extended(AGS_THREAD(audio_loop),
-				  (AgsThread *) soundcard_thread,
+    ags_thread_add_child_extended(main_loop,
+				  soundcard_thread,
 				  TRUE, TRUE);
 
-    /* notify soundcard and export thread */
+    /* export thread */
     export_thread = NULL;
     
-    //    if(soundcard_capability == AGS_SOUNDCARD_CAPABILITY_PLAYBACK){
-    notify_soundcard = ags_notify_soundcard_new(soundcard_thread);
-    AGS_TASK(notify_soundcard)->task_thread = application_context->task_thread;
-    
-    if(AGS_IS_DEVOUT(list->data)){
-      AGS_DEVOUT(list->data)->notify_soundcard = (GObject *) notify_soundcard;
-    }else if(AGS_IS_WASAPI_DEVOUT(list->data)){
-      AGS_WASAPI_DEVOUT(list->data)->notify_soundcard = (GObject *) notify_soundcard;
-    }
-
-    ags_task_thread_append_cyclic_task(application_context->task_thread,
-				       notify_soundcard);
-
     /* export thread */
     if(AGS_IS_DEVOUT(list->data) ||
-       AGS_IS_WASAPI_DEVOUT(list->data)){
-      export_thread = (AgsThread *) monothek_export_thread_new(list->data,
-							       NULL);
-      ags_thread_add_child_extended(AGS_THREAD(audio_loop),
+       AGS_IS_WASAPI_DEVOUT(list->data) ||
+       AGS_IS_JACK_DEVOUT(list->data) ||
+       AGS_IS_PULSE_DEVOUT(list->data) ||
+       AGS_IS_CORE_AUDIO_DEVOUT(list->data)){
+      export_thread = (AgsThread *) ags_export_thread_new(list->data,
+							  NULL);
+      ags_thread_add_child_extended(main_loop,
 				    (AgsThread *) export_thread,
 				    TRUE, TRUE);
     }    
 
     /* default soundcard thread */
     if(monothek_application_context->default_soundcard_thread == NULL){
-      monothek_application_context->default_soundcard_thread = soundcard_thread;
-      g_object_ref(soundcard_thread);
+      ags_sound_provider_set_default_soundcard_thread(AGS_SOUND_PROVIDER(monothek_application_context),
+						      (GObject *) soundcard_thread);
     }
 
     /* default export thread */
-    if(export_thread != NULL &&
-       monothek_application_context->default_export_thread == NULL){
-      monothek_application_context->default_export_thread = export_thread;
-      g_object_ref(export_thread);
+    if(export_thread != NULL){
+      if(monothek_application_context->default_export_thread == NULL){
+	monothek_application_context->default_export_thread = export_thread;
+      }else{
+	g_object_unref(export_thread);
+      }
     }
 
     /* iterate */
+    list = list->next;      
+  }
+  
+  /* AgsSequencerThread */
+  list = monothek_application_context->sequencer;
+    
+  while(list != NULL){
+    sequencer_thread = (AgsThread *) ags_sequencer_thread_new(list->data);
+    ags_thread_add_child_extended(main_loop,
+				  (AgsThread *) sequencer_thread,
+				  TRUE, TRUE);
+
     list = list->next;      
   }
 
@@ -1880,7 +2673,7 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
     }
 
     if(auto_start){
-      ags_osc_server_start(osc_server);
+      ags_osc_server_set_flags(osc_server, AGS_OSC_SERVER_AUTO_START);
     }
 
     g_free(osc_server_group);    
@@ -1901,22 +2694,36 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 							     osc_server);
     g_object_ref(osc_server);
   }
-
+  
   /* AgsWorkerThread */
   monothek_application_context->worker = NULL;
 
   /* AgsDestroyWorker */
-  destroy_worker = ags_destroy_worker_new();
-  g_object_ref(destroy_worker);
-  ags_thread_add_child_extended(AGS_THREAD(audio_loop),
-				destroy_worker,
+  destroy_worker = ags_destroy_worker_get_instance();
+  ags_thread_add_child_extended(main_loop,
+				(AgsThread *) destroy_worker,
 				TRUE, TRUE);
   monothek_application_context->worker = g_list_prepend(monothek_application_context->worker,
 							destroy_worker);
-  ags_thread_start(destroy_worker);
+  ags_thread_start((AgsThread *) destroy_worker);
   
   /* AgsThreadPool */
-  monothek_application_context->thread_pool = AGS_TASK_THREAD(application_context->task_thread)->thread_pool;
+  monothek_application_context->thread_pool = NULL;
+
+  /* launch */
+  if(has_core_audio){
+    ags_core_audio_server_connect_client(core_audio_server);
+  }
+
+  if(has_pulse){
+    ags_pulse_server_connect_client(pulse_server);
+
+    ags_pulse_server_start_poll(pulse_server);
+  }
+
+  if(has_jack){
+    ags_jack_server_connect_client(jack_server);
+  }
   
   /* audio file manager */
   audio_file_manager = monothek_audio_file_manager_get_instance();
@@ -1971,6 +2778,9 @@ monothek_application_context_setup(AgsApplicationContext *application_context)
 					    slist);
   g_slist_free_full(slist,
 		    g_free);
+
+  /* unref */
+  g_object_unref(main_loop);
 }
 
 void
@@ -2057,6 +2867,147 @@ void
 monothek_application_context_quit(AgsApplicationContext *application_context)
 {  
   gtk_main_quit();
+}
+
+void*
+monothek_application_context_server_main_loop_thread(GMainLoop *main_loop)
+{
+  AgsApplicationContext *application_context;
+
+  GList *start_list, *list;
+
+  g_main_context_push_thread_default(g_main_loop_get_context(main_loop));
+  
+  application_context = ags_application_context_get_instance();
+  
+  while(ags_ui_provider_get_show_animation(AGS_UI_PROVIDER(application_context))){
+    g_usleep(G_USEC_PER_SEC / 30);
+  }
+
+  list = 
+    start_list = ags_service_provider_get_server(AGS_SERVICE_PROVIDER(application_context));
+
+  while(list != NULL){
+    if(ags_server_test_flags(list->data, AGS_SERVER_AUTO_START)){
+      ags_server_start(AGS_SERVER(list->data));
+    }
+    
+    list = list->next;
+  }
+
+  g_list_free_full(start_list,
+		   g_object_unref);
+  
+  g_main_loop_run(main_loop);
+
+  g_thread_exit(NULL);
+
+  return(NULL);
+}
+
+void*
+monothek_application_context_audio_main_loop_thread(GMainLoop *main_loop)
+{
+  AgsApplicationContext *application_context;
+
+  GList *start_list, *list;
+
+#ifdef AGS_WITH_RT
+  AgsPriority *priority;
+
+  struct sched_param param;
+
+  gchar *str;
+#endif
+
+  g_main_context_push_thread_default(g_main_loop_get_context(main_loop));
+  
+  application_context = ags_application_context_get_instance();
+
+  while(ags_ui_provider_get_show_animation(AGS_UI_PROVIDER(application_context))){
+    g_usleep(G_USEC_PER_SEC / 30);
+  }
+
+  /* real-time setup */
+#ifdef AGS_WITH_RT
+  priority = ags_priority_get_instance();  
+
+  param.sched_priority = 95;
+
+  str = ags_priority_get_value(priority,
+			       AGS_PRIORITY_RT_THREAD,
+			       AGS_PRIORITY_KEY_AUDIO_MAIN_LOOP);
+
+  if(str != NULL){
+    param.sched_priority = (int) g_ascii_strtoull(str,
+						  NULL,
+						  10);
+  }
+
+  if(str == NULL ||
+     ((!g_ascii_strncasecmp(str,
+			    "0",
+			    2)) != TRUE)){
+    if(sched_setscheduler(0, SCHED_FIFO, &param) == -1) {
+      perror("sched_setscheduler failed");
+    }
+  }
+    
+  g_free(str);
+#endif
+  
+  list = 
+    start_list = ags_sound_provider_get_osc_server(AGS_SERVICE_PROVIDER(application_context));
+
+  while(list != NULL){
+    if(ags_osc_server_test_flags(list->data, AGS_OSC_SERVER_AUTO_START)){
+      ags_osc_server_start(AGS_OSC_SERVER(list->data));
+    }
+    
+    list = list->next;
+  }
+
+  g_list_free_full(start_list,
+		   g_object_unref);
+
+  g_main_loop_run(main_loop);
+
+  g_thread_exit(NULL);
+
+  return(NULL);
+}
+
+gboolean
+monothek_application_context_message_monitor_timeout(MonothekApplicationContext *monothek_application_context)
+{
+  ags_ui_provider_check_message(AGS_UI_PROVIDER(monothek_application_context));
+  ags_ui_provider_clean_message(AGS_UI_PROVIDER(monothek_application_context));
+
+  return(TRUE);
+}
+
+gboolean
+monothek_application_context_task_timeout(MonothekApplicationContext *monothek_application_context)
+{
+  AgsTaskLauncher *task_launcher;
+
+  if(monothek_application_context->task == NULL){
+    return(TRUE);
+  }
+  
+  task_launcher = ags_concurrency_provider_get_task_launcher(AGS_CONCURRENCY_PROVIDER(monothek_application_context));
+
+  ags_task_launcher_add_task_all(task_launcher,
+				 g_list_reverse(monothek_application_context->task));
+
+  g_list_free_full(monothek_application_context->task,
+		   g_object_unref);
+  
+  monothek_application_context->task = NULL;
+  
+  g_object_unref(task_launcher);
+
+  return(TRUE);
 }
 
 MonothekApplicationContext*

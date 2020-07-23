@@ -8,11 +8,7 @@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = po
 
-if WITH_GNULIB
-SUBDIRS += lib
-endif
-
-AM_DISTCHECK_CONFIGURE_FLAGS = --enable-threads=posix --without-included-regex
+AM_DISTCHECK_CONFIGURE_FLAGS = 
 
 ACLOCAL_AMFLAGS = -I m4
 AM_CPPFLAGS = -std=gnu99 -include errno.h

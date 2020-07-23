@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -32,6 +32,13 @@
 
 #define _GNU_SOURCE
 #include <locale.h>
+
+#include <unistd.h>
+#include <sys/types.h>
+
+#if !defined(AGS_W32API)
+#include <pwd.h>
+#endif
 
 #include <monothek/session/monothek_session_manager.h>
 #include <monothek/session/monothek_session.h>
@@ -107,7 +114,7 @@ main(int argc, char **argv)
   gchar *path;
 #endif
 
-#ifndef AGS_W32API
+#if !defined(AGS_W32API)
   struct passwd *pw;
 
   uid_t uid;
@@ -251,6 +258,9 @@ main(int argc, char **argv)
 
     g_free(path);
 #else
+    uid = getuid();
+    pw = getpwuid(uid);
+
     wdir = g_strdup_printf("%s/%s",
 			   pw->pw_dir,
 			   AGS_DEFAULT_DIRECTORY);
