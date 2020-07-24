@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -679,10 +679,10 @@ monothek_diskjokey_sequencer_controller_init(MonothekDiskjokeySequencerControlle
 							  "width", 620,
 							  "height", 60,
 							  NULL);
-  
-  action_slider->adjustment->upper = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER;
-  action_slider->adjustment->lower = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER;
-  action_slider->adjustment->value = MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT;
+
+  gtk_adjustment_set_upper(action_slider->adjustment, MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_UPPER);
+  gtk_adjustment_set_lower(action_slider->adjustment, MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_LOWER);
+  gtk_adjustment_set_value(action_slider->adjustment, MONOTHEK_DISKJOKEY_SEQUENCER_MODEL_BPM_DEFAULT);
   
   monothek_controller_add_action_slider(diskjokey_sequencer_controller,
 					action_slider);
@@ -1976,20 +1976,20 @@ monothek_diskjokey_sequencer_controller_real_change_bpm(MonothekDiskjokeySequenc
 {
   AgsApplyBpm *apply_bpm;
 
-  AgsTaskThread *task_thread;
+  AgsTaskLauncher *task_launcher;
 
   AgsApplicationContext *application_context;
 
   application_context = ags_application_context_get_instance();
 
-  task_thread = ags_concurrency_provider_get_task_thread(AGS_CONCURRENCY_PROVIDER(application_context));
+  task_launcher = ags_concurrency_provider_get_task_launcher(AGS_CONCURRENCY_PROVIDER(application_context));
 
   /* get task thread */
   apply_bpm = ags_apply_bpm_new(application_context,
 				bpm);
 
-  ags_task_thread_append_task(task_thread,
-			      apply_bpm);
+  ags_task_launcher_add_task(task_launcher,
+			     apply_bpm);
 }
 
 /**
@@ -2718,7 +2718,7 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
   AgsAudio *sequencer;
   AgsChannel *channel;
 
-  AgsTaskThread *task_thread;
+  AgsTaskLauncher *task_launcher;
   
   AgsApplicationContext *application_context;  
   MonothekSessionManager *session_manager;
@@ -2728,7 +2728,7 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 
   application_context = ags_application_context_get_instance();
 
-  task_thread = ags_concurrency_provider_get_task_thread(AGS_CONCURRENCY_PROVIDER(application_context));
+  task_launcher = ags_concurrency_provider_get_task_launcher(AGS_CONCURRENCY_PROVIDER(application_context));
 
   /* find session */
   session_manager = monothek_session_manager_get_instance();
@@ -2803,8 +2803,8 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 
     task = g_list_reverse(task);
     
-    ags_task_thread_append_tasks(task_thread,
-				 task);
+    ags_task_launcher_add_task_all(task_launcher,
+				   task);
 
     g_object_unref(output_soundcard);
   }else{
@@ -2822,8 +2822,8 @@ monothek_diskjokey_sequencer_controller_real_run(MonothekDiskjokeySequencerContr
 
     task = g_list_reverse(task);
     
-    ags_task_thread_append_tasks(task_thread,
-				 task);
+    ags_task_launcher_add_task_all(task_launcher,
+				   task);
   }
 }
 
@@ -3067,7 +3067,7 @@ monothek_diskjokey_sequencer_controller_progress_increase_timeout(GObject *gobje
       diskjokey_sequencer_controller->timer->tv_nsec = time_now.tv_nsec - diskjokey_sequencer_controller->start_time->tv_nsec;
     }else{
       diskjokey_sequencer_controller->timer->tv_sec = time_now.tv_sec - diskjokey_sequencer_controller->start_time->tv_sec - 1;
-      diskjokey_sequencer_controller->timer->tv_nsec = NSEC_PER_SEC - diskjokey_sequencer_controller->start_time->tv_nsec + time_now.tv_sec;
+      diskjokey_sequencer_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - diskjokey_sequencer_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */

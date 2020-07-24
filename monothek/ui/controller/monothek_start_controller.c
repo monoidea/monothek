@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -830,7 +830,7 @@ monothek_start_controller_progress_increase_timeout(GObject *gobject)
       start_controller->timer->tv_nsec = time_now.tv_nsec - start_controller->start_time->tv_nsec;
     }else{
       start_controller->timer->tv_sec = time_now.tv_sec - start_controller->start_time->tv_sec - 1;
-      start_controller->timer->tv_nsec = NSEC_PER_SEC - start_controller->start_time->tv_nsec + time_now.tv_sec;
+      start_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - start_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */

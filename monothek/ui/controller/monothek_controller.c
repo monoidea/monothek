@@ -563,9 +563,9 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
       event_y = ((GdkEventButton *) event)->y;
       
       if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
-	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / width * (event_x - x0);
+	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) / width * (event_x - x0);
       }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
-	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / height * (event_y - y0);
+	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) * (event_y - y0);
       }
       
       monothek_action_slider_change_value(list->data,
@@ -663,9 +663,9 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
       event_y = ((GdkEventButton *) event)->y;
       
       if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
-	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / width * (event_x - x0);
+	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) / width * (event_x - x0);
       }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
-	new_value = adjustment->lower + (adjustment->upper - adjustment->lower) / height * (event_y - y0);
+	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) / height * (event_y - y0);
       }
       
       monothek_action_slider_change_value(list->data,

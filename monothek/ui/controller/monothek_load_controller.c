@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -419,7 +419,7 @@ monothek_load_controller_message_monitor_timeout(MonothekLoadController *load_co
     }
     
     g_list_free_full(message_start,
-		     (GDestroyNotify) ags_message_envelope_free);
+		     (GDestroyNotify) g_object_unref);
 
     return(TRUE);
   }else{
@@ -478,11 +478,11 @@ monothek_load_controller_progress_increase_timeout(GObject *gobject)
       load_controller->timer->tv_nsec = time_now.tv_nsec - load_controller->start_time->tv_nsec;
     }else{
       load_controller->timer->tv_sec = time_now.tv_sec - load_controller->start_time->tv_sec - 1;
-      load_controller->timer->tv_nsec = NSEC_PER_SEC - load_controller->start_time->tv_nsec + time_now.tv_sec;
+      load_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - load_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */
-    value = load_controller->timer->tv_sec + (load_controller->timer->tv_nsec / NSEC_PER_SEC);
+    value = load_controller->timer->tv_sec + (load_controller->timer->tv_nsec / AGS_NSEC_PER_SEC);
     
     monothek_load_controller_progress(load_controller,
 				      value);

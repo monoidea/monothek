@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -488,7 +488,7 @@ monothek_jukebox_qrcode_controller_progress_increase_timeout(GObject *gobject)
       jukebox_qrcode_controller->timer->tv_nsec = time_now.tv_nsec - jukebox_qrcode_controller->start_time->tv_nsec;
     }else{
       jukebox_qrcode_controller->timer->tv_sec = time_now.tv_sec - jukebox_qrcode_controller->start_time->tv_sec - 1;
-      jukebox_qrcode_controller->timer->tv_nsec = NSEC_PER_SEC - jukebox_qrcode_controller->start_time->tv_nsec + time_now.tv_sec;
+      jukebox_qrcode_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - jukebox_qrcode_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */

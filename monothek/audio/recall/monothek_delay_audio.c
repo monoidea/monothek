@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -171,16 +171,12 @@ monothek_delay_audio_set_property(GObject *gobject,
 {
   MonothekDelayAudio *delay_audio;
 
-  pthread_mutex_t *recall_mutex;
+  GRecMutex *recall_mutex;
 
   delay_audio = MONOTHEK_DELAY_AUDIO(gobject);
 
   /* get recall mutex */
-  pthread_mutex_lock(ags_recall_get_class_mutex());
-  
-  recall_mutex = AGS_RECALL(gobject)->obj_mutex;
-
-  pthread_mutex_unlock(ags_recall_get_class_mutex());
+  recall_mutex = AGS_RECALL_GET_OBJ_MUTEX(gobject);
 
   switch(prop_id){
   case PROP_SEQUENCER_PAUSED:
@@ -189,10 +185,10 @@ monothek_delay_audio_set_property(GObject *gobject,
 
       port = (AgsPort *) g_value_get_object(value);
 
-      pthread_mutex_lock(recall_mutex);
+      g_rec_mutex_lock(recall_mutex);
 
       if(port == delay_audio->sequencer_paused){
-	pthread_mutex_unlock(recall_mutex);
+	g_rec_mutex_unlock(recall_mutex);
 
 	return;
       }
@@ -207,7 +203,7 @@ monothek_delay_audio_set_property(GObject *gobject,
 
       delay_audio->sequencer_paused = port;
 
-      pthread_mutex_unlock(recall_mutex);
+      g_rec_mutex_unlock(recall_mutex);
     }
     break;
   default:
@@ -224,25 +220,21 @@ monothek_delay_audio_get_property(GObject *gobject,
 {
   MonothekDelayAudio *delay_audio;
 
-  pthread_mutex_t *recall_mutex;
+  GRecMutex *recall_mutex;
 
   delay_audio = MONOTHEK_DELAY_AUDIO(gobject);
 
   /* get recall mutex */
-  pthread_mutex_lock(ags_recall_get_class_mutex());
-  
-  recall_mutex = AGS_RECALL(gobject)->obj_mutex;
-
-  pthread_mutex_unlock(ags_recall_get_class_mutex());
+  recall_mutex = AGS_RECALL_GET_OBJ_MUTEX(gobject);
 
   switch(prop_id){
   case PROP_SEQUENCER_PAUSED:
     {
-      pthread_mutex_lock(recall_mutex);
+      g_rec_mutex_lock(recall_mutex);
 
       g_value_set_object(value, delay_audio->sequencer_paused);
 
-      pthread_mutex_unlock(recall_mutex);
+      g_rec_mutex_unlock(recall_mutex);
     }
     break;
   default:

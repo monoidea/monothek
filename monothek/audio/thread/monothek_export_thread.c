@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -150,16 +150,12 @@ monothek_export_thread_set_property(GObject *gobject,
 {
   MonothekExportThread *export_thread;
 
-  pthread_mutex_t *thread_mutex;
+  GRecMutex *thread_mutex;
 
   export_thread = MONOTHEK_EXPORT_THREAD(gobject);
 
   /* get thread mutex */
-  pthread_mutex_lock(ags_thread_get_class_mutex());
-  
-  thread_mutex = AGS_THREAD(gobject)->obj_mutex;
-  
-  pthread_mutex_unlock(ags_thread_get_class_mutex());
+  thread_mutex = AGS_THREAD_GET_OBJ_MUTEX(gobject);
 
   switch(prop_id){
   case PROP_START_TIME:
@@ -168,12 +164,12 @@ monothek_export_thread_set_property(GObject *gobject,
     
     start_time = g_value_get_pointer(value);
 
-    pthread_mutex_lock(thread_mutex);
+    g_rec_mutex_lock(thread_mutex);
     
     export_thread->start_time->tv_sec = start_time->tv_sec;
     export_thread->start_time->tv_nsec = start_time->tv_nsec;
 
-    pthread_mutex_unlock(thread_mutex);
+    g_rec_mutex_unlock(thread_mutex);
   }
   break;
   case PROP_DURATION:
@@ -182,12 +178,12 @@ monothek_export_thread_set_property(GObject *gobject,
     
     duration = g_value_get_pointer(value);
 
-    pthread_mutex_lock(thread_mutex);
+    g_rec_mutex_lock(thread_mutex);
 
     export_thread->duration->tv_sec = duration->tv_sec;
     export_thread->duration->tv_nsec = duration->tv_nsec;
 
-    pthread_mutex_unlock(thread_mutex);
+    g_rec_mutex_unlock(thread_mutex);
   }
   break;
   default:
@@ -204,34 +200,30 @@ monothek_export_thread_get_property(GObject *gobject,
 {
   MonothekExportThread *export_thread;
 
-  pthread_mutex_t *thread_mutex;
+  GRecMutex *thread_mutex;
 
   export_thread = MONOTHEK_EXPORT_THREAD(gobject);
 
   /* get thread mutex */
-  pthread_mutex_lock(ags_thread_get_class_mutex());
-  
-  thread_mutex = AGS_THREAD(gobject)->obj_mutex;
-  
-  pthread_mutex_unlock(ags_thread_get_class_mutex());
+  thread_mutex = AGS_THREAD_GET_OBJ_MUTEX(gobject);
 
   switch(prop_id){
   case PROP_START_TIME:
   {
-    pthread_mutex_lock(thread_mutex);
+    g_rec_mutex_lock(thread_mutex);
 
     g_value_set_pointer(value, export_thread->start_time);
 
-    pthread_mutex_unlock(thread_mutex);
+    g_rec_mutex_unlock(thread_mutex);
   }
   break;
   case PROP_DURATION:
   {
-    pthread_mutex_lock(thread_mutex);
+    g_rec_mutex_lock(thread_mutex);
 
     g_value_set_pointer(value, export_thread->duration);
 
-    pthread_mutex_unlock(thread_mutex);
+    g_rec_mutex_unlock(thread_mutex);
   }
   break;
   default:
@@ -277,9 +269,6 @@ monothek_export_thread_run(AgsThread *thread)
   guint buffer_size;
   guint format;
 
-  pthread_mutex_t *application_mutex;
-  pthread_mutex_t *mutex;
-  
   export_thread = MONOTHEK_EXPORT_THREAD(thread);
 
   if(AGS_EXPORT_THREAD(export_thread)->audio_file == NULL){
@@ -291,9 +280,9 @@ monothek_export_thread_run(AgsThread *thread)
   sec = 0;
   nsec = export_thread->start_time->tv_nsec + export_thread->duration->tv_nsec;
 
-  if(nsec > NSEC_PER_SEC){
+  if(nsec > AGS_NSEC_PER_SEC){
     sec = 1;
-    nsec -= NSEC_PER_SEC;
+    nsec -= AGS_NSEC_PER_SEC;
   }
   
   if(export_thread->start_time->tv_sec + export_thread->duration->tv_sec < current_time.tv_sec ||

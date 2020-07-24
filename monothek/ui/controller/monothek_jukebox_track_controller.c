@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -913,7 +913,7 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 
   MonothekRack *rack;
 
-  AgsTaskThread *task_thread;
+  AgsTaskLauncher *task_launcher;
   
   AgsApplicationContext *application_context;  
   MonothekSessionManager *session_manager;
@@ -924,7 +924,7 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 
   application_context = ags_application_context_get_instance();
 
-  task_thread = ags_concurrency_provider_get_task_thread(AGS_CONCURRENCY_PROVIDER(application_context));
+  task_launcher = ags_concurrency_provider_get_task_launcher(AGS_CONCURRENCY_PROVIDER(application_context));
   
   /* find session */
   session_manager = monothek_session_manager_get_instance();
@@ -1065,8 +1065,8 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 
     task = g_list_reverse(task);
     
-    ags_task_thread_append_tasks(task_thread,
-				 task);
+    ags_task_launcher_add_task_all(task_launcher,
+				   task);
   }else{
     AgsCancelAudio *cancel_audio;
 
@@ -1082,8 +1082,8 @@ monothek_jukebox_track_controller_real_run(MonothekJukeboxTrackController *jukeb
 
     task = g_list_reverse(task);
     
-    ags_task_thread_append_tasks(task_thread,
-				 task);
+    ags_task_launcher_add_task_all(task_launcher,
+				   task);
   }
 }
 
@@ -1246,7 +1246,7 @@ monothek_jukebox_track_controller_progress_increase_timeout(GObject *gobject)
       jukebox_track_controller->timer->tv_nsec = time_now.tv_nsec - jukebox_track_controller->start_time->tv_nsec;
     }else{
       jukebox_track_controller->timer->tv_sec = time_now.tv_sec - jukebox_track_controller->start_time->tv_sec - 1;
-      jukebox_track_controller->timer->tv_nsec = NSEC_PER_SEC - jukebox_track_controller->start_time->tv_nsec + time_now.tv_sec;
+      jukebox_track_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - jukebox_track_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */

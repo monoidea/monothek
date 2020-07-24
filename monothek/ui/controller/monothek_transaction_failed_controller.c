@@ -351,7 +351,7 @@ monothek_transaction_failed_controller_progress_increase_timeout(GObject *gobjec
       transaction_failed_controller->timer->tv_nsec = time_now.tv_nsec - transaction_failed_controller->start_time->tv_nsec;
     }else{
       transaction_failed_controller->timer->tv_sec = time_now.tv_sec - transaction_failed_controller->start_time->tv_sec - 1;
-      transaction_failed_controller->timer->tv_nsec = NSEC_PER_SEC - transaction_failed_controller->start_time->tv_nsec + time_now.tv_sec;
+      transaction_failed_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - transaction_failed_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */

@@ -471,7 +471,7 @@ monothek_banner_controller_progress_increase_timeout(GObject *gobject)
       banner_controller->timer->tv_nsec = time_now.tv_nsec - banner_controller->start_time->tv_nsec;
     }else{
       banner_controller->timer->tv_sec = time_now.tv_sec - banner_controller->start_time->tv_sec - 1;
-      banner_controller->timer->tv_nsec = NSEC_PER_SEC - banner_controller->start_time->tv_nsec + time_now.tv_sec;
+      banner_controller->timer->tv_nsec = AGS_NSEC_PER_SEC - banner_controller->start_time->tv_nsec + time_now.tv_sec;
     }
 
     /* calculate progress */
