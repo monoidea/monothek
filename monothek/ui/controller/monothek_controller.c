@@ -554,6 +554,7 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
       GtkAdjustment *adjustment;
 
       gdouble event_x, event_y;
+      gdouble upper, lower;
       gdouble new_value;
 
       adjustment = MONOTHEK_ACTION_SLIDER(list->data)->adjustment;
@@ -561,11 +562,14 @@ monothek_controller_motion_notify_event_callback(GtkWidget *widget,
 
       event_x = ((GdkEventButton *) event)->x;
       event_y = ((GdkEventButton *) event)->y;
+
+      upper = gtk_adjustment_get_upper(adjustment);
+      lower = gtk_adjustment_get_lower(adjustment);
       
       if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
-	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) / width * (event_x - x0);
+	new_value = lower + (upper - lower) / width * (event_x - x0);
       }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
-	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) * (event_y - y0);
+	new_value = lower + (upper - lower) * (event_y - y0);
       }
       
       monothek_action_slider_change_value(list->data,
@@ -654,6 +658,7 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
       GtkAdjustment *adjustment;
 
       gdouble event_x, event_y;
+      gdouble upper, lower;
       gdouble new_value;
 
       adjustment = MONOTHEK_ACTION_SLIDER(list->data)->adjustment;
@@ -661,11 +666,14 @@ monothek_controller_button_press_event_callback(GtkWidget *widget,
 
       event_x = ((GdkEventButton *) event)->x;
       event_y = ((GdkEventButton *) event)->y;
+
+      upper = gtk_adjustment_get_upper(adjustment);
+      lower = gtk_adjustment_get_lower(adjustment);
       
       if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_HORIZONTAL){
-	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) / width * (event_x - x0);
+	new_value = lower + (upper - lower) / width * (event_x - x0);
       }else if(MONOTHEK_ACTION_SLIDER(list->data)->orientation == GTK_ORIENTATION_VERTICAL){
-	new_value = gtk_adjustment_get_lower(adjustment) + (gtk_adjustment_get_upper(adjustment) - gtk_adjustment_get_lower(adjustment)) / height * (event_y - y0);
+	new_value = lower + (upper - lower) / height * (event_y - y0);
       }
       
       monothek_action_slider_change_value(list->data,

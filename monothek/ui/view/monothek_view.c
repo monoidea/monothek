@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -70,7 +70,8 @@ gboolean monothek_view_key_release(GtkWidget *widget,
 gboolean monothek_view_motion_notify(GtkWidget *widget,
 				     GdkEventMotion *event);
 
-void monothek_view_real_draw(MonothekView *view);
+void monothek_view_draw(GtkWidget *view,
+			cairo_t *cr);
 
 /**
  * SECTION:monothek_view
@@ -83,7 +84,6 @@ void monothek_view_real_draw(MonothekView *view);
  */
 
 enum{
-  DRAW,
   RESET,
   CLEAR,
   LAST_SIGNAL,
@@ -242,30 +242,13 @@ monothek_view_class_init(MonothekViewClass *view)
   widget->key_release_event = monothek_view_key_release;
   widget->motion_notify_event = monothek_view_motion_notify;
   
-  /* MonothekViewClass */
-  view->draw = monothek_view_real_draw;
+  widget->draw = monothek_view_draw;
 
+  /* MonothekViewClass */
   view->reset = NULL;
   view->clear = NULL;
   
   /* signals */
-  /**
-   * MonothekView::draw:
-   * @view: the #MonothekView
-   *
-   * The ::draw signal notifies about key pressed.
-   *
-   * Since: 1.0.0
-   */
-  view_signals[DRAW] =
-    g_signal_new("draw",
-		 G_TYPE_FROM_CLASS(view),
-		 G_SIGNAL_RUN_LAST,
-		 G_STRUCT_OFFSET(MonothekViewClass, draw),
-		 NULL, NULL,
-		 g_cclosure_marshal_VOID__VOID,
-		 G_TYPE_NONE, 0);
-
   /**
    * MonothekView::reset:
    * @view: the #MonothekView
@@ -728,23 +711,17 @@ monothek_view_motion_notify(GtkWidget *widget,
   return(FALSE);
 }
 
-void
-monothek_view_real_draw(MonothekView *view)
+gboolean
+monothek_view_draw(GtkWidget *view,
+		   cairo_t *cr)
 {
-  cairo_t *cr;
-
   guint width, height;
   guint x_start, y_start;
 
   static const gdouble white_gc = 65535.0;
 
-  cr = gdk_cairo_create(GTK_WIDGET(view)->window);
+  //  cairo_surface_flush(cairo_get_target(cr));
   
-  if(cr == NULL){
-    return;
-  }
-
-  cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
 
   x_start = 0;
@@ -763,8 +740,9 @@ monothek_view_real_draw(MonothekView *view)
   cairo_pop_group_to_source(cr);
   cairo_paint(cr);
 
-  cairo_surface_mark_dirty(cairo_get_target(cr));
-  cairo_destroy(cr);
+  //  cairo_surface_mark_dirty(cairo_get_target(cr));
+
+  return(FALSE);
 }
 
 /**
@@ -828,25 +806,6 @@ monothek_view_unset_flags(MonothekView *view, guint flags)
   }
 
   view->flags &= (~flags);
-}
-
-/**
- * monothek_view_draw:
- * @view: the #MonothekView
- * 
- * Draw view.
- * 
- * Since: 1.0.0
- */
-void
-monothek_view_draw(MonothekView *view)
-{
-  g_return_if_fail(MONOTHEK_IS_VIEW(view));
-  
-  g_object_ref((GObject *) view);
-  g_signal_emit(G_OBJECT(view),
-		view_signals[DRAW], 0);
-  g_object_unref((GObject *) view);
 }
 
 /**

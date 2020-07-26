@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -44,7 +44,8 @@ void monothek_start_view_finalize(GObject *gobject);
 void monothek_start_view_connect(AgsConnectable *connectable);
 void monothek_start_view_disconnect(AgsConnectable *connectable);
 
-void monothek_start_view_draw(MonothekView *view);
+gboolean monothek_start_view_draw(GtkWidget *view,
+				  cairo_t *cr);
 
 void monothek_start_view_reset(MonothekView *view,
 			       gboolean reset_defaults, gboolean reset_current);
@@ -129,10 +130,13 @@ monothek_start_view_class_init(MonothekStartViewClass *start_view)
 
   /* properties */
 
+  /* GtkWidget */
+  widget = (GtkWidgetClass *) start_view;
+  
+  widget->draw = monothek_start_view_draw;
+
   /* MonothekView */
   view = (MonothekViewClass *) start_view;
-
-  view->draw = monothek_start_view_draw;
 
   view->reset = monothek_start_view_reset;
   view->clear = monothek_start_view_clear;
@@ -266,14 +270,15 @@ monothek_start_view_disconnect(AgsConnectable *connectable)
   //TODO:JK: implement me
 }
 
-void
-monothek_start_view_draw(MonothekView *view)
+gboolean
+monothek_start_view_draw(GtkWidget *view,
+			 cairo_t *cr)
 {
   MonothekStartView *start_view;
 
   MonothekStartModel *start_model;
-  
-  cairo_t *cr;
+
+  GtkAllocation allocation;
 
   guint width, height;
   guint x_start, y_start;
@@ -283,33 +288,30 @@ monothek_start_view_draw(MonothekView *view)
   start_view = MONOTHEK_START_VIEW(view);
   
   /* call parent */
-  MONOTHEK_VIEW_CLASS(monothek_start_view_parent_class)->draw(view);
-
-  /* create cr */
-  cr = gdk_cairo_create(GTK_WIDGET(view)->window);
-  
-  if(cr == NULL){
-    return;
-  }
+  GTK_WIDGET_CLASS(monothek_start_view_parent_class)->draw(view,
+							   cr);
 
   g_object_get(view,
 	       "model", &start_model,
 	       NULL);
+
+  gtk_widget_get_allocation(view,
+			    &allocation);
   
-  cairo_surface_flush(cairo_get_target(cr));
+  //  cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
 
   x_start = 0;
   y_start = 0;
 
-  width = GTK_WIDGET(view)->allocation.width;
-  height = GTK_WIDGET(view)->allocation.height;
+  width = allocation.width;
+  height = allocation.height;
 
   /* jukebox - draw box */
   cairo_set_source_rgb(cr,
-		       1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
-		       1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
-		       1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+		       1.0 / 255.0 * ((0xff0000 & MONOTHEK_VIEW(view)->jukebox_gc) >> 16),
+		       1.0 / 255.0 * ((0xff00 & MONOTHEK_VIEW(view)->jukebox_gc) >> 8),
+		       1.0 / 255.0 * ((0xff & MONOTHEK_VIEW(view)->jukebox_gc)));
   cairo_set_line_width(cr,
 		       start_view->outer_box_line_width);
   cairo_rectangle(cr,
@@ -328,7 +330,7 @@ monothek_start_view_draw(MonothekView *view)
     
     static const guint font_size = 100;
 
-    jukebox_font = g_strdup_printf("%s Bold", view->font);
+    jukebox_font = g_strdup_printf("%s Bold", MONOTHEK_VIEW(view)->font);
 
     /* jukebox - head */
     layout = pango_cairo_create_layout(cr);
@@ -425,9 +427,9 @@ monothek_start_view_draw(MonothekView *view)
       g_object_unref(layout);
 
       cairo_set_source_rgb(cr,
-			   1.0 / 255.0 * ((0xff0000 & view->jukebox_gc) >> 16),
-			   1.0 / 255.0 * ((0xff00 & view->jukebox_gc) >> 8),
-			   1.0 / 255.0 * ((0xff & view->jukebox_gc)));
+			   1.0 / 255.0 * ((0xff0000 & MONOTHEK_VIEW(view)->jukebox_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & MONOTHEK_VIEW(view)->jukebox_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & MONOTHEK_VIEW(view)->jukebox_gc)));
     }
     
     /* jukebox - description */
@@ -457,9 +459,9 @@ monothek_start_view_draw(MonothekView *view)
   
   /* diskjokey - draw box */
   cairo_set_source_rgb(cr,
-		       1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
-		       1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
-		       1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+		       1.0 / 255.0 * ((0xff0000 & MONOTHEK_VIEW(view)->diskjokey_gc) >> 16),
+		       1.0 / 255.0 * ((0xff00 & MONOTHEK_VIEW(view)->diskjokey_gc) >> 8),
+		       1.0 / 255.0 * ((0xff & MONOTHEK_VIEW(view)->diskjokey_gc)));
   cairo_set_line_width(cr,
 		       start_view->outer_box_line_width);
   cairo_rectangle(cr,
@@ -478,7 +480,7 @@ monothek_start_view_draw(MonothekView *view)
     
     static const guint font_size = 100;
 
-    diskjokey_font = g_strdup_printf("%s Bold", view->font);
+    diskjokey_font = g_strdup_printf("%s Bold", MONOTHEK_VIEW(view)->font);
 
     /* diskjokey - head */
     layout = pango_cairo_create_layout(cr);
@@ -575,9 +577,9 @@ monothek_start_view_draw(MonothekView *view)
       g_object_unref(layout);
 
       cairo_set_source_rgb(cr,
-			   1.0 / 255.0 * ((0xff0000 & view->diskjokey_gc) >> 16),
-			   1.0 / 255.0 * ((0xff00 & view->diskjokey_gc) >> 8),
-			   1.0 / 255.0 * ((0xff & view->diskjokey_gc)));
+			   1.0 / 255.0 * ((0xff0000 & MONOTHEK_VIEW(view)->diskjokey_gc) >> 16),
+			   1.0 / 255.0 * ((0xff00 & MONOTHEK_VIEW(view)->diskjokey_gc) >> 8),
+			   1.0 / 255.0 * ((0xff & MONOTHEK_VIEW(view)->diskjokey_gc)));
     }
     
     /* diskjokey - description */
@@ -609,12 +611,13 @@ monothek_start_view_draw(MonothekView *view)
   cairo_pop_group_to_source(cr);
   cairo_paint(cr);
 
-  cairo_surface_mark_dirty(cairo_get_target(cr));
-  cairo_destroy(cr);
+  //  cairo_surface_mark_dirty(cairo_get_target(cr));
 
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+
+  return(FALSE);
 }
 
 void

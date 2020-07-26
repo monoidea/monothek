@@ -1,5 +1,5 @@
 /* Monothek - monoidea's monothek
- * Copyright (C) 2018-2019 Joël Krähemann
+ * Copyright (C) 2018-2020 Joël Krähemann
  *
  * This file is part of Monothek.
  *
@@ -42,7 +42,8 @@ void monothek_closed_view_finalize(GObject *gobject);
 void monothek_closed_view_connect(AgsConnectable *connectable);
 void monothek_closed_view_disconnect(AgsConnectable *connectable);
 
-void monothek_closed_view_draw(MonothekView *view);
+gboolean monothek_closed_view_draw(GtkWidget *view,
+				   cairo_t *cr);
 
 /**
  * SECTION:monothek_closed_view
@@ -122,10 +123,13 @@ monothek_closed_view_class_init(MonothekClosedViewClass *closed_view)
 
   /* properties */
 
+  /* GtkWidget */
+  widget = (GtkWidgetClass *) closed_view;
+  
+  widget->draw = monothek_closed_view_draw;
+
   /* MonothekView */
   view = (MonothekViewClass *) closed_view;
-
-  view->draw = monothek_closed_view_draw;
 }
 
 void
@@ -225,12 +229,13 @@ monothek_closed_view_disconnect(AgsConnectable *connectable)
   //TODO:JK: implement me
 }
 
-void
-monothek_closed_view_draw(MonothekView *view)
+gboolean
+monothek_closed_view_draw(GtkWidget *view,
+			  cairo_t *cr)
 {
   MonothekClosedView *closed_view;
-  
-  cairo_t *cr;
+
+  GtkAllocation allocation;
 
   guint width, height;
   guint x_closed, y_closed;
@@ -240,23 +245,20 @@ monothek_closed_view_draw(MonothekView *view)
   closed_view = MONOTHEK_CLOSED_VIEW(view);
   
   /* call parent */
-  MONOTHEK_VIEW_CLASS(monothek_closed_view_parent_class)->draw(view);
+  GTK_WIDGET_CLASS(monothek_closed_view_parent_class)->draw(view,
+							    cr);
 
-  /* create cr */
-  cr = gdk_cairo_create(GTK_WIDGET(view)->window);
-  
-  if(cr == NULL){
-    return;
-  }
+  gtk_widget_get_allocation(view,
+			    &allocation);
 
-  cairo_surface_flush(cairo_get_target(cr));
+  //  cairo_surface_flush(cairo_get_target(cr));
   cairo_push_group(cr);
 
   x_closed = 0;
   y_closed = 0;
 
-  width = GTK_WIDGET(view)->allocation.width;
-  height = GTK_WIDGET(view)->allocation.height;
+  width = allocation.width;
+  height = allocation.height;
 
   cairo_set_source_rgb(cr,
 		       1.0,
@@ -274,7 +276,7 @@ monothek_closed_view_draw(MonothekView *view)
     
     static const guint font_size = 100;
 
-    generic_font = g_strdup_printf("%s Bold", view->font);
+    generic_font = g_strdup_printf("%s Bold", MONOTHEK_VIEW(view)->font);
 
     /* message */
     layout = pango_cairo_create_layout(cr);
@@ -319,7 +321,7 @@ monothek_closed_view_draw(MonothekView *view)
     
     static const guint font_size = 100;
 
-    generic_font = g_strdup_printf("%s Bold", view->font);
+    generic_font = g_strdup_printf("%s Bold", MONOTHEK_VIEW(view)->font);
 
     /* notice */
     layout = pango_cairo_create_layout(cr);
@@ -350,12 +352,13 @@ monothek_closed_view_draw(MonothekView *view)
   cairo_pop_group_to_source(cr);
   cairo_paint(cr);
 
-  cairo_surface_mark_dirty(cairo_get_target(cr));
-  cairo_destroy(cr);
+  //  cairo_surface_mark_dirty(cairo_get_target(cr));
 
 #ifndef __APPLE__
   //  pango_fc_font_map_cache_clear(pango_cairo_font_map_get_default());
 #endif
+
+  return(FALSE);
 }
 
 /**

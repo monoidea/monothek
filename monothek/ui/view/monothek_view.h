@@ -69,8 +69,6 @@ struct _MonothekViewClass
 {
   GtkWidgetClass widget;
 
-  void (*draw)(MonothekView *view);
-
   void (*reset)(MonothekView *view,
 		gboolean reset_defaults, gboolean reset_current);
   void (*clear)(MonothekView *view,
@@ -82,8 +80,6 @@ GType monothek_view_get_type(void);
 gboolean monothek_view_test_flags(MonothekView *view, guint flags);
 void monothek_view_set_flags(MonothekView *view, guint flags);
 void monothek_view_unset_flags(MonothekView *view, guint flags);
-
-void monothek_view_draw(MonothekView *view);
 
 void monothek_view_reset(MonothekView *view,
 			 gboolean reset_defaults, gboolean reset_current);
